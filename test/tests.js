@@ -77,15 +77,19 @@ describe('Appboy Forwarder', function () {
             this.pushSubscribe = false;
             this.phoneSet = null;
             this.imageUrl = null;
-            this.dateOfBirth = null;
+            this.yearOfBirth = null;
+            this.monthOfBirth = null;
+            this.dayOfBirth = null;
             this.customAttribute = null;
             this.customAttributeValue = null;
 
-            this.setLastName = function (name) {
+            this.customAttributeSet = false;
+
+            this.setLastName = function (name){
                 self.lastName = name;
             };
 
-            this.setFirstName = function (name) {
+            this.setFirstName = function (name){
                 self.firstName = name;
             };
 
@@ -121,11 +125,14 @@ describe('Appboy Forwarder', function () {
                 self.imageUrl = url;
             };
 
-            this.setDateOfBirth = function (dob){
-                self.dateOfBirth = dob;
+            this.setDateOfBirth = function (year, month, day){
+                self.yearOfBirth = year;
+                self.monthOfBirth = month;
+                self.dayOfBirth = day;
             };
 
             this.setCustomUserAttribute = function (key, value){
+                self.customAttributeSet = true;
                 self.customAttribute = key;
                 self.customAttributeValue = (!value) ? "" : value;
             };
@@ -150,7 +157,7 @@ describe('Appboy Forwarder', function () {
             this.user = new MockAppboyUser();
             this.display = new MockDisplay();
 
-            this.initialize = function (apiKey) {
+            this.initialize = function (apiKey){
                 self.initializeCalled = true;
                 self.apiKey = apiKey;
                 return true;
@@ -164,11 +171,11 @@ describe('Appboy Forwarder', function () {
                 self.inAppMessageRefreshCalled = true;
             };
 
-            this.changeUser = function(id) {
+            this.changeUser = function(id){
                 self.userId = id;
             };
 
-            this.getUser = function() {
+            this.getUser = function(){
                 return self.user;
             };
 
@@ -184,18 +191,18 @@ describe('Appboy Forwarder', function () {
             };
         },
 
-        ReportingService = function () {
+        ReportingService = function (){
             var self = this;
 
             this.id = null;
             this.event = null;
 
-            this.cb = function (forwarder, event) {
+            this.cb = function (forwarder, event){
                 self.id = forwarder.id;
                 self.event = event;
             };
 
-            this.reset = function () {
+            this.reset = function (){
                 this.id = null;
                 this.event = null;
             };
@@ -284,38 +291,75 @@ describe('Appboy Forwarder', function () {
         window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal('whatever');
     });
 
-    it ('should change user identity and set the user email', function(){
+    it ('should not log non-purchase or non-pageEvent Events', function(){
+        mParticle.forwarder.process({
+            EventName: 'Non-Event',
+            EventDataType: MessageType.PageView
+        });
+        window.appboy.should.have.property('logCustomEventCalled', false);
+        window.appboy.should.have.property('logPurchaseEventCalled', false);
+    });
+
+    it ('should only change user identity and set the user email', function(){
         mParticle.forwarder.setUserIdentity('123', window.mParticle.IdentityType.CustomerId);
         mParticle.forwarder.setUserIdentity('blah@gmail.com', window.mParticle.IdentityType.Email);
+        mParticle.forwarder.setUserIdentity('Mr. Blah facebook id', window.mParticle.IdentityType.Facebook);
         window.appboy.userId.should.equal('123');
         window.appboy.getUser().emailSet.should.equal('blah@gmail.com');
     });
 
     it ('it should set default user attributes', function(){
-        attr = {first_name: 'John', last_name: 'Doe', email: 'test@gmail.com', push_subscribe: true, gender: 'm'};
         mParticle.forwarder.setUserAttribute('first_name', 'John');
         mParticle.forwarder.setUserAttribute('last_name', 'Doe');
         mParticle.forwarder.setUserAttribute('email', 'test@gmail.com');
         mParticle.forwarder.setUserAttribute('push_subscribe', "opted_in");
         mParticle.forwarder.setUserAttribute('gender', 'm');
+        mParticle.forwarder.setUserAttribute('dob', new Date(1991, 11, 17));
         window.appboy.getUser().genderSet.should.equal('m');
         window.appboy.getUser().firstName.should.equal('John');
         window.appboy.getUser().lastName.should.equal('Doe');
         window.appboy.getUser().emailSet.should.equal('test@gmail.com');
         window.appboy.getUser().pushSubscribe.should.equal("opted_in");
+        window.appboy.getUser().yearOfBirth.should.equal(1991);
+        window.appboy.getUser().dayOfBirth.should.equal(17);
+        window.appboy.getUser().monthOfBirth.should.equal(12);
+    });
+
+    it ('should not set default values if a string is not passed as the attribute', function(){
+        mParticle.forwarder.setUserAttribute('first_name', 'John');
+        mParticle.forwarder.setUserAttribute('last_name', 'Doe');
+        mParticle.forwarder.setUserAttribute('first_name', 10.2);
+        mParticle.forwarder.setUserAttribute('last_name', false);
+        window.appboy.getUser().firstName.should.equal('John');
+        window.appboy.getUser().lastName.should.equal('Doe');
     });
 
     it ('should set a custom user attribute', function(){
         mParticle.forwarder.setUserAttribute('test', 'result');
+        window.appboy.getUser().should.have.property('customAttributeSet', true);
         window.appboy.getUser().customAttribute.should.equal('test');
         window.appboy.getUser().customAttributeValue.should.equal('result');
+    });
+
+    it ('should remove a default user attribute', function(){
+        mParticle.forwarder.setUserAttribute('first_name', 'John');
+        mParticle.forwarder.removeUserAttribute('first_name');
+        window.appboy.getUser().firstName.should.equal('');
     });
 
     it ('should remove custom user attributes', function(){
         mParticle.forwarder.setUserAttribute('test', 'result');
         mParticle.forwarder.removeUserAttribute('test');
         window.appboy.getUser().customAttribute.should.equal('test');
-        window.appboy.getUser().customAttributeValue.should.equal("");
-    })
+        window.appboy.getUser().customAttributeValue.should.equal('');
+    });
 
+    it ('should not set date of birth if passed an invalid value', function(){
+        mParticle.forwarder.setUserAttribute('dob', new Date(1991, 11, 17));
+        mParticle.forwarder.setUserAttribute('dob', "something");
+        window.appboy.getUser().yearOfBirth.should.equal(1991);
+        window.appboy.getUser().dayOfBirth.should.equal(17);
+        window.appboy.getUser().monthOfBirth.should.equal(12);
+    });
 });
+

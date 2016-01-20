@@ -44,26 +44,24 @@
         };
 
         function logPurchaseEvent(event) {
+            var reportEvent = false;
             if (event.ProductAction.ProductList) {
                 event.ProductAction.ProductList.forEach(function (product) {
-                    appboy.logPurchase(String(product.Sku),
-                      parseFloat(product.Price),
-                        event.CurrencyCode,
-                        product.Quantity,
-                        product.Attributes);
+                    if (appboy.logPurchase(String(product.Sku), parseFloat(product.Price), event.CurrencyCode, product.Quantity, product.Attributes)) {
+                        reportEvent = true;
+                    }
                 });
             }
+            return reportEvent;
         }
 
         function setDefaultAttribute(key, value) {
-            if (key == "dob") {
+            if (key == 'dob') {
                 if (!(value instanceof Date)) {
-                    return 'Can\'t call removeUserAttribute  on forwarder ' + name + ', removeUserAttribute not supported for \'dob\'';
+                    return 'Can\'t call removeUserAttribute or setUserAttribute on forwarder ' + name + ', removeUserAttribute or setUserAttribute must set \'dob\' to a date';
                 }
                 else {
-                    appboy.getUser().setDateOfBirth(value.getFullYear(),
-                        value.getMonth() + 1,
-                        value.getDay());
+                    appboy.getUser().setDateOfBirth(value.getFullYear(), value.getMonth() + 1, value.getDate());
                 }
             }
             else {
@@ -79,7 +77,7 @@
                 //This method uses the setLastName, setFirstName, setEmail, setCountry, setHomeCity, setPhoneNumber, setAvatarImageUrl, setDateOfBirth, setGender, setEmailNotificationSubscriptionType, and setPushNotificationSubscriptionType methods
                 if (!u[DefaultAttributeMethods[key]].apply(u, params)) {
                     return 'removeUserAttribute or setUserAttribute on forwarder ' + name + ' failed to call, an invalid attribute value was passed in';
-                };
+                }
             }
         }
 
@@ -92,7 +90,7 @@
             if (isInitialized) {
 
                 if (event.EventDataType == MessageType.PageEvent) {
-                    appboy.logCustomEvent(event.EventName, event.EventAttributes);
+                    reportEvent = appboy.logCustomEvent(event.EventName, event.EventAttributes);
                 }
 
                 /** There is no current mapping for the ProductAddToCart, ProductAddToWishlist, ProductCheckout, ProductCheckoutOption, ProductClick,
@@ -100,7 +98,7 @@
                  * commerce event types.
                  **/
                 else if (event.EventDataType == MessageType.Commerce && event.EventCategory == mParticle.CommerceEventType.ProductPurchase) {
-                    logPurchaseEvent(event);
+                    reportEvent = logPurchaseEvent(event);
                 }
                 else {
                     return 'Can\'t send event type to forwarder ' + name + ', event type is not supported';
