@@ -175,7 +175,7 @@
                             y.onreadystatechange = b;
                         }
                     }(document, 'script', 'link', function () {
-                        if (!(appboy.initialize(forwarderSettings.secretKey))) {
+                        if (!(appboy.initialize(forwarderSettings.apiKey))) {
                             return 'Failed to initialize: ' + name;
                         }
                         appboy.display.automaticallyShowNewInAppMessages();
@@ -186,7 +186,7 @@
                     isInitialized = true;
                 }
                 else {
-                    if (!(appboy.initialize(forwarderSettings.secretKey))) {
+                    if (!(appboy.initialize(forwarderSettings.apiKey))) {
                         return 'Failed to initialize: ' + name;
                     }
                     appboy.display.automaticallyShowNewInAppMessages();
