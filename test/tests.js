@@ -183,11 +183,17 @@ describe('Appboy Forwarder', function () {
                 self.logCustomEventCalled = true;
                 self.logCustomEventName = name;
                 self.eventProperties.push(eventProperties);
+                
+                // Return true to indicate event should be reported
+                return true;
             };
 
             this.logPurchase = function(sku, price, currencyType, quantity, attributes){
                 self.logPurchaseEventCalled = true;
                 self.purchaseEventProperties.push([sku, price, quantity, attributes]);
+                
+                // Return true to indicate event should be reported
+                return true;
             };
         },
 
@@ -203,8 +209,8 @@ describe('Appboy Forwarder', function () {
             };
 
             this.reset = function (){
-                this.id = null;
-                this.event = null;
+                self.id = null;
+                self.event = null;
             };
         },
         reportService = new ReportingService();
@@ -218,10 +224,11 @@ describe('Appboy Forwarder', function () {
     });
 
     beforeEach(function () {
+        reportService.reset();
         window.appboy = new MockAppboy();
 
         mParticle.forwarder.init({
-            secretKey: '123456'
+            apiKey: '123456'
         }, reportService.cb, true, null, {
             gender: 'm'
         }, [{
@@ -247,6 +254,15 @@ describe('Appboy Forwarder', function () {
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
         window.appboy.should.have.property('logCustomEventName', 'Test Event');
+    });
+    
+    it('should call reportService when logging event', function () {
+        mParticle.forwarder.process({
+            EventName: 'Test Reporting Event',
+            EventDataType: MessageType.PageEvent
+        });
+        
+        reportService.event.should.have.property('EventName', 'Test Reporting Event');
     });
 
     it ('should log an event with properties', function(){
