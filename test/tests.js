@@ -291,10 +291,11 @@ describe('Appboy Forwarder', function () {
                 ProductList: [
                     {
                         Price: "50",
-                        Sku: 12345,
+                        Name: "12345",
                         TotalAmount: 50,
                         Quantity: 1,
-                        Attributes: {attribute: 'whatever'}
+                        Attributes: {attribute: 'whatever'},
+                        Sku: 12345
                     }
                 ]
             }
@@ -305,6 +306,7 @@ describe('Appboy Forwarder', function () {
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
         window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal('whatever');
+        window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
     });
 
     it ('should not log non-purchase or non-pageEvent Events', function(){
