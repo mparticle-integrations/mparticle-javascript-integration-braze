@@ -25,7 +25,8 @@
             forwarderSettings,
             reportingService,
             isInitialized = false,
-            isTesting = false;
+            isTesting = false,
+            eventQueue = [];
 
         self.name = name;
 
@@ -109,7 +110,8 @@
                 }
             }
             else {
-                return 'Can\'t send to forwarder ' + name + ', not initialized';
+                eventQueue.push(event);
+                return 'Can\'t send to forwarder ' + name + ', not initialized. Event added to queue.';
             }
         }
 
@@ -189,6 +191,18 @@
                             appboy.display.automaticallyShowNewInAppMessages();
                             appboy.openSession();
                             appboy.requestInAppMessageRefresh();
+
+                            isInitialized = true;
+
+                            if(eventQueue && eventQueue.length > 0) {
+                                // Process any events that may have been queued up while forwarder was being initialized.
+                                
+                                for(var i = 0; i < eventQueue.length; i++) {
+                                    processEvent(eventQueue[i]);
+                                }
+
+                                eventQueue = [];
+                            }
                         });
 
                         if (link.addEventListener) {
@@ -199,8 +213,6 @@
                         }
                         head.appendChild(link);
                     }();
-
-                    isInitialized = true;
                 }
                 else {
                     if (!(appboy.initialize(forwarderSettings.apiKey))) {
