@@ -48,8 +48,17 @@
             var reportEvent = false;
             if (event.ProductAction.ProductList) {
                 event.ProductAction.ProductList.forEach(function (product) {
-                    product.Attributes['Sku'] = product.Sku;
-                    if (appboy.logPurchase(String(product.Name), parseFloat(product.Price), event.CurrencyCode, product.Quantity, product.Attributes)) {
+                    if (product.Attributes != null) {
+                      product.Attributes['Sku'] = product.Sku;
+                    } 
+                    var sanitizedProductName = getSanitizedValueForAppboy(String(product.Name));
+                    var sanitizedProperties = getSanitizedCustomProperties(product.Attributes);
+
+                    if(sanitizedProperties == null) {
+                        return 'Properties did not pass validation for ' + sanitizedProductName;
+                    }
+
+                    if (appboy.logPurchase(sanitizedProductName, parseFloat(product.Price), event.CurrencyCode, product.Quantity, sanitizedProperties)) {
                         reportEvent = true;
                     }
                 });
@@ -92,7 +101,14 @@
             if (isInitialized) {
 
                 if (event.EventDataType == MessageType.PageEvent) {
-                    reportEvent = appboy.logCustomEvent(event.EventName, event.EventAttributes);
+                    var sanitizedEventName = getSanitizedValueForAppboy(event.EventName);
+                    var sanitizedProperties = getSanitizedCustomProperties(event.EventAttributes);
+
+                    if(sanitizedProperties == null) {
+                        return 'Properties did not pass validation for ' + sanitizedEventName;
+                    }
+
+                    reportEvent = appboy.logCustomEvent(sanitizedEventName, sanitizedProperties);
                 }
 
                 /** There is no current mapping for the ProductAddToCart, ProductAddToWishlist, ProductCheckout, ProductCheckoutOption, ProductClick,
@@ -118,7 +134,8 @@
         function removeUserAttribute(key) {
             if (isInitialized) {
                 if (!(key in DefaultAttributeMethods)) {
-                    appboy.getUser().setCustomUserAttribute(key, null);
+                    var sanitizedKey = getSanitizedValueForAppboy(key);
+                    appboy.getUser().setCustomUserAttribute(sanitizedKey, null);
                 }
                 else {
                     return setDefaultAttribute(key, null);
@@ -132,7 +149,12 @@
         function setUserAttribute(key, value) {
             if (isInitialized) {
                 if (!(key in DefaultAttributeMethods)) {
-                    appboy.getUser().setCustomUserAttribute(key, value);
+                    var sanitizedKey = getSanitizedValueForAppboy(key);
+                    var sanitizedValue = getSanitizedValueForAppboy(value);
+                    if (value != null && sanitizedValue == null) {
+                        return 'Value did not pass validation for ' + key;
+                    }
+                    appboy.getUser().setCustomUserAttribute(sanitizedKey, sanitizedValue);
                 }
                 else {
                     return setDefaultAttribute(key, value);
@@ -233,6 +255,67 @@
         /**************************/
         /** End mParticle API **/
         /**************************/
+
+        function isArray(value) {
+            if (Array.isArray) {
+                return Array.isArray(value);
+            }
+            return (Object.prototype.toString.call(value) === '[object Array]');
+        }
+
+        function getSanitizedStringForAppboy(value) {
+            if (typeof(value) === 'string') {
+                if (value.substr(0, 1) === "$") {
+                    return value.replace(/^\$+/g, '')
+                } else {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+        function getSanitizedValueForAppboy(value) {
+            if (typeof(value) === 'string') {
+                return getSanitizedStringForAppboy(value);
+            }
+
+            if (isArray(value)) {
+                var sanitizedArray = [];
+                for (var i in value) {
+                    var element = value[i];
+                    var sanitizedElement = getSanitizedStringForAppboy(element);
+                    if (sanitizedElement == null) {
+                        return null;
+                    }
+                    
+                    sanitizedArray.push(sanitizedElement);
+                }
+                return sanitizedArray;
+            }
+            return value;
+        }
+
+        function getSanitizedCustomProperties(customProperties) {
+            var sanitizedProperties = {};
+            
+            if (customProperties == null) {
+                customProperties = {};
+            }
+
+            if (typeof(customProperties) !== 'object') {
+              return null;
+            }
+
+            for (var propertyName in customProperties) {
+              var value = customProperties[propertyName];
+              var sanitizedPropertyName = getSanitizedValueForAppboy(propertyName);
+              var sanitizedValue = typeof(value) === 'string' ? getSanitizedValueForAppboy(value) : value;
+              sanitizedProperties[sanitizedPropertyName] = sanitizedValue;
+            }
+
+            return sanitizedProperties;
+        };
 
         this.init = initForwarder;
         this.process = processEvent;
