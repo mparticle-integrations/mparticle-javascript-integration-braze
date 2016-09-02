@@ -48,9 +48,10 @@
             var reportEvent = false;
             if (event.ProductAction.ProductList) {
                 event.ProductAction.ProductList.forEach(function (product) {
-                    if (product.Attributes != null) {
-                      product.Attributes['Sku'] = product.Sku;
+                    if (product.Attributes == null) {
+                        product.Attributes = {};
                     } 
+                    product.Attributes['Sku'] = product.Sku;
                     var sanitizedProductName = getSanitizedValueForAppboy(String(product.Name));
                     var sanitizedProperties = getSanitizedCustomProperties(product.Attributes);
 
