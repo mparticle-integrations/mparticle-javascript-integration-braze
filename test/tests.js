@@ -1,219 +1,221 @@
 describe('Appboy Forwarder', function () {
 
     var MessageType = {
-            SessionStart: 1,
-            SessionEnd: 2,
-            PageView: 3,
-            PageEvent: 4,
-            CrashReport: 5,
-            OptOut: 6,
-            Commerce: 16
-        },
-        EventType = {
-            Unknown: 0,
-            Navigation: 1,
-            Location: 2,
-            Search: 3,
-            Transaction: 4,
-            UserContent: 5,
-            UserPreference: 6,
-            Social: 7,
-            Other: 8,
-            Media: 9,
-            ProductPurchase: 16,
-            getName: function () {
-                return 'blahblah';
-            }
-        },
-        CommerceEventType = {
-            ProductAddToCart: 10,
-            ProductRemoveFromCart: 11,
-            ProductCheckout: 12,
-            ProductCheckoutOption: 13,
-            ProductClick: 14,
-            ProductViewDetail: 15,
-            ProductPurchase: 16,
-            ProductRefund: 17,
-            PromotionView: 18,
-            PromotionClick: 19,
-            ProductAddToWishlist: 20,
-            ProductRemoveFromWishlist: 21,
-            ProductImpression: 22
-        },
-        IdentityType = {
-            Other: 0,
-            CustomerId: 1,
-            Facebook: 2,
-            Twitter: 3,
-            Google: 4,
-            Microsoft: 5,
-            Yahoo: 6,
-            Email: 7,
-            Alias: 8,
-            FacebookCustomAudienceId: 9,
-            getName: function () {  return 'CustomerID';}
-        },
+          SessionStart: 1,
+          SessionEnd: 2,
+          PageView: 3,
+          PageEvent: 4,
+          CrashReport: 5,
+          OptOut: 6,
+          Commerce: 16
+      },
+      EventType = {
+          Unknown: 0,
+          Navigation: 1,
+          Location: 2,
+          Search: 3,
+          Transaction: 4,
+          UserContent: 5,
+          UserPreference: 6,
+          Social: 7,
+          Other: 8,
+          Media: 9,
+          ProductPurchase: 16,
+          getName: function () {
+              return 'blahblah';
+          }
+      },
+      CommerceEventType = {
+          ProductAddToCart: 10,
+          ProductRemoveFromCart: 11,
+          ProductCheckout: 12,
+          ProductCheckoutOption: 13,
+          ProductClick: 14,
+          ProductViewDetail: 15,
+          ProductPurchase: 16,
+          ProductRefund: 17,
+          PromotionView: 18,
+          PromotionClick: 19,
+          ProductAddToWishlist: 20,
+          ProductRemoveFromWishlist: 21,
+          ProductImpression: 22
+      },
+      IdentityType = {
+          Other: 0,
+          CustomerId: 1,
+          Facebook: 2,
+          Twitter: 3,
+          Google: 4,
+          Microsoft: 5,
+          Yahoo: 6,
+          Email: 7,
+          Alias: 8,
+          FacebookCustomAudienceId: 9,
+          getName: function () {  return 'CustomerID';}
+      },
 
-        MockDisplay = function(){
-            var self = this;
+      MockDisplay = function(){
+          var self = this;
 
-            this.automaticallyShowNewInAppMessagesCalled = false;
+          this.automaticallyShowNewInAppMessagesCalled = false;
 
-            this.automaticallyShowNewInAppMessages = function(){
-                self.automaticallyShowNewInAppMessagesCalled = true;
-            };
-        },
+          this.automaticallyShowNewInAppMessages = function(){
+              self.automaticallyShowNewInAppMessagesCalled = true;
+          };
+      },
 
-        MockAppboyUser = function() {
-            var self = this;
+      MockAppboyUser = function() {
+          var self = this;
 
-            this.lastName = null;
-            this.firstName = null;
-            this.emailSet = null;
-            this.genderSet = null;
-            this.countrySet = null;
-            this.homeCity = null;
-            this.emailSubscribe = false;
-            this.pushSubscribe = false;
-            this.phoneSet = null;
-            this.imageUrl = null;
-            this.yearOfBirth = null;
-            this.monthOfBirth = null;
-            this.dayOfBirth = null;
-            this.customAttribute = null;
-            this.customAttributeValue = null;
+          this.lastName = null;
+          this.firstName = null;
+          this.emailSet = null;
+          this.genderSet = null;
+          this.countrySet = null;
+          this.homeCity = null;
+          this.emailSubscribe = false;
+          this.pushSubscribe = false;
+          this.phoneSet = null;
+          this.imageUrl = null;
+          this.yearOfBirth = null;
+          this.monthOfBirth = null;
+          this.dayOfBirth = null;
+          this.customAttribute = null;
+          this.customAttributeValue = null;
 
-            this.customAttributeSet = false;
+          this.customAttributeSet = false;
 
-            this.setLastName = function (name){
-                self.lastName = name;
-            };
+          this.setLastName = function (name){
+              self.lastName = name;
+          };
 
-            this.setFirstName = function (name){
-                self.firstName = name;
-            };
+          this.setFirstName = function (name){
+              self.firstName = name;
+          };
 
-            this.setEmail = function (email){
-                self.emailSet = email;
-            };
+          this.setEmail = function (email){
+              self.emailSet = email;
+          };
 
-            this.setGender = function (gender){
-                self.genderSet = gender;
-            };
+          this.setGender = function (gender){
+              self.genderSet = gender;
+          };
 
-            this.setCountry = function (country){
-                self.countrySet = country;
-            };
+          this.setCountry = function (country){
+              self.countrySet = country;
+          };
 
-            this.setHomeCity = function (homeCity){
-                self.homeCity = homeCity;
-            };
+          this.setHomeCity = function (homeCity){
+              self.homeCity = homeCity;
+          };
 
-            this.setEmailNotificationSubscriptionType = function (subscriptionType){
-                self.emailSubscribe = subscriptionType;
-            };
+          this.setEmailNotificationSubscriptionType = function (subscriptionType){
+              self.emailSubscribe = subscriptionType;
+          };
 
-            this.setPushNotificationSubscriptionType = function (subscriptionType){
-                self.pushSubscribe = subscriptionType;
-            };
+          this.setPushNotificationSubscriptionType = function (subscriptionType){
+              self.pushSubscribe = subscriptionType;
+          };
 
-            this.setPhoneNumber = function (number){
-                self.phoneSet = number;
-            };
+          this.setPhoneNumber = function (number){
+              self.phoneSet = number;
+          };
 
-            this.setAvatarImageUrl = function (url){
-                self.imageUrl = url;
-            };
+          this.setAvatarImageUrl = function (url){
+              self.imageUrl = url;
+          };
 
-            this.setDateOfBirth = function (year, month, day){
-                self.yearOfBirth = year;
-                self.monthOfBirth = month;
-                self.dayOfBirth = day;
-            };
+          this.setDateOfBirth = function (year, month, day){
+              self.yearOfBirth = year;
+              self.monthOfBirth = month;
+              self.dayOfBirth = day;
+          };
 
-            this.setCustomUserAttribute = function (key, value){
-                self.customAttributeSet = true;
-                self.customAttribute = key;
-                self.customAttributeValue = (!value) ? "" : value;
-            };
-        },
+          this.setCustomUserAttribute = function (key, value){
+              self.customAttributeSet = true;
+              self.customAttribute = key;
+              self.customAttributeValue = (!value) ? "" : value;
+          };
+      },
 
-        MockAppboy = function() {
-            var self = this;
+      MockAppboy = function() {
+          var self = this;
 
-            this.logCustomEventCalled = false;
-            this.logPurchaseEventCalled = false;
-            this.initializeCalled = false;
-            this.openSessionCalled = false;
-            this.inAppMessageRefreshCalled = false;
+          this.logCustomEventCalled = false;
+          this.logPurchaseEventCalled = false;
+          this.initializeCalled = false;
+          this.openSessionCalled = false;
+          this.inAppMessageRefreshCalled = false;
 
-            this.logCustomEventName = null;
-            this.apiKey = null;
-            this.userId = null;
+          this.logCustomEventName = null;
+          this.logPurchaseName = null;
+          this.apiKey = null;
+          this.userId = null;
 
-            this.eventProperties = [];
-            this.purchaseEventProperties = [];
+          this.eventProperties = [];
+          this.purchaseEventProperties = [];
 
-            this.user = new MockAppboyUser();
-            this.display = new MockDisplay();
+          this.user = new MockAppboyUser();
+          this.display = new MockDisplay();
 
-            this.initialize = function (apiKey){
-                self.initializeCalled = true;
-                self.apiKey = apiKey;
-                return true;
-            };
+          this.initialize = function (apiKey){
+              self.initializeCalled = true;
+              self.apiKey = apiKey;
+              return true;
+          };
 
-            this.openSession = function (){
-                self.openSessionCalled = true;
-            };
+          this.openSession = function (){
+              self.openSessionCalled = true;
+          };
 
-            this.requestInAppMessageRefresh = function (){
-                self.inAppMessageRefreshCalled = true;
-            };
+          this.requestInAppMessageRefresh = function (){
+              self.inAppMessageRefreshCalled = true;
+          };
 
-            this.changeUser = function(id){
-                self.userId = id;
-            };
+          this.changeUser = function(id){
+              self.userId = id;
+          };
 
-            this.getUser = function(){
-                return self.user;
-            };
+          this.getUser = function(){
+              return self.user;
+          };
 
-            this.logCustomEvent = function (name, eventProperties){
-                self.logCustomEventCalled = true;
-                self.logCustomEventName = name;
-                self.eventProperties.push(eventProperties);
-                
-                // Return true to indicate event should be reported
-                return true;
-            };
+          this.logCustomEvent = function (name, eventProperties){
+              self.logCustomEventCalled = true;
+              self.logCustomEventName = name;
+              self.eventProperties.push(eventProperties);
 
-            this.logPurchase = function(sku, price, currencyType, quantity, attributes){
-                self.logPurchaseEventCalled = true;
-                self.purchaseEventProperties.push([sku, price, quantity, attributes]);
-                
-                // Return true to indicate event should be reported
-                return true;
-            };
-        },
+              // Return true to indicate event should be reported
+              return true;
+          };
 
-        ReportingService = function (){
-            var self = this;
+          this.logPurchase = function(sku, price, currencyType, quantity, attributes){
+              self.logPurchaseName = sku;
+              self.logPurchaseEventCalled = true;
+              self.purchaseEventProperties.push([sku, price, quantity, attributes]);
 
-            this.id = null;
-            this.event = null;
+              // Return true to indicate event should be reported
+              return true;
+          };
+      },
 
-            this.cb = function (forwarder, event){
-                self.id = forwarder.id;
-                self.event = event;
-            };
+      ReportingService = function (){
+          var self = this;
 
-            this.reset = function (){
-                self.id = null;
-                self.event = null;
-            };
-        },
-        reportService = new ReportingService();
+          this.id = null;
+          this.event = null;
+
+          this.cb = function (forwarder, event){
+              self.id = forwarder.id;
+              self.event = event;
+          };
+
+          this.reset = function (){
+              self.id = null;
+              self.event = null;
+          };
+      },
+      reportService = new ReportingService();
 
 
     before(function () {
@@ -255,13 +257,13 @@ describe('Appboy Forwarder', function () {
         window.appboy.should.have.property('logCustomEventCalled', true);
         window.appboy.should.have.property('logCustomEventName', 'Test Event');
     });
-    
+
     it('should call reportService when logging event', function () {
         mParticle.forwarder.process({
             EventName: 'Test Reporting Event',
             EventDataType: MessageType.PageEvent
         });
-        
+
         reportService.event.should.have.property('EventName', 'Test Reporting Event');
     });
 
@@ -279,6 +281,29 @@ describe('Appboy Forwarder', function () {
         window.appboy.eventProperties[0]['dog'].should.equal('rex');
     });
 
+    it('should sanitize event names and property keys/values', function() {
+        mParticle.forwarder.process({
+            EventName: '$$$$Test Event with attributes$',
+            EventDataType: MessageType.PageEvent,
+            EventAttributes: {
+                $dog: '$$rex$'
+            }
+        });
+        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.appboy.should.have.property('logCustomEventName', 'Test Event with attributes$');
+        window.appboy.eventProperties.should.have.lengthOf(1);
+        window.appboy.eventProperties[0]['dog'].should.equal('rex$');
+    });
+
+    it('should not set if properties are invalid', function() {
+        mParticle.forwarder.process({
+            EventName: '$$$$Test Event with attributes$',
+            EventDataType: MessageType.PageEvent,
+            EventAttributes: 5
+        });
+        window.appboy.should.have.property('logCustomEventCalled', false);
+    });
+
     it ('should log a purchase event', function(){
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
@@ -291,7 +316,7 @@ describe('Appboy Forwarder', function () {
                 ProductList: [
                     {
                         Price: "50",
-                        Name: "12345",
+                        Name: "Product Name",
                         TotalAmount: 50,
                         Quantity: 1,
                         Attributes: {attribute: 'whatever'},
@@ -301,11 +326,100 @@ describe('Appboy Forwarder', function () {
             }
         });
         window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.should.have.property('logPurchaseName', "Product Name");
         window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal('12345');
+        window.appboy.purchaseEventProperties[0][0].should.equal('Product Name');
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
         window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal('whatever');
+        window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
+    });
+
+      it ('should log a purchase event without attributes', function(){
+        mParticle.forwarder.process({
+            EventName: 'Test Purchase Event',
+            EventDataType: MessageType.Commerce,
+            EventCategory: EventType.ProductPurchase,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                TransactionId: 1234,
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: "50",
+                        Name: "Product Name",
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Sku: 12345
+                    }
+                ]
+            }
+        });
+        window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.should.have.property('logPurchaseName', "Product Name");
+        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
+        window.appboy.purchaseEventProperties[0][0].should.equal('Product Name');
+        window.appboy.purchaseEventProperties[0][1].should.equal(50);
+        window.appboy.purchaseEventProperties[0][2].should.equal(1);
+    });
+
+
+      it ('should log a purchase event with empty attributes', function(){
+        mParticle.forwarder.process({
+            EventName: 'Test Purchase Event',
+            EventDataType: MessageType.Commerce,
+            EventCategory: EventType.ProductPurchase,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                TransactionId: 1234,
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: "50",
+                        Name: "Product Name",
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: {},
+                        Sku: 12345
+                    }
+                ]
+            }
+        });
+        window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.should.have.property('logPurchaseName', "Product Name");
+        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
+        window.appboy.purchaseEventProperties[0][0].should.equal('Product Name');
+        window.appboy.purchaseEventProperties[0][1].should.equal(50);
+        window.appboy.purchaseEventProperties[0][2].should.equal(1);
+    });
+
+    it ('should sanitize purchase event and properties', function(){
+        mParticle.forwarder.process({
+            EventName: 'Test Purchase Event',
+            EventDataType: MessageType.Commerce,
+            EventCategory: EventType.ProductPurchase,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                TransactionId: 1234,
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: "50",
+                        Name: "$Product $Name",
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: { $$$attri$bute: '$$$$what$ever'},
+                        Sku: 12345
+                    }
+                ]
+            }
+        });
+        window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
+        window.appboy.purchaseEventProperties[0][0].should.equal('Product $Name');
+        window.appboy.purchaseEventProperties[0][1].should.equal(50);
+        window.appboy.purchaseEventProperties[0][2].should.equal(1);
+        window.appboy.purchaseEventProperties[0][3]['attri$bute'].should.equal('what$ever');
         window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
     });
 
@@ -359,6 +473,33 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().customAttributeValue.should.equal('result');
     });
 
+    it ('should set a custom user attribute of diffferent types', function(){
+        mParticle.forwarder.setUserAttribute('testint', 3);
+        window.appboy.getUser().customAttributeValue.should.equal(3);
+        var d = new Date();
+        mParticle.forwarder.setUserAttribute('testdate', d);
+        window.appboy.getUser().customAttributeValue.should.equal(d);
+        mParticle.forwarder.setUserAttribute('testarray', ['3']);
+        window.appboy.getUser().customAttributeValue[0].should.equal('3');
+    });
+
+    it ('should sanitize a custom user attribute', function(){
+        mParticle.forwarder.setUserAttribute('$$tes$t', '$$res$ult');
+        window.appboy.getUser().should.have.property('customAttributeSet', true);
+        window.appboy.getUser().customAttribute.should.equal('tes$t');
+        window.appboy.getUser().customAttributeValue.should.equal('res$ult');
+    });
+
+    it ('should sanitize a custom user attribute array', function(){
+        mParticle.forwarder.setUserAttribute('att array', ['1', '$2$']);
+        window.appboy.getUser().customAttributeValue[1].should.equal('2$');
+    });
+
+    it ('should not set a custom user attribute array on an invalid array', function() {
+        mParticle.forwarder.setUserAttribute('att array', [2, 4, 5]);
+        window.appboy.getUser().should.have.property('customAttributeSet', false);
+    });
+
     it ('should remove a default user attribute', function(){
         mParticle.forwarder.setUserAttribute('first_name', 'John');
         mParticle.forwarder.removeUserAttribute('first_name');
@@ -372,6 +513,13 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().customAttributeValue.should.equal('');
     });
 
+    it ('should remove custom user attributes', function(){
+        mParticle.forwarder.setUserAttribute('$$test', '$res$ul$t');
+        mParticle.forwarder.removeUserAttribute('$test');
+        window.appboy.getUser().customAttribute.should.equal('test');
+        window.appboy.getUser().customAttributeValue.should.equal('');
+    });
+
     it ('should not set date of birth if passed an invalid value', function(){
         mParticle.forwarder.setUserAttribute('dob', new Date(1991, 11, 17));
         mParticle.forwarder.setUserAttribute('dob', "something");
@@ -380,4 +528,3 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().monthOfBirth.should.equal(12);
     });
 });
-
