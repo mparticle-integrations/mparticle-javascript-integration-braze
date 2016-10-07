@@ -14,7 +14,7 @@
 //  limitations under the License.
 
 (function (window) {
-    var name = 'AppboyForwarder',
+    var name = 'Appboy',
       MessageType = {
           PageEvent: 4,
           Commerce: 16
