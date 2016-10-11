@@ -93,6 +93,20 @@
             }
         }
 
+        function logAppboyEvent(event) {
+            var sanitizedEventName = getSanitizedValueForAppboy(event.EventName);
+            var sanitizedProperties = getSanitizedCustomProperties(event.EventAttributes);
+
+            if(sanitizedProperties == null) {
+                return 'Properties did not pass validation for ' + sanitizedEventName;
+            }
+
+            var reportEvent = appboy.logCustomEvent(sanitizedEventName, sanitizedProperties);
+            if (reportEvent && reportingService) {
+                reportingService(self, event);
+            }
+        }
+
         /**************************/
         /** Begin mParticle API **/
         /**************************/
@@ -101,29 +115,30 @@
 
             if (isInitialized) {
 
-                if (event.EventDataType == MessageType.PageEvent) {
-                    var sanitizedEventName = getSanitizedValueForAppboy(event.EventName);
-                    var sanitizedProperties = getSanitizedCustomProperties(event.EventAttributes);
-
-                    if(sanitizedProperties == null) {
-                        return 'Properties did not pass validation for ' + sanitizedEventName;
+                if (event.EventDataType == MessageType.Commerce && event.EventCategory == mParticle.CommerceEventType.ProductPurchase) {
+                    reportEvent = logPurchaseEvent(event);
+                    if (reportEvent && reportingService) {
+                        reportingService(self, event);
                     }
-
-                    reportEvent = appboy.logCustomEvent(sanitizedEventName, sanitizedProperties);
+                    return;
                 }
 
-                /** There is no current mapping for the ProductAddToCart, ProductAddToWishlist, ProductCheckout, ProductCheckoutOption, ProductClick,
-                 * ProductImpression, ProductRefund, ProductRemoveFromCart, ProductRemoveFromWishlist, ProductViewDetail, PromotionClick, or PromotionView
-                 * commerce event types.
-                 **/
-                else if (event.EventDataType == MessageType.Commerce && event.EventCategory == mParticle.CommerceEventType.ProductPurchase) {
-                    reportEvent = logPurchaseEvent(event);
+                if (event.EventDataType == MessageType.Commerce) {
+                    var listOfPageEvents = mParticle.eCommerce.expandCommerceEvent(event);
+                    if (listOfPageEvents != null) {
+                        for (var i = 0; i < listOfPageEvents.length; i++) {
+                            try {
+                              logAppboyEvent(listOfPageEvents[i]);
+                            } catch (err) {
+                              console.log("Error logging page event" + err.messasge);
+                            }
+                        }
+                    }
+                } else if (event.EventDataType == MessageType.PageEvent) {
+                    logAppboyEvent(event);
                 }
                 else {
                     return 'Can\'t send event type to forwarder ' + name + ', event type is not supported';
-                }
-                if (reportEvent && reportingService) {
-                    reportingService(self, event);
                 }
             }
             else {

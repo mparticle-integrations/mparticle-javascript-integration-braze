@@ -1,6 +1,12 @@
 describe('Appboy Forwarder', function () {
 
-    var MessageType = {
+    var expandCommerceEvent = function() {
+      return [{
+            EventName: 'Test Event',
+            EventDataType: MessageType.PageEvent
+        }];
+    },
+    MessageType = {
           SessionStart: 1,
           SessionEnd: 2,
           PageView: 3,
@@ -223,6 +229,8 @@ describe('Appboy Forwarder', function () {
         mParticle.IdentityType = IdentityType;
         mParticle.MessageType = MessageType;
         mParticle.CommerceEventType = CommerceEventType;
+        mParticle.eCommerce = {};
+        mParticle.eCommerce.expandCommerceEvent = expandCommerceEvent;
     });
 
     beforeEach(function () {
@@ -391,6 +399,15 @@ describe('Appboy Forwarder', function () {
         window.appboy.purchaseEventProperties[0][0].should.equal('Product Name');
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
+    });
+
+    it ('should log a custom event for non-purchase commerce events', function(){
+        mParticle.forwarder.process({
+            EventName: 'Test Purchase Event',
+            EventDataType: MessageType.Commerce,
+            EventCategory: EventType.Other,
+        });
+        window.appboy.should.have.property('logCustomEventCalled', true);
     });
 
     it ('should sanitize purchase event and properties', function(){
