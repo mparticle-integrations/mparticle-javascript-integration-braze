@@ -255,6 +255,24 @@ describe('Appboy Forwarder', function () {
         window.appboy.should.have.property('initializeCalled', true);
         window.appboy.should.have.property('openSessionCalled', true);
         window.appboy.should.have.property('inAppMessageRefreshCalled', true);
+        window.appboy.display.should.have.property('automaticallyShowNewInAppMessagesCalled', false);
+    });
+
+    it ('should automatically show in app messages', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            register_inapp: 'True'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.display.should.have.property('automaticallyShowNewInAppMessagesCalled', true);
     });
 
     it('should log event', function() {
