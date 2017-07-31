@@ -27,7 +27,6 @@
             options = {},
             reportingService,
             isInitialized = false,
-            isTesting = false,
             eventQueue = [];
 
         self.name = name;
@@ -75,7 +74,7 @@
                 attrs = event.EventAttributes || {};
 
             attrs.hostname = window.location.hostname;
-            attrs.title = window.document.title
+            attrs.title = window.document.title;
 
             sanitizedEventName = getSanitizedValueForAppboy(window.location.pathname);
             sanitizedAttrs = getSanitizedCustomProperties(attrs);
@@ -155,7 +154,8 @@
                         logAppboyPageViewEvent(event);
                     }
                 }
-                else {
+                else
+                {
                     return 'Can\'t send event type to forwarder ' + name + ', event type is not supported';
                 }
             }
@@ -226,6 +226,9 @@
                 options.sdkFlavor = 'mparticle';
                 options.enableHtmlInAppMessages = forwarderSettings.enableHtmlInAppMessages == 'True'
 
+                if (forwarderSettings.dataCenterLocation === 'EU') {
+                    options.baseUrl = 'https://sdk.api.appboy.eu/api/v3';
+                }
                 if (testMode !== true) {
                     /* eslint-disable */
                     +function() {

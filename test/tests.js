@@ -157,6 +157,7 @@ describe('Appboy Forwarder', function () {
             this.logCustomEventName = null;
             this.logPurchaseName = null;
             this.apiKey = null;
+            this.baseUrl = null;
             this.userId = null;
 
             this.eventProperties = [];
@@ -165,9 +166,10 @@ describe('Appboy Forwarder', function () {
             this.user = new MockAppboyUser();
             this.display = new MockDisplay();
 
-            this.initialize = function (apiKey){
+            this.initialize = function(apiKey, options) {
                 self.initializeCalled = true;
                 self.apiKey = apiKey;
+                self.baseUrl = options.baseUrl;
                 return true;
             };
 
@@ -592,5 +594,22 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().yearOfBirth.should.equal(1991);
         window.appboy.getUser().dayOfBirth.should.equal(17);
         window.appboy.getUser().monthOfBirth.should.equal(12);
+    });
+
+    it('should use the EU data center when dataCenterLocation is set to EU', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            dataCenterLocation: 'EU'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.should.have.property('baseUrl', 'https://sdk.api.appboy.eu/api/v3');
     });
 });
