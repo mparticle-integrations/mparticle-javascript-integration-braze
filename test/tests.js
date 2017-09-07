@@ -596,7 +596,7 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().monthOfBirth.should.equal(12);
     });
 
-    it('should use the EU data center when dataCenterLocation is set to EU', function(){
+    it('should use the EU data center when dataCenterLocation is set to EU and no host is passed', function(){
         reportService.reset();
         window.appboy = new MockAppboy();
 
@@ -611,5 +611,40 @@ describe('Appboy Forwarder', function () {
         }], '1.1', 'My App');
 
         window.appboy.should.have.property('baseUrl', 'https://sdk.api.appboy.eu/api/v3');
+    });
+
+    it('should use the default cluster when cluster is not passed and dataCenterLocation is not EU', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            dataCenterLocation: 'US'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.should.have.property('baseUrl', 'https://sdk-03.iad.appboy.com');
+    });
+
+    it('should use the specified clusterMapping url when cluster number is passed', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            dataCenterLocation: 'US',
+            cluster: '01'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.should.have.property('baseUrl', 'https://dev.appboy.com');
     });
 });

@@ -21,6 +21,13 @@
             Commerce: 16
         };
 
+    var clusterMapping = {
+        '01': 'https://dev.appboy.com',
+        '02': 'https://sdk-02.iad.appboy.com',
+        '03': 'https://sdk-03.iad.appboy.com',
+        EU: 'https://sdk.api.appboy.eu/api/v3'
+    };
+
     var constructor = function () {
         var self = this,
             forwarderSettings,
@@ -224,11 +231,18 @@
                 // 30 min is Appboy default
                 options.sessionTimeoutInSeconds = forwarderSettings.ABKSessionTimeoutKey || 1800;
                 options.sdkFlavor = 'mparticle';
-                options.enableHtmlInAppMessages = forwarderSettings.enableHtmlInAppMessages == 'True'
+                options.enableHtmlInAppMessages = forwarderSettings.enableHtmlInAppMessages == 'True';
 
-                if (forwarderSettings.dataCenterLocation === 'EU') {
-                    options.baseUrl = 'https://sdk.api.appboy.eu/api/v3';
+                if (forwarderSettings.cluster) {
+                    options.baseUrl = clusterMapping[forwarderSettings.cluster];
+                } else if (forwarderSettings.dataCenterLocation) {
+                    if (forwarderSettings.dataCenterLocation === 'EU') {
+                        options.baseUrl = clusterMapping.EU;
+                    } else {
+                        options.baseUrl = clusterMapping['03'];
+                    }
                 }
+
                 if (testMode !== true) {
                     /* eslint-disable */
                     +function() {
