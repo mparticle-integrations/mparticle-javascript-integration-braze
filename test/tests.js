@@ -169,7 +169,7 @@ describe('Appboy Forwarder', function () {
             this.initialize = function(apiKey, options) {
                 self.initializeCalled = true;
                 self.apiKey = apiKey;
-                self.baseUrl = options.baseUrl;
+                self.baseUrl = options.baseUrl || null;
                 return true;
             };
 
@@ -596,7 +596,24 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().monthOfBirth.should.equal(12);
     });
 
-    it('should use the EU data center when dataCenterLocation is set to EU', function(){
+    it('should have no baseUrl when cluster is not passed and dataCenterLocation is not EU', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            dataCenterLocation: 'US'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.should.have.property('baseUrl', null);
+    });
+
+    it('should use the EU data center when dataCenterLocation is set to EU and no host is passed', function(){
         reportService.reset();
         window.appboy = new MockAppboy();
 
@@ -611,5 +628,72 @@ describe('Appboy Forwarder', function () {
         }], '1.1', 'My App');
 
         window.appboy.should.have.property('baseUrl', 'https://sdk.api.appboy.eu/api/v3');
+    });
+
+    it('should use the 01 clusterMapping url when 01 number is passed to cluster', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            cluster: '01'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.baseUrl.should.equal('https://dev.appboy.com/api/v3');
+    });
+
+    it('should use the 02 clusterMapping url when 02 number is passed to cluster', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            cluster: '02'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.baseUrl.should.equal('https://sdk-02.iad.appboy.com/api/v3');
+    });
+
+    it('should use the 03 clusterMapping url when 03 number is passed to cluster', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            cluster: '03'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.baseUrl.should.equal('https://sdk.iad-03.appboy.com/api/v3');
+    });
+
+    it('should use the 03 cluster url when passed an invalid cluster', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            cluster: '04'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.baseUrl.should.equal('https://sdk.iad-03.appboy.com/api/v3');
     });
 });
