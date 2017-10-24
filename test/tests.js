@@ -696,4 +696,34 @@ describe('Appboy Forwarder', function () {
 
         window.appboy.baseUrl.should.equal('https://sdk.iad-03.appboy.com/api/v3');
     });
+
+    it('should use custom cluster url when passed cluster JSON', function(){
+        reportService.reset();
+        window.appboy = new MockAppboy();
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            cluster: '{&quot;SDK&quot;:&quot;sdk.foo.bar.com&quot;,&quot;REST&quot;:&quot;rest.foo.bar.com&quot;,&quot;JS&quot;:&quot;js.foo.bar.com&quot;}'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
+        window.appboy.baseUrl.should.equal('https://js.foo.bar.com/api/v3');
+    });
+
+    it('decodeClusterSetting should return null when no setting given', function(){
+        Should(window.mParticle.forwarder.decodeClusterSetting()).not.be.ok();
+    });
+
+    it('decodeClusterSetting should return null on bad json', function(){
+        Should(window.mParticle.forwarder.decodeClusterSetting("blah&quote;")).not.be.ok();
+    });
+
+    it('decodeClusterSetting should return JS url when proper setting is given', function(){
+        var clusterSetting = "{&quot;SDK&quot;:&quot;sdk.foo.bar.com&quot;,&quot;REST&quot;:&quot;rest.foo.bar.com&quot;,&quot;JS&quot;:&quot;js.foo.bar.com&quot;}";
+        Should(window.mParticle.forwarder.decodeClusterSetting(clusterSetting)).equal('https://js.foo.bar.com/api/v3')
+    });
+
 });

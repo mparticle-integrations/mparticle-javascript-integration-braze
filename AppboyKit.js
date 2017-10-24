@@ -233,11 +233,17 @@
                 options.sdkFlavor = 'mparticle';
                 options.enableHtmlInAppMessages = forwarderSettings.enableHtmlInAppMessages == 'True';
 
-                cluster = forwarderSettings.cluster || forwarderSettings.dataCenterLocation;
+                var cluster = forwarderSettings.cluster || forwarderSettings.dataCenterLocation;
+
                 if (clusterMapping.hasOwnProperty(cluster)) {
                     options.baseUrl = clusterMapping[cluster];
+                } else {
+                    var customUrl = decodeClusterSetting(cluster)
+                    if (customUrl) {
+                        options.baseUrl = customUrl;
+                    }
                 }
-
+                
                 if (testMode !== true) {
                     /* eslint-disable */
                     +function() {
@@ -303,6 +309,21 @@
         /** End mParticle API **/
         /**************************/
 
+        function decodeClusterSetting(clusterSetting) {
+            if (clusterSetting) {
+                var decodedSetting = clusterSetting.replace(/&amp;/g, '&');
+                decodedSetting = clusterSetting.replace(/&quot;/g, '"');
+                try {
+                    var clusterSettingObject = JSON.parse(decodedSetting)
+                    if (clusterSettingObject && clusterSettingObject.JS) {
+                        return 'https://' + clusterSettingObject.JS + '/api/v3';
+                    }
+                } catch (e) {
+                    console.log('Unable to configure custom Appboy cluster: ' + e.toString());
+                }
+            }
+        }
+
         function getSanitizedStringForAppboy(value) {
             if (typeof(value) === 'string') {
                 if (value.substr(0, 1) === '$') {
@@ -359,6 +380,7 @@
         this.setUserIdentity = setUserIdentity;
         this.setUserAttribute = setUserAttribute;
         this.removeUserAttribute = removeUserAttribute;
+        this.decodeClusterSetting = decodeClusterSetting;
     };
 
     if (!window || !window.mParticle || !window.mParticle.addForwarder) {
