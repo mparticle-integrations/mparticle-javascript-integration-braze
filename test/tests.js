@@ -457,7 +457,7 @@ describe('Appboy Forwarder', function () {
         });
 
         window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.eventProperties[0].should.have.property('hostname', '');
+        window.appboy.eventProperties[0].should.have.property('hostname', window.location.hostname);
         window.appboy.eventProperties[0].should.have.property('title', 'Mocha Tests');
         window.appboy.eventProperties[0].should.have.property('attri$bute', 'what$ever');
     });
