@@ -1,4 +1,4 @@
-# integration-appboy
+# integration-braze
 
 Braze Javascript integration for mParticle
 
