@@ -1,6 +1,6 @@
 # integration-appboy
 
-Appboy Javascript integration for mParticle
+Braze Javascript integration for mParticle
 
 #License
 
