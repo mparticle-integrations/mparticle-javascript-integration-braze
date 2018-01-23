@@ -267,6 +267,9 @@
                             if (!(appboy.initialize(forwarderSettings.apiKey, options))) {
                                 return 'Failed to initialize: ' + name;
                             }
+                            if (forwarderSettings.register_inapp) {
+                                appboy.display.automaticallyShowNewInAppMessages();
+                            }
 
                             appboy.openSession();
                             appboy.requestInAppMessageRefresh();
@@ -291,13 +294,13 @@
                     if (!(appboy.initialize(forwarderSettings.apiKey, options))) {
                         return 'Failed to initialize: ' + name;
                     }
+                    if (forwarderSettings.register_inapp) {
+                        appboy.display.automaticallyShowNewInAppMessages();
+                    }
 
                     appboy.openSession();
                     appboy.requestInAppMessageRefresh();
                     isInitialized = true;
-                }
-                if (forwarderSettings.register_inapp) {
-                    appboy.display.automaticallyShowNewInAppMessages();
                 }
                 return 'Successfully initialized: ' + name;
             }
