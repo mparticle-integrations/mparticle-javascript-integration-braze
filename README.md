@@ -1,8 +1,11 @@
-# integration-braze
+![Braze Logo](https://github.com/mparticle-integrations/mparticle-javascript-integration-appboy/blob/master/braze-logo.png)
+
+Braze Integration
+===========================
 
 Braze Javascript integration for mParticle
 
-#License
+# License
 
 Copyright 2015 mParticle, Inc.
 
