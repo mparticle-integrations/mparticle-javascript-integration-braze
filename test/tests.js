@@ -430,19 +430,30 @@ describe('Appboy Forwarder', function () {
         window.appboy.should.have.property('logCustomEventCalled', true);
     });
 
-    it('should log a page view when forwardScreenViews is true, and not log when forwarder setting is false or not passed in', function(){
+    it('should log a page view when forwardScreenViews is true, and not log when forwarder setting is false', function(){
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            forwardScreenViews: 'False'
+        }, reportService.cb, true, null, {
+            gender: 'm'
+        }, [{
+            Identity: 'testUser',
+            Type: IdentityType.CustomerId
+        }], '1.1', 'My App');
+
         mParticle.forwarder.process({
             EventName: 'Test Log Page View',
             EventDataType: MessageType.PageView,
             EventCategory: EventType.Navigation,
             EventAttributes: { $$$attri$bute: '$$$$what$ever' }
         });
+
         window.appboy.should.have.property('logCustomEventCalled', false);
 
         window.appboy = new MockAppboy();
         mParticle.forwarder.init({
             apiKey: '123456',
-            forwardScreenViews: true
+            forwardScreenViews: 'True'
         }, reportService.cb, true, null, {
             gender: 'm'
         }, [{
