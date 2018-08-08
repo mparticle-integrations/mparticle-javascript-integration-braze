@@ -200,6 +200,53 @@
             }
         }
 
+        function primeAppBoyWebPush() {
+            appboy.subscribeToNewInAppMessages(function(inAppMessages) {
+                var message = inAppMessages[0];
+                var pushPrimer = false;
+                if (message != null) {
+                    shouldDisplay = true;
+
+                    if (message instanceof appboy.ab.InAppMessage) {
+                      // Read the key-value pair for msg-id
+                        var msgId = message.extras['msg-id'];
+
+                      // If this is our push primer message
+                        if (msgId == 'push-primer') {
+                            pushPrimer = true;
+                          // We don't want to display the soft push prompt to users on browsers that don't support push, or if the user
+                          // has already granted/blocked permission
+                            if (!appboy.isPushSupported() || appboy.isPushPermissionGranted() || appboy.isPushBlocked()) {
+                                shouldDisplay = false;
+                            }
+                            if (message.buttons[0] != null) {
+                              // Prompt the user when the first button is clicked
+                                message.buttons[0].subscribeToClickedEvent(function() {
+                                    appboy.registerAppboyPushMessages();
+                                });
+                            }
+                        }
+                    }
+
+                    // Display the message if it's a push primer message and shouldDisplay is true
+                    if ((pushPrimer && shouldDisplay) || (!pushPrimer && forwarderSettings.register_inapp === 'True')) {
+                        appboy.display.showInAppMessage(message);
+                    }
+                }
+
+              // Remove this message from the array of IAMs and return whatever's left
+                return inAppMessages.slice(1);
+            });
+        }
+
+        function openSession(forwarderSettings) {
+            appboy.openSession(function() {
+                if (forwarderSettings.softPushCustomEventName) {
+                    appboy.logCustomEvent(forwarderSettings.softPushCustomEventName);
+                }
+            });
+        }
+
         function initForwarder(settings, service, testMode, trackerId, userAttributes, userIdentities, appVersion, appName) {  // eslint-disable-line no-unused-vars
             try {
                 forwarderSettings = settings;
@@ -209,6 +256,14 @@
                 options.sessionTimeoutInSeconds = forwarderSettings.ABKSessionTimeoutKey || 1800;
                 options.sdkFlavor = 'mparticle';
                 options.enableHtmlInAppMessages = forwarderSettings.enableHtmlInAppMessages == 'True';
+
+                if (forwarderSettings.safariWebsitePushId) {
+                    options.safariWebsitePushId = forwarderSettings.safariWebsitePushId;
+                }
+
+                if (forwarderSettings.serviceWorkerLocation) {
+                    options.serviceWorkerLocation = forwarderSettings.serviceWorkerLocation;
+                }
 
                 var cluster = forwarderSettings.cluster || forwarderSettings.dataCenterLocation;
 
@@ -223,49 +278,35 @@
 
                 if (testMode !== true) {
                     /* eslint-disable */
-                    +function() {
-                        +function(a, p, P, b, y) {
-                            appboy = {};
-                            appboyQueue = [];
-                            for (var s = "initialize destroy getDeviceId toggleAppboyLogging setLogger openSession changeUser requestImmediateDataFlush requestFeedRefresh subscribeToFeedUpdates logCardImpressions logCardClick logFeedDisplayed requestInAppMessageRefresh logInAppMessageImpression logInAppMessageClick logInAppMessageButtonClick logInAppMessageHtmlClick subscribeToNewInAppMessages removeSubscription removeAllSubscriptions logCustomEvent logPurchase isPushSupported isPushBlocked isPushGranted isPushPermissionGranted registerAppboyPushMessages unregisterAppboyPushMessages submitFeedback trackLocation stopWebTracking resumeWebTracking ab ab.User ab.User.Genders ab.User.NotificationSubscriptionTypes ab.User.prototype.getUserId ab.User.prototype.setFirstName ab.User.prototype.setLastName ab.User.prototype.setEmail ab.User.prototype.setGender ab.User.prototype.setDateOfBirth ab.User.prototype.setCountry ab.User.prototype.setHomeCity ab.User.prototype.setLanguage ab.User.prototype.setEmailNotificationSubscriptionType ab.User.prototype.setPushNotificationSubscriptionType ab.User.prototype.setPhoneNumber ab.User.prototype.setAvatarImageUrl ab.User.prototype.setLastKnownLocation ab.User.prototype.setUserAttribute ab.User.prototype.setCustomUserAttribute ab.User.prototype.addToCustomAttributeArray ab.User.prototype.removeFromCustomAttributeArray ab.User.prototype.incrementCustomUserAttribute ab.User.prototype.addAlias ab.InAppMessage ab.InAppMessage.SlideFrom ab.InAppMessage.ClickAction ab.InAppMessage.DismissType ab.InAppMessage.OpenTarget ab.InAppMessage.ImageStyle ab.InAppMessage.TextAlignment ab.InAppMessage.Orientation ab.InAppMessage.CropType ab.InAppMessage.prototype.subscribeToClickedEvent ab.InAppMessage.prototype.subscribeToDismissedEvent ab.InAppMessage.prototype.removeSubscription ab.InAppMessage.prototype.removeAllSubscriptions ab.InAppMessage.Button ab.InAppMessage.Button.prototype.subscribeToClickedEvent ab.InAppMessage.Button.prototype.removeSubscription ab.InAppMessage.Button.prototype.removeAllSubscriptions ab.SlideUpMessage ab.ModalMessage ab.FullScreenMessage ab.HtmlMessage ab.ControlMessage ab.Feed ab.Feed.prototype.getUnreadCardCount ab.Card ab.ClassicCard ab.CaptionedImage ab.Banner ab.WindowUtils display display.automaticallyShowNewInAppMessages display.showInAppMessage display.showFeed display.destroyFeed display.toggleFeed sharedLib".split(" "), i = 0; i < s.length; i++) {
-                                for (var m = s[i], k = appboy, l = m.split("."), j = 0; j < l.length - 1; j++) k = k[l[j]];
-                                k[l[j]] = (new Function("return function " + m.replace(/\./g, "_") + "(){appboyQueue.push(arguments)}"))()
-                            }
-                            appboy.getUser = function() {
-                                return new appboy.ab.User
-                            };
-                            appboy.getCachedFeed = function() {
-                                return new appboy.ab.Feed
-                            };
+                    +function(a,p,P,b,y){
+                        appboy={};
+                        appboyQueue=[];
+                        for (var s="initialize destroy getDeviceId toggleAppboyLogging setLogger openSession changeUser requestImmediateDataFlush requestFeedRefresh subscribeToFeedUpdates requestContentCardsRefresh subscribeToContentCardsUpdates logCardImpressions logCardClick logCardDismissal logFeedDisplayed logContentCardsDisplayed logInAppMessageImpression logInAppMessageClick logInAppMessageButtonClick logInAppMessageHtmlClick subscribeToNewInAppMessages removeSubscription removeAllSubscriptions logCustomEvent logPurchase isPushSupported isPushBlocked isPushGranted isPushPermissionGranted registerAppboyPushMessages unregisterAppboyPushMessages submitFeedback trackLocation stopWebTracking resumeWebTracking wipeData ab ab.User ab.User.Genders ab.User.NotificationSubscriptionTypes ab.User.prototype.getUserId ab.User.prototype.setFirstName ab.User.prototype.setLastName ab.User.prototype.setEmail ab.User.prototype.setGender ab.User.prototype.setDateOfBirth ab.User.prototype.setCountry ab.User.prototype.setHomeCity ab.User.prototype.setLanguage ab.User.prototype.setEmailNotificationSubscriptionType ab.User.prototype.setPushNotificationSubscriptionType ab.User.prototype.setPhoneNumber ab.User.prototype.setAvatarImageUrl ab.User.prototype.setLastKnownLocation ab.User.prototype.setUserAttribute ab.User.prototype.setCustomUserAttribute ab.User.prototype.addToCustomAttributeArray ab.User.prototype.removeFromCustomAttributeArray ab.User.prototype.incrementCustomUserAttribute ab.User.prototype.addAlias ab.InAppMessage ab.InAppMessage.SlideFrom ab.InAppMessage.ClickAction ab.InAppMessage.DismissType ab.InAppMessage.OpenTarget ab.InAppMessage.ImageStyle ab.InAppMessage.TextAlignment ab.InAppMessage.Orientation ab.InAppMessage.CropType ab.InAppMessage.prototype.subscribeToClickedEvent ab.InAppMessage.prototype.subscribeToDismissedEvent ab.InAppMessage.prototype.removeSubscription ab.InAppMessage.prototype.removeAllSubscriptions ab.InAppMessage.Button ab.InAppMessage.Button.prototype.subscribeToClickedEvent ab.InAppMessage.Button.prototype.removeSubscription ab.InAppMessage.Button.prototype.removeAllSubscriptions ab.SlideUpMessage ab.ModalMessage ab.FullScreenMessage ab.HtmlMessage ab.ControlMessage ab.Feed ab.Feed.prototype.getUnreadCardCount ab.ContentCards ab.ContentCards.prototype.getUnviewedCardCount ab.Card ab.ClassicCard ab.CaptionedImage ab.Banner ab.ControlCard ab.WindowUtils display display.automaticallyShowNewInAppMessages display.showInAppMessage display.showFeed display.destroyFeed display.toggleFeed display.showContentCards display.hideContentCards display.toggleContentCards sharedLib".split(" "),i=0;i<s.length;i++){for(var m=s[i],k=appboy,l=m.split("."), j=0; j < l.length-1; j++) k = k[l[j]]; k[l[j]]=(new Function("return function "+m.replace(/\./g,"_")+"(){appboyQueue.push(arguments); return true}"))()}
+                        appboy.getUser = function() {
+                            return new appboy.ab.User;
+                        };
+                        appboy.getCachedFeed = function(){
+                            return new appboy.ab.Feed;
+                        };
+                        appboy.getCachedContentCards=function(){return new appboy.ab.ContentCards};(y=p.createElement(P)).type='text/javascript';
+                        y.src='https://js.appboycdn.com/web-sdk/2.2/appboy.min.js';
+                        y.async=1;
+                        (b=p.getElementsByTagName(P)[0]).parentNode.insertBefore(y,b)
+                    }(window,document,'script');
+                    appboy.initialize(forwarderSettings.apiKey, options);
 
-                            (y = p.createElement(P)).type = 'text/javascript';
-                            y.src = 'https://js.appboycdn.com/web-sdk/2.0/appboy.min.js';
+                    primeAppBoyWebPush();
+                    openSession(forwarderSettings);
 
-                            y.async = 1;
-                            (b = p.getElementsByTagName(P)[0]).parentNode.insertBefore(y, b)
-                        }(window, document, 'script');
-
-                        appboy.initialize(forwarderSettings.apiKey, options);
-
-                        if (forwarderSettings.register_inapp == 'True') {
-                            appboy.display.automaticallyShowNewInAppMessages();
-                        }
-
-                        appboy.openSession();
-                        appboy.requestInAppMessageRefresh();
-                    }();
                     /* eslint-enable */
                 }
                 else {
                     if (!(appboy.initialize(forwarderSettings.apiKey, options))) {
                         return 'Failed to initialize: ' + name;
                     }
-                    if (forwarderSettings.register_inapp == 'True') {
-                        appboy.display.automaticallyShowNewInAppMessages();
-                    }
 
-                    appboy.openSession();
-                    appboy.requestInAppMessageRefresh();
+                    primeAppBoyWebPush();
+                    openSession(forwarderSettings);
                 }
                 return 'Successfully initialized: ' + name;
             }
