@@ -742,7 +742,7 @@ describe('Appboy Forwarder', function () {
         window.appboy.logCustomEventName.should.equal('prime-for-push');
     });
 
-    it.only('should initialize with doNotLoadFontAwesome', function(){
+    it('should initialize with doNotLoadFontAwesome', function(){
         window.appboy = new MockAppboy();
 
         mParticle.forwarder.init({
