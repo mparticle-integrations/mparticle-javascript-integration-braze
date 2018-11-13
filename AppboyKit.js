@@ -507,7 +507,6 @@ window.appboy = require('appboy-web-sdk');
                 options.sessionTimeoutInSeconds = forwarderSettings.ABKSessionTimeoutKey || 1800;
                 options.sdkFlavor = 'mparticle';
                 options.enableHtmlInAppMessages = forwarderSettings.enableHtmlInAppMessages == 'True';
-                options.doNotLoadFontAwesome = forwarderSettings.doNotLoadFontAwesome == 'True';
 
                 if (forwarderSettings.safariWebsitePushId) {
                     options.safariWebsitePushId = forwarderSettings.safariWebsitePushId;
