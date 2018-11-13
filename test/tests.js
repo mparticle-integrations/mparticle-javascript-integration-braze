@@ -160,6 +160,7 @@ describe('Appboy Forwarder', function () {
             this.apiKey = null;
             this.baseUrl = null;
             this.userId = null;
+            this.doNotLoadFontAwesome = null;
 
             this.eventProperties = [];
             this.purchaseEventProperties = [];
@@ -171,6 +172,7 @@ describe('Appboy Forwarder', function () {
                 self.initializeCalled = true;
                 self.apiKey = apiKey;
                 self.baseUrl = options.baseUrl || null;
+                self.doNotLoadFontAwesome = options.doNotLoadFontAwesome;
                 return true;
             };
 
@@ -738,5 +740,28 @@ describe('Appboy Forwarder', function () {
         }], '1.1', 'My App');
         window.appboy.logCustomEventCalled.should.equal(true);
         window.appboy.logCustomEventName.should.equal('prime-for-push');
+    });
+
+    it.only('should initialize with doNotLoadFontAwesome', function(){
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            doNotLoadFontAwesome: null});
+
+        window.appboy.should.have.property('doNotLoadFontAwesome', false);
+
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            doNotLoadFontAwesome: 'True'});
+
+        window.appboy.should.have.property('doNotLoadFontAwesome', true);
+
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init({
+            doNotLoadFontAwesome: 'False'});
+
+        window.appboy.should.have.property('doNotLoadFontAwesome', false);
     });
 });
