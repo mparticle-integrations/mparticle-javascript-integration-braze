@@ -271,15 +271,8 @@ describe('Appboy Forwarder', function () {
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
         window.appboy.should.have.property('logCustomEventName', 'Test Event');
-    });
 
-    it('should call reportService when logging event', function () {
-        mParticle.forwarder.process({
-            EventName: 'Test Reporting Event',
-            EventDataType: MessageType.PageEvent
-        });
-
-        reportService.event.should.have.property('EventName', 'Test Reporting Event');
+        reportService.event.should.have.property('EventName', 'Test Event');
     });
 
     it('should log an event with properties', function(){
@@ -348,6 +341,7 @@ describe('Appboy Forwarder', function () {
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
         window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal('whatever');
         window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
+        reportService.event.should.have.property('EventName', 'Test Purchase Event');
     });
 
     it('should log a purchase event without attributes', function(){
@@ -410,11 +404,14 @@ describe('Appboy Forwarder', function () {
 
     it('should log a custom event for non-purchase commerce events', function(){
         mParticle.forwarder.process({
-            EventName: 'Test Purchase Event',
+            EventName: 'Test Non-Purchase Event',
             EventDataType: MessageType.Commerce,
             EventCategory: EventType.Other
         });
+
         window.appboy.should.have.property('logCustomEventCalled', true);
+        reportService.event.should.have.property('EventName', 'Test Non-Purchase Event');
+
     });
 
     it('should log a page view when forwardScreenViews is true, and not log when forwarder setting is false', function(){
@@ -458,6 +455,7 @@ describe('Appboy Forwarder', function () {
         window.appboy.eventProperties[0].should.have.property('hostname', window.location.hostname);
         window.appboy.eventProperties[0].should.have.property('title', 'Mocha Tests');
         window.appboy.eventProperties[0].should.have.property('attri$bute', 'what$ever');
+        reportService.event.should.have.property('EventName', 'Test Log Page View');
     });
 
     it('should sanitize purchase event and properties', function(){
