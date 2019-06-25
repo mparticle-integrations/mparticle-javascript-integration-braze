@@ -1,17 +1,29 @@
 {
-  "name": "integration-appboy",
+  "name": "@mparticle/web-appboy-kit",
+  "version": "2.0.0-rc.1",
+  "author": "mParticle Developers <developers@mparticle.com> (https://www.mparticle.com)",
   "description": "mParticle integration sdk for Appboy",
-  "repository": "https://github.com/mParticle/integration-appboy",
+  "browser": "dist/AppboyKit.js",
+  "files": [
+    "dist/AppboyKit.js"
+  ],
+  "repository": "https://github.com/mparticle-integrations/mparticle-javascript-integration-appboy",
   "devDependencies": {
     "blanket": "1.1.7",
     "mocha": "2.3.2",
     "should": "7.1.0",
-    "watchify": "^3.11.0"
+    "watchify": "^3.11.0",
+    "rollup": "^1.13.1",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.0.1"
   },
   "dependencies": {
+    "@mparticle/web-sdk": "^2.9.4-rc.1",
     "appboy-web-sdk": "2.2.4"
   },
   "scripts": {
-    "watch": "watchify src/AppboyKit-dev.js -v -o AppboyKit.js"
-  }
+    "build": "rollup --config rollup.config.js",
+    "watch": "rollup --config rollup.config.js -w"
+  },
+  "license": "Apache-2.0"
 }

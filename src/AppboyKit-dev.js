@@ -16,6 +16,7 @@ window.appboy = require('appboy-web-sdk');
 
 (function (window) {
     var name = 'Appboy',
+        moduleId = 28,
         MessageType = {
             PageView: 3,
             PageEvent: 4,
@@ -380,13 +381,29 @@ window.appboy = require('appboy-web-sdk');
         this.decodeClusterSetting = decodeClusterSetting;
     };
 
+    function getId() {
+        return moduleId;
+    }
+
+    function register(config) {
+        if (config.kits) {
+            config.kits[name] = {
+                constructor: constructor
+            };
+        }
+    }
+
     if (!window || !window.mParticle || !window.mParticle.addForwarder) {
         return;
     }
 
     window.mParticle.addForwarder({
         name: name,
-        constructor: constructor
+        constructor: constructor,
+        getId: getId
     });
 
+    module.exports = {
+        register: register
+    };
 })(window);

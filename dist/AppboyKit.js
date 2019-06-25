@@ -2,7 +2,8 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	(global = global || self, factory(global['mp-appboy-kit'] = {}));
-}(this, function (exports) {
+}(this, function (exports) { 'use strict';
+
 	function commonjsRequire () {
 		throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
 	}
