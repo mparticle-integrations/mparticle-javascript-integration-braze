@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 window.appboy = require('appboy-web-sdk');
+var isobject = require('isobject');
 //  Copyright 2015 mParticle, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,6 @@ window.appboy = require('appboy-web-sdk');
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-(function (window) {
     var name = 'Appboy',
         moduleId = 28,
         MessageType = {
@@ -211,19 +211,19 @@ window.appboy = require('appboy-web-sdk');
                     shouldDisplay = true;
 
                     if (message instanceof appboy.ab.InAppMessage) {
-                      // Read the key-value pair for msg-id
+                        // Read the key-value pair for msg-id
                         var msgId = message.extras['msg-id'];
 
-                      // If this is our push primer message
+                        // If this is our push primer message
                         if (msgId == 'push-primer') {
                             pushPrimer = true;
-                          // We don't want to display the soft push prompt to users on browsers that don't support push, or if the user
-                          // has already granted/blocked permission
+                            // We don't want to display the soft push prompt to users on browsers that don't support push, or if the user
+                            // has already granted/blocked permission
                             if (!appboy.isPushSupported() || appboy.isPushPermissionGranted() || appboy.isPushBlocked()) {
                                 shouldDisplay = false;
                             }
                             if (message.buttons[0] != null) {
-                              // Prompt the user when the first button is clicked
+                                // Prompt the user when the first button is clicked
                                 message.buttons[0].subscribeToClickedEvent(function() {
                                     appboy.registerAppboyPushMessages();
                                 });
@@ -237,7 +237,7 @@ window.appboy = require('appboy-web-sdk');
                     }
                 }
 
-              // Remove this message from the array of IAMs and return whatever's left
+                // Remove this message from the array of IAMs and return whatever's left
                 return inAppMessages.slice(1);
             });
         }
@@ -386,24 +386,37 @@ window.appboy = require('appboy-web-sdk');
     }
 
     function register(config) {
-        if (config.kits) {
+        if (!config) {
+            window.console.log('You must pass a config object to register the kit ' + name);
+            return;
+        }
+
+        if (!isobject(config)) {
+            window.console.log('\'config\' must be an object. You passed in a ' + typeof config);
+            return;
+        }
+
+        if (isobject(config.kits)) {
+            config.kits[name] = {
+                constructor: constructor
+            };
+        } else {
+            config.kits = {};
             config.kits[name] = {
                 constructor: constructor
             };
         }
+        window.console.log('Successfully registered ' + name + ' to your mParticle configuration');
     }
 
-    if (!window || !window.mParticle || !window.mParticle.addForwarder) {
-        return;
+    if (window && window.mParticle && window.mParticle.addForwarder) {
+        window.mParticle.addForwarder({
+            name: name,
+            constructor: constructor,
+            getId: getId
+        });
     }
-
-    window.mParticle.addForwarder({
-        name: name,
-        constructor: constructor,
-        getId: getId
-    });
 
     module.exports = {
         register: register
     };
-})(window);
