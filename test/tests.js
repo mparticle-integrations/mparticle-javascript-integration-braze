@@ -511,6 +511,9 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.setUserAttribute('push_subscribe', 'opted_in');
         mParticle.forwarder.setUserAttribute('gender', 'm');
         mParticle.forwarder.setUserAttribute('dob', new Date(1991, 11, 17));
+        mParticle.forwarder.setUserAttribute('phone', '1234567890');
+        mParticle.forwarder.setUserAttribute('country', 'USA');
+        mParticle.forwarder.setUserAttribute('home_city', 'NYC');
         window.appboy.getUser().genderSet.should.equal('m');
         window.appboy.getUser().firstName.should.equal('John');
         window.appboy.getUser().lastName.should.equal('Doe');
@@ -519,6 +522,41 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().yearOfBirth.should.equal(1991);
         window.appboy.getUser().dayOfBirth.should.equal(17);
         window.appboy.getUser().monthOfBirth.should.equal(12);
+        window.appboy.getUser().phoneSet.should.equal('1234567890');
+        window.appboy.getUser().countrySet.should.equal('USA');
+        window.appboy.getUser().homeCity.should.equal('NYC');
+    });
+
+    it('it should set default user attributes using newer mParticle reserved attributes', function(){
+        mParticle.forwarder.setUserAttribute('$FirstName', 'Jane');
+        mParticle.forwarder.setUserAttribute('$LastName', 'Smith');
+        mParticle.forwarder.setUserAttribute('Email', 'test2@gmail.com');
+        mParticle.forwarder.setUserAttribute('$Gender', 'f');
+        mParticle.forwarder.setUserAttribute('$Age', 10);
+        mParticle.forwarder.setUserAttribute('$Mobile', '1234567890');
+        mParticle.forwarder.setUserAttribute('$Country', 'USA');
+        mParticle.forwarder.setUserAttribute('$City', 'NYC');
+
+        window.appboy.getUser().genderSet.should.equal('f');
+        window.appboy.getUser().firstName.should.equal('Jane');
+        window.appboy.getUser().lastName.should.equal('Smith');
+        window.appboy.getUser().emailSet.should.equal('test2@gmail.com');
+        window.appboy.getUser().yearOfBirth.should.equal(2009);
+        window.appboy.getUser().dayOfBirth.should.equal(1);
+        window.appboy.getUser().monthOfBirth.should.equal(1);
+        window.appboy.getUser().phoneSet.should.equal('1234567890');
+        window.appboy.getUser().countrySet.should.equal('USA');
+        window.appboy.getUser().homeCity.should.equal('NYC');
+    });
+
+    it('it should not set invalid attributes on reserved attributes', function(){
+        // age must be a number so yearofBirth is not set
+        mParticle.forwarder.setUserAttribute('$Age', '10');
+        (window.appboy.getUser().yearOfBirth === null).should.equal(true);
+        
+        // dob must be a date value so yearofBirth is not set
+        mParticle.forwarder.setUserAttribute('dob', '1/1/2019');
+        (window.appboy.getUser().yearOfBirth === null).should.equal(true);
     });
 
     it('should not set default values if a string is not passed as the attribute', function(){

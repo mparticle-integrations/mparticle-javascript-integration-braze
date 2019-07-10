@@ -8,6 +8,10 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
+function getCjsExportFromNamespace (n) {
+	return n && n['default'] || n;
+}
+
 var appboy_min = createCommonjsModule(function (module, exports) {
 /*
 * Braze Web SDK v2.2.4
@@ -269,6 +273,12 @@ function isObject(val) {
   return val != null && typeof val === 'object' && Array.isArray(val) === false;
 }
 
+var isobject = /*#__PURE__*/Object.freeze({
+	'default': isObject
+});
+
+var isobject$1 = getCjsExportFromNamespace(isobject);
+
 /* eslint-disable no-undef */
 window.appboy = appboy_min;
 
@@ -310,6 +320,14 @@ window.appboy = appboy_min;
         self.name = name;
 
         var DefaultAttributeMethods = {
+            $LastName: 'setLastName',
+            $FirstName: 'setFirstName',
+            Email: 'setEmail',
+            $Gender: 'setGender',
+            $Country: 'setCountry',
+            $City: 'setHomeCity',
+            $Mobile: 'setPhoneNumber',
+            $Age: 'setDateOfBirth',
             last_name: 'setLastName',
             first_name: 'setFirstName',
             email: 'setEmail',
@@ -359,12 +377,19 @@ window.appboy = appboy_min;
         }
 
         function setDefaultAttribute(key, value) {
-            if (key == 'dob') {
+            if (key === 'dob') {
                 if (!(value instanceof Date)) {
                     return 'Can\'t call removeUserAttribute or setUserAttribute on forwarder ' + name + ', removeUserAttribute or setUserAttribute must set \'dob\' to a date';
                 }
                 else {
                     appboy.getUser().setDateOfBirth(value.getFullYear(), value.getMonth() + 1, value.getDate());
+                }
+            } else if (key === '$Age') {
+                if (typeof value === 'number') {
+                    var year = (new Date).getFullYear() - value;
+                    appboy.getUser().setDateOfBirth(year, 1, 1);
+                } else {
+                    return '$Age must be a number';
                 }
             }
             else {
@@ -662,12 +687,12 @@ window.appboy = appboy_min;
             return;
         }
 
-        if (!isObject(config)) {
+        if (!isobject$1(config)) {
             window.console.log('\'config\' must be an object. You passed in a ' + typeof config);
             return;
         }
 
-        if (isObject(config.kits)) {
+        if (isobject$1(config.kits)) {
             config.kits[name] = {
                 constructor: constructor
             };

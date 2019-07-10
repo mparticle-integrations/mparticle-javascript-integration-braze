@@ -39,6 +39,14 @@ var isobject = require('isobject');
         self.name = name;
 
         var DefaultAttributeMethods = {
+            $LastName: 'setLastName',
+            $FirstName: 'setFirstName',
+            Email: 'setEmail',
+            $Gender: 'setGender',
+            $Country: 'setCountry',
+            $City: 'setHomeCity',
+            $Mobile: 'setPhoneNumber',
+            $Age: 'setDateOfBirth',
             last_name: 'setLastName',
             first_name: 'setFirstName',
             email: 'setEmail',
@@ -88,12 +96,19 @@ var isobject = require('isobject');
         }
 
         function setDefaultAttribute(key, value) {
-            if (key == 'dob') {
+            if (key === 'dob') {
                 if (!(value instanceof Date)) {
                     return 'Can\'t call removeUserAttribute or setUserAttribute on forwarder ' + name + ', removeUserAttribute or setUserAttribute must set \'dob\' to a date';
                 }
                 else {
                     appboy.getUser().setDateOfBirth(value.getFullYear(), value.getMonth() + 1, value.getDate());
+                }
+            } else if (key === '$Age') {
+                if (typeof value === 'number') {
+                    var year = (new Date).getFullYear() - value;
+                    appboy.getUser().setDateOfBirth(year, 1, 1);
+                } else {
+                    return '$Age must be a number';
                 }
             }
             else {
