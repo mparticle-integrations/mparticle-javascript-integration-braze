@@ -493,7 +493,7 @@ var mpAppboyKit = (function (exports) {
 	                var message = inAppMessages[0];
 	                var pushPrimer = false;
 	                if (message != null) {
-	                    shouldDisplay = true;
+	                    var shouldDisplay = true;
 
 	                    if (message instanceof appboy.ab.InAppMessage) {
 	                        // Read the key-value pair for msg-id
@@ -539,7 +539,6 @@ var mpAppboyKit = (function (exports) {
 	            try {
 	                forwarderSettings = settings;
 	                reportingService = service;
-	                isTesting = testMode;
 	                // 30 min is Appboy default
 	                options.sessionTimeoutInSeconds = forwarderSettings.ABKSessionTimeoutKey || 1800;
 	                options.sdkFlavor = 'mparticle';
