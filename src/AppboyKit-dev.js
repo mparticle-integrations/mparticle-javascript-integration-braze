@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 window.appboy = require('appboy-web-sdk');
-var isobject = require('isobject');
 //  Copyright 2015 mParticle, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,7 @@ var isobject = require('isobject');
 
     var name = 'Appboy',
         moduleId = 28,
+        version = '2.0.1',
         MessageType = {
             PageView: 3,
             PageEvent: 4,
@@ -207,14 +207,34 @@ var isobject = require('isobject');
         }
 
         function setUserIdentity(id, type) {
-            if (type == window.mParticle.IdentityType.CustomerId) {
-                appboy.changeUser(id);
+            // Only use this method when mParicle core SDK is version 1
+            // Other versions use onUserIdentified, which is called after setUserIdentity from core SDK
+            if (window.mParticle.getVersion().split('.')[0] === '1') {
+                if (type == window.mParticle.IdentityType.CustomerId) {
+                    appboy.changeUser(id);
+                } else if (type == window.mParticle.IdentityType.Email) {
+                    appboy.getUser().setEmail(id);
+                } else {
+                    return ("Can't call setUserIdentity on forwarder " + name + ', identity type not supported.');
+                }
             }
-            else if (type == window.mParticle.IdentityType.Email) {
-                appboy.getUser().setEmail(id);
+        }
+
+        // onUserIdentified is not used in version 1 so there is no need to check for version number
+        function onUserIdentified(user) {
+            var appboyUserIDType,
+                userIdentities = user.getUserIdentities().userIdentities;
+
+            if (forwarderSettings.userIdentificationType === 'MPID') {
+                appboyUserIDType = user.getMPID();
+            } else {
+                appboyUserIDType = userIdentities[forwarderSettings.userIdentificationType.toLowerCase()];
             }
-            else {
-                return 'Can\'t call setUserIdentity on forwarder ' + name + ', identity type not supported.';
+
+            appboy.changeUser(appboyUserIDType);
+
+            if (userIdentities.email) {
+                appboy.getUser().setEmail(userIdentities.email);
             }
         }
 
@@ -391,6 +411,7 @@ var isobject = require('isobject');
         this.process = processEvent;
         this.setUserIdentity = setUserIdentity;
         this.setUserAttribute = setUserAttribute;
+        this.onUserIdentified = onUserIdentified;
         this.removeUserAttribute = removeUserAttribute;
         this.decodeClusterSetting = decodeClusterSetting;
     };
@@ -405,12 +426,12 @@ var isobject = require('isobject');
             return;
         }
 
-        if (!isobject(config)) {
+        if (!isObject(config)) {
             window.console.log('\'config\' must be an object. You passed in a ' + typeof config);
             return;
         }
 
-        if (isobject(config.kits)) {
+        if (isObject(config.kits)) {
             config.kits[name] = {
                 constructor: constructor
             };
@@ -431,6 +452,13 @@ var isobject = require('isobject');
         });
     }
 
+    function isObject(val) {
+        return (val != null && typeof val === 'object' && Array.isArray(val) === false);
+    }
+
     module.exports = {
-        register: register
+        register: register,
+        getVersion: function() {
+            return version;
+        }
     };

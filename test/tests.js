@@ -56,11 +56,11 @@ describe('Appboy Forwarder', function () {
             Microsoft: 5,
             Yahoo: 6,
             Email: 7,
-            Alias: 8,
             FacebookCustomAudienceId: 9,
-            getName: function () { return 'CustomerID';}
+            Other2: 10,
+            Other3: 11,
+            Other4: 12
         },
-
         MockDisplay = function(){
             var self = this;
 
@@ -497,11 +497,74 @@ describe('Appboy Forwarder', function () {
     });
 
     it('should only change user identity and set the user email', function(){
+        // version 1 should use setUserIdentity
+        mParticle.getVersion = function() {
+            return '1.1.1';
+        };
         mParticle.forwarder.setUserIdentity('123', window.mParticle.IdentityType.CustomerId);
         mParticle.forwarder.setUserIdentity('blah@gmail.com', window.mParticle.IdentityType.Email);
         mParticle.forwarder.setUserIdentity('Mr. Blah facebook id', window.mParticle.IdentityType.Facebook);
         window.appboy.userId.should.equal('123');
         window.appboy.getUser().emailSet.should.equal('blah@gmail.com');
+
+        delete mParticle.getVersion;
+    });
+
+    it('should not use forwarder.setUserIdentity on version 2', function(){
+        mParticle.getVersion = function() {
+            return '2.0.0';
+        };
+        mParticle.forwarder.setUserIdentity('123', window.mParticle.IdentityType.CustomerId);
+        mParticle.forwarder.setUserIdentity('blah@gmail.com', window.mParticle.IdentityType.Email);
+        mParticle.forwarder.setUserIdentity('Mr. Blah facebook id', window.mParticle.IdentityType.Facebook);
+
+        (window.appboy.userId === null).should.equal(true);
+        (window.appboy.getUser().emailSet === null).should.equal(true);
+
+        delete mParticle.getVersion;
+    });
+
+    it('should set main appboy user identity from userIdentificationType ', function() {
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            userIdentificationType: 'Email'
+        });
+        var user = {
+            getUserIdentities: function() {
+                return {
+                    userIdentities: {
+                        customerid: 'abc123',
+                        email: 'test@test.com',
+                        facebook: 'fbID1'
+
+                    }
+                };
+            },
+            getMPID: function() {
+                return 'MPID123';
+            }
+        };
+
+        mParticle.forwarder.onUserIdentified(user);
+        window.appboy.userId.should.equal('test@test.com');
+        window.appboy.getUser().emailSet.should.equal('test@test.com');
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            userIdentificationType: 'MPID'
+        });
+
+        mParticle.forwarder.onUserIdentified(user);
+        window.appboy.userId.should.equal('MPID123');
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            userIdentificationType: 'Facebook'
+        });
+
+        mParticle.forwarder.onUserIdentified(user);
+        window.appboy.userId.should.equal('fbID1');
+
     });
 
     it('it should set default user attributes', function(){

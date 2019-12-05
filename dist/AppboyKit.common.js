@@ -8,10 +8,6 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
-function getCjsExportFromNamespace (n) {
-	return n && n['default'] || n;
-}
-
 var appboy_min = createCommonjsModule(function (module, exports) {
 /*
 * Braze Web SDK v2.2.4
@@ -262,26 +258,8 @@ if("undefined"!==typeof appboyQueue&&appboyQueue&&appboyQueue.length&&0<appboyQu
 aa=T=null!=ca?ca.apply():new T.constructor;else T=T[R[U]];ba+="."+R[U];}null!=T&&"function"===typeof T&&T.apply(aa,O[P]);}}}}).call(window);
 });
 
-/*!
- * isobject <https://github.com/jonschlinkert/isobject>
- *
- * Copyright (c) 2014-2017, Jon Schlinkert.
- * Released under the MIT License.
- */
-
-function isObject(val) {
-  return val != null && typeof val === 'object' && Array.isArray(val) === false;
-}
-
-var isobject = /*#__PURE__*/Object.freeze({
-	'default': isObject
-});
-
-var isobject$1 = getCjsExportFromNamespace(isobject);
-
 /* eslint-disable no-undef */
 window.appboy = appboy_min;
-
 //  Copyright 2015 mParticle, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -298,6 +276,7 @@ window.appboy = appboy_min;
 
     var name = 'Appboy',
         moduleId = 28,
+        version = '2.0.1',
         MessageType = {
             PageView: 3,
             PageEvent: 4,
@@ -488,14 +467,34 @@ window.appboy = appboy_min;
         }
 
         function setUserIdentity(id, type) {
-            if (type == window.mParticle.IdentityType.CustomerId) {
-                appboy.changeUser(id);
+            // Only use this method when mParicle core SDK is version 1
+            // Other versions use onUserIdentified, which is called after setUserIdentity from core SDK
+            if (window.mParticle.getVersion().split('.')[0] === '1') {
+                if (type == window.mParticle.IdentityType.CustomerId) {
+                    appboy.changeUser(id);
+                } else if (type == window.mParticle.IdentityType.Email) {
+                    appboy.getUser().setEmail(id);
+                } else {
+                    return ("Can't call setUserIdentity on forwarder " + name + ', identity type not supported.');
+                }
             }
-            else if (type == window.mParticle.IdentityType.Email) {
-                appboy.getUser().setEmail(id);
+        }
+
+        // onUserIdentified is not used in version 1 so there is no need to check for version number
+        function onUserIdentified(user) {
+            var appboyUserIDType,
+                userIdentities = user.getUserIdentities().userIdentities;
+
+            if (forwarderSettings.userIdentificationType === 'MPID') {
+                appboyUserIDType = user.getMPID();
+            } else {
+                appboyUserIDType = userIdentities[forwarderSettings.userIdentificationType.toLowerCase()];
             }
-            else {
-                return 'Can\'t call setUserIdentity on forwarder ' + name + ', identity type not supported.';
+
+            appboy.changeUser(appboyUserIDType);
+
+            if (userIdentities.email) {
+                appboy.getUser().setEmail(userIdentities.email);
             }
         }
 
@@ -672,6 +671,7 @@ window.appboy = appboy_min;
         this.process = processEvent;
         this.setUserIdentity = setUserIdentity;
         this.setUserAttribute = setUserAttribute;
+        this.onUserIdentified = onUserIdentified;
         this.removeUserAttribute = removeUserAttribute;
         this.decodeClusterSetting = decodeClusterSetting;
     };
@@ -686,12 +686,12 @@ window.appboy = appboy_min;
             return;
         }
 
-        if (!isobject$1(config)) {
+        if (!isObject(config)) {
             window.console.log('\'config\' must be an object. You passed in a ' + typeof config);
             return;
         }
 
-        if (isobject$1(config.kits)) {
+        if (isObject(config.kits)) {
             config.kits[name] = {
                 constructor: constructor
             };
@@ -712,10 +712,19 @@ window.appboy = appboy_min;
         });
     }
 
+    function isObject(val) {
+        return (val != null && typeof val === 'object' && Array.isArray(val) === false);
+    }
+
     var AppboyKitDev = {
-        register: register
+        register: register,
+        getVersion: function() {
+            return version;
+        }
     };
 var AppboyKitDev_1 = AppboyKitDev.register;
+var AppboyKitDev_2 = AppboyKitDev.getVersion;
 
 exports.default = AppboyKitDev;
+exports.getVersion = AppboyKitDev_2;
 exports.register = AppboyKitDev_1;

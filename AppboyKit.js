@@ -257,20 +257,8 @@ var mpAppboyKit = (function (exports) {
 	aa=T=null!=ca?ca.apply():new T.constructor;else T=T[R[U]];ba+="."+R[U];}null!=T&&"function"===typeof T&&T.apply(aa,O[P]);}}}}).call(window);
 	});
 
-	/*!
-	 * isobject <https://github.com/jonschlinkert/isobject>
-	 *
-	 * Copyright (c) 2014-2017, Jon Schlinkert.
-	 * Released under the MIT License.
-	 */
-
-	function isObject(val) {
-	  return val != null && typeof val === 'object' && Array.isArray(val) === false;
-	}
-
 	/* eslint-disable no-undef */
 	window.appboy = appboy_min;
-
 	//  Copyright 2015 mParticle, Inc.
 	//
 	//  Licensed under the Apache License, Version 2.0 (the "License");
@@ -287,6 +275,7 @@ var mpAppboyKit = (function (exports) {
 
 	    var name = 'Appboy',
 	        moduleId = 28,
+	        version = '2.0.1',
 	        MessageType = {
 	            PageView: 3,
 	            PageEvent: 4,
@@ -477,14 +466,34 @@ var mpAppboyKit = (function (exports) {
 	        }
 
 	        function setUserIdentity(id, type) {
-	            if (type == window.mParticle.IdentityType.CustomerId) {
-	                appboy.changeUser(id);
+	            // Only use this method when mParicle core SDK is version 1
+	            // Other versions use onUserIdentified, which is called after setUserIdentity from core SDK
+	            if (window.mParticle.getVersion().split('.')[0] === '1') {
+	                if (type == window.mParticle.IdentityType.CustomerId) {
+	                    appboy.changeUser(id);
+	                } else if (type == window.mParticle.IdentityType.Email) {
+	                    appboy.getUser().setEmail(id);
+	                } else {
+	                    return ("Can't call setUserIdentity on forwarder " + name + ', identity type not supported.');
+	                }
 	            }
-	            else if (type == window.mParticle.IdentityType.Email) {
-	                appboy.getUser().setEmail(id);
+	        }
+
+	        // onUserIdentified is not used in version 1 so there is no need to check for version number
+	        function onUserIdentified(user) {
+	            var appboyUserIDType,
+	                userIdentities = user.getUserIdentities().userIdentities;
+
+	            if (forwarderSettings.userIdentificationType === 'MPID') {
+	                appboyUserIDType = user.getMPID();
+	            } else {
+	                appboyUserIDType = userIdentities[forwarderSettings.userIdentificationType.toLowerCase()];
 	            }
-	            else {
-	                return 'Can\'t call setUserIdentity on forwarder ' + name + ', identity type not supported.';
+
+	            appboy.changeUser(appboyUserIDType);
+
+	            if (userIdentities.email) {
+	                appboy.getUser().setEmail(userIdentities.email);
 	            }
 	        }
 
@@ -661,6 +670,7 @@ var mpAppboyKit = (function (exports) {
 	        this.process = processEvent;
 	        this.setUserIdentity = setUserIdentity;
 	        this.setUserAttribute = setUserAttribute;
+	        this.onUserIdentified = onUserIdentified;
 	        this.removeUserAttribute = removeUserAttribute;
 	        this.decodeClusterSetting = decodeClusterSetting;
 	    };
@@ -701,12 +711,21 @@ var mpAppboyKit = (function (exports) {
 	        });
 	    }
 
+	    function isObject(val) {
+	        return (val != null && typeof val === 'object' && Array.isArray(val) === false);
+	    }
+
 	    var AppboyKitDev = {
-	        register: register
+	        register: register,
+	        getVersion: function() {
+	            return version;
+	        }
 	    };
 	var AppboyKitDev_1 = AppboyKitDev.register;
+	var AppboyKitDev_2 = AppboyKitDev.getVersion;
 
 	exports.default = AppboyKitDev;
+	exports.getVersion = AppboyKitDev_2;
 	exports.register = AppboyKitDev_1;
 
 	return exports;

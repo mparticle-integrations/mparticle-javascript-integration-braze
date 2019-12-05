@@ -1,6 +1,6 @@
 {
   "name": "@mparticle/web-appboy-kit",
-  "version": "2.0.0-rc.4",
+  "version": "2.0.1",
   "author": "mParticle Developers <developers@mparticle.com> (https://www.mparticle.com)",
   "description": "mParticle integration sdk for Appboy",
   "browser": "dist/AppboyKit.common.js",
@@ -20,7 +20,6 @@
     "should": "^7.1.0"
   },
   "dependencies": {
-    "isobject": "^4.0.0",
     "@mparticle/web-sdk": "^2.9.4-rc.1",
     "appboy-web-sdk": "2.2.4"
   },
