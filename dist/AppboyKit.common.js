@@ -276,7 +276,7 @@ window.appboy = appboy_min;
 
     var name = 'Appboy',
         moduleId = 28,
-        version = '2.0.1',
+        version = '2.0.2',
         MessageType = {
             PageView: 3,
             PageEvent: 4,
@@ -344,12 +344,18 @@ window.appboy = appboy_min;
         function logAppboyPageViewEvent(event) {
             var sanitizedEventName,
                 sanitizedAttrs,
+                eventName,
                 attrs = event.EventAttributes || {};
 
             attrs.hostname = window.location.hostname;
             attrs.title = window.document.title;
 
-            sanitizedEventName = getSanitizedValueForAppboy(window.location.pathname);
+            if (forwarderSettings.setEventNameForPageView === 'True') {
+                eventName = event.EventName;
+            } else {
+                eventName = window.location.pathname;
+            }
+            sanitizedEventName = getSanitizedValueForAppboy(eventName);
             sanitizedAttrs = getSanitizedCustomProperties(attrs);
             var reportEvent = appboy.logCustomEvent(sanitizedEventName, sanitizedAttrs);
             return reportEvent === true;

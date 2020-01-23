@@ -1,11 +1,13 @@
 /* eslint-disable no-undef */
 
-describe('Appboy Forwarder', function () {
+describe('Appboy Forwarder', function() {
     var expandCommerceEvent = function() {
-            return [{
-                EventName: 'Test Event',
-                EventDataType: MessageType.PageEvent
-            }];
+            return [
+                {
+                    EventName: 'Test Event',
+                    EventDataType: MessageType.PageEvent,
+                },
+            ];
         },
         MessageType = {
             SessionStart: 1,
@@ -14,7 +16,7 @@ describe('Appboy Forwarder', function () {
             PageEvent: 4,
             CrashReport: 5,
             OptOut: 6,
-            Commerce: 16
+            Commerce: 16,
         },
         EventType = {
             Unknown: 0,
@@ -28,9 +30,9 @@ describe('Appboy Forwarder', function () {
             Other: 8,
             Media: 9,
             ProductPurchase: 16,
-            getName: function () {
+            getName: function() {
                 return 'blahblah';
-            }
+            },
         },
         CommerceEventType = {
             ProductAddToCart: 10,
@@ -45,7 +47,7 @@ describe('Appboy Forwarder', function () {
             PromotionClick: 19,
             ProductAddToWishlist: 20,
             ProductRemoveFromWishlist: 21,
-            ProductImpression: 22
+            ProductImpression: 22,
         },
         IdentityType = {
             Other: 0,
@@ -59,18 +61,17 @@ describe('Appboy Forwarder', function () {
             FacebookCustomAudienceId: 9,
             Other2: 10,
             Other3: 11,
-            Other4: 12
+            Other4: 12,
         },
-        MockDisplay = function(){
+        MockDisplay = function() {
             var self = this;
 
             this.automaticallyShowNewInAppMessagesCalled = false;
 
-            this.automaticallyShowNewInAppMessages = function(){
+            this.automaticallyShowNewInAppMessages = function() {
                 self.automaticallyShowNewInAppMessagesCalled = true;
             };
         },
-
         MockAppboyUser = function() {
             var self = this;
 
@@ -92,59 +93,62 @@ describe('Appboy Forwarder', function () {
 
             this.customAttributeSet = false;
 
-            this.setLastName = function (name){
+            this.setLastName = function(name) {
                 self.lastName = name;
             };
 
-            this.setFirstName = function (name){
+            this.setFirstName = function(name) {
                 self.firstName = name;
             };
 
-            this.setEmail = function (email){
+            this.setEmail = function(email) {
                 self.emailSet = email;
             };
 
-            this.setGender = function (gender){
+            this.setGender = function(gender) {
                 self.genderSet = gender;
             };
 
-            this.setCountry = function (country){
+            this.setCountry = function(country) {
                 self.countrySet = country;
             };
 
-            this.setHomeCity = function (homeCity){
+            this.setHomeCity = function(homeCity) {
                 self.homeCity = homeCity;
             };
 
-            this.setEmailNotificationSubscriptionType = function (subscriptionType){
+            this.setEmailNotificationSubscriptionType = function(
+                subscriptionType
+            ) {
                 self.emailSubscribe = subscriptionType;
             };
 
-            this.setPushNotificationSubscriptionType = function (subscriptionType){
+            this.setPushNotificationSubscriptionType = function(
+                subscriptionType
+            ) {
                 self.pushSubscribe = subscriptionType;
             };
 
-            this.setPhoneNumber = function (number){
+            this.setPhoneNumber = function(number) {
                 self.phoneSet = number;
             };
 
-            this.setAvatarImageUrl = function (url){
+            this.setAvatarImageUrl = function(url) {
                 self.imageUrl = url;
             };
 
-            this.setDateOfBirth = function (year, month, day){
+            this.setDateOfBirth = function(year, month, day) {
                 self.yearOfBirth = year;
                 self.monthOfBirth = month;
                 self.dayOfBirth = day;
             };
 
-            this.setCustomUserAttribute = function (key, value){
+            this.setCustomUserAttribute = function(key, value) {
                 self.customAttributeSet = true;
                 self.customAttribute = key;
-                self.customAttributeValue = (!value) ? '' : value;
+                self.customAttributeValue = !value ? '' : value;
             };
         },
-
         MockAppboy = function() {
             var self = this;
 
@@ -181,19 +185,19 @@ describe('Appboy Forwarder', function () {
                 func();
             };
 
-            this.changeUser = function(id){
+            this.changeUser = function(id) {
                 self.userId = id;
             };
 
-            this.subscribeToNewInAppMessages = function(){
+            this.subscribeToNewInAppMessages = function() {
                 self.subscribeToNewInAppMessagesCalled = true;
             };
 
-            this.getUser = function(){
+            this.getUser = function() {
                 return self.user;
             };
 
-            this.logCustomEvent = function (name, eventProperties){
+            this.logCustomEvent = function(name, eventProperties) {
                 self.logCustomEventCalled = true;
                 self.logCustomEventName = name;
                 self.eventProperties.push(eventProperties);
@@ -202,35 +206,45 @@ describe('Appboy Forwarder', function () {
                 return true;
             };
 
-            this.logPurchase = function(sku, price, currencyType, quantity, attributes){
+            this.logPurchase = function(
+                sku,
+                price,
+                currencyType,
+                quantity,
+                attributes
+            ) {
                 self.logPurchaseName = sku;
                 self.logPurchaseEventCalled = true;
-                self.purchaseEventProperties.push([sku, price, quantity, attributes]);
+                self.purchaseEventProperties.push([
+                    sku,
+                    price,
+                    quantity,
+                    attributes,
+                ]);
 
                 // Return true to indicate event should be reported
                 return true;
             };
         },
-
-        ReportingService = function (){
+        ReportingService = function() {
             var self = this;
 
             this.id = null;
             this.event = null;
 
-            this.cb = function (forwarder, event){
+            this.cb = function(forwarder, event) {
                 self.id = forwarder.id;
                 self.event = event;
             };
 
-            this.reset = function (){
+            this.reset = function() {
                 self.id = null;
                 self.event = null;
             };
         },
         reportService = new ReportingService();
 
-    before(function () {
+    before(function() {
         mParticle.EventType = EventType;
         mParticle.IdentityType = IdentityType;
         mParticle.MessageType = MessageType;
@@ -239,35 +253,52 @@ describe('Appboy Forwarder', function () {
         mParticle.eCommerce.expandCommerceEvent = expandCommerceEvent;
     });
 
-    beforeEach(function () {
+    beforeEach(function() {
         reportService.reset();
         window.appboy = new MockAppboy();
 
-        mParticle.forwarder.init({
-            apiKey: '123456'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
     });
 
-    it('should initialize with apiKey', function(){
+    it('should initialize with apiKey', function() {
         window.appboy.should.have.property('apiKey', '123456');
     });
 
-    it('should open a new session and refresh in app messages upon initialization', function(){
+    it('should open a new session and refresh in app messages upon initialization', function() {
         window.appboy.should.have.property('initializeCalled', true);
         window.appboy.should.have.property('openSessionCalled', true);
-        window.appboy.should.have.property('subscribeToNewInAppMessagesCalled', true);
-        window.appboy.display.should.have.property('automaticallyShowNewInAppMessagesCalled', false);
+        window.appboy.should.have.property(
+            'subscribeToNewInAppMessagesCalled',
+            true
+        );
+        window.appboy.display.should.have.property(
+            'automaticallyShowNewInAppMessagesCalled',
+            false
+        );
     });
 
     it('should log event', function() {
         mParticle.forwarder.process({
             EventName: 'Test Event',
-            EventDataType: MessageType.PageEvent
+            EventDataType: MessageType.PageEvent,
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
         window.appboy.should.have.property('logCustomEventName', 'Test Event');
@@ -275,16 +306,19 @@ describe('Appboy Forwarder', function () {
         reportService.event.should.have.property('EventName', 'Test Event');
     });
 
-    it('should log an event with properties', function(){
+    it('should log an event with properties', function() {
         mParticle.forwarder.process({
             EventName: 'Test Event with attributes',
             EventDataType: MessageType.PageEvent,
             EventAttributes: {
-                dog: 'rex'
-            }
+                dog: 'rex',
+            },
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property('logCustomEventName', 'Test Event with attributes');
+        window.appboy.should.have.property(
+            'logCustomEventName',
+            'Test Event with attributes'
+        );
         window.appboy.eventProperties.should.have.lengthOf(1);
         window.appboy.eventProperties[0]['dog'].should.equal('rex');
     });
@@ -294,11 +328,14 @@ describe('Appboy Forwarder', function () {
             EventName: '$$$$Test Event with attributes$',
             EventDataType: MessageType.PageEvent,
             EventAttributes: {
-                $dog: '$$rex$'
-            }
+                $dog: '$$rex$',
+            },
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property('logCustomEventName', 'Test Event with attributes$');
+        window.appboy.should.have.property(
+            'logCustomEventName',
+            'Test Event with attributes$'
+        );
         window.appboy.eventProperties.should.have.lengthOf(1);
         window.appboy.eventProperties[0]['dog'].should.equal('rex$');
     });
@@ -307,12 +344,12 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: '$$$$Test Event with attributes$',
             EventDataType: MessageType.PageEvent,
-            EventAttributes: 5
+            EventAttributes: 5,
         });
         window.appboy.should.have.property('logCustomEventCalled', false);
     });
 
-    it('should log a purchase event', function(){
+    it('should log a purchase event', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
@@ -327,24 +364,31 @@ describe('Appboy Forwarder', function () {
                         Name: 'Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
-                        Attributes: {attribute: 'whatever'},
-                        Sku: 12345
-                    }
-                ]
-            }
+                        Attributes: { attribute: 'whatever' },
+                        Sku: 12345,
+                    },
+                ],
+            },
         });
         window.appboy.should.have.property('logPurchaseEventCalled', true);
         window.appboy.should.have.property('logPurchaseName', 'Product Name');
         window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal('Product Name');
+        window.appboy.purchaseEventProperties[0][0].should.equal(
+            'Product Name'
+        );
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal('whatever');
+        window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal(
+            'whatever'
+        );
         window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
-        reportService.event.should.have.property('EventName', 'Test Purchase Event');
+        reportService.event.should.have.property(
+            'EventName',
+            'Test Purchase Event'
+        );
     });
 
-    it('should log a purchase event without attributes', function(){
+    it('should log a purchase event without attributes', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
@@ -359,21 +403,22 @@ describe('Appboy Forwarder', function () {
                         Name: 'Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
-                        Sku: 12345
-                    }
-                ]
-            }
+                        Sku: 12345,
+                    },
+                ],
+            },
         });
         window.appboy.should.have.property('logPurchaseEventCalled', true);
         window.appboy.should.have.property('logPurchaseName', 'Product Name');
         window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal('Product Name');
+        window.appboy.purchaseEventProperties[0][0].should.equal(
+            'Product Name'
+        );
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
     });
 
-
-    it('should log a purchase event with empty attributes', function(){
+    it('should log a purchase event with empty attributes', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
@@ -389,76 +434,198 @@ describe('Appboy Forwarder', function () {
                         TotalAmount: 50,
                         Quantity: 1,
                         Attributes: {},
-                        Sku: 12345
-                    }
-                ]
-            }
+                        Sku: 12345,
+                    },
+                ],
+            },
         });
         window.appboy.should.have.property('logPurchaseEventCalled', true);
         window.appboy.should.have.property('logPurchaseName', 'Product Name');
         window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal('Product Name');
+        window.appboy.purchaseEventProperties[0][0].should.equal(
+            'Product Name'
+        );
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
     });
 
-    it('should log a custom event for non-purchase commerce events', function(){
+    it('should log a custom event for non-purchase commerce events', function() {
         mParticle.forwarder.process({
             EventName: 'Test Non-Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.Other
+            EventCategory: EventType.Other,
         });
 
         window.appboy.should.have.property('logCustomEventCalled', true);
-        reportService.event.should.have.property('EventName', 'Test Non-Purchase Event');
-
+        reportService.event.should.have.property(
+            'EventName',
+            'Test Non-Purchase Event'
+        );
     });
 
-    it('should log a page view when forwardScreenViews is true, and not log when forwarder setting is false', function(){
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            forwardScreenViews: 'False'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+    it('should log a page view when forwardScreenViews is true, and not log when forwarder setting is false', function() {
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                forwardScreenViews: 'False',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
 
         mParticle.forwarder.process({
             EventName: 'Test Log Page View',
             EventDataType: MessageType.PageView,
             EventCategory: EventType.Navigation,
-            EventAttributes: { $$$attri$bute: '$$$$what$ever' }
+            EventAttributes: { $$$attri$bute: '$$$$what$ever' },
         });
 
         window.appboy.should.have.property('logCustomEventCalled', false);
 
         window.appboy = new MockAppboy();
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            forwardScreenViews: 'True'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                forwardScreenViews: 'True',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
         mParticle.forwarder.process({
             EventName: 'Test Log Page View',
             EventDataType: MessageType.PageView,
             EventCategory: EventType.Navigation,
-            EventAttributes: { $$$attri$bute: '$$$$what$ever' }
+            EventAttributes: { $$$attri$bute: '$$$$what$ever' },
         });
 
         window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.eventProperties[0].should.have.property('hostname', window.location.hostname);
-        window.appboy.eventProperties[0].should.have.property('title', 'Mocha Tests');
-        window.appboy.eventProperties[0].should.have.property('attri$bute', 'what$ever');
-        reportService.event.should.have.property('EventName', 'Test Log Page View');
+        window.appboy.eventProperties[0].should.have.property(
+            'hostname',
+            window.location.hostname
+        );
+        window.appboy.eventProperties[0].should.have.property(
+            'title',
+            'Mocha Tests'
+        );
+        window.appboy.eventProperties[0].should.have.property(
+            'attri$bute',
+            'what$ever'
+        );
+        reportService.event.should.have.property(
+            'EventName',
+            'Test Log Page View'
+        );
     });
 
-    it('should sanitize purchase event and properties', function(){
+    it('should log a page view with the page name if sendEventNameForPageView is true', function() {
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                forwardScreenViews: 'True',
+                setEventNameForPageView: 'True',
+            },
+            reportService.cb,
+            true,
+            null
+        );
+
+        mParticle.forwarder.process({
+            EventName: 'Test Log Page View',
+            EventDataType: MessageType.PageView,
+            EventCategory: EventType.Navigation,
+            EventAttributes: { $$$attri$bute: '$$$$what$ever' },
+        });
+
+        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.appboy.should.have.property(
+            'logCustomEventName',
+            'Test Log Page View'
+        );
+        window.appboy.eventProperties[0].should.have.property(
+            'hostname',
+            window.location.hostname
+        );
+        window.appboy.eventProperties[0].should.have.property(
+            'title',
+            'Mocha Tests'
+        );
+        window.appboy.eventProperties[0].should.have.property(
+            'attri$bute',
+            'what$ever'
+        );
+        reportService.event.should.have.property(
+            'EventName',
+            'Test Log Page View'
+        );
+
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                forwardScreenViews: 'True',
+                setEventNameForPageView: 'False',
+            },
+            reportService.cb,
+            true,
+            null
+        );
+
+        mParticle.forwarder.process({
+            EventName: 'Test Log Page View',
+            EventDataType: MessageType.PageView,
+            EventCategory: EventType.Navigation,
+            EventAttributes: { $$$attri$bute: '$$$$what$ever' },
+        });
+
+        window.appboy.should.have.property('logCustomEventCalled', true);
+
+        window.appboy.logCustomEventName
+            .includes('Test Log Page View')
+            .should.equal(false);
+        //when setEventNameForPageView is false, logCustomEventName is the path, which will include several /'s
+        window.appboy.logCustomEventName.includes('/').should.equal(true);
+        window.appboy.eventProperties[0].should.have.property(
+            'hostname',
+            window.location.hostname
+        );
+        window.appboy.eventProperties[0].should.have.property(
+            'title',
+            'Mocha Tests'
+        );
+        window.appboy.eventProperties[0].should.have.property(
+            'attri$bute',
+            'what$ever'
+        );
+        reportService.event.should.have.property(
+            'EventName',
+            'Test Log Page View'
+        );
+    });
+
+    it('should sanitize purchase event and properties', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
@@ -473,50 +640,72 @@ describe('Appboy Forwarder', function () {
                         Name: '$Product $Name',
                         TotalAmount: 50,
                         Quantity: 1,
-                        Attributes: { $$$attri$bute: '$$$$what$ever'},
-                        Sku: 12345
-                    }
-                ]
-            }
+                        Attributes: { $$$attri$bute: '$$$$what$ever' },
+                        Sku: 12345,
+                    },
+                ],
+            },
         });
         window.appboy.should.have.property('logPurchaseEventCalled', true);
         window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal('Product $Name');
+        window.appboy.purchaseEventProperties[0][0].should.equal(
+            'Product $Name'
+        );
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3]['attri$bute'].should.equal('what$ever');
+        window.appboy.purchaseEventProperties[0][3]['attri$bute'].should.equal(
+            'what$ever'
+        );
         window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
     });
 
-    it('should not log non-purchase or non-pageEvent Events', function(){
+    it('should not log non-purchase or non-pageEvent Events', function() {
         mParticle.forwarder.process({
             EventName: 'Non-Event',
-            EventDataType: MessageType.PageView
+            EventDataType: MessageType.PageView,
         });
         window.appboy.should.have.property('logPurchaseEventCalled', false);
     });
 
-    it('should only change user identity and set the user email', function(){
+    it('should only change user identity and set the user email', function() {
         // version 1 should use setUserIdentity
         mParticle.getVersion = function() {
             return '1.1.1';
         };
-        mParticle.forwarder.setUserIdentity('123', window.mParticle.IdentityType.CustomerId);
-        mParticle.forwarder.setUserIdentity('blah@gmail.com', window.mParticle.IdentityType.Email);
-        mParticle.forwarder.setUserIdentity('Mr. Blah facebook id', window.mParticle.IdentityType.Facebook);
+        mParticle.forwarder.setUserIdentity(
+            '123',
+            window.mParticle.IdentityType.CustomerId
+        );
+        mParticle.forwarder.setUserIdentity(
+            'blah@gmail.com',
+            window.mParticle.IdentityType.Email
+        );
+        mParticle.forwarder.setUserIdentity(
+            'Mr. Blah facebook id',
+            window.mParticle.IdentityType.Facebook
+        );
         window.appboy.userId.should.equal('123');
         window.appboy.getUser().emailSet.should.equal('blah@gmail.com');
 
         delete mParticle.getVersion;
     });
 
-    it('should not use forwarder.setUserIdentity on version 2', function(){
+    it('should not use forwarder.setUserIdentity on version 2', function() {
         mParticle.getVersion = function() {
             return '2.0.0';
         };
-        mParticle.forwarder.setUserIdentity('123', window.mParticle.IdentityType.CustomerId);
-        mParticle.forwarder.setUserIdentity('blah@gmail.com', window.mParticle.IdentityType.Email);
-        mParticle.forwarder.setUserIdentity('Mr. Blah facebook id', window.mParticle.IdentityType.Facebook);
+        mParticle.forwarder.setUserIdentity(
+            '123',
+            window.mParticle.IdentityType.CustomerId
+        );
+        mParticle.forwarder.setUserIdentity(
+            'blah@gmail.com',
+            window.mParticle.IdentityType.Email
+        );
+        mParticle.forwarder.setUserIdentity(
+            'Mr. Blah facebook id',
+            window.mParticle.IdentityType.Facebook
+        );
 
         (window.appboy.userId === null).should.equal(true);
         (window.appboy.getUser().emailSet === null).should.equal(true);
@@ -527,7 +716,7 @@ describe('Appboy Forwarder', function () {
     it('should set main appboy user identity from userIdentificationType ', function() {
         mParticle.forwarder.init({
             apiKey: '123456',
-            userIdentificationType: 'Email'
+            userIdentificationType: 'Email',
         });
         var user = {
             getUserIdentities: function() {
@@ -535,14 +724,13 @@ describe('Appboy Forwarder', function () {
                     userIdentities: {
                         customerid: 'abc123',
                         email: 'test@test.com',
-                        facebook: 'fbID1'
-
-                    }
+                        facebook: 'fbID1',
+                    },
                 };
             },
             getMPID: function() {
                 return 'MPID123';
-            }
+            },
         };
 
         mParticle.forwarder.onUserIdentified(user);
@@ -551,7 +739,7 @@ describe('Appboy Forwarder', function () {
 
         mParticle.forwarder.init({
             apiKey: '123456',
-            userIdentificationType: 'MPID'
+            userIdentificationType: 'MPID',
         });
 
         mParticle.forwarder.onUserIdentified(user);
@@ -559,15 +747,14 @@ describe('Appboy Forwarder', function () {
 
         mParticle.forwarder.init({
             apiKey: '123456',
-            userIdentificationType: 'Facebook'
+            userIdentificationType: 'Facebook',
         });
 
         mParticle.forwarder.onUserIdentified(user);
         window.appboy.userId.should.equal('fbID1');
-
     });
 
-    it('it should set default user attributes', function(){
+    it('it should set default user attributes', function() {
         mParticle.forwarder.setUserAttribute('first_name', 'John');
         mParticle.forwarder.setUserAttribute('last_name', 'Doe');
         mParticle.forwarder.setUserAttribute('email', 'test@gmail.com');
@@ -590,7 +777,7 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().homeCity.should.equal('NYC');
     });
 
-    it('it should set default user attributes using newer mParticle reserved attributes', function(){
+    it('it should set default user attributes using newer mParticle reserved attributes', function() {
         mParticle.forwarder.setUserAttribute('$FirstName', 'Jane');
         mParticle.forwarder.setUserAttribute('$LastName', 'Smith');
         mParticle.forwarder.setUserAttribute('Email', 'test2@gmail.com');
@@ -604,7 +791,7 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().firstName.should.equal('Jane');
         window.appboy.getUser().lastName.should.equal('Smith');
         window.appboy.getUser().emailSet.should.equal('test2@gmail.com');
-        window.appboy.getUser().yearOfBirth.should.equal(2009);
+        window.appboy.getUser().yearOfBirth.should.equal(2010);
         window.appboy.getUser().dayOfBirth.should.equal(1);
         window.appboy.getUser().monthOfBirth.should.equal(1);
         window.appboy.getUser().phoneSet.should.equal('1234567890');
@@ -612,17 +799,17 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().homeCity.should.equal('NYC');
     });
 
-    it('it should not set invalid attributes on reserved attributes', function(){
+    it('it should not set invalid attributes on reserved attributes', function() {
         // age must be a number so yearofBirth is not set
         mParticle.forwarder.setUserAttribute('$Age', '10');
         (window.appboy.getUser().yearOfBirth === null).should.equal(true);
-        
+
         // dob must be a date value so yearofBirth is not set
         mParticle.forwarder.setUserAttribute('dob', '1/1/2019');
         (window.appboy.getUser().yearOfBirth === null).should.equal(true);
     });
 
-    it('should not set default values if a string is not passed as the attribute', function(){
+    it('should not set default values if a string is not passed as the attribute', function() {
         mParticle.forwarder.setUserAttribute('first_name', 'John');
         mParticle.forwarder.setUserAttribute('last_name', 'Doe');
         mParticle.forwarder.setUserAttribute('first_name', 10.2);
@@ -631,14 +818,16 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().lastName.should.equal('Doe');
     });
 
-    it('should set a custom user attribute', function(){
+    it('should set a custom user attribute', function() {
         mParticle.forwarder.setUserAttribute('test', 'result');
-        window.appboy.getUser().should.have.property('customAttributeSet', true);
+        window.appboy
+            .getUser()
+            .should.have.property('customAttributeSet', true);
         window.appboy.getUser().customAttribute.should.equal('test');
         window.appboy.getUser().customAttributeValue.should.equal('result');
     });
 
-    it('should set a custom user attribute of diffferent types', function(){
+    it('should set a custom user attribute of diffferent types', function() {
         mParticle.forwarder.setUserAttribute('testint', 3);
         window.appboy.getUser().customAttributeValue.should.equal(3);
         var d = new Date();
@@ -648,44 +837,48 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().customAttributeValue[0].should.equal('3');
     });
 
-    it('should sanitize a custom user attribute', function(){
+    it('should sanitize a custom user attribute', function() {
         mParticle.forwarder.setUserAttribute('$$tes$t', '$$res$ult');
-        window.appboy.getUser().should.have.property('customAttributeSet', true);
+        window.appboy
+            .getUser()
+            .should.have.property('customAttributeSet', true);
         window.appboy.getUser().customAttribute.should.equal('tes$t');
         window.appboy.getUser().customAttributeValue.should.equal('res$ult');
     });
 
-    it('should sanitize a custom user attribute array', function(){
+    it('should sanitize a custom user attribute array', function() {
         mParticle.forwarder.setUserAttribute('att array', ['1', '$2$']);
         window.appboy.getUser().customAttributeValue[1].should.equal('2$');
     });
 
     it('should not set a custom user attribute array on an invalid array', function() {
         mParticle.forwarder.setUserAttribute('att array', [2, 4, 5]);
-        window.appboy.getUser().should.have.property('customAttributeSet', false);
+        window.appboy
+            .getUser()
+            .should.have.property('customAttributeSet', false);
     });
 
-    it('should remove a default user attribute', function(){
+    it('should remove a default user attribute', function() {
         mParticle.forwarder.setUserAttribute('first_name', 'John');
         mParticle.forwarder.removeUserAttribute('first_name');
         window.appboy.getUser().firstName.should.equal('');
     });
 
-    it('should remove custom user attributes', function(){
+    it('should remove custom user attributes', function() {
         mParticle.forwarder.setUserAttribute('test', 'result');
         mParticle.forwarder.removeUserAttribute('test');
         window.appboy.getUser().customAttribute.should.equal('test');
         window.appboy.getUser().customAttributeValue.should.equal('');
     });
 
-    it('should remove custom user attributes', function(){
+    it('should remove custom user attributes', function() {
         mParticle.forwarder.setUserAttribute('$$test', '$res$ul$t');
         mParticle.forwarder.removeUserAttribute('$test');
         window.appboy.getUser().customAttribute.should.equal('test');
         window.appboy.getUser().customAttributeValue.should.equal('');
     });
 
-    it('should not set date of birth if passed an invalid value', function(){
+    it('should not set date of birth if passed an invalid value', function() {
         mParticle.forwarder.setUserAttribute('dob', new Date(1991, 11, 17));
         mParticle.forwarder.setUserAttribute('dob', 'something');
         window.appboy.getUser().yearOfBirth.should.equal(1991);
@@ -693,134 +886,226 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().monthOfBirth.should.equal(12);
     });
 
-    it('should have no baseUrl when cluster is not passed and dataCenterLocation is not EU', function(){
+    it('should have no baseUrl when cluster is not passed and dataCenterLocation is not EU', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
 
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            dataCenterLocation: 'US'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                dataCenterLocation: 'US',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
 
         window.appboy.should.have.property('baseUrl', null);
     });
 
-    it('should use the EU data center when dataCenterLocation is set to EU and no host is passed', function(){
+    it('should use the EU data center when dataCenterLocation is set to EU and no host is passed', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
 
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            dataCenterLocation: 'EU'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                dataCenterLocation: 'EU',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
 
-        window.appboy.should.have.property('baseUrl', 'https://sdk.api.appboy.eu/api/v3');
+        window.appboy.should.have.property(
+            'baseUrl',
+            'https://sdk.api.appboy.eu/api/v3'
+        );
     });
 
-    it('should use the 01 clusterMapping url when 01 number is passed to cluster', function(){
+    it('should use the 01 clusterMapping url when 01 number is passed to cluster', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
 
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            cluster: '01'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '01',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
 
         window.appboy.baseUrl.should.equal('https://dev.appboy.com/api/v3');
     });
 
-    it('should use the 02 clusterMapping url when 02 number is passed to cluster', function(){
+    it('should use the 02 clusterMapping url when 02 number is passed to cluster', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
 
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            cluster: '02'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '02',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
 
-        window.appboy.baseUrl.should.equal('https://sdk-02.iad.appboy.com/api/v3');
+        window.appboy.baseUrl.should.equal(
+            'https://sdk-02.iad.appboy.com/api/v3'
+        );
     });
 
-    it('should use the 03 clusterMapping url when 03 number is passed to cluster', function(){
+    it('should use the 03 clusterMapping url when 03 number is passed to cluster', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
 
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            cluster: '03'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '03',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
 
-        window.appboy.baseUrl.should.equal('https://sdk.iad-03.appboy.com/api/v3');
+        window.appboy.baseUrl.should.equal(
+            'https://sdk.iad-03.appboy.com/api/v3'
+        );
     });
 
-    it('should use the 03 cluster url when passed an invalid cluster', function(){
+    it('should use the 03 cluster url when passed an invalid cluster', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            cluster: '04'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '04',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
 
-        window.appboy.baseUrl.should.equal('https://sdk.iad-03.appboy.com/api/v3');
+        window.appboy.baseUrl.should.equal(
+            'https://sdk.iad-03.appboy.com/api/v3'
+        );
     });
 
-    it('should use custom cluster url when passed cluster JSON', function(){
+    it('should use custom cluster url when passed cluster JSON', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            cluster: '{&quot;SDK&quot;:&quot;sdk.foo.bar.com&quot;,&quot;REST&quot;:&quot;rest.foo.bar.com&quot;,&quot;JS&quot;:&quot;js.foo.bar.com&quot;}'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster:
+                    '{&quot;SDK&quot;:&quot;sdk.foo.bar.com&quot;,&quot;REST&quot;:&quot;rest.foo.bar.com&quot;,&quot;JS&quot;:&quot;js.foo.bar.com&quot;}',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
 
         window.appboy.baseUrl.should.equal('https://js.foo.bar.com/api/v3');
     });
 
-    it('decodeClusterSetting should return null when no setting given', function(){
+    it('decodeClusterSetting should return null when no setting given', function() {
         Should(window.mParticle.forwarder.decodeClusterSetting()).not.be.ok();
     });
 
-    it('decodeClusterSetting should return null on bad json', function(){
-        Should(window.mParticle.forwarder.decodeClusterSetting('blah&quote;')).not.be.ok();
+    it('decodeClusterSetting should return null on bad json', function() {
+        Should(
+            window.mParticle.forwarder.decodeClusterSetting('blah&quote;')
+        ).not.be.ok();
     });
 
-    it('decodeClusterSetting should return JS url when proper setting is given', function(){
-        var clusterSetting = '{&quot;SDK&quot;:&quot;sdk.foo.bar.com&quot;,&quot;REST&quot;:&quot;rest.foo.bar.com&quot;,&quot;JS&quot;:&quot;js.foo.bar.com&quot;}';
-        Should(window.mParticle.forwarder.decodeClusterSetting(clusterSetting)).equal('https://js.foo.bar.com/api/v3');
+    it('decodeClusterSetting should return JS url when proper setting is given', function() {
+        var clusterSetting =
+            '{&quot;SDK&quot;:&quot;sdk.foo.bar.com&quot;,&quot;REST&quot;:&quot;rest.foo.bar.com&quot;,&quot;JS&quot;:&quot;js.foo.bar.com&quot;}';
+        Should(
+            window.mParticle.forwarder.decodeClusterSetting(clusterSetting)
+        ).equal('https://js.foo.bar.com/api/v3');
     });
 
     it('does not log prime-for-push when initialized without softPushCustomEventName', function() {
@@ -828,38 +1113,52 @@ describe('Appboy Forwarder', function () {
     });
 
     it('logs soft push custom event when initialized with softPushCustomEventName', function() {
-        mParticle.forwarder.init({
-            apiKey: '123456',
-            softPushCustomEventName: 'prime-for-push'
-        }, reportService.cb, true, null, {
-            gender: 'm'
-        }, [{
-            Identity: 'testUser',
-            Type: IdentityType.CustomerId
-        }], '1.1', 'My App');
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                softPushCustomEventName: 'prime-for-push',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
         window.appboy.logCustomEventCalled.should.equal(true);
         window.appboy.logCustomEventName.should.equal('prime-for-push');
     });
 
-    it('should initialize with doNotLoadFontAwesome', function(){
+    it('should initialize with doNotLoadFontAwesome', function() {
         window.appboy = new MockAppboy();
 
         mParticle.forwarder.init({
-            doNotLoadFontAwesome: null});
+            doNotLoadFontAwesome: null,
+        });
 
         window.appboy.should.have.property('doNotLoadFontAwesome', false);
 
         window.appboy = new MockAppboy();
 
         mParticle.forwarder.init({
-            doNotLoadFontAwesome: 'True'});
+            doNotLoadFontAwesome: 'True',
+        });
 
         window.appboy.should.have.property('doNotLoadFontAwesome', true);
 
         window.appboy = new MockAppboy();
 
         mParticle.forwarder.init({
-            doNotLoadFontAwesome: 'False'});
+            doNotLoadFontAwesome: 'False',
+        });
 
         window.appboy.should.have.property('doNotLoadFontAwesome', false);
     });
