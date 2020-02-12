@@ -327,7 +327,14 @@ var mpAppboyKit = (function (exports) {
 	                        product.Attributes = {};
 	                    }
 	                    product.Attributes['Sku'] = product.Sku;
-	                    var sanitizedProductName = getSanitizedValueForAppboy(String(product.Name));
+
+	                    var sanitizedProductName;
+	                    if (forwarderSettings.forwardSkuAsProductName === 'True') {
+	                        sanitizedProductName = getSanitizedValueForAppboy(String(product.Sku));
+	                    } else {
+	                        sanitizedProductName = getSanitizedValueForAppboy(String(product.Name));
+	                    }
+
 	                    var sanitizedProperties = getSanitizedCustomProperties(product.Attributes);
 
 	                    if (sanitizedProperties == null) {

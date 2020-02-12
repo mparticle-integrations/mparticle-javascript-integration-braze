@@ -541,6 +541,41 @@ describe('Appboy Forwarder', function() {
         );
     });
 
+    it('should log a purchase event with SKU in place of product name if forwardSkuAsProductName is true', function () {
+        mParticle.forwarder.init({
+                apiKey: '123456',
+                forwardSkuAsProductName: 'True',
+            },
+            reportService.cb,
+            true,
+            null
+        );
+
+        mParticle.forwarder.process({
+            EventName: 'Test Purchase Event',
+            EventDataType: MessageType.Commerce,
+            EventCategory: EventType.ProductPurchase,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                TransactionId: 1234,
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: '50',
+                        Name: '$Product $Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: { $$$attri$bute: '$$$$what$ever' },
+                        Sku: 12345,
+                    },
+                ],
+            },
+        });
+
+        window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.should.have.property('logPurchaseName', "12345");
+    });
+
     it('should log a page view with the page name if sendEventNameForPageView is true', function() {
         mParticle.forwarder.init(
             {
