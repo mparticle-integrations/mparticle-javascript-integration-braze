@@ -527,10 +527,7 @@ describe('Appboy Forwarder', function() {
             'hostname',
             window.location.hostname
         );
-        window.appboy.eventProperties[0].should.have.property(
-            'title',
-            'Mocha Tests'
-        );
+        window.appboy.eventProperties[0].should.have.property('title');
         window.appboy.eventProperties[0].should.have.property(
             'attri$bute',
             'what$ever'
@@ -541,8 +538,9 @@ describe('Appboy Forwarder', function() {
         );
     });
 
-    it('should log a purchase event with SKU in place of product name if forwardSkuAsProductName is true', function () {
-        mParticle.forwarder.init({
+    it('should log a purchase event with SKU in place of product name if forwardSkuAsProductName is true', function() {
+        mParticle.forwarder.init(
+            {
                 apiKey: '123456',
                 forwardSkuAsProductName: 'True',
             },
@@ -573,7 +571,7 @@ describe('Appboy Forwarder', function() {
         });
 
         window.appboy.should.have.property('logPurchaseEventCalled', true);
-        window.appboy.should.have.property('logPurchaseName', "12345");
+        window.appboy.should.have.property('logPurchaseName', '12345');
     });
 
     it('should log a page view with the page name if sendEventNameForPageView is true', function() {
@@ -604,10 +602,7 @@ describe('Appboy Forwarder', function() {
             'hostname',
             window.location.hostname
         );
-        window.appboy.eventProperties[0].should.have.property(
-            'title',
-            'Mocha Tests'
-        );
+        window.appboy.eventProperties[0].should.have.property('title');
         window.appboy.eventProperties[0].should.have.property(
             'attri$bute',
             'what$ever'
@@ -646,10 +641,7 @@ describe('Appboy Forwarder', function() {
             'hostname',
             window.location.hostname
         );
-        window.appboy.eventProperties[0].should.have.property(
-            'title',
-            'Mocha Tests'
-        );
+        window.appboy.eventProperties[0].should.have.property('title');
         window.appboy.eventProperties[0].should.have.property(
             'attri$bute',
             'what$ever'
