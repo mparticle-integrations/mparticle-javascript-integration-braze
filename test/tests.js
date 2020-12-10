@@ -913,6 +913,34 @@ describe('Appboy Forwarder', function() {
         window.appboy.getUser().monthOfBirth.should.equal(12);
     });
 
+    it('should not set baseUrl when passed an invalid cluster', function() {
+        reportService.reset();
+        window.appboy = new MockAppboy();
+
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '05',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
+
+        (window.appboy.baseUrl === null).should.equal(true);
+    });
+
     it('should have no baseUrl when cluster is not passed and dataCenterLocation is not EU', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
@@ -966,10 +994,7 @@ describe('Appboy Forwarder', function() {
             'My App'
         );
 
-        window.appboy.should.have.property(
-            'baseUrl',
-            'https://sdk.api.appboy.eu/api/v3'
-        );
+        window.appboy.should.have.property('baseUrl', 'sdk.fra-01.braze.eu');
     });
 
     it('should use the 01 clusterMapping url when 01 number is passed to cluster', function() {
@@ -997,7 +1022,7 @@ describe('Appboy Forwarder', function() {
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal('https://dev.appboy.com/api/v3');
+        window.appboy.baseUrl.should.equal('sdk.iad-01.braze.com');
     });
 
     it('should use the 02 clusterMapping url when 02 number is passed to cluster', function() {
@@ -1025,9 +1050,7 @@ describe('Appboy Forwarder', function() {
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal(
-            'https://sdk-02.iad.appboy.com/api/v3'
-        );
+        window.appboy.baseUrl.should.equal('sdk.iad-02.braze.com');
     });
 
     it('should use the 03 clusterMapping url when 03 number is passed to cluster', function() {
@@ -1055,12 +1078,10 @@ describe('Appboy Forwarder', function() {
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal(
-            'https://sdk.iad-03.appboy.com/api/v3'
-        );
+        window.appboy.baseUrl.should.equal('sdk.iad-03.braze.com');
     });
 
-    it('should use the 03 cluster url when passed an invalid cluster', function() {
+    it('should use the 04 clusterMapping url when 04 number is passed to cluster', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
@@ -1084,9 +1105,61 @@ describe('Appboy Forwarder', function() {
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal(
-            'https://sdk.iad-03.appboy.com/api/v3'
+        window.appboy.baseUrl.should.equal('sdk.iad-04.braze.com');
+    });
+
+    it('should use the 06 clusterMapping url when 06 number is passed to cluster', function() {
+        reportService.reset();
+        window.appboy = new MockAppboy();
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '06',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
         );
+
+        window.appboy.baseUrl.should.equal('sdk.iad-06.braze.com');
+    });
+
+    it('should use the 08 clusterMapping url when 08 number is passed to cluster', function() {
+        reportService.reset();
+        window.appboy = new MockAppboy();
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '08',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
+
+        window.appboy.baseUrl.should.equal('sdk.iad-08.braze.com');
     });
 
     it('should use custom cluster url when passed cluster JSON', function() {

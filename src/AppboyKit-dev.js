@@ -24,10 +24,13 @@ window.appboy = require('appboy-web-sdk');
         };
 
     var clusterMapping = {
-        '01': 'https://dev.appboy.com/api/v3',
-        '02': 'https://sdk-02.iad.appboy.com/api/v3',
-        '03': 'https://sdk.iad-03.appboy.com/api/v3',
-        EU: 'https://sdk.api.appboy.eu/api/v3'
+        '01': 'sdk.iad-01.braze.com',
+        '02': 'sdk.iad-02.braze.com',
+        '03': 'sdk.iad-03.braze.com',
+        '04': 'sdk.iad-04.braze.com',
+        '06': 'sdk.iad-06.braze.com',
+        '08': 'sdk.iad-08.braze.com',
+        EU: 'sdk.fra-01.braze.eu',
     };
 
     var constructor = function () {
