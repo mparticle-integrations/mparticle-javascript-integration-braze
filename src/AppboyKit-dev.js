@@ -16,7 +16,7 @@ window.appboy = require('appboy-web-sdk');
 
     var name = 'Appboy',
         moduleId = 28,
-        version = '2.0.2',
+        version = '2.0.6',
         MessageType = {
             PageView: 3,
             PageEvent: 4,
