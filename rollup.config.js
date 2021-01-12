@@ -5,22 +5,6 @@ export default [
     {
         input: 'src/AppboyKit-dev.js',
         output: {
-            file: 'AppboyKit.js',
-            format: 'iife',
-            exports: 'named',
-            name: 'mpAppboyKit',
-            strict: false
-        },
-        plugins: [
-            resolve({
-                browser: true
-            }),
-            commonjs()
-        ]
-    },
-    {
-        input: 'src/AppboyKit-dev.js',
-        output: {
             file: 'dist/AppboyKit.iife.js',
             format: 'iife',
             exports: 'named',
