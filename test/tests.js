@@ -818,7 +818,7 @@ describe('Appboy Forwarder', function() {
         window.appboy.getUser().firstName.should.equal('Jane');
         window.appboy.getUser().lastName.should.equal('Smith');
         window.appboy.getUser().emailSet.should.equal('test2@gmail.com');
-        window.appboy.getUser().yearOfBirth.should.equal(2010);
+        window.appboy.getUser().yearOfBirth.should.equal(2011);
         window.appboy.getUser().dayOfBirth.should.equal(1);
         window.appboy.getUser().monthOfBirth.should.equal(1);
         window.appboy.getUser().phoneSet.should.equal('1234567890');

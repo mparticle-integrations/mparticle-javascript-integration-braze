@@ -2,7 +2,7 @@
     "env": {
         "browser": true
     },
-    "extends": "eslint:recommended",
+    "extends": ["plugin:prettier/recommended", "eslint:recommended"],
     "rules": {
         "indent": [
             "error",
@@ -25,22 +25,18 @@
             "error",
             { "defaultAssignment": false }
         ],
-        "comma-dangle": [
-            "error",
-            "never"
-        ],
         "curly": [
             "error",
             "multi-line"
         ],
         "comma-spacing": [
             "error",
-            { before: false, after: true }
+            { "before": false, "after": true }
         ],
         "quote-props": [
             "error",
             "as-needed",
-            { keywords: false, unnecessary: true, numbers: false }
+            { "keywords": false, "unnecessary": true, "numbers": false }
         ],
         "no-multi-spaces": "error",
     }
