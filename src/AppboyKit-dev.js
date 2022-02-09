@@ -28,9 +28,11 @@ var clusterMapping = {
     '02': 'sdk.iad-02.braze.com',
     '03': 'sdk.iad-03.braze.com',
     '04': 'sdk.iad-04.braze.com',
+    '05': 'sdk.iad-05.braze.com',
     '06': 'sdk.iad-06.braze.com',
     '08': 'sdk.iad-08.braze.com',
     EU: 'sdk.fra-01.braze.eu',
+    EU02: 'sdk.fra-02.braze.eu'
 };
 
 var constructor = function() {
