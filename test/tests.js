@@ -818,7 +818,12 @@ describe('Appboy Forwarder', function() {
         window.appboy.getUser().firstName.should.equal('Jane');
         window.appboy.getUser().lastName.should.equal('Smith');
         window.appboy.getUser().emailSet.should.equal('test2@gmail.com');
-        window.appboy.getUser().yearOfBirth.should.equal(2011);
+
+        // We support $Age as a reserved attribute for Braze. However, since
+        // Braze's API expects a year from us, this test will break every year,
+        // since setting the age = 10 in 2021 will mean the user is born in 2011,
+        // but setting it in 2022 means the year is 2012.
+        window.appboy.getUser().yearOfBirth.should.equal(2012);
         window.appboy.getUser().dayOfBirth.should.equal(1);
         window.appboy.getUser().monthOfBirth.should.equal(1);
         window.appboy.getUser().phoneSet.should.equal('1234567890');
@@ -920,7 +925,7 @@ describe('Appboy Forwarder', function() {
         mParticle.forwarder.init(
             {
                 apiKey: '123456',
-                cluster: '05',
+                cluster: '0',
             },
             reportService.cb,
             true,
