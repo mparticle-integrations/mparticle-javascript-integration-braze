@@ -2,6 +2,10 @@
 
 --
 
+#### 2.0.7 - 2022-02-09
+
+-   Feat - add new Braze clusters
+
 #### 2.0.6 - 2020-12-10
 
 -   Feat - Add additional Braze clusters to URL mapping table
