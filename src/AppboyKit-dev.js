@@ -215,7 +215,6 @@ var constructor = function() {
                 event
             );
             if (listOfPageEvents != null) {
-                debugger;
                 for (var i = 0; i < listOfPageEvents.length; i++) {
                     // finalLoopResult keeps track of if any logAppBoyEvent in this loop returns true or not
                     var finalLoopResult = false;
@@ -306,7 +305,6 @@ var constructor = function() {
         }
 
         appboy.changeUser(appboyUserIDType);
-        debugger;
 
         if (userIdentities.email) {
             appboy.getUser().setEmail(userIdentities.email);
@@ -318,7 +316,6 @@ var constructor = function() {
             var shouldDisplay = true;
 
             if (inAppMessage instanceof appboy.InAppMessage) {
-                debugger;
                 // Read the key-value pair for msg-id
                 var msgId = inAppMessage.extras['msg-id'];
 
@@ -346,7 +343,6 @@ var constructor = function() {
 
             // Display the message
             if (shouldDisplay) {
-                debugger;
                 appboy.display.showInAppMessage(inAppMessage);
             }
         });
