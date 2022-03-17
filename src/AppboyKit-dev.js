@@ -312,55 +312,44 @@ var constructor = function() {
     }
 
     function primeAppBoyWebPush() {
-                                      // The following code block is Braze's best practice for implementing
-                                      // their push primer.  It should not be changed unless Braze updates it
-                                      // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/integration/#soft-push-prompts
-                                      appboy.subscribeToInAppMessage(function(
-                                          inAppMessage
-                                      ) {
-                                          var shouldDisplay = true;
+        // The following code block is Braze's best practice for implementing
+        // their push primer.  It should not be changed unless Braze updates it
+        // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/integration/#soft-push-prompts
+        appboy.subscribeToInAppMessage(function(inAppMessage) {
+            var shouldDisplay = true;
 
-                                          if (
-                                              inAppMessage instanceof
-                                              appboy.InAppMessage
-                                          ) {
-                                              // Read the key-value pair for msg-id
-                                              var msgId =
-                                                  inAppMessage.extras['msg-id'];
+            if (inAppMessage instanceof appboy.InAppMessage) {
+                // Read the key-value pair for msg-id
+                var msgId = inAppMessage.extras['msg-id'];
 
-                                              // If this is our push primer message
-                                              if (msgId == 'push-primer') {
-                                                  // We don't want to display the soft push prompt to users on browsers that don't support push, or if the user
-                                                  // has already granted/blocked permission
-                                                  if (
-                                                      !appboy.isPushSupported() ||
-                                                      appboy.isPushPermissionGranted() ||
-                                                      appboy.isPushBlocked()
-                                                  ) {
-                                                      shouldDisplay = false;
-                                                  }
-                                                  if (
-                                                      inAppMessage.buttons[0] !=
-                                                      null
-                                                  ) {
-                                                      // Prompt the user when the first button is clicked
-                                                      inAppMessage.buttons[0].subscribeToClickedEvent(
-                                                          function() {
-                                                              appboy.registerAppboyPushMessages();
-                                                          }
-                                                      );
-                                                  }
-                                              }
-                                          }
+                // If this is our push primer message
+                if (msgId == 'push-primer') {
+                    // We don't want to display the soft push prompt to users on browsers that don't support push, or if the user
+                    // has already granted/blocked permission
+                    if (
+                        !appboy.isPushSupported() ||
+                        appboy.isPushPermissionGranted() ||
+                        appboy.isPushBlocked()
+                    ) {
+                        shouldDisplay = false;
+                    }
+                    if (inAppMessage.buttons[0] != null) {
+                        // Prompt the user when the first button is clicked
+                        inAppMessage.buttons[0].subscribeToClickedEvent(
+                            function() {
+                                appboy.registerAppboyPushMessages();
+                            }
+                        );
+                    }
+                }
+            }
 
-                                          // Display the message
-                                          if (shouldDisplay) {
-                                              appboy.display.showInAppMessage(
-                                                  inAppMessage
-                                              );
-                                          }
-                                      });
-                                  }
+            // Display the message
+            if (shouldDisplay) {
+                appboy.display.showInAppMessage(inAppMessage);
+            }
+        });
+    }
 
     function openSession(forwarderSettings) {
         appboy.openSession();
