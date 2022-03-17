@@ -352,7 +352,9 @@ var constructor = function() {
 
     function openSession(forwarderSettings) {
         appboy.openSession();
-        appboy.logCustomEvent(forwarderSettings.softPushCustomEventName);
+        if (forwarderSettings.softPushCustomEventName) {
+            appboy.logCustomEvent(forwarderSettings.softPushCustomEventName);
+        }
     }
 
     function initForwarder(
