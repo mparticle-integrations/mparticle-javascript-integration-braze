@@ -312,6 +312,8 @@ var constructor = function() {
     }
 
     function primeAppBoyWebPush() {
+        // Per Braze push notification documentation
+        // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/integration/#soft-push-prompts
         appboy.subscribeToInAppMessage(function(inAppMessage) {
             var shouldDisplay = true;
 
