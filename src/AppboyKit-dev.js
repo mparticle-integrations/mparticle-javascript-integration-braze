@@ -358,16 +358,7 @@ var constructor = function() {
         }
     }
 
-    function initForwarder(
-        settings,
-        service,
-        testMode,
-        trackerId,
-        userAttributes,
-        userIdentities,
-        appVersion,
-        appName
-    ) {
+    function initForwarder(settings, service, testMode) {
         // eslint-disable-line no-unused-vars
         try {
             forwarderSettings = settings;
@@ -405,13 +396,11 @@ var constructor = function() {
             }
 
             if (testMode !== true) {
-                /* eslint-disable */
                 appboy.initialize(forwarderSettings.apiKey, options);
+                appboy.addSdkMetadata(['mp']);
 
                 primeAppBoyWebPush();
                 openSession(forwarderSettings);
-
-                /* eslint-enable */
             } else {
                 if (!appboy.initialize(forwarderSettings.apiKey, options)) {
                     return 'Failed to initialize: ' + name;
