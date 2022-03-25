@@ -394,20 +394,14 @@ var constructor = function() {
                     options.baseUrl = customUrl;
                 }
             }
-
             if (testMode !== true) {
                 appboy.initialize(forwarderSettings.apiKey, options);
-                appboy.addSdkMetadata(['mp']);
-
-                primeAppBoyWebPush();
-                openSession(forwarderSettings);
+                finishAppboyInitialization(forwarderSettings);
             } else {
                 if (!appboy.initialize(forwarderSettings.apiKey, options)) {
                     return 'Failed to initialize: ' + name;
                 }
-
-                primeAppBoyWebPush();
-                openSession(forwarderSettings);
+                finishAppboyInitialization(forwarderSettings);
             }
             return 'Successfully initialized: ' + name;
         } catch (e) {
@@ -416,6 +410,13 @@ var constructor = function() {
             );
         }
     }
+
+    function finishAppboyInitialization(forwarderSettings) {
+        appboy.addSdkMetadata(['mp']);
+        primeAppBoyWebPush();
+        openSession(forwarderSettings);
+    }
+
     /**************************/
     /** End mParticle API **/
     /**************************/
