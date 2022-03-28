@@ -3,35 +3,35 @@ import commonjs from 'rollup-plugin-commonjs';
 
 export default [
     {
-        input: 'src/AppboyKit-dev.js',
+        input: 'src/BrazeKit-dev.js',
         output: {
-            file: 'dist/AppboyKit.iife.js',
+            file: 'dist/BrazeKit.iife.js',
             format: 'iife',
             exports: 'named',
-            name: 'mpAppboyKit',
-            strict: false
+            name: 'mpBrazeKit',
+            strict: false,
         },
         plugins: [
             resolve({
-                browser: true
+                browser: true,
             }),
-            commonjs()
-        ]
+            commonjs(),
+        ],
     },
     {
-        input: 'src/AppboyKit-dev.js',
+        input: 'src/BrazeKit-dev.js',
         output: {
-            file: 'dist/AppboyKit.common.js',
+            file: 'dist/BrazeKit.common.js',
             format: 'cjs',
             exports: 'named',
-            name: 'mpAppboyKit',
-            strict: false
+            name: 'mpBrazeKit',
+            strict: false,
         },
         plugins: [
             resolve({
-                browser: true
+                browser: true,
             }),
-            commonjs()
-        ]
-    }
-]
+            commonjs(),
+        ],
+    },
+];
