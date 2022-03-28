@@ -30,8 +30,8 @@
         "watchify": "^3.11.1"
     },
     "dependencies": {
-        "@mparticle/web-sdk": "^2.11.3",
-        "appboy-web-sdk": "2.5.2"
+        "@braze/web-sdk": "^3.5.0",
+        "@mparticle/web-sdk": "^2.11.3"
     },
     "license": "Apache-2.0"
 }

@@ -65,12 +65,6 @@ describe('Appboy Forwarder', function() {
         },
         MockDisplay = function() {
             var self = this;
-
-            this.automaticallyShowNewInAppMessagesCalled = false;
-
-            this.automaticallyShowNewInAppMessages = function() {
-                self.automaticallyShowNewInAppMessagesCalled = true;
-            };
         },
         MockAppboyUser = function() {
             var self = this;
@@ -165,12 +159,20 @@ describe('Appboy Forwarder', function() {
             this.baseUrl = null;
             this.userId = null;
             this.doNotLoadFontAwesome = null;
-
+            this.metadata = null;
+            this.subscribeToInAppMessageCalled = false;
             this.eventProperties = [];
             this.purchaseEventProperties = [];
 
             this.user = new MockAppboyUser();
             this.display = new MockDisplay();
+            this.addSdkMetadata = function(metadata) {
+                self.metadata = metadata;
+            };
+
+            this.subscribeToInAppMessage = function() {
+                self.subscribeToInAppMessageCalled = true;
+            };
 
             this.initialize = function(apiKey, options) {
                 self.initializeCalled = true;
@@ -182,7 +184,6 @@ describe('Appboy Forwarder', function() {
 
             this.openSession = function(func) {
                 self.openSessionCalled = true;
-                func();
             };
 
             this.changeUser = function(id) {
@@ -278,20 +279,17 @@ describe('Appboy Forwarder', function() {
         );
     });
 
-    it('should initialize with apiKey', function() {
+    it('should initialize with apiKey and mp metadata', function() {
         window.appboy.should.have.property('apiKey', '123456');
+        window.appboy.should.have.property('metadata', ['mp']);
     });
 
     it('should open a new session and refresh in app messages upon initialization', function() {
         window.appboy.should.have.property('initializeCalled', true);
         window.appboy.should.have.property('openSessionCalled', true);
         window.appboy.should.have.property(
-            'subscribeToNewInAppMessagesCalled',
+            'subscribeToInAppMessageCalled',
             true
-        );
-        window.appboy.display.should.have.property(
-            'automaticallyShowNewInAppMessagesCalled',
-            false
         );
     });
 
