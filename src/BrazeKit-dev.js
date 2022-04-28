@@ -394,6 +394,12 @@ var constructor = function() {
                     options.baseUrl = customUrl;
                 }
             }
+            
+            if (forwarderSettings.contentSecurityNonce) {
+                options.contentSecurityNonce =
+                    forwarderSettings.contentSecurityNonce;
+            }
+            
             if (testMode !== true) {
                 appboy.initialize(forwarderSettings.apiKey, options);
                 finishAppboyInitialization(forwarderSettings);
