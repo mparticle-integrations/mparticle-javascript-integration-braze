@@ -39,7 +39,8 @@ var constructor = function() {
     var self = this,
         forwarderSettings,
         options = {},
-        reportingService;
+        reportingService,
+        mpCustomFlags;
 
     self.name = name;
 
@@ -358,8 +359,9 @@ var constructor = function() {
         }
     }
 
-    function initForwarder(settings, service, testMode) {
+    function initForwarder(settings, service, testMode, customFlags) {
         // eslint-disable-line no-unused-vars
+        mpCustomFlags = customFlags;
         try {
             forwarderSettings = settings;
             reportingService = service;
@@ -394,6 +396,13 @@ var constructor = function() {
                     options.baseUrl = customUrl;
                 }
             }
+            
+            if (mpCustomFlags && mpCustomFlags['BRAZE']) {
+                for (var key in mpCustomFlags.BRAZE) {
+                    options[key] = mpCustomFlags.BRAZE[key]
+                }
+            }
+            
             if (testMode !== true) {
                 appboy.initialize(forwarderSettings.apiKey, options);
                 finishAppboyInitialization(forwarderSettings);
