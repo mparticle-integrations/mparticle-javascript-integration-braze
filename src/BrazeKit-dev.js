@@ -397,9 +397,10 @@ var constructor = function() {
                 }
             }
             
-            if (mpCustomFlags && mpCustomFlags['BRAZE']) {
-                for (var key in mpCustomFlags.BRAZE) {
-                    options[key] = mpCustomFlags.BRAZE[key]
+            if (mpCustomFlags && mpCustomFlags[moduleId]) {
+                var brazeFlags = mpCustomFlags[moduleId];
+                if (typeof brazeFlags.initOptions == 'function') {
+                    brazeFlags.initOptions(options)
                 }
             }
             
