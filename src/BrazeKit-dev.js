@@ -359,7 +359,7 @@ var constructor = function() {
         }
     }
 
-    function initForwarder(settings, service, testMode, customFlags) {
+    function initForwarder(settings, service, testMode, trackerId, userAttributes, userIdentities, appVersion, appName, customFlags) {
         // eslint-disable-line no-unused-vars
         mpCustomFlags = customFlags;
         try {
