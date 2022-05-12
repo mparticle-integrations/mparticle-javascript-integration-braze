@@ -399,7 +399,7 @@ var constructor = function() {
             
             if (mpCustomFlags && mpCustomFlags[moduleId.toString()]) {
                 var brazeFlags = mpCustomFlags[moduleId];
-                if (typeof brazeFlags.initOptions == 'function') {
+                if (typeof brazeFlags.initOptions === 'function') {
                     brazeFlags.initOptions(options)
                 }
             }
