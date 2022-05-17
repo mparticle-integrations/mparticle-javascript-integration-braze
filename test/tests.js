@@ -175,6 +175,7 @@ describe('Appboy Forwarder', function() {
             };
 
             this.initialize = function(apiKey, options) {
+                self.options = options;
                 self.initializeCalled = true;
                 self.apiKey = apiKey;
                 self.baseUrl = options.baseUrl || null;
@@ -1264,5 +1265,33 @@ describe('Appboy Forwarder', function() {
         });
 
         window.appboy.should.have.property('doNotLoadFontAwesome', false);
+    });
+
+    it('should add additional braze settings passed from custom flags to the options object', function() {
+        window.appboy = new MockAppboy();
+        mParticle.forwarder.init(
+            {
+                doNotLoadFontAwesome: null,
+                apiKey: 'test',
+            },
+            null,
+            true,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+                28: {
+                    initOptions: function(options) {
+                        options.brazeSetting1 = true;
+                        options.brazeSetting2 = true;
+                    },
+                },
+            }
+        );
+
+        window.appboy.options.should.have.property('brazeSetting1', true);
+        window.appboy.options.should.have.property('brazeSetting2', true);
     });
 });

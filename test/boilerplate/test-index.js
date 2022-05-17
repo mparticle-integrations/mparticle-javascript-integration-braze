@@ -5,6 +5,6 @@ window.mParticle.addForwarder = function(forwarder) {
     window.mParticle.forwarder = new forwarder.constructor();
 };
 
-require('../../dist/AppboyKit.common.js');
+require('../../dist/BrazeKit.common.js');
 require('../mockhttprequest');
 require('../tests.js');
