@@ -305,7 +305,7 @@ window.appboy = appboy_min;
 
 var name = 'Appboy',
     moduleId = 28,
-    version = '2.0.7',
+    version = '3.0.1',
     MessageType = {
         PageView: 3,
         PageEvent: 4,
@@ -328,7 +328,8 @@ var constructor = function() {
     var self = this,
         forwarderSettings,
         options = {},
-        reportingService;
+        reportingService,
+        mpCustomFlags;
 
     self.name = name;
 
@@ -647,8 +648,9 @@ var constructor = function() {
         }
     }
 
-    function initForwarder(settings, service, testMode) {
+    function initForwarder(settings, service, testMode, trackerId, userAttributes, userIdentities, appVersion, appName, customFlags) {
         // eslint-disable-line no-unused-vars
+        mpCustomFlags = customFlags;
         try {
             forwarderSettings = settings;
             reportingService = service;
@@ -683,6 +685,14 @@ var constructor = function() {
                     options.baseUrl = customUrl;
                 }
             }
+            
+            if (mpCustomFlags && mpCustomFlags[moduleId.toString()]) {
+                var brazeFlags = mpCustomFlags[moduleId.toString()];
+                if (typeof brazeFlags.initOptions === 'function') {
+                    brazeFlags.initOptions(options);
+                }
+            }
+            
             if (testMode !== true) {
                 appboy.initialize(forwarderSettings.apiKey, options);
                 finishAppboyInitialization(forwarderSettings);

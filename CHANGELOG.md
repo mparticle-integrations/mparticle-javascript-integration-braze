@@ -2,6 +2,10 @@
 
 --
 
+#### 3.0.1 - 2022-05-18
+
+-   consume initOptions customFlags - this allows a customer to pass a callback to include additional options that mParticle doesn't support in the UI
+
 #### 3.0.0 - 2022-03-28
 
 ⚠️ **Breaking** - If you reference any of the below deprecations and implement mParticle via snippet, you will have to make changes to your codebase before June 8, 2022 to be compatible with both version 2 and version 3 of the Braze SDK to ensure your code continues to work.

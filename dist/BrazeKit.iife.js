@@ -304,7 +304,7 @@ var mpBrazeKit = (function (exports) {
 
 	var name = 'Appboy',
 	    moduleId = 28,
-	    version = '2.0.7',
+	    version = '3.0.1',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -327,7 +327,8 @@ var mpBrazeKit = (function (exports) {
 	    var self = this,
 	        forwarderSettings,
 	        options = {},
-	        reportingService;
+	        reportingService,
+	        mpCustomFlags;
 
 	    self.name = name;
 
@@ -646,8 +647,9 @@ var mpBrazeKit = (function (exports) {
 	        }
 	    }
 
-	    function initForwarder(settings, service, testMode) {
+	    function initForwarder(settings, service, testMode, trackerId, userAttributes, userIdentities, appVersion, appName, customFlags) {
 	        // eslint-disable-line no-unused-vars
+	        mpCustomFlags = customFlags;
 	        try {
 	            forwarderSettings = settings;
 	            reportingService = service;
@@ -682,6 +684,14 @@ var mpBrazeKit = (function (exports) {
 	                    options.baseUrl = customUrl;
 	                }
 	            }
+	            
+	            if (mpCustomFlags && mpCustomFlags[moduleId.toString()]) {
+	                var brazeFlags = mpCustomFlags[moduleId.toString()];
+	                if (typeof brazeFlags.initOptions === 'function') {
+	                    brazeFlags.initOptions(options);
+	                }
+	            }
+	            
 	            if (testMode !== true) {
 	                appboy.initialize(forwarderSettings.apiKey, options);
 	                finishAppboyInitialization(forwarderSettings);
