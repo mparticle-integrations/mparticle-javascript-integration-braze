@@ -2,6 +2,9 @@
 
 --
 
+#### 3.0.2 - 2022-06-16
+-   fix: add register_inapp and pushPrimer variables
+
 #### 3.0.1 - 2022-05-18
 
 -   consume initOptions customFlags - this allows a customer to pass a callback to include additional options that mParticle doesn't support in the UI

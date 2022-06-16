@@ -601,18 +601,19 @@ var mpBrazeKit = (function (exports) {
 	    }
 
 	    function primeAppBoyWebPush() {
-	        // The following code block is Braze's best practice for implementing
-	        // their push primer.  It should not be changed unless Braze updates it
+	        // The following code block is based on Braze's best practice for implementing
+	        // their push primer.  We only modify it to include pushPrimer and register_inapp settings.
 	        // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/integration/#soft-push-prompts
 	        appboy.subscribeToInAppMessage(function(inAppMessage) {
 	            var shouldDisplay = true;
-
+	            var pushPrimer = false;
 	            if (inAppMessage instanceof appboy.InAppMessage) {
 	                // Read the key-value pair for msg-id
 	                var msgId = inAppMessage.extras['msg-id'];
 
 	                // If this is our push primer message
 	                if (msgId == 'push-primer') {
+	                    pushPrimer = true;
 	                    // We don't want to display the soft push prompt to users on browsers that don't support push, or if the user
 	                    // has already granted/blocked permission
 	                    if (
@@ -633,8 +634,11 @@ var mpBrazeKit = (function (exports) {
 	                }
 	            }
 
-	            // Display the message
-	            if (shouldDisplay) {
+	            // Display the message if it's a push primer message and shouldDisplay is true
+	            if (
+	                (pushPrimer && shouldDisplay) ||
+	                (!pushPrimer && forwarderSettings.register_inapp === 'True')
+	            ) {
 	                appboy.display.showInAppMessage(inAppMessage);
 	            }
 	        });
