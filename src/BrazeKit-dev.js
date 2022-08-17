@@ -160,7 +160,7 @@ var constructor = function() {
                     value.getMonth() + 1,
                     value.getDate()
                 );
-                s;
+
                 appboy
                     .getUser()
                     .setDateOfBirth(
