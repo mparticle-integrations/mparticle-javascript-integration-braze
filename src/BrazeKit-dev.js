@@ -612,7 +612,7 @@ var constructor = function() {
             msg += ', \n';
         });
 
-        self.logger.verbos('MP Braze Web Kit: ' + msg);
+        self.logger.verbose('MP Braze Web Kit: ' + msg);
     }
 };
 
