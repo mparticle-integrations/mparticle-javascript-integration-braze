@@ -441,10 +441,9 @@ var constructor = function() {
         if (!self.logger) {
             // create a logger
             self.logger = {
-                verbose: function() {
-                }
-            }
-        ]}
+                verbose: function() {},
+            };
+        }
         // eslint-disable-line no-unused-vars
         mpCustomFlags = customFlags;
         try {
@@ -612,6 +611,8 @@ var constructor = function() {
             }
             msg += ', \n';
         });
+
+        self.logger.verbos('MP Braze Web Kit: ' + msg);
     }
 };
 
