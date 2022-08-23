@@ -437,6 +437,14 @@ var constructor = function() {
         appName,
         customFlags
     ) {
+        // check to see if there is a logger for backwards compatibility, and if not, mock one to avoid errors
+        if (!self.logger) {
+            // create a logger
+            self.logger = {
+                verbose: function() {
+                }
+            }
+        ]}
         // eslint-disable-line no-unused-vars
         mpCustomFlags = customFlags;
         try {
@@ -604,7 +612,6 @@ var constructor = function() {
             }
             msg += ', \n';
         });
-        self.logger.verbose(msg);
     }
 };
 
