@@ -597,16 +597,17 @@ var constructor = function() {
     this.removeUserAttribute = removeUserAttribute;
     this.decodeClusterSetting = decodeClusterSetting;
 
-    // An example output of this logger if we pass in a purchase event for 1 iPhone
-    // with a SKU of iphoneSku that cost $999 with a product attribute of 
-    // color: blue would be:
-    //mParticle - Braze Web Kit log:
-    //appboy.logPurchase:
-    //iphone,
-    //999,
-    //USD,
-    //1,
-    //{\"color\":\"blue\",\"Sku":"iphoneSKU"},\n`;
+    /* An example output of this logger if we pass in a purchase event for 1 iPhone
+     with a SKU of iphoneSku that cost $999 with a product attribute of 
+     color: blue would be:
+     mParticle - Braze Web Kit log:
+     appboy.logPurchase:
+     iphone,
+     999,
+     USD,
+     1,
+     {\"color\":\"blue\",\"Sku":"iphoneSKU"},\n`;
+     */
     function kitLogger(method) {
         var msg = 'mParticle - Braze Web Kit log:';
 
