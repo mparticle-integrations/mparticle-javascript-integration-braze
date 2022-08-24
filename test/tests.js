@@ -917,6 +917,57 @@ describe('Appboy Forwarder', function() {
         window.appboy.getUser().monthOfBirth.should.equal(12);
     });
 
+    it('should log messages to the proper logger', function() {
+        mParticle.forwarder.logger = {
+            verbose: function(msg) {
+                mParticle.forwarder.msg = msg;
+            },
+        };
+        var product1 = {
+            Name: 'iphone',
+            Sku: 'iphoneSKU',
+            Price: 999,
+            Quantity: 1,
+            Brand: 'brand',
+            Variant: 'variant',
+            Category: 'category',
+            Position: 1,
+            CouponCode: 'coupon',
+            TotalAmount: 999,
+            Attributes: {
+                color: 'blue',
+            },
+        };
+
+        var commerceEvent = {
+            EventName: 'eCommerce - Purchase',
+            EventCategory: CommerceEventType.ProductPurchase,
+            EventAttributes: {
+                sale: true,
+            },
+            EventDataType: 16,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                ProductActionType: 7, // ProductActionType.Purchase value is 7
+                ProductList: [product1],
+                TransactionId: 'foo-transaction-id',
+                TotalAmount: 430,
+                TaxAmount: 30,
+            },
+        };
+        mParticle.forwarder.process(commerceEvent);
+
+        var expectedMessage = `mParticle - Braze Web Kit log:
+appboy.logPurchase:
+iphone,
+999,
+USD,
+1,
+{\"color\":\"blue\",\"Sku":"iphoneSKU"},\n`;
+
+        mParticle.forwarder.msg.should.equal(expectedMessage);
+    });
+
     it('should not set baseUrl when passed an invalid cluster', function() {
         reportService.reset();
         window.appboy = new MockAppboy();
