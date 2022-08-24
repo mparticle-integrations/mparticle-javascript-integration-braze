@@ -96,10 +96,20 @@ var constructor = function() {
                         sanitizedProductName
                     );
                 }
+                var price = parseFloat(product.Price);
+
+                kitLogger(
+                    'appboy.logPurchase',
+                    sanitizedProductName,
+                    price,
+                    event.CurrencyCode,
+                    product.Quantity,
+                    sanitizedProperties
+                );
 
                 reportEvent = appboy.logPurchase(
                     sanitizedProductName,
-                    parseFloat(product.Price),
+                    price,
                     event.CurrencyCode,
                     product.Quantity,
                     sanitizedProperties
@@ -125,6 +135,9 @@ var constructor = function() {
         }
         sanitizedEventName = getSanitizedValueForAppboy(eventName);
         sanitizedAttrs = getSanitizedCustomProperties(attrs);
+
+        kitLogger('appboy.logCustomEvent', sanitizedEventName, sanitizedAttrs);
+
         var reportEvent = appboy.logCustomEvent(
             sanitizedEventName,
             sanitizedAttrs
@@ -141,6 +154,13 @@ var constructor = function() {
                     ", removeUserAttribute or setUserAttribute must set 'dob' to a date"
                 );
             } else {
+                kitLogger(
+                    'appoy.getUser().setDateOfBirth',
+                    value.getFullYear(),
+                    value.getMonth() + 1,
+                    value.getDate()
+                );
+
                 appboy
                     .getUser()
                     .setDateOfBirth(
@@ -152,6 +172,9 @@ var constructor = function() {
         } else if (key === '$Age') {
             if (typeof value === 'number') {
                 var year = new Date().getFullYear() - value;
+
+                kitLogger('appboy.getUser().setDateOfBirth', year, 1, 1);
+
                 appboy.getUser().setDateOfBirth(year, 1, 1);
             } else {
                 return '$Age must be a number';
@@ -169,6 +192,12 @@ var constructor = function() {
             }
             var params = [];
             params.push(value);
+
+            kitLogger(
+                'appboy.getUser().' + DefaultAttributeMethods[key],
+                params
+            );
+
             var u = appboy.getUser();
             //This method uses the setLastName, setFirstName, setEmail, setCountry, setHomeCity, setPhoneNumber, setAvatarImageUrl, setDateOfBirth, setGender, setEmailNotificationSubscriptionType, and setPushNotificationSubscriptionType methods
             if (!u[DefaultAttributeMethods[key]].apply(u, params)) {
@@ -193,10 +222,17 @@ var constructor = function() {
             );
         }
 
+        kitLogger(
+            'appboy.logCustomEvent',
+            sanitizedEventName,
+            sanitizedProperties
+        );
+
         var reportEvent = appboy.logCustomEvent(
             sanitizedEventName,
             sanitizedProperties
         );
+
         return reportEvent === true;
     }
 
@@ -252,6 +288,13 @@ var constructor = function() {
     function removeUserAttribute(key) {
         if (!(key in DefaultAttributeMethods)) {
             var sanitizedKey = getSanitizedValueForAppboy(key);
+
+            kitLogger(
+                'appboy.getUser().setCustomUserAttribute',
+                sanitizedKey,
+                null
+            );
+
             appboy.getUser().setCustomUserAttribute(sanitizedKey, null);
         } else {
             return setDefaultAttribute(key, null);
@@ -265,6 +308,13 @@ var constructor = function() {
             if (value != null && sanitizedValue == null) {
                 return 'Value did not pass validation for ' + key;
             }
+
+            kitLogger(
+                'appboy.getUser().setCustomUserAttribute',
+                sanitizedKey,
+                sanitizedValue
+            );
+
             appboy
                 .getUser()
                 .setCustomUserAttribute(sanitizedKey, sanitizedValue);
@@ -278,8 +328,12 @@ var constructor = function() {
         // Other versions use onUserIdentified, which is called after setUserIdentity from core SDK
         if (window.mParticle.getVersion().split('.')[0] === '1') {
             if (type == window.mParticle.IdentityType.CustomerId) {
+                kitLogger('appboy.changeUser', id);
+
                 appboy.changeUser(id);
             } else if (type == window.mParticle.IdentityType.Email) {
+                kitLogger('appboy.getUser().setEmail', id);
+
                 appboy.getUser().setEmail(id);
             } else {
                 return (
@@ -305,9 +359,13 @@ var constructor = function() {
                 ];
         }
 
+        kitLogger('appboy.changeUser', appboyUserIDType);
+
         appboy.changeUser(appboyUserIDType);
 
         if (userIdentities.email) {
+            kitLogger('appboy.getUser().setEmail', userIdentities.email);
+
             appboy.getUser().setEmail(userIdentities.email);
         }
     }
@@ -359,11 +417,33 @@ var constructor = function() {
     function openSession(forwarderSettings) {
         appboy.openSession();
         if (forwarderSettings.softPushCustomEventName) {
+            kitLogger(
+                'appboy.logCustomEvent',
+                forwarderSettings.softPushCustomEventName
+            );
+
             appboy.logCustomEvent(forwarderSettings.softPushCustomEventName);
         }
     }
 
-    function initForwarder(settings, service, testMode, trackerId, userAttributes, userIdentities, appVersion, appName, customFlags) {
+    function initForwarder(
+        settings,
+        service,
+        testMode,
+        trackerId,
+        userAttributes,
+        userIdentities,
+        appVersion,
+        appName,
+        customFlags
+    ) {
+        // check to see if there is a logger for backwards compatibility, and if not, mock one to avoid errors
+        if (!self.logger) {
+            // create a logger
+            self.logger = {
+                verbose: function() {},
+            };
+        }
         // eslint-disable-line no-unused-vars
         mpCustomFlags = customFlags;
         try {
@@ -400,14 +480,14 @@ var constructor = function() {
                     options.baseUrl = customUrl;
                 }
             }
-            
+
             if (mpCustomFlags && mpCustomFlags[moduleId.toString()]) {
                 var brazeFlags = mpCustomFlags[moduleId.toString()];
                 if (typeof brazeFlags.initOptions === 'function') {
-                    brazeFlags.initOptions(options)
+                    brazeFlags.initOptions(options);
                 }
             }
-            
+
             if (testMode !== true) {
                 appboy.initialize(forwarderSettings.apiKey, options);
                 finishAppboyInitialization(forwarderSettings);
@@ -516,6 +596,35 @@ var constructor = function() {
     this.onUserIdentified = onUserIdentified;
     this.removeUserAttribute = removeUserAttribute;
     this.decodeClusterSetting = decodeClusterSetting;
+
+    /* An example output of this logger if we pass in a purchase event for 1 iPhone
+     with a SKU of iphoneSku that cost $999 with a product attribute of 
+     color: blue would be:
+     mParticle - Braze Web Kit log:
+     appboy.logPurchase:
+     iphone,
+     999,
+     USD,
+     1,
+     {\"color\":\"blue\",\"Sku":"iphoneSKU"},\n`;
+     */
+    function kitLogger(method) {
+        var msg = 'mParticle - Braze Web Kit log:';
+
+        var nonMethodArguments = Array.prototype.slice.call(arguments, 1);
+        msg += '\n' + method + ':\n';
+
+        nonMethodArguments.forEach(function(arg) {
+            if (isObject(arg) || Array.isArray(arg)) {
+                msg += JSON.stringify(arg);
+            } else {
+                msg += arg;
+            }
+            msg += ',\n';
+        });
+
+        self.logger.verbose(msg);
+    }
 };
 
 function getId() {
