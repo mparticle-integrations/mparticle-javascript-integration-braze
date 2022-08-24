@@ -2,6 +2,9 @@
 
 --
 
+#### 3.0.3 - 2022-08-24
+-   feat: Add logging for debugging
+
 #### 3.0.2 - 2022-06-16
 -   fix: add register_inapp and pushPrimer variables
 
