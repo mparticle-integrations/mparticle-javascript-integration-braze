@@ -1,11 +1,17 @@
 /* eslint-disable no-undef */
 
-describe('Appboy Forwarder', function() {
-    var expandCommerceEvent = function() {
+describe('Appboy Forwarder', function () {
+    var expandCommerceEvent = function (event) {
+            var eventAttributes = {};
+            if (event.ProductAction && event.ProductAction.TransactionId) {
+                eventAttributes['Transaction Id'] =
+                    event.ProductAction.TransactionId;
+            }
             return [
                 {
-                    EventName: 'Test Event',
+                    EventName: 'Test EXPANDED Event',
                     EventDataType: MessageType.PageEvent,
+                    EventAttributes: eventAttributes,
                 },
             ];
         },
@@ -387,7 +393,87 @@ describe('Appboy Forwarder', function() {
         );
     });
 
-    it('should log a purchase event without attributes', function() {
+    it('should log a purchase event with a transaction id', function () {
+        mParticle.forwarder.process({
+            EventName: 'Test Purchase Event',
+            EventDataType: MessageType.Commerce,
+            EventCategory: EventType.ProductPurchase,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                TransactionId: 'foo-purchase-transaction-id',
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: '50',
+                        Name: 'Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: { attribute: 'whatever' },
+                        Sku: 12345,
+                    },
+                ],
+            },
+        });
+        window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.should.have.property('logPurchaseName', 'Product Name');
+        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
+        window.appboy.purchaseEventProperties[0][0].should.equal(
+            'Product Name'
+        );
+        window.appboy.purchaseEventProperties[0][1].should.equal(50);
+        window.appboy.purchaseEventProperties[0][2].should.equal(1);
+        window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal(
+            'whatever'
+        );
+        window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
+        window.appboy.purchaseEventProperties[0][3][
+            'Transaction Id'
+        ].should.equal('foo-purchase-transaction-id');
+        reportService.event.should.have.property(
+            'EventName',
+            'Test Purchase Event'
+        );
+    });
+
+    it('should log a non-purchase commerce event with a transaction id', function () {
+        mParticle.forwarder.process({
+            EventName: 'Test Add To Cart',
+            EventDataType: MessageType.Commerce,
+            EventCategory: CommerceEventType.ProductAddToCart, // 10
+            CurrencyCode: 'USD',
+            ProductAction: {
+                ProductActionType: EventType.AddToCart, // 1
+                TransactionId: 'foo-add-to-cart-transaction-id',
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: '50',
+                        Name: 'Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: { attribute: 'whatever' },
+                        Sku: 12345,
+                    },
+                ],
+            },
+        });
+        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.appboy.should.have.property(
+            'logCustomEventName',
+            'Test EXPANDED Event'
+        );
+
+        window.appboy.eventProperties.should.have.lengthOf(1);
+        window.appboy.eventProperties[0]['Transaction Id'].should.equal(
+            'foo-add-to-cart-transaction-id'
+        );
+        reportService.event.should.have.property(
+            'EventName',
+            'Test Add To Cart'
+        );
+    });
+
+    it('should log a purchase event without attributes', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
@@ -415,6 +501,12 @@ describe('Appboy Forwarder', function() {
         );
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
+        window.appboy.purchaseEventProperties[0][3].should.not.have.properties(
+            'attribute'
+        );
+        window.appboy.purchaseEventProperties[0][3][
+            'Transaction Id'
+        ].should.equal(1234);
     });
 
     it('should log a purchase event with empty attributes', function() {
@@ -446,6 +538,12 @@ describe('Appboy Forwarder', function() {
         );
         window.appboy.purchaseEventProperties[0][1].should.equal(50);
         window.appboy.purchaseEventProperties[0][2].should.equal(1);
+        window.appboy.purchaseEventProperties[0][3].should.not.have.properties(
+            'attribute'
+        );
+        window.appboy.purchaseEventProperties[0][3][
+            'Transaction Id'
+        ].should.equal(1234);
     });
 
     it('should log a custom event for non-purchase commerce events', function() {
@@ -963,7 +1061,7 @@ iphone,
 999,
 USD,
 1,
-{\"color\":\"blue\",\"Sku":"iphoneSKU"},\n`;
+{\"color\":\"blue\",\"Sku":"iphoneSKU",\"Transaction Id":"foo-transaction-id"},\n`;
 
         mParticle.forwarder.msg.should.equal(expectedMessage);
     });
