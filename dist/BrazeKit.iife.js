@@ -304,7 +304,7 @@ var mpBrazeKit = (function (exports) {
 
 	var name = 'Appboy',
 	    moduleId = 28,
-	    version = '3.0.3',
+	    version = '3.0.4',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -323,7 +323,7 @@ var mpBrazeKit = (function (exports) {
 	    EU02: 'sdk.fra-02.braze.eu',
 	};
 
-	var constructor = function() {
+	var constructor = function () {
 	    var self = this,
 	        forwarderSettings,
 	        options = {},
@@ -357,7 +357,7 @@ var mpBrazeKit = (function (exports) {
 	    function logPurchaseEvent(event) {
 	        var reportEvent = false;
 	        if (event.ProductAction.ProductList) {
-	            event.ProductAction.ProductList.forEach(function(product) {
+	            event.ProductAction.ProductList.forEach(function (product) {
 	                if (product.Attributes == null) {
 	                    product.Attributes = {};
 	                }
@@ -374,9 +374,12 @@ var mpBrazeKit = (function (exports) {
 	                    );
 	                }
 
-	                var sanitizedProperties = getSanitizedCustomProperties(
-	                    product.Attributes
-	                );
+	                var productAttributes = mergeObjects(product.Attributes, {
+	                    'Transaction Id': event.ProductAction.TransactionId,
+	                });
+
+	                var sanitizedProperties =
+	                    getSanitizedCustomProperties(productAttributes);
 
 	                if (sanitizedProperties == null) {
 	                    return (
@@ -536,9 +539,8 @@ var mpBrazeKit = (function (exports) {
 	        ) {
 	            reportEvent = logPurchaseEvent(event);
 	        } else if (event.EventDataType == MessageType.Commerce) {
-	            var listOfPageEvents = mParticle.eCommerce.expandCommerceEvent(
-	                event
-	            );
+	            var listOfPageEvents =
+	                mParticle.eCommerce.expandCommerceEvent(event);
 	            if (listOfPageEvents != null) {
 	                for (var i = 0; i < listOfPageEvents.length; i++) {
 	                    // finalLoopResult keeps track of if any logAppBoyEvent in this loop returns true or not
@@ -662,7 +664,7 @@ var mpBrazeKit = (function (exports) {
 	        // The following code block is based on Braze's best practice for implementing
 	        // their push primer.  We only modify it to include pushPrimer and register_inapp settings.
 	        // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/integration/#soft-push-prompts
-	        appboy.subscribeToInAppMessage(function(inAppMessage) {
+	        appboy.subscribeToInAppMessage(function (inAppMessage) {
 	            var shouldDisplay = true;
 	            var pushPrimer = false;
 	            if (inAppMessage instanceof appboy.InAppMessage) {
@@ -684,7 +686,7 @@ var mpBrazeKit = (function (exports) {
 	                    if (inAppMessage.buttons[0] != null) {
 	                        // Prompt the user when the first button is clicked
 	                        inAppMessage.buttons[0].subscribeToClickedEvent(
-	                            function() {
+	                            function () {
 	                                appboy.registerAppboyPushMessages();
 	                            }
 	                        );
@@ -729,7 +731,7 @@ var mpBrazeKit = (function (exports) {
 	        if (!self.logger) {
 	            // create a logger
 	            self.logger = {
-	                verbose: function() {},
+	                verbose: function () {},
 	            };
 	        }
 	        // eslint-disable-line no-unused-vars
@@ -902,7 +904,7 @@ var mpBrazeKit = (function (exports) {
 	        var nonMethodArguments = Array.prototype.slice.call(arguments, 1);
 	        msg += '\n' + method + ':\n';
 
-	        nonMethodArguments.forEach(function(arg) {
+	        nonMethodArguments.forEach(function (arg) {
 	            if (isObject(arg) || Array.isArray(arg)) {
 	                msg += JSON.stringify(arg);
 	            } else {
@@ -957,6 +959,18 @@ var mpBrazeKit = (function (exports) {
 	    });
 	}
 
+	function mergeObjects() {
+	    var resObj = {};
+	    for (var i = 0; i < arguments.length; i += 1) {
+	        var obj = arguments[i],
+	            keys = Object.keys(obj);
+	        for (var j = 0; j < keys.length; j += 1) {
+	            resObj[keys[j]] = obj[keys[j]];
+	        }
+	    }
+	    return resObj;
+	}
+
 	function isObject(val) {
 	    return (
 	        val != null && typeof val === 'object' && Array.isArray(val) === false
@@ -965,7 +979,7 @@ var mpBrazeKit = (function (exports) {
 
 	var BrazeKitDev = {
 	    register: register,
-	    getVersion: function() {
+	    getVersion: function () {
 	        return version;
 	    },
 	};
