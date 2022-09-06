@@ -2,6 +2,9 @@
 
 --
 
+#### 3.0.4 - 2022-09-06
+-   fix: Add Transaction Id to Purchase Commerce Events
+
 #### 3.0.3 - 2022-08-24
 -   feat: Add logging for debugging
 
