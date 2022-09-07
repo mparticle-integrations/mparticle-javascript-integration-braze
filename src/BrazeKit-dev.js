@@ -14,7 +14,7 @@ window.braze = require('@braze/web-sdk');
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-var name = 'Braze',
+var name = 'Appboy',
     moduleId = 28,
     version = '3.0.4',
     MessageType = {
