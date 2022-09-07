@@ -157,7 +157,7 @@ var constructor = function () {
                 );
             } else {
                 kitLogger(
-                    'appoy.getUser().setDateOfBirth',
+                    'braze.getUser().setDateOfBirth',
                     value.getFullYear(),
                     value.getMonth() + 1,
                     value.getDate()
