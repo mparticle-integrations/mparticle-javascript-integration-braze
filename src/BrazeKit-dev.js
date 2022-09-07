@@ -101,7 +101,7 @@ var constructor = function () {
                 var price = parseFloat(product.Price);
 
                 kitLogger(
-                    'appboy.logPurchase',
+                    'braze.logPurchase',
                     sanitizedProductName,
                     price,
                     event.CurrencyCode,
@@ -138,7 +138,7 @@ var constructor = function () {
         sanitizedEventName = getSanitizedValueForBraze(eventName);
         sanitizedAttrs = getSanitizedCustomProperties(attrs);
 
-        kitLogger('appboy.logCustomEvent', sanitizedEventName, sanitizedAttrs);
+        kitLogger('braze.logCustomEvent', sanitizedEventName, sanitizedAttrs);
 
         var reportEvent = braze.logCustomEvent(
             sanitizedEventName,
@@ -175,7 +175,7 @@ var constructor = function () {
             if (typeof value === 'number') {
                 var year = new Date().getFullYear() - value;
 
-                kitLogger('appboy.getUser().setDateOfBirth', year, 1, 1);
+                kitLogger('braze.getUser().setDateOfBirth', year, 1, 1);
 
                 braze.getUser().setDateOfBirth(year, 1, 1);
             } else {
@@ -196,7 +196,7 @@ var constructor = function () {
             params.push(value);
 
             kitLogger(
-                'appboy.getUser().' + DefaultAttributeMethods[key],
+                'braze.getUser().' + DefaultAttributeMethods[key],
                 params
             );
 
@@ -226,7 +226,7 @@ var constructor = function () {
         }
 
         kitLogger(
-            'appboy.logCustomEvent',
+            'braze.logCustomEvent',
             sanitizedEventName,
             sanitizedProperties
         );
@@ -292,7 +292,7 @@ var constructor = function () {
             var sanitizedKey = getSanitizedValueForBraze(key);
 
             kitLogger(
-                'appboy.getUser().setCustomUserAttribute',
+                'braze.getUser().setCustomUserAttribute',
                 sanitizedKey,
                 null
             );
@@ -312,7 +312,7 @@ var constructor = function () {
             }
 
             kitLogger(
-                'appboy.getUser().setCustomUserAttribute',
+                'braze.getUser().setCustomUserAttribute',
                 sanitizedKey,
                 sanitizedValue
             );
@@ -330,11 +330,11 @@ var constructor = function () {
         // Other versions use onUserIdentified, which is called after setUserIdentity from core SDK
         if (window.mParticle.getVersion().split('.')[0] === '1') {
             if (type == window.mParticle.IdentityType.CustomerId) {
-                kitLogger('appboy.changeUser', id);
+                kitLogger('braze.changeUser', id);
 
                 braze.changeUser(id);
             } else if (type == window.mParticle.IdentityType.Email) {
-                kitLogger('appboy.getUser().setEmail', id);
+                kitLogger('braze.getUser().setEmail', id);
 
                 braze.getUser().setEmail(id);
             } else {
@@ -361,12 +361,12 @@ var constructor = function () {
                 ];
         }
 
-        kitLogger('appboy.changeUser', brazeUserIDType);
+        kitLogger('braze.changeUser', brazeUserIDType);
 
         braze.changeUser(brazeUserIDType);
 
         if (userIdentities.email) {
-            kitLogger('appboy.getUser().setEmail', userIdentities.email);
+            kitLogger('braze.getUser().setEmail', userIdentities.email);
 
             braze.getUser().setEmail(userIdentities.email);
         }
@@ -420,7 +420,7 @@ var constructor = function () {
         braze.openSession();
         if (forwarderSettings.softPushCustomEventName) {
             kitLogger(
-                'appboy.logCustomEvent',
+                'braze.logCustomEvent',
                 forwarderSettings.softPushCustomEventName
             );
 
@@ -603,7 +603,7 @@ var constructor = function () {
      with a SKU of iphoneSku that cost $999 with a product attribute of 
      color: blue would be:
      mParticle - Braze Web Kit log:
-     appboy.logPurchase:
+     braze.logPurchase:
      iphone,
      999,
      USD,

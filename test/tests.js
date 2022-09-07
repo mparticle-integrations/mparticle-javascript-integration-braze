@@ -1056,7 +1056,7 @@ describe('Braze Forwarder', function () {
         mParticle.forwarder.process(commerceEvent);
 
         var expectedMessage = `mParticle - Braze Web Kit log:
-appboy.logPurchase:
+braze.logPurchase:
 iphone,
 999,
 USD,
