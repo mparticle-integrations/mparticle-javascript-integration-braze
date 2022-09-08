@@ -1,5 +1,5 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 
 export default [
     {
@@ -10,6 +10,7 @@ export default [
             exports: 'named',
             name: 'mpBrazeKit',
             strict: false,
+            inlineDynamicImports: true,
         },
         plugins: [
             resolve({
@@ -26,6 +27,7 @@ export default [
             exports: 'named',
             name: 'mpBrazeKit',
             strict: false,
+            inlineDynamicImports: true,
         },
         plugins: [
             resolve({
