@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-window.appboy = require('@braze/web-sdk');
+window.braze = require('@braze/web-sdk');
 //  Copyright 2015 mParticle, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +14,7 @@ window.appboy = require('@braze/web-sdk');
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+// This should remain Appboy and not Braze until the core SDK is able to parse the moduleID and not the name (go.mparticle.com/work/SQDSDKS-4655)
 var name = 'Appboy',
     moduleId = 28,
     version = '3.0.4',
@@ -62,7 +63,6 @@ var constructor = function () {
         email_subscribe: 'setEmailNotificationSubscriptionType',
         push_subscribe: 'setPushNotificationSubscriptionType',
         phone: 'setPhoneNumber',
-        image_url: 'setAvatarImageUrl',
         dob: 'setDateOfBirth',
     };
 
@@ -77,11 +77,11 @@ var constructor = function () {
 
                 var sanitizedProductName;
                 if (forwarderSettings.forwardSkuAsProductName === 'True') {
-                    sanitizedProductName = getSanitizedValueForAppboy(
+                    sanitizedProductName = getSanitizedValueForBraze(
                         String(product.Sku)
                     );
                 } else {
-                    sanitizedProductName = getSanitizedValueForAppboy(
+                    sanitizedProductName = getSanitizedValueForBraze(
                         String(product.Name)
                     );
                 }
@@ -102,7 +102,7 @@ var constructor = function () {
                 var price = parseFloat(product.Price);
 
                 kitLogger(
-                    'appboy.logPurchase',
+                    'braze.logPurchase',
                     sanitizedProductName,
                     price,
                     event.CurrencyCode,
@@ -110,7 +110,7 @@ var constructor = function () {
                     sanitizedProperties
                 );
 
-                reportEvent = appboy.logPurchase(
+                reportEvent = braze.logPurchase(
                     sanitizedProductName,
                     price,
                     event.CurrencyCode,
@@ -122,7 +122,7 @@ var constructor = function () {
         return reportEvent === true;
     }
 
-    function logAppboyPageViewEvent(event) {
+    function logBrazePageViewEvent(event) {
         var sanitizedEventName,
             sanitizedAttrs,
             eventName,
@@ -136,12 +136,12 @@ var constructor = function () {
         } else {
             eventName = window.location.pathname;
         }
-        sanitizedEventName = getSanitizedValueForAppboy(eventName);
+        sanitizedEventName = getSanitizedValueForBraze(eventName);
         sanitizedAttrs = getSanitizedCustomProperties(attrs);
 
-        kitLogger('appboy.logCustomEvent', sanitizedEventName, sanitizedAttrs);
+        kitLogger('braze.logCustomEvent', sanitizedEventName, sanitizedAttrs);
 
-        var reportEvent = appboy.logCustomEvent(
+        var reportEvent = braze.logCustomEvent(
             sanitizedEventName,
             sanitizedAttrs
         );
@@ -158,13 +158,13 @@ var constructor = function () {
                 );
             } else {
                 kitLogger(
-                    'appoy.getUser().setDateOfBirth',
+                    'braze.getUser().setDateOfBirth',
                     value.getFullYear(),
                     value.getMonth() + 1,
                     value.getDate()
                 );
 
-                appboy
+                braze
                     .getUser()
                     .setDateOfBirth(
                         value.getFullYear(),
@@ -176,9 +176,9 @@ var constructor = function () {
             if (typeof value === 'number') {
                 var year = new Date().getFullYear() - value;
 
-                kitLogger('appboy.getUser().setDateOfBirth', year, 1, 1);
+                kitLogger('braze.getUser().setDateOfBirth', year, 1, 1);
 
-                appboy.getUser().setDateOfBirth(year, 1, 1);
+                braze.getUser().setDateOfBirth(year, 1, 1);
             } else {
                 return '$Age must be a number';
             }
@@ -197,11 +197,12 @@ var constructor = function () {
             params.push(value);
 
             kitLogger(
-                'appboy.getUser().' + DefaultAttributeMethods[key],
+                'braze.getUser().' + DefaultAttributeMethods[key],
                 params
             );
 
-            var u = appboy.getUser();
+            var u = braze.getUser();
+
             //This method uses the setLastName, setFirstName, setEmail, setCountry, setHomeCity, setPhoneNumber, setAvatarImageUrl, setDateOfBirth, setGender, setEmailNotificationSubscriptionType, and setPushNotificationSubscriptionType methods
             if (!u[DefaultAttributeMethods[key]].apply(u, params)) {
                 return (
@@ -213,8 +214,8 @@ var constructor = function () {
         }
     }
 
-    function logAppboyEvent(event) {
-        var sanitizedEventName = getSanitizedValueForAppboy(event.EventName);
+    function logBrazeEvent(event) {
+        var sanitizedEventName = getSanitizedValueForBraze(event.EventName);
         var sanitizedProperties = getSanitizedCustomProperties(
             event.EventAttributes
         );
@@ -226,12 +227,12 @@ var constructor = function () {
         }
 
         kitLogger(
-            'appboy.logCustomEvent',
+            'braze.logCustomEvent',
             sanitizedEventName,
             sanitizedProperties
         );
 
-        var reportEvent = appboy.logCustomEvent(
+        var reportEvent = braze.logCustomEvent(
             sanitizedEventName,
             sanitizedProperties
         );
@@ -255,10 +256,10 @@ var constructor = function () {
                 mParticle.eCommerce.expandCommerceEvent(event);
             if (listOfPageEvents != null) {
                 for (var i = 0; i < listOfPageEvents.length; i++) {
-                    // finalLoopResult keeps track of if any logAppBoyEvent in this loop returns true or not
+                    // finalLoopResult keeps track of if any logBrazeEvent in this loop returns true or not
                     var finalLoopResult = false;
                     try {
-                        reportEvent = logAppboyEvent(listOfPageEvents[i]);
+                        reportEvent = logBrazeEvent(listOfPageEvents[i]);
                         if (reportEvent === true) {
                             finalLoopResult = true;
                         }
@@ -269,10 +270,10 @@ var constructor = function () {
                 reportEvent = finalLoopResult === true;
             }
         } else if (event.EventDataType == MessageType.PageEvent) {
-            reportEvent = logAppboyEvent(event);
+            reportEvent = logBrazeEvent(event);
         } else if (event.EventDataType == MessageType.PageView) {
             if (forwarderSettings.forwardScreenViews == 'True') {
-                reportEvent = logAppboyPageViewEvent(event);
+                reportEvent = logBrazePageViewEvent(event);
             }
         } else {
             return (
@@ -289,15 +290,15 @@ var constructor = function () {
 
     function removeUserAttribute(key) {
         if (!(key in DefaultAttributeMethods)) {
-            var sanitizedKey = getSanitizedValueForAppboy(key);
+            var sanitizedKey = getSanitizedValueForBraze(key);
 
             kitLogger(
-                'appboy.getUser().setCustomUserAttribute',
+                'braze.getUser().setCustomUserAttribute',
                 sanitizedKey,
                 null
             );
 
-            appboy.getUser().setCustomUserAttribute(sanitizedKey, null);
+            braze.getUser().setCustomUserAttribute(sanitizedKey, null);
         } else {
             return setDefaultAttribute(key, null);
         }
@@ -305,19 +306,19 @@ var constructor = function () {
 
     function setUserAttribute(key, value) {
         if (!(key in DefaultAttributeMethods)) {
-            var sanitizedKey = getSanitizedValueForAppboy(key);
-            var sanitizedValue = getSanitizedValueForAppboy(value);
+            var sanitizedKey = getSanitizedValueForBraze(key);
+            var sanitizedValue = getSanitizedValueForBraze(value);
             if (value != null && sanitizedValue == null) {
                 return 'Value did not pass validation for ' + key;
             }
 
             kitLogger(
-                'appboy.getUser().setCustomUserAttribute',
+                'braze.getUser().setCustomUserAttribute',
                 sanitizedKey,
                 sanitizedValue
             );
 
-            appboy
+            braze
                 .getUser()
                 .setCustomUserAttribute(sanitizedKey, sanitizedValue);
         } else {
@@ -330,13 +331,13 @@ var constructor = function () {
         // Other versions use onUserIdentified, which is called after setUserIdentity from core SDK
         if (window.mParticle.getVersion().split('.')[0] === '1') {
             if (type == window.mParticle.IdentityType.CustomerId) {
-                kitLogger('appboy.changeUser', id);
+                kitLogger('braze.changeUser', id);
 
-                appboy.changeUser(id);
+                braze.changeUser(id);
             } else if (type == window.mParticle.IdentityType.Email) {
-                kitLogger('appboy.getUser().setEmail', id);
+                kitLogger('braze.getUser().setEmail', id);
 
-                appboy.getUser().setEmail(id);
+                braze.getUser().setEmail(id);
             } else {
                 return (
                     "Can't call setUserIdentity on forwarder " +
@@ -349,37 +350,37 @@ var constructor = function () {
 
     // onUserIdentified is not used in version 1 so there is no need to check for version number
     function onUserIdentified(user) {
-        var appboyUserIDType,
+        var brazeUserIDType,
             userIdentities = user.getUserIdentities().userIdentities;
 
         if (forwarderSettings.userIdentificationType === 'MPID') {
-            appboyUserIDType = user.getMPID();
+            brazeUserIDType = user.getMPID();
         } else {
-            appboyUserIDType =
+            brazeUserIDType =
                 userIdentities[
                     forwarderSettings.userIdentificationType.toLowerCase()
                 ];
         }
 
-        kitLogger('appboy.changeUser', appboyUserIDType);
+        kitLogger('braze.changeUser', brazeUserIDType);
 
-        appboy.changeUser(appboyUserIDType);
+        braze.changeUser(brazeUserIDType);
 
         if (userIdentities.email) {
-            kitLogger('appboy.getUser().setEmail', userIdentities.email);
+            kitLogger('braze.getUser().setEmail', userIdentities.email);
 
-            appboy.getUser().setEmail(userIdentities.email);
+            braze.getUser().setEmail(userIdentities.email);
         }
     }
 
-    function primeAppBoyWebPush() {
+    function primeBrazeWebPush() {
         // The following code block is based on Braze's best practice for implementing
         // their push primer.  We only modify it to include pushPrimer and register_inapp settings.
         // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/integration/#soft-push-prompts
-        appboy.subscribeToInAppMessage(function (inAppMessage) {
+        braze.subscribeToInAppMessage(function (inAppMessage) {
             var shouldDisplay = true;
             var pushPrimer = false;
-            if (inAppMessage instanceof appboy.InAppMessage) {
+            if (inAppMessage instanceof braze.InAppMessage) {
                 // Read the key-value pair for msg-id
                 var msgId = inAppMessage.extras['msg-id'];
 
@@ -389,17 +390,17 @@ var constructor = function () {
                     // We don't want to display the soft push prompt to users on browsers that don't support push, or if the user
                     // has already granted/blocked permission
                     if (
-                        !appboy.isPushSupported() ||
-                        appboy.isPushPermissionGranted() ||
-                        appboy.isPushBlocked()
+                        !braze.isPushSupported() ||
+                        braze.isPushPermissionGranted() ||
+                        braze.isPushBlocked()
                     ) {
                         shouldDisplay = false;
                     }
                     if (inAppMessage.buttons[0] != null) {
                         // Prompt the user when the first button is clicked
                         inAppMessage.buttons[0].subscribeToClickedEvent(
-                            function () {
-                                appboy.registerAppboyPushMessages();
+                            function() {
+                                braze.requestPushPermission();
                             }
                         );
                     }
@@ -411,20 +412,20 @@ var constructor = function () {
                 (pushPrimer && shouldDisplay) ||
                 (!pushPrimer && forwarderSettings.register_inapp === 'True')
             ) {
-                appboy.display.showInAppMessage(inAppMessage);
+                braze.showInAppMessage(inAppMessage);
             }
         });
     }
 
     function openSession(forwarderSettings) {
-        appboy.openSession();
+        braze.openSession();
         if (forwarderSettings.softPushCustomEventName) {
             kitLogger(
-                'appboy.logCustomEvent',
+                'braze.logCustomEvent',
                 forwarderSettings.softPushCustomEventName
             );
 
-            appboy.logCustomEvent(forwarderSettings.softPushCustomEventName);
+            braze.logCustomEvent(forwarderSettings.softPushCustomEventName);
         }
     }
 
@@ -451,7 +452,7 @@ var constructor = function () {
         try {
             forwarderSettings = settings;
             reportingService = service;
-            // 30 min is Appboy default
+            // 30 min is Braze default
             options.sessionTimeoutInSeconds =
                 forwarderSettings.ABKSessionTimeoutKey || 1800;
             options.sdkFlavor = 'mparticle';
@@ -491,13 +492,13 @@ var constructor = function () {
             }
 
             if (testMode !== true) {
-                appboy.initialize(forwarderSettings.apiKey, options);
-                finishAppboyInitialization(forwarderSettings);
+                braze.initialize(forwarderSettings.apiKey, options);
+                finishBrazeInitialization(forwarderSettings);
             } else {
-                if (!appboy.initialize(forwarderSettings.apiKey, options)) {
+                if (!braze.initialize(forwarderSettings.apiKey, options)) {
                     return 'Failed to initialize: ' + name;
                 }
-                finishAppboyInitialization(forwarderSettings);
+                finishBrazeInitialization(forwarderSettings);
             }
             return 'Successfully initialized: ' + name;
         } catch (e) {
@@ -507,9 +508,9 @@ var constructor = function () {
         }
     }
 
-    function finishAppboyInitialization(forwarderSettings) {
-        appboy.addSdkMetadata(['mp']);
-        primeAppBoyWebPush();
+    function finishBrazeInitialization(forwarderSettings) {
+        braze.addSdkMetadata(['mp']);
+        primeBrazeWebPush();
         openSession(forwarderSettings);
     }
 
@@ -528,13 +529,13 @@ var constructor = function () {
                 }
             } catch (e) {
                 console.log(
-                    'Unable to configure custom Appboy cluster: ' + e.toString()
+                    'Unable to configure custom Braze cluster: ' + e.toString()
                 );
             }
         }
     }
 
-    function getSanitizedStringForAppboy(value) {
+    function getSanitizedStringForBraze(value) {
         if (typeof value === 'string') {
             if (value.substr(0, 1) === '$') {
                 return value.replace(/^\$+/g, '');
@@ -545,16 +546,16 @@ var constructor = function () {
         return null;
     }
 
-    function getSanitizedValueForAppboy(value) {
+    function getSanitizedValueForBraze(value) {
         if (typeof value === 'string') {
-            return getSanitizedStringForAppboy(value);
+            return getSanitizedStringForBraze(value);
         }
 
         if (Array.isArray(value)) {
             var sanitizedArray = [];
             for (var i in value) {
                 var element = value[i];
-                var sanitizedElement = getSanitizedStringForAppboy(element);
+                var sanitizedElement = getSanitizedStringForBraze(element);
                 if (sanitizedElement == null) {
                     return null;
                 }
@@ -581,10 +582,10 @@ var constructor = function () {
 
         for (var propertyName in customProperties) {
             value = customProperties[propertyName];
-            sanitizedPropertyName = getSanitizedValueForAppboy(propertyName);
+            sanitizedPropertyName = getSanitizedValueForBraze(propertyName);
             sanitizedValue =
                 typeof value === 'string'
-                    ? getSanitizedValueForAppboy(value)
+                    ? getSanitizedValueForBraze(value)
                     : value;
             sanitizedProperties[sanitizedPropertyName] = sanitizedValue;
         }
@@ -603,7 +604,7 @@ var constructor = function () {
      with a SKU of iphoneSku that cost $999 with a product attribute of 
      color: blue would be:
      mParticle - Braze Web Kit log:
-     appboy.logPurchase:
+     braze.logPurchase:
      iphone,
      999,
      USD,

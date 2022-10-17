@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-describe('Appboy Forwarder', function () {
+describe('Braze Forwarder', function () {
     var expandCommerceEvent = function (event) {
             var eventAttributes = {};
             if (event.ProductAction && event.ProductAction.TransactionId) {
@@ -72,7 +72,7 @@ describe('Appboy Forwarder', function () {
         MockDisplay = function() {
             var self = this;
         },
-        MockAppboyUser = function() {
+        MockBrazeUser = function() {
             var self = this;
 
             this.lastName = null;
@@ -149,7 +149,7 @@ describe('Appboy Forwarder', function () {
                 self.customAttributeValue = !value ? '' : value;
             };
         },
-        MockAppboy = function() {
+        MockBraze = function() {
             var self = this;
 
             this.logCustomEventCalled = false;
@@ -170,7 +170,7 @@ describe('Appboy Forwarder', function () {
             this.eventProperties = [];
             this.purchaseEventProperties = [];
 
-            this.user = new MockAppboyUser();
+            this.user = new MockBrazeUser();
             this.display = new MockDisplay();
             this.addSdkMetadata = function(metadata) {
                 self.metadata = metadata;
@@ -263,7 +263,7 @@ describe('Appboy Forwarder', function () {
 
     beforeEach(function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init(
             {
@@ -287,14 +287,14 @@ describe('Appboy Forwarder', function () {
     });
 
     it('should initialize with apiKey and mp metadata', function() {
-        window.appboy.should.have.property('apiKey', '123456');
-        window.appboy.should.have.property('metadata', ['mp']);
+        window.braze.should.have.property('apiKey', '123456');
+        window.braze.should.have.property('metadata', ['mp']);
     });
 
     it('should open a new session and refresh in app messages upon initialization', function() {
-        window.appboy.should.have.property('initializeCalled', true);
-        window.appboy.should.have.property('openSessionCalled', true);
-        window.appboy.should.have.property(
+        window.braze.should.have.property('initializeCalled', true);
+        window.braze.should.have.property('openSessionCalled', true);
+        window.braze.should.have.property(
             'subscribeToInAppMessageCalled',
             true
         );
@@ -305,8 +305,8 @@ describe('Appboy Forwarder', function () {
             EventName: 'Test Event',
             EventDataType: MessageType.PageEvent,
         });
-        window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property('logCustomEventName', 'Test Event');
+        window.braze.should.have.property('logCustomEventCalled', true);
+        window.braze.should.have.property('logCustomEventName', 'Test Event');
 
         reportService.event.should.have.property('EventName', 'Test Event');
     });
@@ -319,13 +319,13 @@ describe('Appboy Forwarder', function () {
                 dog: 'rex',
             },
         });
-        window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property(
+        window.braze.should.have.property('logCustomEventCalled', true);
+        window.braze.should.have.property(
             'logCustomEventName',
             'Test Event with attributes'
         );
-        window.appboy.eventProperties.should.have.lengthOf(1);
-        window.appboy.eventProperties[0]['dog'].should.equal('rex');
+        window.braze.eventProperties.should.have.lengthOf(1);
+        window.braze.eventProperties[0]['dog'].should.equal('rex');
     });
 
     it('should sanitize event names and property keys/values', function() {
@@ -336,13 +336,13 @@ describe('Appboy Forwarder', function () {
                 $dog: '$$rex$',
             },
         });
-        window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property(
+        window.braze.should.have.property('logCustomEventCalled', true);
+        window.braze.should.have.property(
             'logCustomEventName',
             'Test Event with attributes$'
         );
-        window.appboy.eventProperties.should.have.lengthOf(1);
-        window.appboy.eventProperties[0]['dog'].should.equal('rex$');
+        window.braze.eventProperties.should.have.lengthOf(1);
+        window.braze.eventProperties[0]['dog'].should.equal('rex$');
     });
 
     it('should not set if properties are invalid', function() {
@@ -351,7 +351,7 @@ describe('Appboy Forwarder', function () {
             EventDataType: MessageType.PageEvent,
             EventAttributes: 5,
         });
-        window.appboy.should.have.property('logCustomEventCalled', false);
+        window.braze.should.have.property('logCustomEventCalled', false);
     });
 
     it('should log a purchase event', function() {
@@ -375,18 +375,18 @@ describe('Appboy Forwarder', function () {
                 ],
             },
         });
-        window.appboy.should.have.property('logPurchaseEventCalled', true);
-        window.appboy.should.have.property('logPurchaseName', 'Product Name');
-        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal(
+        window.braze.should.have.property('logPurchaseEventCalled', true);
+        window.braze.should.have.property('logPurchaseName', 'Product Name');
+        window.braze.purchaseEventProperties.should.have.lengthOf(1);
+        window.braze.purchaseEventProperties[0][0].should.equal(
             'Product Name'
         );
-        window.appboy.purchaseEventProperties[0][1].should.equal(50);
-        window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal(
+        window.braze.purchaseEventProperties[0][1].should.equal(50);
+        window.braze.purchaseEventProperties[0][2].should.equal(1);
+        window.braze.purchaseEventProperties[0][3]['attribute'].should.equal(
             'whatever'
         );
-        window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
+        window.braze.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
         reportService.event.should.have.property(
             'EventName',
             'Test Purchase Event'
@@ -414,19 +414,19 @@ describe('Appboy Forwarder', function () {
                 ],
             },
         });
-        window.appboy.should.have.property('logPurchaseEventCalled', true);
-        window.appboy.should.have.property('logPurchaseName', 'Product Name');
-        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal(
+        window.braze.should.have.property('logPurchaseEventCalled', true);
+        window.braze.should.have.property('logPurchaseName', 'Product Name');
+        window.braze.purchaseEventProperties.should.have.lengthOf(1);
+        window.braze.purchaseEventProperties[0][0].should.equal(
             'Product Name'
         );
-        window.appboy.purchaseEventProperties[0][1].should.equal(50);
-        window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal(
+        window.braze.purchaseEventProperties[0][1].should.equal(50);
+        window.braze.purchaseEventProperties[0][2].should.equal(1);
+        window.braze.purchaseEventProperties[0][3]['attribute'].should.equal(
             'whatever'
         );
-        window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
-        window.appboy.purchaseEventProperties[0][3][
+        window.braze.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
+        window.braze.purchaseEventProperties[0][3][
             'Transaction Id'
         ].should.equal('foo-purchase-transaction-id');
         reportService.event.should.have.property(
@@ -457,14 +457,14 @@ describe('Appboy Forwarder', function () {
                 ],
             },
         });
-        window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property(
+        window.braze.should.have.property('logCustomEventCalled', true);
+        window.braze.should.have.property(
             'logCustomEventName',
             'Test EXPANDED Event'
         );
 
-        window.appboy.eventProperties.should.have.lengthOf(1);
-        window.appboy.eventProperties[0]['Transaction Id'].should.equal(
+        window.braze.eventProperties.should.have.lengthOf(1);
+        window.braze.eventProperties[0]['Transaction Id'].should.equal(
             'foo-add-to-cart-transaction-id'
         );
         reportService.event.should.have.property(
@@ -493,18 +493,18 @@ describe('Appboy Forwarder', function () {
                 ],
             },
         });
-        window.appboy.should.have.property('logPurchaseEventCalled', true);
-        window.appboy.should.have.property('logPurchaseName', 'Product Name');
-        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal(
+        window.braze.should.have.property('logPurchaseEventCalled', true);
+        window.braze.should.have.property('logPurchaseName', 'Product Name');
+        window.braze.purchaseEventProperties.should.have.lengthOf(1);
+        window.braze.purchaseEventProperties[0][0].should.equal(
             'Product Name'
         );
-        window.appboy.purchaseEventProperties[0][1].should.equal(50);
-        window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3].should.not.have.properties(
+        window.braze.purchaseEventProperties[0][1].should.equal(50);
+        window.braze.purchaseEventProperties[0][2].should.equal(1);
+        window.braze.purchaseEventProperties[0][3].should.not.have.properties(
             'attribute'
         );
-        window.appboy.purchaseEventProperties[0][3][
+        window.braze.purchaseEventProperties[0][3][
             'Transaction Id'
         ].should.equal(1234);
     });
@@ -530,18 +530,18 @@ describe('Appboy Forwarder', function () {
                 ],
             },
         });
-        window.appboy.should.have.property('logPurchaseEventCalled', true);
-        window.appboy.should.have.property('logPurchaseName', 'Product Name');
-        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal(
+        window.braze.should.have.property('logPurchaseEventCalled', true);
+        window.braze.should.have.property('logPurchaseName', 'Product Name');
+        window.braze.purchaseEventProperties.should.have.lengthOf(1);
+        window.braze.purchaseEventProperties[0][0].should.equal(
             'Product Name'
         );
-        window.appboy.purchaseEventProperties[0][1].should.equal(50);
-        window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3].should.not.have.properties(
+        window.braze.purchaseEventProperties[0][1].should.equal(50);
+        window.braze.purchaseEventProperties[0][2].should.equal(1);
+        window.braze.purchaseEventProperties[0][3].should.not.have.properties(
             'attribute'
         );
-        window.appboy.purchaseEventProperties[0][3][
+        window.braze.purchaseEventProperties[0][3][
             'Transaction Id'
         ].should.equal(1234);
     });
@@ -553,7 +553,7 @@ describe('Appboy Forwarder', function () {
             EventCategory: EventType.Other,
         });
 
-        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.braze.should.have.property('logCustomEventCalled', true);
         reportService.event.should.have.property(
             'EventName',
             'Test Non-Purchase Event'
@@ -589,9 +589,9 @@ describe('Appboy Forwarder', function () {
             EventAttributes: { $$$attri$bute: '$$$$what$ever' },
         });
 
-        window.appboy.should.have.property('logCustomEventCalled', false);
+        window.braze.should.have.property('logCustomEventCalled', false);
 
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
         mParticle.forwarder.init(
             {
                 apiKey: '123456',
@@ -619,13 +619,13 @@ describe('Appboy Forwarder', function () {
             EventAttributes: { $$$attri$bute: '$$$$what$ever' },
         });
 
-        window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.eventProperties[0].should.have.property(
+        window.braze.should.have.property('logCustomEventCalled', true);
+        window.braze.eventProperties[0].should.have.property(
             'hostname',
             window.location.hostname
         );
-        window.appboy.eventProperties[0].should.have.property('title');
-        window.appboy.eventProperties[0].should.have.property(
+        window.braze.eventProperties[0].should.have.property('title');
+        window.braze.eventProperties[0].should.have.property(
             'attri$bute',
             'what$ever'
         );
@@ -667,8 +667,8 @@ describe('Appboy Forwarder', function () {
             },
         });
 
-        window.appboy.should.have.property('logPurchaseEventCalled', true);
-        window.appboy.should.have.property('logPurchaseName', '12345');
+        window.braze.should.have.property('logPurchaseEventCalled', true);
+        window.braze.should.have.property('logPurchaseName', '12345');
     });
 
     it('should log a page view with the page name if sendEventNameForPageView is true', function() {
@@ -690,17 +690,17 @@ describe('Appboy Forwarder', function () {
             EventAttributes: { $$$attri$bute: '$$$$what$ever' },
         });
 
-        window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property(
+        window.braze.should.have.property('logCustomEventCalled', true);
+        window.braze.should.have.property(
             'logCustomEventName',
             'Test Log Page View'
         );
-        window.appboy.eventProperties[0].should.have.property(
+        window.braze.eventProperties[0].should.have.property(
             'hostname',
             window.location.hostname
         );
-        window.appboy.eventProperties[0].should.have.property('title');
-        window.appboy.eventProperties[0].should.have.property(
+        window.braze.eventProperties[0].should.have.property('title');
+        window.braze.eventProperties[0].should.have.property(
             'attri$bute',
             'what$ever'
         );
@@ -727,19 +727,19 @@ describe('Appboy Forwarder', function () {
             EventAttributes: { $$$attri$bute: '$$$$what$ever' },
         });
 
-        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.braze.should.have.property('logCustomEventCalled', true);
 
-        window.appboy.logCustomEventName
+        window.braze.logCustomEventName
             .includes('Test Log Page View')
             .should.equal(false);
         //when setEventNameForPageView is false, logCustomEventName is the path, which will include several /'s
-        window.appboy.logCustomEventName.includes('/').should.equal(true);
-        window.appboy.eventProperties[0].should.have.property(
+        window.braze.logCustomEventName.includes('/').should.equal(true);
+        window.braze.eventProperties[0].should.have.property(
             'hostname',
             window.location.hostname
         );
-        window.appboy.eventProperties[0].should.have.property('title');
-        window.appboy.eventProperties[0].should.have.property(
+        window.braze.eventProperties[0].should.have.property('title');
+        window.braze.eventProperties[0].should.have.property(
             'attri$bute',
             'what$ever'
         );
@@ -770,17 +770,17 @@ describe('Appboy Forwarder', function () {
                 ],
             },
         });
-        window.appboy.should.have.property('logPurchaseEventCalled', true);
-        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal(
+        window.braze.should.have.property('logPurchaseEventCalled', true);
+        window.braze.purchaseEventProperties.should.have.lengthOf(1);
+        window.braze.purchaseEventProperties[0][0].should.equal(
             'Product $Name'
         );
-        window.appboy.purchaseEventProperties[0][1].should.equal(50);
-        window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3]['attri$bute'].should.equal(
+        window.braze.purchaseEventProperties[0][1].should.equal(50);
+        window.braze.purchaseEventProperties[0][2].should.equal(1);
+        window.braze.purchaseEventProperties[0][3]['attri$bute'].should.equal(
             'what$ever'
         );
-        window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
+        window.braze.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
     });
 
     it('should not log non-purchase or non-pageEvent Events', function() {
@@ -788,7 +788,7 @@ describe('Appboy Forwarder', function () {
             EventName: 'Non-Event',
             EventDataType: MessageType.PageView,
         });
-        window.appboy.should.have.property('logPurchaseEventCalled', false);
+        window.braze.should.have.property('logPurchaseEventCalled', false);
     });
 
     it('should only change user identity and set the user email', function() {
@@ -808,8 +808,8 @@ describe('Appboy Forwarder', function () {
             'Mr. Blah facebook id',
             window.mParticle.IdentityType.Facebook
         );
-        window.appboy.userId.should.equal('123');
-        window.appboy.getUser().emailSet.should.equal('blah@gmail.com');
+        window.braze.userId.should.equal('123');
+        window.braze.getUser().emailSet.should.equal('blah@gmail.com');
 
         delete mParticle.getVersion;
     });
@@ -831,13 +831,13 @@ describe('Appboy Forwarder', function () {
             window.mParticle.IdentityType.Facebook
         );
 
-        (window.appboy.userId === null).should.equal(true);
-        (window.appboy.getUser().emailSet === null).should.equal(true);
+        (window.braze.userId === null).should.equal(true);
+        (window.braze.getUser().emailSet === null).should.equal(true);
 
         delete mParticle.getVersion;
     });
 
-    it('should set main appboy user identity from userIdentificationType ', function() {
+    it('should set main braze user identity from userIdentificationType ', function() {
         mParticle.forwarder.init({
             apiKey: '123456',
             userIdentificationType: 'Email',
@@ -858,8 +858,8 @@ describe('Appboy Forwarder', function () {
         };
 
         mParticle.forwarder.onUserIdentified(user);
-        window.appboy.userId.should.equal('test@test.com');
-        window.appboy.getUser().emailSet.should.equal('test@test.com');
+        window.braze.userId.should.equal('test@test.com');
+        window.braze.getUser().emailSet.should.equal('test@test.com');
 
         mParticle.forwarder.init({
             apiKey: '123456',
@@ -867,7 +867,7 @@ describe('Appboy Forwarder', function () {
         });
 
         mParticle.forwarder.onUserIdentified(user);
-        window.appboy.userId.should.equal('MPID123');
+        window.braze.userId.should.equal('MPID123');
 
         mParticle.forwarder.init({
             apiKey: '123456',
@@ -875,7 +875,7 @@ describe('Appboy Forwarder', function () {
         });
 
         mParticle.forwarder.onUserIdentified(user);
-        window.appboy.userId.should.equal('fbID1');
+        window.braze.userId.should.equal('fbID1');
     });
 
     it('it should set default user attributes', function() {
@@ -888,17 +888,17 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.setUserAttribute('phone', '1234567890');
         mParticle.forwarder.setUserAttribute('country', 'USA');
         mParticle.forwarder.setUserAttribute('home_city', 'NYC');
-        window.appboy.getUser().genderSet.should.equal('m');
-        window.appboy.getUser().firstName.should.equal('John');
-        window.appboy.getUser().lastName.should.equal('Doe');
-        window.appboy.getUser().emailSet.should.equal('test@gmail.com');
-        window.appboy.getUser().pushSubscribe.should.equal('opted_in');
-        window.appboy.getUser().yearOfBirth.should.equal(1991);
-        window.appboy.getUser().dayOfBirth.should.equal(17);
-        window.appboy.getUser().monthOfBirth.should.equal(12);
-        window.appboy.getUser().phoneSet.should.equal('1234567890');
-        window.appboy.getUser().countrySet.should.equal('USA');
-        window.appboy.getUser().homeCity.should.equal('NYC');
+        window.braze.getUser().genderSet.should.equal('m');
+        window.braze.getUser().firstName.should.equal('John');
+        window.braze.getUser().lastName.should.equal('Doe');
+        window.braze.getUser().emailSet.should.equal('test@gmail.com');
+        window.braze.getUser().pushSubscribe.should.equal('opted_in');
+        window.braze.getUser().yearOfBirth.should.equal(1991);
+        window.braze.getUser().dayOfBirth.should.equal(17);
+        window.braze.getUser().monthOfBirth.should.equal(12);
+        window.braze.getUser().phoneSet.should.equal('1234567890');
+        window.braze.getUser().countrySet.should.equal('USA');
+        window.braze.getUser().homeCity.should.equal('NYC');
     });
 
     it('it should set default user attributes using newer mParticle reserved attributes', function() {
@@ -911,31 +911,31 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.setUserAttribute('$Country', 'USA');
         mParticle.forwarder.setUserAttribute('$City', 'NYC');
 
-        window.appboy.getUser().genderSet.should.equal('f');
-        window.appboy.getUser().firstName.should.equal('Jane');
-        window.appboy.getUser().lastName.should.equal('Smith');
-        window.appboy.getUser().emailSet.should.equal('test2@gmail.com');
+        window.braze.getUser().genderSet.should.equal('f');
+        window.braze.getUser().firstName.should.equal('Jane');
+        window.braze.getUser().lastName.should.equal('Smith');
+        window.braze.getUser().emailSet.should.equal('test2@gmail.com');
 
         // We support $Age as a reserved attribute for Braze. However, since
         // Braze's API expects a year from us, this test will break every year,
         // since setting the age = 10 in 2021 will mean the user is born in 2011,
         // but setting it in 2022 means the year is 2012.
-        window.appboy.getUser().yearOfBirth.should.equal(2012);
-        window.appboy.getUser().dayOfBirth.should.equal(1);
-        window.appboy.getUser().monthOfBirth.should.equal(1);
-        window.appboy.getUser().phoneSet.should.equal('1234567890');
-        window.appboy.getUser().countrySet.should.equal('USA');
-        window.appboy.getUser().homeCity.should.equal('NYC');
+        window.braze.getUser().yearOfBirth.should.equal(2012);
+        window.braze.getUser().dayOfBirth.should.equal(1);
+        window.braze.getUser().monthOfBirth.should.equal(1);
+        window.braze.getUser().phoneSet.should.equal('1234567890');
+        window.braze.getUser().countrySet.should.equal('USA');
+        window.braze.getUser().homeCity.should.equal('NYC');
     });
 
     it('it should not set invalid attributes on reserved attributes', function() {
         // age must be a number so yearofBirth is not set
         mParticle.forwarder.setUserAttribute('$Age', '10');
-        (window.appboy.getUser().yearOfBirth === null).should.equal(true);
+        (window.braze.getUser().yearOfBirth === null).should.equal(true);
 
         // dob must be a date value so yearofBirth is not set
         mParticle.forwarder.setUserAttribute('dob', '1/1/2019');
-        (window.appboy.getUser().yearOfBirth === null).should.equal(true);
+        (window.braze.getUser().yearOfBirth === null).should.equal(true);
     });
 
     it('should not set default values if a string is not passed as the attribute', function() {
@@ -943,46 +943,46 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.setUserAttribute('last_name', 'Doe');
         mParticle.forwarder.setUserAttribute('first_name', 10.2);
         mParticle.forwarder.setUserAttribute('last_name', false);
-        window.appboy.getUser().firstName.should.equal('John');
-        window.appboy.getUser().lastName.should.equal('Doe');
+        window.braze.getUser().firstName.should.equal('John');
+        window.braze.getUser().lastName.should.equal('Doe');
     });
 
     it('should set a custom user attribute', function() {
         mParticle.forwarder.setUserAttribute('test', 'result');
-        window.appboy
+        window.braze
             .getUser()
             .should.have.property('customAttributeSet', true);
-        window.appboy.getUser().customAttribute.should.equal('test');
-        window.appboy.getUser().customAttributeValue.should.equal('result');
+        window.braze.getUser().customAttribute.should.equal('test');
+        window.braze.getUser().customAttributeValue.should.equal('result');
     });
 
     it('should set a custom user attribute of diffferent types', function() {
         mParticle.forwarder.setUserAttribute('testint', 3);
-        window.appboy.getUser().customAttributeValue.should.equal(3);
+        window.braze.getUser().customAttributeValue.should.equal(3);
         var d = new Date();
         mParticle.forwarder.setUserAttribute('testdate', d);
-        window.appboy.getUser().customAttributeValue.should.equal(d);
+        window.braze.getUser().customAttributeValue.should.equal(d);
         mParticle.forwarder.setUserAttribute('testarray', ['3']);
-        window.appboy.getUser().customAttributeValue[0].should.equal('3');
+        window.braze.getUser().customAttributeValue[0].should.equal('3');
     });
 
     it('should sanitize a custom user attribute', function() {
         mParticle.forwarder.setUserAttribute('$$tes$t', '$$res$ult');
-        window.appboy
+        window.braze
             .getUser()
             .should.have.property('customAttributeSet', true);
-        window.appboy.getUser().customAttribute.should.equal('tes$t');
-        window.appboy.getUser().customAttributeValue.should.equal('res$ult');
+        window.braze.getUser().customAttribute.should.equal('tes$t');
+        window.braze.getUser().customAttributeValue.should.equal('res$ult');
     });
 
     it('should sanitize a custom user attribute array', function() {
         mParticle.forwarder.setUserAttribute('att array', ['1', '$2$']);
-        window.appboy.getUser().customAttributeValue[1].should.equal('2$');
+        window.braze.getUser().customAttributeValue[1].should.equal('2$');
     });
 
     it('should not set a custom user attribute array on an invalid array', function() {
         mParticle.forwarder.setUserAttribute('att array', [2, 4, 5]);
-        window.appboy
+        window.braze
             .getUser()
             .should.have.property('customAttributeSet', false);
     });
@@ -990,29 +990,29 @@ describe('Appboy Forwarder', function () {
     it('should remove a default user attribute', function() {
         mParticle.forwarder.setUserAttribute('first_name', 'John');
         mParticle.forwarder.removeUserAttribute('first_name');
-        window.appboy.getUser().firstName.should.equal('');
+        window.braze.getUser().firstName.should.equal('');
     });
 
     it('should remove custom user attributes', function() {
         mParticle.forwarder.setUserAttribute('test', 'result');
         mParticle.forwarder.removeUserAttribute('test');
-        window.appboy.getUser().customAttribute.should.equal('test');
-        window.appboy.getUser().customAttributeValue.should.equal('');
+        window.braze.getUser().customAttribute.should.equal('test');
+        window.braze.getUser().customAttributeValue.should.equal('');
     });
 
     it('should remove custom user attributes', function() {
         mParticle.forwarder.setUserAttribute('$$test', '$res$ul$t');
         mParticle.forwarder.removeUserAttribute('$test');
-        window.appboy.getUser().customAttribute.should.equal('test');
-        window.appboy.getUser().customAttributeValue.should.equal('');
+        window.braze.getUser().customAttribute.should.equal('test');
+        window.braze.getUser().customAttributeValue.should.equal('');
     });
 
     it('should not set date of birth if passed an invalid value', function() {
         mParticle.forwarder.setUserAttribute('dob', new Date(1991, 11, 17));
         mParticle.forwarder.setUserAttribute('dob', 'something');
-        window.appboy.getUser().yearOfBirth.should.equal(1991);
-        window.appboy.getUser().dayOfBirth.should.equal(17);
-        window.appboy.getUser().monthOfBirth.should.equal(12);
+        window.braze.getUser().yearOfBirth.should.equal(1991);
+        window.braze.getUser().dayOfBirth.should.equal(17);
+        window.braze.getUser().monthOfBirth.should.equal(12);
     });
 
     it('should log messages to the proper logger', function() {
@@ -1056,7 +1056,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process(commerceEvent);
 
         var expectedMessage = `mParticle - Braze Web Kit log:
-appboy.logPurchase:
+braze.logPurchase:
 iphone,
 999,
 USD,
@@ -1068,7 +1068,7 @@ USD,
 
     it('should not set baseUrl when passed an invalid cluster', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init(
             {
@@ -1091,12 +1091,12 @@ USD,
             'My App'
         );
 
-        (window.appboy.baseUrl === null).should.equal(true);
+        (window.braze.baseUrl === null).should.equal(true);
     });
 
     it('should have no baseUrl when cluster is not passed and dataCenterLocation is not EU', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init(
             {
@@ -1119,12 +1119,12 @@ USD,
             'My App'
         );
 
-        window.appboy.should.have.property('baseUrl', null);
+        window.braze.should.have.property('baseUrl', null);
     });
 
     it('should use the EU data center when dataCenterLocation is set to EU and no host is passed', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init(
             {
@@ -1147,12 +1147,12 @@ USD,
             'My App'
         );
 
-        window.appboy.should.have.property('baseUrl', 'sdk.fra-01.braze.eu');
+        window.braze.should.have.property('baseUrl', 'sdk.fra-01.braze.eu');
     });
 
     it('should use the 01 clusterMapping url when 01 number is passed to cluster', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init(
             {
@@ -1175,12 +1175,12 @@ USD,
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal('sdk.iad-01.braze.com');
+        window.braze.baseUrl.should.equal('sdk.iad-01.braze.com');
     });
 
     it('should use the 02 clusterMapping url when 02 number is passed to cluster', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init(
             {
@@ -1203,12 +1203,12 @@ USD,
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal('sdk.iad-02.braze.com');
+        window.braze.baseUrl.should.equal('sdk.iad-02.braze.com');
     });
 
     it('should use the 03 clusterMapping url when 03 number is passed to cluster', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init(
             {
@@ -1231,12 +1231,12 @@ USD,
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal('sdk.iad-03.braze.com');
+        window.braze.baseUrl.should.equal('sdk.iad-03.braze.com');
     });
 
     it('should use the 04 clusterMapping url when 04 number is passed to cluster', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
         mParticle.forwarder.init(
             {
                 apiKey: '123456',
@@ -1258,12 +1258,12 @@ USD,
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal('sdk.iad-04.braze.com');
+        window.braze.baseUrl.should.equal('sdk.iad-04.braze.com');
     });
 
     it('should use the 06 clusterMapping url when 06 number is passed to cluster', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
         mParticle.forwarder.init(
             {
                 apiKey: '123456',
@@ -1285,12 +1285,12 @@ USD,
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal('sdk.iad-06.braze.com');
+        window.braze.baseUrl.should.equal('sdk.iad-06.braze.com');
     });
 
     it('should use the 08 clusterMapping url when 08 number is passed to cluster', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
         mParticle.forwarder.init(
             {
                 apiKey: '123456',
@@ -1312,12 +1312,12 @@ USD,
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal('sdk.iad-08.braze.com');
+        window.braze.baseUrl.should.equal('sdk.iad-08.braze.com');
     });
 
     it('should use custom cluster url when passed cluster JSON', function() {
         reportService.reset();
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
         mParticle.forwarder.init(
             {
                 apiKey: '123456',
@@ -1340,7 +1340,7 @@ USD,
             'My App'
         );
 
-        window.appboy.baseUrl.should.equal('https://js.foo.bar.com/api/v3');
+        window.braze.baseUrl.should.equal('https://js.foo.bar.com/api/v3');
     });
 
     it('decodeClusterSetting should return null when no setting given', function() {
@@ -1362,7 +1362,7 @@ USD,
     });
 
     it('does not log prime-for-push when initialized without softPushCustomEventName', function() {
-        Should(window.appboy.logCustomEventName).not.be.ok();
+        Should(window.braze.logCustomEventName).not.be.ok();
     });
 
     it('logs soft push custom event when initialized with softPushCustomEventName', function() {
@@ -1386,38 +1386,38 @@ USD,
             '1.1',
             'My App'
         );
-        window.appboy.logCustomEventCalled.should.equal(true);
-        window.appboy.logCustomEventName.should.equal('prime-for-push');
+        window.braze.logCustomEventCalled.should.equal(true);
+        window.braze.logCustomEventName.should.equal('prime-for-push');
     });
 
     it('should initialize with doNotLoadFontAwesome', function() {
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init({
             doNotLoadFontAwesome: null,
         });
 
-        window.appboy.should.have.property('doNotLoadFontAwesome', false);
+        window.braze.should.have.property('doNotLoadFontAwesome', false);
 
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init({
             doNotLoadFontAwesome: 'True',
         });
 
-        window.appboy.should.have.property('doNotLoadFontAwesome', true);
+        window.braze.should.have.property('doNotLoadFontAwesome', true);
 
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
 
         mParticle.forwarder.init({
             doNotLoadFontAwesome: 'False',
         });
 
-        window.appboy.should.have.property('doNotLoadFontAwesome', false);
+        window.braze.should.have.property('doNotLoadFontAwesome', false);
     });
 
     it('should add additional braze settings passed from custom flags to the options object', function() {
-        window.appboy = new MockAppboy();
+        window.braze = new MockBraze();
         mParticle.forwarder.init(
             {
                 doNotLoadFontAwesome: null,
@@ -1440,7 +1440,7 @@ USD,
             }
         );
 
-        window.appboy.options.should.have.property('brazeSetting1', true);
-        window.appboy.options.should.have.property('brazeSetting2', true);
+        window.braze.options.should.have.property('brazeSetting1', true);
+        window.braze.options.should.have.property('brazeSetting2', true);
     });
 });
