@@ -14,7 +14,7 @@ window.braze = require('@braze/web-sdk');
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// This should remain Appboy and not Braze until the core SDK parsed the moduleID and not the name
+// This should remain Appboy and not Braze until the core SDK is able to parse the moduleID and not the name
 var name = 'Appboy',
     moduleId = 28,
     version = '3.0.4',
