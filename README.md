@@ -1,13 +1,12 @@
-![Braze Logo](https://github.com/mparticle-integrations/mparticle-javascript-integration-appboy/blob/master/braze-logo.png)
+![Braze Logo](https://github.com/mparticle-integrations/mparticle-javascript-integration-appboy/blob/master/braze-logo.png) 
 
 ⚠️⚠️⚠️
-
 <b>10/15/2022 - 2/15/2023 - Temporary Notice!<br></b>
 Customers who use mParticle and Braze on their websites may require some code changes due to an update we are making to the mParticle Braze web kit.  The web kit, which previously used v3.5.0 of the Braze web SDK, will use Braze SDK 4.2.1 starting on 2/15/2023 on our CDN.
 
-<b>The Braze web SDK has several breaking changes and if you load mParticle via snippet/CDN, you should <a href="#update-to-braze-sdk-version-4-from-version-3---10152022---2152023">follow these instructions to ensure your code continues to work when our changes go live to the CDN on 2/15/2023</a>.  If you self-host mParticle and the Braze Web Kit via npm, you can update sooner. Follow the instructions below whether you self-host or load mParticle via snippet/CDN.</b>.<br/>
-
-If you are using version 2 of the @mparticle/web-appboy-kit, you will need to <a href="#transition-from-mparticleweb-appboy-kit-to-mparticleweb-braze-kit">transition to @mparticle/web-braze-kit per the instructions here</a> before following the above instructions as well.
+* <b>The Braze web SDK has several breaking changes and if you load mParticle via snippet/CDN, you should <a href="#update-to-braze-sdk-version-4-from-version-3---10152022---2152023">follow these instructions to ensure your code continues to work when our changes go live to the CDN on 2/15/2023</a>.  If you self-host mParticle and the Braze Web Kit via npm, you can update sooner. Follow the instructions below whether you self-host or load mParticle via snippet/CDN.</b>.
+* <b>Note that if you are here looking at source code, the `master` branch will continue to contain Braze Web Kit version 3.X until 2/15/2023.  The `braze-v4-npm-master` branch currently contains the source code for v4.X, and this will be merged to `master` on 2/15/2022 to be available via CDN.  </b>
+* If you are using version 2 of the @mparticle/web-appboy-kit, you will need to <a href="#transition-from-mparticleweb-appboy-kit-to-mparticleweb-braze-kit">transition to @mparticle/web-braze-kit per the instructions here</a> before following the below instructions as well.
 
 ## Braze Web Kit Citical Updates and Timelines
 
