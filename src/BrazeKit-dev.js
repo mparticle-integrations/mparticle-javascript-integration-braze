@@ -439,6 +439,9 @@ var constructor = function () {
         appName,
         customFlags
     ) {
+        console.warn(
+            'mParticle is upgrading the Braze web kit and Braze SDK that you are currently using from V3 to V4 on 2/15/2023.  You will AUTOMATICALLY receive this update if implementing mParticle via snippet/CDN.  There are many breaking changes if you invoke deprecated Braze SDK methods. Please see https://docs.mparticle.com/integrations/braze/event for more information.'
+        );
         // check to see if there is a logger for backwards compatibility, and if not, mock one to avoid errors
         if (!self.logger) {
             // create a logger
