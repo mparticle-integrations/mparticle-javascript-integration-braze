@@ -1,7 +1,6 @@
 ![Braze Logo](https://github.com/mparticle-integrations/mparticle-javascript-integration-appboy/blob/master/braze-logo.png)
 
 ⚠️⚠️⚠️
-⚠️⚠️⚠️
 # Notice! Timeline for Breaking Changes for mParticle Web Braze Kit- 10/15/2022 - 2/15/2023
 Customers who use mParticle and Braze on their websites may require some code changes due to an update we are making to the mParticle Braze web kit.  The web kit, which previously used v3.5.0 of the Braze web SDK, will use Braze SDK 4.2.1 starting on 2/15/2023 on our CDN.
 
