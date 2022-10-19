@@ -2,6 +2,9 @@
 
 --
 
+#### 3.0.5 - 2022-10-20
+-   docs: Update README to alert developers about v4 kit upgrade date, add console warning to current CDN users (#15)
+
 #### 3.0.4 - 2022-09-06
 -   fix: Add Transaction Id to Purchase Commerce Events
 
