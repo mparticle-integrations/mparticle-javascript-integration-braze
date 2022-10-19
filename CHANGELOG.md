@@ -2,6 +2,13 @@
 
 --
 
+## 4.0.0 - 2022-10-19
+
+⚠️ **Breaking** - The mParticle web Braze kit now supports Braze's Web SDK V4.2.1.  
+* Our partner, Braze, has made significant changes to their web SDK.  As a result, we are also updating our mParticle Braze web kit to support Braze’s Web SDK version 4.2.1.  The updated mParticle Braze Web kit will be available via CDN on Feb 15, 2023 and is currently available on npm at @mparticle/web-braze-kit v4.0.0.  
+* There are lots of breaking changes, most notably Braze deprecating the entire `appboy` namespace in favor of `braze`, so please proceed with caution when updating to v4.0.0 via NPM.  If you implement mParticle via snippet, you will have to make changes to your codebase before Feb 15, 2023 to be compatible with both version 3 and version 4 of the Braze SDK to ensure your code continues to work.
+* Full details about the changes and recommended code changes can be found on mParticle's [Braze integration docs page](https://docs.mparticle.com/integrations/braze/event).
+
 #### 3.0.4 - 2022-09-06
 -   fix: Add Transaction Id to Purchase Commerce Events
 
