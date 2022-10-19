@@ -305,7 +305,7 @@ window.appboy = appboy_min;
 
 var name = 'Appboy',
     moduleId = 28,
-    version = '3.0.4',
+    version = '3.0.5',
     MessageType = {
         PageView: 3,
         PageEvent: 4,
@@ -728,6 +728,9 @@ var constructor = function () {
         appName,
         customFlags
     ) {
+        console.warn(
+            'mParticle is upgrading the Braze web kit and Braze SDK that you are currently using from V3 to V4 on 2/15/2023.  You will AUTOMATICALLY receive this update if you see this message.  There are many breaking changes if you invoke deprecated Braze SDK methods in your code. Please see https://docs.mparticle.com/integrations/braze/event for more information and necessary upgrade steps to take to ensure code compatibility on 2/15/2023.'
+        );
         // check to see if there is a logger for backwards compatibility, and if not, mock one to avoid errors
         if (!self.logger) {
             // create a logger
