@@ -297,7 +297,7 @@ var constructor = function () {
                 null
             );
 
-            appboy.getUser().setCustomUserAttribute(sanitizedKey, null);
+            // appboy.getUser().setCustomUserAttribute(sanitizedKey, null);
         } else {
             return setDefaultAttribute(key, null);
         }
