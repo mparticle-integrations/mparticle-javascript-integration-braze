@@ -533,7 +533,6 @@ var constructor = function () {
     /**************************/
     function processEvent(event) {
         var reportEvent = false;
-        var bundleNonPurchaseCommerceEvents = forwarderSettings.bundleNonPurchaseCommerceEvents;
 
         if (
             event.EventDataType == MessageType.Commerce &&
@@ -544,44 +543,19 @@ var constructor = function () {
             var listOfPageEvents =
                 mParticle.eCommerce.expandCommerceEvent(event);
             if (listOfPageEvents != null) {
-                if (!bundleNonPurchaseCommerceEvents) {
-                    for (var i = 0; i < listOfPageEvents.length; i++) {
-                        // finalLoopResult keeps track of if any logAppBoyEvent in this loop returns true or not
-                        var finalLoopResult = false;
-                        try {
-                            reportEvent = logAppboyEvent(listOfPageEvents[i]);
-                            if (reportEvent === true) {
-                                finalLoopResult = true;
-                            }
-                            
-                        } catch (err) {
-                            return 'Error logging page event' + err.message;
-                        }
-                        reportEvent = finalLoopResult === true;
-                    }
-                } else {
-                    var sanitizedProperties = getSanitizedCustomProperties(event.EventAttributes);
-                    var productArray = []; 
-                    for (var i = 0; i < event.ProductAction.ProductList.length; i++) {
-                        var sanitizedProduct = getSanitizedCustomProperties(event.ProductAction.ProductList[i]);
-                        sanitizedProduct['custom attributes'] = sanitizedProperties;
-                        productArray.push(sanitizedProduct);
-                    }
+                for (var i = 0; i < listOfPageEvents.length; i++) {
+                    // finalLoopResult keeps track of if any logAppBoyEvent in this loop returns true or not
+                    var finalLoopResult = false;
                     try {
-                        
-                        var brazeProductDetails = {}; 
-                        brazeProductDetails["products"] = productArray; 
-                        brazeProductDetails["Transaction ID"] = event.ProductAction.TransactionId; 
-                       
-                        var brazeEcommerceEvent = {};
-                        brazeEcommerceEvent.EventName = event.EventName; 
-                        brazeEcommerceEvent.EventAttributes = brazeProductDetails;
-                        reportEvent = logAppboyEvent(brazeEcommerceEvent);
-                    } catch(err) {
-                        return 'Error logging page event' + err.message; 
+                        reportEvent = logAppboyEvent(listOfPageEvents[i]);
+                        if (reportEvent === true) {
+                            finalLoopResult = true;
+                        }
+                    } catch (err) {
+                        return 'Error logging page event' + err.message;
                     }
                 }
-                
+                reportEvent = finalLoopResult === true;
             }
         } else if (event.EventDataType == MessageType.PageEvent) {
             reportEvent = logAppboyEvent(event);

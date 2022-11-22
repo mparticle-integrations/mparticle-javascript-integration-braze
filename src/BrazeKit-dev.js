@@ -267,9 +267,9 @@ var constructor = function () {
                             
                         } catch (err) {
                             return 'Error logging page event' + err.message;
-                        }
-                        reportEvent = finalLoopResult === true;
+                        } 
                     }
+                    reportEvent = finalLoopResult === true;
                 } else {
                     var sanitizedProperties = getSanitizedCustomProperties(event.EventAttributes);
                     var productArray = []; 
