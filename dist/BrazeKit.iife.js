@@ -552,9 +552,11 @@ var mpBrazeKit = (function (exports) {
 	                            if (reportEvent === true) {
 	                                finalLoopResult = true;
 	                            }
+	                            
 	                        } catch (err) {
 	                            return 'Error logging page event' + err.message;
 	                        }
+	                        reportEvent = finalLoopResult === true;
 	                    }
 	                } else {
 	                    var sanitizedProperties = getSanitizedCustomProperties(event.EventAttributes);
@@ -566,19 +568,19 @@ var mpBrazeKit = (function (exports) {
 	                    }
 	                    try {
 	                        
-	                        var brazeJSON= {}; 
-	                        brazeJSON["products"] = productArray; 
-	                        brazeJSON["Transaction ID"] = event.ProductAction.TransactionId;
+	                        var brazeProductDetails = {}; 
+	                        brazeProductDetails["products"] = productArray; 
+	                        brazeProductDetails["Transaction ID"] = event.ProductAction.TransactionId; 
 	                       
-	                        var newEvent = {};
-	                        newEvent.EventName = event.EventName; 
-	                        newEvent.EventAttributes = brazeJSON;
-	                        logAppboyEvent(newEvent);
+	                        var brazeEcommerceEvent = {};
+	                        brazeEcommerceEvent.EventName = event.EventName; 
+	                        brazeEcommerceEvent.EventAttributes = brazeProductDetails;
+	                        reportEvent = logAppboyEvent(brazeEcommerceEvent);
 	                    } catch(err) {
 	                        return 'Error logging page event' + err.message; 
 	                    }
 	                }
-	                reportEvent = finalLoopResult === true;
+	                
 	            }
 	        } else if (event.EventDataType == MessageType.PageEvent) {
 	            reportEvent = logAppboyEvent(event);

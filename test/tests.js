@@ -1444,7 +1444,7 @@ USD,
         window.appboy.options.should.have.property('brazeSetting2', true);
     });
 
-    it('should log a single non purchase commerce event with multiple products if bundleNonPurchaseCommerceEvents is true', function() {
+    it('should log a single non-purchase commerce event with multiple products if bundleNonPurchaseCommerceEvents is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
