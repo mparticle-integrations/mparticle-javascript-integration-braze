@@ -2,6 +2,9 @@
 
 --
 
+#### 3.0.5 - 2023-02-15
+-   refactor: Update console warning and readme to reflect new rollout plans (#19)
+
 #### 3.0.5 - 2022-10-20
 -   docs: Update README to alert developers about v4 kit upgrade date, add console warning to current CDN users (#15)
 
