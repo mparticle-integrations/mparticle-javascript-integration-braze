@@ -66,32 +66,118 @@ var constructor = function () {
         dob: 'setDateOfBirth',
     };
 
-    function logPurchaseEvent(event) {
+    // A purchase event can either log a single event with all products
+    // or multiple purchase events (one per product)
+    function logPurchaseEvent(event, forwardProductsWithEvent) {
         var reportEvent = false;
+
+        if (forwardProductsWithEvent) {
+            reportEvent = logSinglePurchaseEventWithProducts(event);
+        } else {
+            reportEvent = logPurchaseEventPerProduct(event);
+        }
+        return reportEvent === true;
+    }
+
+    function logSinglePurchaseEventWithProducts(event) {
+        var quantity = 1;
+        var eventAttributes = {
+            products: [],
+        };
+        // TODO pending Braze response - do we need transaction id anywhere in the purchase event?
+        // var productAttributes = mergeObjects(product.Attributes, {
+        //     'Transaction Id': event.ProductAction.TransactionId,
+        // });
+
+        if (event.ProductAction.ProductList.length) {
+            event.ProductAction.ProductList.forEach(function(_product) {
+                var product = getSanitizedCustomProperties(
+                    parseProduct(_product)
+                );
+
+                var productName;
+                if (forwarderSettings.forwardSkuAsProductName === 'True') {
+                    productName = _product.Sku;
+                } else {
+                    productName = _product.Name;
+                }
+                product.name = getSanitizedValueForAppboy(productName);
+
+                eventAttributes.products.push(product);
+            });
+        }
+
+        kitLogger(
+            'appboy.logPurchase',
+            'Completed Order',
+            event.ProductAction.TotalAmount,
+            event.CurrencyCode,
+            quantity,
+            eventAttributes
+        );
+
+        reportEvent = appboy.logPurchase(
+            'Completed Order',
+            event.ProductAction.TotalAmount,
+            event.CurrencyCode,
+            quantity,
+            eventAttributes
+        );
+    }
+
+    function toUnderscore(string) {
+        return string
+            .split(/(?=[A-Z])/)
+            .join('_')
+            .toLowerCase();
+    }
+
+    function parseProduct(_product) {
+        var product = {};
+        for (var key in _product) {
+            switch (key) {
+                case 'Sku':
+                    product.id = _product.Sku;
+                    break;
+                case 'TotalAmount':
+                    product.total_product_amount = _product['TotalAmount'];
+                    break;
+                case 'Attributes':
+                    product.custom_attributes = _product.Attributes;
+                    break;
+                default:
+                    product[toUnderscore(key)] = _product[key];
+            }
+        }
+
+        return product;
+    }
+
+    function logPurchaseEventPerProduct(event) {
         if (event.ProductAction.ProductList) {
             event.ProductAction.ProductList.forEach(function (product) {
+                var productName;
+
                 if (product.Attributes == null) {
                     product.Attributes = {};
                 }
                 product.Attributes['Sku'] = product.Sku;
 
-                var sanitizedProductName;
                 if (forwarderSettings.forwardSkuAsProductName === 'True') {
-                    sanitizedProductName = getSanitizedValueForAppboy(
-                        String(product.Sku)
-                    );
+                    productName = product.Sku;
                 } else {
-                    sanitizedProductName = getSanitizedValueForAppboy(
-                        String(product.Name)
-                    );
-                }
+                    productName = product.Name;
+
+
+                var sanitizedProductName = getSanitizedValueForAppboy(productName);
 
                 var productAttributes = mergeObjects(product.Attributes, {
                     'Transaction Id': event.ProductAction.TransactionId,
                 });
 
-                var sanitizedProperties =
-                    getSanitizedCustomProperties(productAttributes);
+                var sanitizedProperties = getSanitizedCustomProperties(
+                    productAttributes
+                );
 
                 if (sanitizedProperties == null) {
                     return (
@@ -244,56 +330,9 @@ var constructor = function () {
     /**************************/
     function processEvent(event) {
         var reportEvent = false;
-        var bundleNonPurchaseCommerceEvents = forwarderSettings.bundleNonPurchaseCommerceEvents
 
-        if (
-            event.EventDataType == MessageType.Commerce &&
-            event.EventCategory == mParticle.CommerceEventType.ProductPurchase
-        ) {
-            reportEvent = logPurchaseEvent(event);
-        } else if (event.EventDataType == MessageType.Commerce) {
-            var listOfPageEvents =
-                mParticle.eCommerce.expandCommerceEvent(event);
-            if (listOfPageEvents != null) {
-                if (!bundleNonPurchaseCommerceEvents) {
-                    for (var i = 0; i < listOfPageEvents.length; i++) {
-                        // finalLoopResult keeps track of if any logAppBoyEvent in this loop returns true or not
-                        var finalLoopResult = false;
-                        try {
-                            reportEvent = logAppboyEvent(listOfPageEvents[i]);
-                            if (reportEvent === true) {
-                                finalLoopResult = true;
-                            }
-                            
-                        } catch (err) {
-                            return 'Error logging page event' + err.message;
-                        } 
-                    }
-                    reportEvent = finalLoopResult === true;
-                } else {
-                    var sanitizedProperties = getSanitizedCustomProperties(event.EventAttributes);
-                    var productArray = []; 
-                    for (var i = 0; i < event.ProductAction.ProductList.length; i++) {
-                        var sanitizedProduct = getSanitizedCustomProperties(event.ProductAction.ProductList[i]);
-                        sanitizedProduct['custom attributes'] = sanitizedProperties;
-                        productArray.push(sanitizedProduct);
-                    }
-                    try {
-                        
-                        var brazeProductDetails = {}; 
-                        brazeProductDetails["products"] = productArray; 
-                        brazeProductDetails["Transaction ID"] = event.ProductAction.TransactionId; 
-                       
-                        var brazeEcommerceEvent = {};
-                        brazeEcommerceEvent.EventName = event.EventName; 
-                        brazeEcommerceEvent.EventAttributes = brazeProductDetails;
-                        reportEvent = logAppboyEvent(brazeEcommerceEvent);
-                    } catch(err) {
-                        return 'Error logging page event' + err.message; 
-                    }
-                }
-                
-            }
+        if (event.EventDataType == MessageType.Commerce) {
+            reportEvent = logCommerceEvent(event);
         } else if (event.EventDataType == MessageType.PageEvent) {
             reportEvent = logAppboyEvent(event);
         } else if (event.EventDataType == MessageType.PageView) {
@@ -311,6 +350,92 @@ var constructor = function () {
         if (reportEvent === true && reportingService) {
             reportingService(self, event);
         }
+    }
+
+    // mParticle commerce events use different appboy methods depending on if they are
+    // a purchase event or a non-purchase commerce event
+    function logCommerceEvent(event) {
+        var forwardProductsWithEvent =
+            forwarderSettings.forwardEnhancedECommerceData === 'True';
+
+        if (
+            event.EventCategory == mParticle.CommerceEventType.ProductPurchase
+        ) {
+            reportEvent = logPurchaseEvent(event, forwardProductsWithEvent);
+            return reportEvent === true;
+        } else {
+            reportEvent = logNonPurchaseCommerceEvent(
+                event,
+                forwardProductsWithEvent
+            );
+            return reportEvent === true;
+        }
+    }
+
+    // A non-purchase commerce event can either log a single event with all products
+    // or one event per product when the commerce event is expanded
+    function logNonPurchaseCommerceEvent(event, forwardProductsWithEvent) {
+        if (forwardProductsWithEvent) {
+            return sendNonPurchaseCommerceEventWithProducts(event);
+        } else {
+            return sendExpandedNonPurchaseCommerceEvents(event);
+        }
+    }
+
+    function sendNonPurchaseCommerceEventWithProducts(event) {
+        var sanitizedProperties = getSanitizedCustomProperties(
+            event.EventAttributes
+        );
+        var productArray = [];
+        if (event.ProductAction && event.ProductAction.ProductList) {
+            event.ProductAction.ProductList.forEach(function(product) {
+                {
+                    var sanitizedProduct = getSanitizedCustomProperties(
+                        product
+                    );
+                    sanitizedProduct['custom_attributes'] = sanitizedProperties;
+                    productArray.push(sanitizedProduct);
+                }
+            });
+        }
+        try {
+            var brazeProductDetails = {
+                products: productArray,
+                'Transaction ID': event.ProductAction.TransactionId,
+            };
+            var brazeEcommerceEvent = {
+                EventName: event.EventName,
+                EventAttributes: mergeObjects(
+                    brazeProductDetails,
+                    sanitizedProperties
+                ),
+            };
+
+            reportEvent = logAppboyEvent(brazeEcommerceEvent);
+            return reportEvent;
+        } catch (err) {
+            return 'Error logging page event' + err.message;
+        }
+    }
+
+    function sendExpandedNonPurchaseCommerceEvents(event) {
+        var listOfPageEvents = mParticle.eCommerce.expandCommerceEvent(event);
+        if (listOfPageEvents !== null) {
+            for (var i = 0; i < listOfPageEvents.length; i++) {
+                // finalLoopResult keeps track of if any logAppBoyEvent in this loop returns true or not
+                var finalLoopResult = false;
+                try {
+                    reportEvent = logAppboyEvent(listOfPageEvents[i]);
+                    if (reportEvent === true) {
+                        finalLoopResult = true;
+                    }
+                } catch (err) {
+                    return 'Error logging page event' + err.message;
+                }
+            }
+            reportEvent = finalLoopResult === true;
+        }
+        return reportEvent;
     }
 
     function removeUserAttribute(key) {

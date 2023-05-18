@@ -1,7 +1,5 @@
-/* eslint-disable no-undef */
-
-describe('Appboy Forwarder', function () {
-    var expandCommerceEvent = function (event) {
+describe('Appboy Forwarder', function() {
+    var expandCommerceEvent = function(event) {
             var eventAttributes = {};
             if (event.ProductAction && event.ProductAction.TransactionId) {
                 eventAttributes['Transaction Id'] =
@@ -35,7 +33,6 @@ describe('Appboy Forwarder', function () {
             Social: 7,
             Other: 8,
             Media: 9,
-            ProductPurchase: 16,
             getName: function() {
                 return 'blahblah';
             },
@@ -54,6 +51,19 @@ describe('Appboy Forwarder', function () {
             ProductAddToWishlist: 20,
             ProductRemoveFromWishlist: 21,
             ProductImpression: 22,
+        },
+        ProductActionType = {
+            Unknown: 0,
+            AddToCart: 1,
+            RemoveFromCart: 2,
+            Checkout: 3,
+            CheckoutOption: 4,
+            Click: 5,
+            ViewDetail: 6,
+            Purchase: 7,
+            Refund: 8,
+            AddToWishlist: 9,
+            RemoveFromWishlist: 10,
         },
         IdentityType = {
             Other: 0,
@@ -358,7 +368,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -393,11 +403,11 @@ describe('Appboy Forwarder', function () {
         );
     });
 
-    it('should log a purchase event with a transaction id', function () {
+    it('should log a purchase event with a transaction id', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 'foo-purchase-transaction-id',
@@ -435,14 +445,14 @@ describe('Appboy Forwarder', function () {
         );
     });
 
-    it('should log a non-purchase commerce event with a transaction id', function () {
+    it('should log a non-purchase commerce event with a transaction id', function() {
         mParticle.forwarder.process({
             EventName: 'Test Add To Cart',
             EventDataType: MessageType.Commerce,
             EventCategory: CommerceEventType.ProductAddToCart, // 10
             CurrencyCode: 'USD',
             ProductAction: {
-                ProductActionType: EventType.AddToCart, // 1
+                ProductActionType: ProductActionType.AddToCart, // 1
                 TransactionId: 'foo-add-to-cart-transaction-id',
                 TotalAmount: 50,
                 ProductList: [
@@ -473,11 +483,11 @@ describe('Appboy Forwarder', function () {
         );
     });
 
-    it('should log a purchase event without attributes', function () {
+    it('should log a purchase event without attributes', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -513,7 +523,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -649,7 +659,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -753,7 +763,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -919,8 +929,8 @@ describe('Appboy Forwarder', function () {
         // We support $Age as a reserved attribute for Braze. However, since
         // Braze's API expects a year from us, this test will break every year,
         // since setting the age = 10 in 2021 will mean the user is born in 2011,
-        // but setting it in 2022 means the year is 2012.
-        window.appboy.getUser().yearOfBirth.should.equal(2012);
+        // but setting it in 2023 means the year is 2013.
+        window.appboy.getUser().yearOfBirth.should.equal(2013);
         window.appboy.getUser().dayOfBirth.should.equal(1);
         window.appboy.getUser().monthOfBirth.should.equal(1);
         window.appboy.getUser().phoneSet.should.equal('1234567890');
@@ -1046,7 +1056,7 @@ describe('Appboy Forwarder', function () {
             EventDataType: 16,
             CurrencyCode: 'USD',
             ProductAction: {
-                ProductActionType: 7, // ProductActionType.Purchase value is 7
+                ProductActionType: CommerceEventType.ProductPurchase,
                 ProductList: [product1],
                 TransactionId: 'foo-transaction-id',
                 TotalAmount: 430,
@@ -1444,22 +1454,26 @@ USD,
         window.appboy.options.should.have.property('brazeSetting2', true);
     });
 
-    it('should log a single non-purchase commerce event with multiple products if bundleNonPurchaseCommerceEvents is `True`', function() {
+    it('should log a single non-purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
                 apiKey: '9123456',
-                bundleNonPurchaseCommerceEvents: 'True',
+                forwardEnhancedECommerceData: 'True',
             },
             reportService.cb,
             true,
             null
         );
-
+        var customAttributes = {
+            foo: 'bar',
+            baz: 'bar',
+        };
         mParticle.forwarder.process({
             EventName: 'Test Non-Purchase Commerce Event',
             EventDataType: MessageType.Commerce,
             EventCategory: CommerceEventType.ProductCheckout,
+            EventAttributes: customAttributes,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 91234,
@@ -1470,7 +1484,9 @@ USD,
                         Name: '$Product $Name',
                         TotalAmount: 50,
                         Quantity: 1,
-                        Attributes: { $$$attri$bute: '$$$$what$ever' },
+                        Attributes: {
+                            $$$attri$bute: '$$$$what$ever',
+                        },
                         Sku: 12345,
                     },
                     {
@@ -1478,13 +1494,120 @@ USD,
                         Name: '$Product $2 $Name',
                         TotalAmount: 50,
                         Quantity: 1,
-                        Attributes: { $$$attri$bute2: '$$$$what$ever2' },
+                        Attributes: {
+                            $$$attri$bute2: '$$$$what$ever2',
+                        },
                         Sku: 12345,
                     },
                 ],
             },
         });
+
         window.appboy.logCustomEventCalled.should.equal(true);
-        window.appboy.eventProperties[0].products.length.should.equal(2); 
+        window.appboy.eventProperties[0].products.length.should.equal(2);
+        window.appboy.eventProperties[0].products[0].should.have.property(
+            'custom_attributes',
+            customAttributes
+        );
+        window.appboy.eventProperties[0].products[1].should.have.property(
+            'custom_attributes',
+            customAttributes
+        );
+        window.appboy.eventProperties[0].should.have.property('foo', 'bar');
+        window.appboy.eventProperties[0].should.have.property('baz', 'bar');
+    });
+
+    it('should log a single purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
+        window.appboy = new MockAppboy();
+        mParticle.forwarder.init(
+            {
+                apiKey: '9123456',
+                forwardEnhancedECommerceData: 'True',
+            },
+            reportService.cb,
+            true,
+            null
+        );
+        var customAttributes = {
+            foo: 'bar',
+            baz: 'bar',
+        };
+
+        mParticle.forwarder.process({
+            EventName: 'eCommerce - Purchase',
+            EventDataType: MessageType.Commerce,
+            EventCategory: CommerceEventType.ProductPurchase,
+            EventAttributes: customAttributes,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                ProductActionType: CommerceEventType.ProductPurchase,
+                TransactionId: 'foo-transaction-id',
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: '50',
+                        Name: '$Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: {
+                            prodFoo1: 'prodBar1',
+                        },
+                        Sku: 12345,
+                    },
+                    {
+                        Price: '50',
+                        Name: '$Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: {
+                            prodFoo2: 'prodBar2',
+                        },
+                        Sku: 12345,
+                    },
+                ],
+            },
+        });
+
+        window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.should.have.property(
+            'logPurchaseName',
+            'Completed Order'
+        );
+        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
+        window.appboy.purchaseEventProperties[0][0].should.equal(
+            'Completed Order'
+        );
+        window.appboy.purchaseEventProperties[0][1].should.equal(50);
+        window.appboy.purchaseEventProperties[0][2].should.equal(1);
+        window.appboy.purchaseEventProperties[0][3].should.have.property(
+            'products'
+        );
+        window.appboy.purchaseEventProperties[0][3].products.should.have.lengthOf(
+            2
+        );
+
+        var expectedProduct1 = {
+            custom_attributes: { prodFoo1: 'prodBar1' },
+            id: 12345,
+            name: 'Product Name',
+            price: '50',
+            quantity: 1,
+            total_product_amount: 50,
+        };
+        var product1 = window.appboy.purchaseEventProperties[0][3].products[0];
+        product1.custom_attributes.should.have.property('prodFoo1', 'prodBar1');
+        product1.should.have.property('id', 12345);
+        product1.should.have.property('name', 'Product Name');
+        product1.should.have.property('price', '50');
+        product1.should.have.property('quantity', 1);
+        product1.should.have.property('total_product_amount', 50);
+
+        var product2 = window.appboy.purchaseEventProperties[0][3].products[1];
+        product2.custom_attributes.should.have.property('prodFoo2', 'prodBar2');
+        product2.should.have.property('id', 12345);
+        product2.should.have.property('name', 'Product Name');
+        product2.should.have.property('price', '50');
+        product2.should.have.property('quantity', 1);
+        product2.should.have.property('total_product_amount', 50);
     });
 });
