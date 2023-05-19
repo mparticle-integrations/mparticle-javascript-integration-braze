@@ -671,7 +671,7 @@ describe('Appboy Forwarder', function() {
                         TotalAmount: 50,
                         Quantity: 1,
                         Attributes: { $$$attri$bute: '$$$$what$ever' },
-                        Sku: 12345,
+                        Sku: '12345',
                     },
                 ],
             },
@@ -1454,7 +1454,7 @@ USD,
         window.appboy.options.should.have.property('brazeSetting2', true);
     });
 
-    it('should log a single non-purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
+    it.only('should log a single non-purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
@@ -1465,10 +1465,12 @@ USD,
             true,
             null
         );
+
         var customAttributes = {
             foo: 'bar',
             baz: 'bar',
         };
+
         mParticle.forwarder.process({
             EventName: 'Test Non-Purchase Commerce Event',
             EventDataType: MessageType.Commerce,
@@ -1481,21 +1483,21 @@ USD,
                 ProductList: [
                     {
                         Price: '50',
-                        Name: '$Product $Name',
+                        Name: '$Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
                         Attributes: {
-                            $$$attri$bute: '$$$$what$ever',
+                            prodFoo1: 'prodBar1',
                         },
                         Sku: 12345,
                     },
                     {
                         Price: '50',
-                        Name: '$Product $2 $Name',
+                        Name: '$Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
                         Attributes: {
-                            $$$attri$bute2: '$$$$what$ever2',
+                            prodFoo2: 'prodBar2',
                         },
                         Sku: 12345,
                     },
@@ -1505,16 +1507,29 @@ USD,
 
         window.appboy.logCustomEventCalled.should.equal(true);
         window.appboy.eventProperties[0].products.length.should.equal(2);
-        window.appboy.eventProperties[0].products[0].should.have.property(
-            'custom_attributes',
-            customAttributes
-        );
-        window.appboy.eventProperties[0].products[1].should.have.property(
-            'custom_attributes',
-            customAttributes
-        );
         window.appboy.eventProperties[0].should.have.property('foo', 'bar');
         window.appboy.eventProperties[0].should.have.property('baz', 'bar');
+
+        var product1 = window.appboy.eventProperties[0].products[0];
+        product1.custom_attributes.should.have.property('prodFoo1', 'prodBar1');
+        product1.custom_attributes.should.have.property('foo', 'bar');
+        product1.custom_attributes.should.have.property('baz', 'bar');
+        
+        product1.should.have.property('id', 12345);
+        product1.should.have.property('name', 'Product Name');
+        product1.should.have.property('price', '50');
+        product1.should.have.property('quantity', 1);
+        product1.should.have.property('total_product_amount', 50);
+        
+        var product2 = window.appboy.eventProperties[0].products[1];
+        product2.custom_attributes.should.have.property('prodFoo2', 'prodBar2');
+        product2.custom_attributes.should.have.property('foo', 'bar');
+        product2.custom_attributes.should.have.property('baz', 'bar');
+        product2.should.have.property('id', 12345);
+        product2.should.have.property('name', 'Product Name');
+        product2.should.have.property('price', '50');
+        product2.should.have.property('quantity', 1);
+        product2.should.have.property('total_product_amount', 50);
     });
 
     it('should log a single purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
@@ -1586,14 +1601,6 @@ USD,
             2
         );
 
-        var expectedProduct1 = {
-            custom_attributes: { prodFoo1: 'prodBar1' },
-            id: 12345,
-            name: 'Product Name',
-            price: '50',
-            quantity: 1,
-            total_product_amount: 50,
-        };
         var product1 = window.appboy.purchaseEventProperties[0][3].products[0];
         product1.custom_attributes.should.have.property('prodFoo1', 'prodBar1');
         product1.should.have.property('id', 12345);

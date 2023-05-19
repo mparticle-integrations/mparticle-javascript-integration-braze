@@ -166,8 +166,8 @@ var constructor = function () {
                 if (forwarderSettings.forwardSkuAsProductName === 'True') {
                     productName = product.Sku;
                 } else {
-                    productName = product.Name;
-
+                           productName = product.Name;
+                       }
 
                 var sanitizedProductName = getSanitizedValueForAppboy(productName);
 
@@ -376,13 +376,13 @@ var constructor = function () {
     // or one event per product when the commerce event is expanded
     function logNonPurchaseCommerceEvent(event, forwardProductsWithEvent) {
         if (forwardProductsWithEvent) {
-            return sendNonPurchaseCommerceEventWithProducts(event);
+            return logNonPurchaseCommerceEventWithProducts(event);
         } else {
-            return sendExpandedNonPurchaseCommerceEvents(event);
+            return logExpandedNonPurchaseCommerceEvents(event);
         }
     }
 
-    function sendNonPurchaseCommerceEventWithProducts(event) {
+    function logNonPurchaseCommerceEventWithProducts(event) {
         var sanitizedProperties = getSanitizedCustomProperties(
             event.EventAttributes
         );
@@ -390,11 +390,16 @@ var constructor = function () {
         if (event.ProductAction && event.ProductAction.ProductList) {
             event.ProductAction.ProductList.forEach(function(product) {
                 {
-                    var sanitizedProduct = getSanitizedCustomProperties(
-                        product
+                    product.Attributes = mergeObjects(
+                        sanitizedProperties,
+                        product.Attributes
                     );
-                    sanitizedProduct['custom_attributes'] = sanitizedProperties;
+                    var sanitizedProduct = getSanitizedCustomProperties(
+                        parseProduct(product)
+                    );
+                    // sanitizedProduct['custom_attributes'] = ;
                     productArray.push(sanitizedProduct);
+                    debugger;
                 }
             });
         }
@@ -418,7 +423,7 @@ var constructor = function () {
         }
     }
 
-    function sendExpandedNonPurchaseCommerceEvents(event) {
+    function logExpandedNonPurchaseCommerceEvents(event) {
         var listOfPageEvents = mParticle.eCommerce.expandCommerceEvent(event);
         if (listOfPageEvents !== null) {
             for (var i = 0; i < listOfPageEvents.length; i++) {
