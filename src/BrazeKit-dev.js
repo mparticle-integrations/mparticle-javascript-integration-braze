@@ -158,18 +158,20 @@ var constructor = function () {
             event.ProductAction.ProductList.forEach(function (product) {
                 var productName;
 
+                if (forwarderSettings.forwardSkuAsProductName === 'True') {
+                    productName = product.Sku;
+                } else {
+                    productName = product.Name;
+                }
+
                 if (product.Attributes == null) {
                     product.Attributes = {};
                 }
                 product.Attributes['Sku'] = product.Sku;
 
-                if (forwarderSettings.forwardSkuAsProductName === 'True') {
-                    productName = product.Sku;
-                } else {
-                           productName = product.Name;
-                       }
-
-                var sanitizedProductName = getSanitizedValueForAppboy(productName);
+                var sanitizedProductName = getSanitizedValueForAppboy(
+                    productName
+                );
 
                 var productAttributes = mergeObjects(product.Attributes, {
                     'Transaction Id': event.ProductAction.TransactionId,
@@ -397,9 +399,7 @@ var constructor = function () {
                     var sanitizedProduct = getSanitizedCustomProperties(
                         parseProduct(product)
                     );
-                    // sanitizedProduct['custom_attributes'] = ;
                     productArray.push(sanitizedProduct);
-                    debugger;
                 }
             });
         }

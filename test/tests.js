@@ -1454,7 +1454,7 @@ USD,
         window.appboy.options.should.have.property('brazeSetting2', true);
     });
 
-    it.only('should log a single non-purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
+    it('should log a single non-purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
@@ -1514,13 +1514,13 @@ USD,
         product1.custom_attributes.should.have.property('prodFoo1', 'prodBar1');
         product1.custom_attributes.should.have.property('foo', 'bar');
         product1.custom_attributes.should.have.property('baz', 'bar');
-        
+
         product1.should.have.property('id', 12345);
         product1.should.have.property('name', 'Product Name');
         product1.should.have.property('price', '50');
         product1.should.have.property('quantity', 1);
         product1.should.have.property('total_product_amount', 50);
-        
+
         var product2 = window.appboy.eventProperties[0].products[1];
         product2.custom_attributes.should.have.property('prodFoo2', 'prodBar2');
         product2.custom_attributes.should.have.property('foo', 'bar');
