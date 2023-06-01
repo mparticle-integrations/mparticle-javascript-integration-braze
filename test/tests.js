@@ -1506,30 +1506,38 @@ USD,
         });
 
         window.appboy.logCustomEventCalled.should.equal(true);
-        window.appboy.eventProperties[0].products.length.should.equal(2);
-        window.appboy.eventProperties[0].should.have.property('foo', 'bar');
-        window.appboy.eventProperties[0].should.have.property('baz', 'bar');
+        var expectedNonPurchaseCommerceEventProperties = {
+            foo: 'bar',
+            baz: 'bar',
+            products: [
+                {
+                    id: 12345,
+                    name: 'Product Name',
+                    price: 50,
+                    quantity: 1,
+                    total_product_amount: 50,
+                    custom_attributes: {
+                        prodFoo1: 'prodBar1',
+                    },
+                },
+                {
+                    id: 12345,
+                    name: 'Product Name',
+                    price: 50,
+                    quantity: 1,
+                    total_product_amount: 50,
+                    custom_attributes: {
+                        prodFoo2: 'prodBar2',
+                    },
+                },
+            ],
+        };
 
-        var product1 = window.appboy.eventProperties[0].products[0];
-        product1.custom_attributes.should.have.property('prodFoo1', 'prodBar1');
-        product1.custom_attributes.should.have.property('foo', 'bar');
-        product1.custom_attributes.should.have.property('baz', 'bar');
-
-        product1.should.have.property('id', 12345);
-        product1.should.have.property('name', 'Product Name');
-        product1.should.have.property('price', '50');
-        product1.should.have.property('quantity', 1);
-        product1.should.have.property('total_product_amount', 50);
-
-        var product2 = window.appboy.eventProperties[0].products[1];
-        product2.custom_attributes.should.have.property('prodFoo2', 'prodBar2');
-        product2.custom_attributes.should.have.property('foo', 'bar');
-        product2.custom_attributes.should.have.property('baz', 'bar');
-        product2.should.have.property('id', 12345);
-        product2.should.have.property('name', 'Product Name');
-        product2.should.have.property('price', '50');
-        product2.should.have.property('quantity', 1);
-        product2.should.have.property('total_product_amount', 50);
+        var loggedNonPurchaseCommerceEventProperties =
+            window.appboy.eventProperties[0];
+        loggedNonPurchaseCommerceEventProperties.should.containDeepOrdered(
+            expectedNonPurchaseCommerceEventProperties
+        );
     });
 
     it('should log a single purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
@@ -1583,38 +1591,45 @@ USD,
             },
         });
 
+        var expectedPurchaseEvent = [
+            'eCommerce - Purchase',
+            50,
+            1,
+            {
+                'Transaction Id': 'foo-transaction-id',
+                products: [
+                    {
+                        id: 12345,
+                        name: 'Product Name',
+                        price: 50,
+                        quantity: 1,
+                        total_product_amount: 50,
+                        custom_attributes: {
+                            prodFoo1: 'prodBar1',
+                        },
+                    },
+                    {
+                        id: 12345,
+                        name: 'Product Name',
+                        price: 50,
+                        quantity: 1,
+                        total_product_amount: 50,
+                        custom_attributes: {
+                            prodFoo2: 'prodBar2',
+                        },
+                    },
+                ],
+            },
+        ];
+
         window.appboy.should.have.property('logPurchaseEventCalled', true);
         window.appboy.should.have.property(
             'logPurchaseName',
-            'Completed Order'
+            'eCommerce - Purchase'
         );
-        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal(
-            'Completed Order'
+        var purchaseEventProperties = window.appboy.purchaseEventProperties[0];
+        purchaseEventProperties.should.containDeepOrdered(
+            expectedPurchaseEvent
         );
-        window.appboy.purchaseEventProperties[0][1].should.equal(50);
-        window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3].should.have.property(
-            'products'
-        );
-        window.appboy.purchaseEventProperties[0][3].products.should.have.lengthOf(
-            2
-        );
-
-        var product1 = window.appboy.purchaseEventProperties[0][3].products[0];
-        product1.custom_attributes.should.have.property('prodFoo1', 'prodBar1');
-        product1.should.have.property('id', 12345);
-        product1.should.have.property('name', 'Product Name');
-        product1.should.have.property('price', '50');
-        product1.should.have.property('quantity', 1);
-        product1.should.have.property('total_product_amount', 50);
-
-        var product2 = window.appboy.purchaseEventProperties[0][3].products[1];
-        product2.custom_attributes.should.have.property('prodFoo2', 'prodBar2');
-        product2.should.have.property('id', 12345);
-        product2.should.have.property('name', 'Product Name');
-        product2.should.have.property('price', '50');
-        product2.should.have.property('quantity', 1);
-        product2.should.have.property('total_product_amount', 50);
     });
 });

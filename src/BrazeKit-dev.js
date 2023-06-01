@@ -84,10 +84,10 @@ var constructor = function () {
         var eventAttributes = {
             products: [],
         };
-        // TODO pending Braze response - do we need transaction id anywhere in the purchase event?
-        // var productAttributes = mergeObjects(product.Attributes, {
-        //     'Transaction Id': event.ProductAction.TransactionId,
-        // });
+        if (event.ProductAction.TransactionId) {
+            eventAttributes['Transaction Id'] =
+                event.ProductAction.TransactionId;
+        }
 
         if (event.ProductAction.ProductList.length) {
             event.ProductAction.ProductList.forEach(function(_product) {
@@ -109,7 +109,7 @@ var constructor = function () {
 
         kitLogger(
             'appboy.logPurchase',
-            'Completed Order',
+            event.EventName,
             event.ProductAction.TotalAmount,
             event.CurrencyCode,
             quantity,
@@ -117,7 +117,7 @@ var constructor = function () {
         );
 
         reportEvent = appboy.logPurchase(
-            'Completed Order',
+            event.EventName,
             event.ProductAction.TotalAmount,
             event.CurrencyCode,
             quantity,
@@ -155,7 +155,7 @@ var constructor = function () {
 
     function logPurchaseEventPerProduct(event) {
         if (event.ProductAction.ProductList) {
-            event.ProductAction.ProductList.forEach(function (product) {
+            event.ProductAction.ProductList.forEach(function(product) {
                 var productName;
 
                 if (forwarderSettings.forwardSkuAsProductName === 'True') {
