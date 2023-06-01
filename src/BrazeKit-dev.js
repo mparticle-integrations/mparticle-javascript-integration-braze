@@ -127,28 +127,20 @@ var constructor = function () {
         );
     }
 
-    function toUnderscore(string) {
-        return string
-            .split(/(?=[A-Z])/)
-            .join('_')
-            .toLowerCase();
-    }
+    // function toUnderscore(string) {
+    //     return string
+    //         .split(/(?=[A-Z])/)
+    //         .join('_')
+    //         .toLowerCase();
+    // }
 
     function parseProduct(_product) {
         var product = {};
         for (var key in _product) {
-            switch (key) {
-                case 'Sku':
-                    product.id = _product.Sku;
-                    break;
-                case 'TotalAmount':
-                    product.total_product_amount = _product['TotalAmount'];
-                    break;
-                case 'Attributes':
-                    product.custom_attributes = _product.Attributes;
-                    break;
-                default:
-                    product[toUnderscore(key)] = _product[key];
+            if (key === 'Attributes') {
+                product.custom_attributes = _product.Attributes;
+            } else {
+                product[key] = _product[key];
             }
         }
 

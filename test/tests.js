@@ -365,43 +365,69 @@ describe('Appboy Forwarder', function() {
     });
 
     it('should log a purchase event', function() {
-        mParticle.forwarder.process({
-            EventName: 'Test Purchase Event',
-            EventDataType: MessageType.Commerce,
-            EventCategory: CommerceEventType.ProductPurchase,
-            CurrencyCode: 'USD',
-            ProductAction: {
-                TransactionId: 1234,
-                TotalAmount: 50,
-                ProductList: [
-                    {
-                        Price: '50',
-                        Name: 'Product Name',
-                        TotalAmount: 50,
-                        Quantity: 1,
-                        Attributes: { attribute: 'whatever' },
-                        Sku: 12345,
-                    },
-                ],
-            },
-        });
-        window.appboy.should.have.property('logPurchaseEventCalled', true);
-        window.appboy.should.have.property('logPurchaseName', 'Product Name');
-        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
-        window.appboy.purchaseEventProperties[0][0].should.equal(
-            'Product Name'
-        );
-        window.appboy.purchaseEventProperties[0][1].should.equal(50);
-        window.appboy.purchaseEventProperties[0][2].should.equal(1);
-        window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal(
-            'whatever'
-        );
-        window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
-        reportService.event.should.have.property(
-            'EventName',
-            'Test Purchase Event'
-        );
-    });
+                                                     mParticle.forwarder.process(
+                                                         {
+                                                             EventName:
+                                                                 'Test Purchase Event',
+                                                             EventDataType:
+                                                                 MessageType.Commerce,
+                                                             EventCategory:
+                                                                 CommerceEventType.ProductPurchase,
+                                                             CurrencyCode:
+                                                                 'USD',
+                                                             ProductAction: {
+                                                                 TransactionId: 1234,
+                                                                 TotalAmount: 50,
+                                                                 ProductList: [
+                                                                     {
+                                                                         Price:
+                                                                             '50',
+                                                                         Name:
+                                                                             'Product Name',
+                                                                         TotalAmount: 50,
+                                                                         Quantity: 1,
+                                                                         Attributes: {
+                                                                             attribute:
+                                                                                 'whatever',
+                                                                         },
+                                                                         Sku: 12345,
+                                                                     },
+                                                                 ],
+                                                             },
+                                                         }
+                                                     );
+                                                     window.appboy.should.have.property(
+                                                         'logPurchaseEventCalled',
+                                                         true
+                                                     );
+                                                     window.appboy.should.have.property(
+                                                         'logPurchaseName',
+                                                         'Product Name'
+                                                     );
+                                                     window.appboy.purchaseEventProperties.should.have.lengthOf(
+                                                         1
+                                                     );
+                                                     window.appboy.purchaseEventProperties[0][0].should.equal(
+                                                         'Product Name'
+                                                     );
+                                                     window.appboy.purchaseEventProperties[0][1].should.equal(
+                                                         50
+                                                     );
+                                                     window.appboy.purchaseEventProperties[0][2].should.equal(
+                                                         1
+                                                     );
+                                                     window.appboy.purchaseEventProperties[0][3][
+                                                         'attribute'
+                                                     ].should.equal('whatever');
+
+                                                     window.appboy.purchaseEventProperties[0][3][
+                                                         'Sku'
+                                                     ].should.equal(12345);
+                                                     reportService.event.should.have.property(
+                                                         'EventName',
+                                                         'Test Purchase Event'
+                                                     );
+                                                 });
 
     it('should log a purchase event with a transaction id', function() {
         mParticle.forwarder.process({
@@ -1511,21 +1537,21 @@ USD,
             baz: 'bar',
             products: [
                 {
-                    id: 12345,
-                    name: 'Product Name',
-                    price: 50,
-                    quantity: 1,
-                    total_product_amount: 50,
+                    Sku: 12345,
+                    Name: 'Product Name',
+                    Price: 50,
+                    Quantity: 1,
+                    TotalAmount: 50,
                     custom_attributes: {
                         prodFoo1: 'prodBar1',
                     },
                 },
                 {
-                    id: 12345,
-                    name: 'Product Name',
-                    price: 50,
-                    quantity: 1,
-                    total_product_amount: 50,
+                    Sku: 12345,
+                    Name: 'Product Name',
+                    Price: 50,
+                    Quantity: 1,
+                    TotalAmount: 50,
                     custom_attributes: {
                         prodFoo2: 'prodBar2',
                     },
@@ -1599,21 +1625,21 @@ USD,
                 'Transaction Id': 'foo-transaction-id',
                 products: [
                     {
-                        id: 12345,
-                        name: 'Product Name',
-                        price: 50,
-                        quantity: 1,
-                        total_product_amount: 50,
+                        Sku: 12345,
+                        Name: 'Product Name',
+                        Price: 50,
+                        Quantity: 1,
+                        TotalAmount: 50,
                         custom_attributes: {
                             prodFoo1: 'prodBar1',
                         },
                     },
                     {
-                        id: 12345,
-                        name: 'Product Name',
-                        price: 50,
-                        quantity: 1,
-                        total_product_amount: 50,
+                        Sku: 12345,
+                        Name: 'Product Name',
+                        Price: 50,
+                        Quantity: 1,
+                        TotalAmount: 50,
                         custom_attributes: {
                             prodFoo2: 'prodBar2',
                         },
