@@ -66,12 +66,14 @@ var constructor = function () {
         dob: 'setDateOfBirth',
     };
 
+    var bundleProductsWithEvent = false;
+
     // A purchase event can either log a single event with all products
     // or multiple purchase events (one per product)
-    function logPurchaseEvent(event, forwardProductsWithEvent) {
+    function logPurchaseEvent(event) {
         var reportEvent = false;
 
-        if (forwardProductsWithEvent) {
+        if (bundleProductsWithEvent) {
             reportEvent = logSinglePurchaseEventWithProducts(event);
         } else {
             reportEvent = logPurchaseEventPerProduct(event);
@@ -163,15 +165,15 @@ var constructor = function () {
                 } else {
                     productName = product.Name;
                 }
+                var sanitizedProductName = getSanitizedValueForAppboy(
+                    productName
+                );
 
                 if (product.Attributes == null) {
                     product.Attributes = {};
                 }
-                product.Attributes['Sku'] = product.Sku;
 
-                var sanitizedProductName = getSanitizedValueForAppboy(
-                    productName
-                );
+                product.Attributes['Sku'] = product.Sku;
 
                 var productAttributes = mergeObjects(product.Attributes, {
                     'Transaction Id': event.ProductAction.TransactionId,
@@ -357,27 +359,21 @@ var constructor = function () {
     // mParticle commerce events use different appboy methods depending on if they are
     // a purchase event or a non-purchase commerce event
     function logCommerceEvent(event) {
-        var forwardProductsWithEvent =
-            forwarderSettings.forwardEnhancedECommerceData === 'True';
-
         if (
             event.EventCategory === mParticle.CommerceEventType.ProductPurchase
         ) {
-            reportEvent = logPurchaseEvent(event, forwardProductsWithEvent);
+            reportEvent = logPurchaseEvent(event);
             return reportEvent === true;
         } else {
-            reportEvent = logNonPurchaseCommerceEvent(
-                event,
-                forwardProductsWithEvent
-            );
+            reportEvent = logNonPurchaseCommerceEvent(event);
             return reportEvent === true;
         }
     }
 
     // A non-purchase commerce event can either log a single event with all products
     // or one event per product when the commerce event is expanded
-    function logNonPurchaseCommerceEvent(event, forwardProductsWithEvent) {
-        if (forwardProductsWithEvent) {
+    function logNonPurchaseCommerceEvent(event) {
+        if (bundleProductsWithEvent) {
             return logNonPurchaseCommerceEventWithProducts(event);
         } else {
             return logExpandedNonPurchaseCommerceEvents(event);
@@ -532,7 +528,7 @@ var constructor = function () {
         // The following code block is based on Braze's best practice for implementing
         // their push primer.  We only modify it to include pushPrimer and register_inapp settings.
         // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/integration/#soft-push-prompts
-        appboy.subscribeToInAppMessage(function (inAppMessage) {
+        appboy.subscribeToInAppMessage(function(inAppMessage) {
             var shouldDisplay = true;
             var pushPrimer = false;
             if (inAppMessage instanceof appboy.InAppMessage) {
@@ -554,7 +550,7 @@ var constructor = function () {
                     if (inAppMessage.buttons[0] != null) {
                         // Prompt the user when the first button is clicked
                         inAppMessage.buttons[0].subscribeToClickedEvent(
-                            function () {
+                            function() {
                                 appboy.registerAppboyPushMessages();
                             }
                         );
@@ -602,13 +598,15 @@ var constructor = function () {
         if (!self.logger) {
             // create a logger
             self.logger = {
-                verbose: function () {},
+                verbose: function() {},
             };
         }
         // eslint-disable-line no-unused-vars
         mpCustomFlags = customFlags;
         try {
             forwarderSettings = settings;
+            bundleProductsWithEvent =
+                forwarderSettings.bundleProductsWithEvent === 'True';
             reportingService = service;
             // 30 min is Appboy default
             options.sessionTimeoutInSeconds =

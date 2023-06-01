@@ -1454,12 +1454,12 @@ USD,
         window.appboy.options.should.have.property('brazeSetting2', true);
     });
 
-    it('should log a single non-purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
+    it('should log a single non-purchase commerce event with multiple products if bundleProductsWithEvent is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
                 apiKey: '9123456',
-                forwardEnhancedECommerceData: 'True',
+                bundleProductsWithEvent: 'True',
             },
             reportService.cb,
             true,
@@ -1540,12 +1540,12 @@ USD,
         );
     });
 
-    it('should log a single purchase commerce event with multiple products if forwardEnhancedECommerceData is `True`', function() {
+    it('should log a single purchase commerce event with multiple products if bundleProductsWithEvent is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
                 apiKey: '9123456',
-                forwardEnhancedECommerceData: 'True',
+                bundleProductsWithEvent: 'True',
             },
             reportService.cb,
             true,
