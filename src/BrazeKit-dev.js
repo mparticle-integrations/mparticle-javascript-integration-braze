@@ -361,7 +361,7 @@ var constructor = function () {
             forwarderSettings.forwardEnhancedECommerceData === 'True';
 
         if (
-            event.EventCategory == mParticle.CommerceEventType.ProductPurchase
+            event.EventCategory === mParticle.CommerceEventType.ProductPurchase
         ) {
             reportEvent = logPurchaseEvent(event, forwardProductsWithEvent);
             return reportEvent === true;
