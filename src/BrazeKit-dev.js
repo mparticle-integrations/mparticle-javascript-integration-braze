@@ -103,7 +103,7 @@ var constructor = function () {
                 } else {
                     productName = _product.Name;
                 }
-                product.name = getSanitizedValueForAppboy(productName);
+                product.Name = getSanitizedValueForAppboy(productName);
 
                 eventAttributes.products.push(product);
             });
