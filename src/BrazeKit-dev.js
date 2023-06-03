@@ -83,9 +83,9 @@ var constructor = function () {
 
     function logSinglePurchaseEventWithProducts(event) {
         var quantity = 1;
-        var eventAttributes = {
+        var eventAttributes = mergeObjects(event.EventAttributes, {
             products: [],
-        };
+        });
         if (event.ProductAction.TransactionId) {
             eventAttributes['Transaction Id'] =
                 event.ProductAction.TransactionId;
@@ -93,9 +93,7 @@ var constructor = function () {
 
         if (event.ProductAction.ProductList.length) {
             event.ProductAction.ProductList.forEach(function(_product) {
-                var product = getSanitizedCustomProperties(
-                    parseProduct(_product)
-                );
+                var product = getSanitizedCustomProperties(_product);
 
                 var productName;
                 if (forwarderSettings.forwardSkuAsProductName === 'True') {
@@ -125,26 +123,6 @@ var constructor = function () {
             quantity,
             eventAttributes
         );
-    }
-
-    // function toUnderscore(string) {
-    //     return string
-    //         .split(/(?=[A-Z])/)
-    //         .join('_')
-    //         .toLowerCase();
-    // }
-
-    function parseProduct(_product) {
-        var product = {};
-        for (var key in _product) {
-            if (key === 'Attributes') {
-                product.custom_attributes = _product.Attributes;
-            } else {
-                product[key] = _product[key];
-            }
-        }
-
-        return product;
     }
 
     function logPurchaseEventPerProduct(event) {
@@ -380,12 +358,8 @@ var constructor = function () {
         if (event.ProductAction && event.ProductAction.ProductList) {
             event.ProductAction.ProductList.forEach(function(product) {
                 {
-                    product.Attributes = mergeObjects(
-                        sanitizedProperties,
-                        product.Attributes
-                    );
                     var sanitizedProduct = getSanitizedCustomProperties(
-                        parseProduct(product)
+                        product
                     );
                     productArray.push(sanitizedProduct);
                 }

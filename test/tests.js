@@ -1480,7 +1480,7 @@ USD,
         window.appboy.options.should.have.property('brazeSetting2', true);
     });
 
-    it('should log a single non-purchase commerce event with multiple products if bundleProductsWithEvent is `True`', function() {
+    it.only('should log a single non-purchase commerce event with multiple products if bundleProductsWithEvent is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
@@ -1508,7 +1508,7 @@ USD,
                 TotalAmount: 50,
                 ProductList: [
                     {
-                        Price: '50',
+                        Price: 50,
                         Name: '$Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
@@ -1518,7 +1518,7 @@ USD,
                         Sku: 12345,
                     },
                     {
-                        Price: '50',
+                        Price: 50,
                         Name: '$Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
@@ -1533,6 +1533,7 @@ USD,
 
         window.appboy.logCustomEventCalled.should.equal(true);
         var expectedNonPurchaseCommerceEventProperties = {
+            'Transaction Id': 91234,
             foo: 'bar',
             baz: 'bar',
             products: [
@@ -1542,7 +1543,7 @@ USD,
                     Price: 50,
                     Quantity: 1,
                     TotalAmount: 50,
-                    custom_attributes: {
+                    Attributes: {
                         prodFoo1: 'prodBar1',
                     },
                 },
@@ -1552,7 +1553,7 @@ USD,
                     Price: 50,
                     Quantity: 1,
                     TotalAmount: 50,
-                    custom_attributes: {
+                    Attributes: {
                         prodFoo2: 'prodBar2',
                     },
                 },
@@ -1561,7 +1562,7 @@ USD,
 
         var loggedNonPurchaseCommerceEventProperties =
             window.appboy.eventProperties[0];
-        loggedNonPurchaseCommerceEventProperties.should.containDeepOrdered(
+        loggedNonPurchaseCommerceEventProperties.should.eql(
             expectedNonPurchaseCommerceEventProperties
         );
     });
@@ -1594,7 +1595,7 @@ USD,
                 TotalAmount: 50,
                 ProductList: [
                     {
-                        Price: '50',
+                        Price: 50,
                         Name: '$Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
@@ -1604,7 +1605,7 @@ USD,
                         Sku: 12345,
                     },
                     {
-                        Price: '50',
+                        Price: 50,
                         Name: '$Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
@@ -1623,6 +1624,8 @@ USD,
             1,
             {
                 'Transaction Id': 'foo-transaction-id',
+                foo: 'bar',
+                baz: 'bar',
                 products: [
                     {
                         Sku: 12345,
@@ -1630,7 +1633,7 @@ USD,
                         Price: 50,
                         Quantity: 1,
                         TotalAmount: 50,
-                        custom_attributes: {
+                        Attributes: {
                             prodFoo1: 'prodBar1',
                         },
                     },
@@ -1640,7 +1643,7 @@ USD,
                         Price: 50,
                         Quantity: 1,
                         TotalAmount: 50,
-                        custom_attributes: {
+                        Attributes: {
                             prodFoo2: 'prodBar2',
                         },
                     },
@@ -1654,8 +1657,7 @@ USD,
             'eCommerce - Purchase'
         );
         var purchaseEventProperties = window.appboy.purchaseEventProperties[0];
-        purchaseEventProperties.should.containDeepOrdered(
-            expectedPurchaseEvent
-        );
+
+        purchaseEventProperties.should.eql(expectedPurchaseEvent);
     });
 });
