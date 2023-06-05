@@ -368,7 +368,7 @@ var constructor = function () {
         try {
             var brazeProductDetails = {
                 products: productArray,
-                'Transaction ID': event.ProductAction.TransactionId,
+                'Transaction Id': event.ProductAction.TransactionId,
             };
             var brazeEcommerceEvent = {
                 EventName: event.EventName,
