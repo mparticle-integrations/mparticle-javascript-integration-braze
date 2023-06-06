@@ -671,7 +671,7 @@ if (window && window.mParticle && window.mParticle.addForwarder) {
         name: name,
         constructor: constructor,
         getId: getId,
-        // A suffix is added if there are multiple difference versions of
+        // A suffix is added if there are multiple different versions of
         // a client kit.  This matches the suffix in the DB.
         suffix: suffix,
     });
