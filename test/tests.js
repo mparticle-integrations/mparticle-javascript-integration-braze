@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 describe('Appboy Forwarder', function() {
     var expandCommerceEvent = function(event) {
             var eventAttributes = {};
@@ -365,69 +367,46 @@ describe('Appboy Forwarder', function() {
     });
 
     it('should log a purchase event', function() {
-                                                     mParticle.forwarder.process(
-                                                         {
-                                                             EventName:
-                                                                 'Test Purchase Event',
-                                                             EventDataType:
-                                                                 MessageType.Commerce,
-                                                             EventCategory:
-                                                                 CommerceEventType.ProductPurchase,
-                                                             CurrencyCode:
-                                                                 'USD',
-                                                             ProductAction: {
-                                                                 TransactionId: 1234,
-                                                                 TotalAmount: 50,
-                                                                 ProductList: [
-                                                                     {
-                                                                         Price:
-                                                                             '50',
-                                                                         Name:
-                                                                             'Product Name',
-                                                                         TotalAmount: 50,
-                                                                         Quantity: 1,
-                                                                         Attributes: {
-                                                                             attribute:
-                                                                                 'whatever',
-                                                                         },
-                                                                         Sku: 12345,
-                                                                     },
-                                                                 ],
-                                                             },
-                                                         }
-                                                     );
-                                                     window.appboy.should.have.property(
-                                                         'logPurchaseEventCalled',
-                                                         true
-                                                     );
-                                                     window.appboy.should.have.property(
-                                                         'logPurchaseName',
-                                                         'Product Name'
-                                                     );
-                                                     window.appboy.purchaseEventProperties.should.have.lengthOf(
-                                                         1
-                                                     );
-                                                     window.appboy.purchaseEventProperties[0][0].should.equal(
-                                                         'Product Name'
-                                                     );
-                                                     window.appboy.purchaseEventProperties[0][1].should.equal(
-                                                         50
-                                                     );
-                                                     window.appboy.purchaseEventProperties[0][2].should.equal(
-                                                         1
-                                                     );
-                                                     window.appboy.purchaseEventProperties[0][3][
-                                                         'attribute'
-                                                     ].should.equal('whatever');
+        mParticle.forwarder.process({
+            EventName: 'Test Purchase Event',
+            EventDataType: MessageType.Commerce,
+            EventCategory: CommerceEventType.ProductPurchase,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                TransactionId: 1234,
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: '50',
+                        Name: 'Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: {
+                            attribute: 'whatever',
+                        },
+                        Sku: 12345,
+                    },
+                ],
+            },
+        });
+        window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.should.have.property('logPurchaseName', 'Product Name');
+        window.appboy.purchaseEventProperties.should.have.lengthOf(1);
+        window.appboy.purchaseEventProperties[0][0].should.equal(
+            'Product Name'
+        );
+        window.appboy.purchaseEventProperties[0][1].should.equal(50);
+        window.appboy.purchaseEventProperties[0][2].should.equal(1);
+        window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal(
+            'whatever'
+        );
 
-                                                     window.appboy.purchaseEventProperties[0][3][
-                                                         'Sku'
-                                                     ].should.equal(12345);
-                                                     reportService.event.should.have.property(
-                                                         'EventName',
-                                                         'Test Purchase Event'
-                                                     );
-                                                 });
+        window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
+        reportService.event.should.have.property(
+            'EventName',
+            'Test Purchase Event'
+        );
+    });
 
     it('should log a purchase event with a transaction id', function() {
         mParticle.forwarder.process({
@@ -1480,12 +1459,12 @@ USD,
         window.appboy.options.should.have.property('brazeSetting2', true);
     });
 
-    it('should log a single non-purchase commerce event with multiple products if bundleProductsWithEvent is `True`', function() {
+    it('should log a single non-purchase commerce event with multiple products if bundleProductsWithCommerceEvents is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
                 apiKey: '9123456',
-                bundleProductsWithEvent: 'True',
+                bundleProductsWithCommerceEvents: 'True',
             },
             reportService.cb,
             true,
@@ -1564,18 +1543,19 @@ USD,
             window.appboy.eventProperties[0];
 
         loggedNonPurchaseCommerceEventProperties['Transaction Id'].should.equal(
-            expectedNonPurchaseCommerceEventProperties['Transaction Id']);
-        // loggedNonPurchaseCommerceEventProperties.should.eql(
-        //     expectedNonPurchaseCommerceEventProperties
-        // );
+            expectedNonPurchaseCommerceEventProperties['Transaction Id']
+        );
+        loggedNonPurchaseCommerceEventProperties.should.eql(
+            expectedNonPurchaseCommerceEventProperties
+        );
     });
 
-    it('should log a single purchase commerce event with multiple products if bundleProductsWithEvent is `True`', function() {
+    it('should log a single purchase commerce event with multiple products if bundleProductsWithCommerceEvents is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
                 apiKey: '9123456',
-                bundleProductsWithEvent: 'True',
+                bundleProductsWithCommerceEvents: 'True',
             },
             reportService.cb,
             true,

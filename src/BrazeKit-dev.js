@@ -66,14 +66,14 @@ var constructor = function () {
         dob: 'setDateOfBirth',
     };
 
-    var bundleProductsWithEvent = false;
+    var bundleProductsWithCommerceEvents = false;
 
     // A purchase event can either log a single event with all products
     // or multiple purchase events (one per product)
     function logPurchaseEvent(event) {
         var reportEvent = false;
 
-        if (bundleProductsWithEvent) {
+        if (bundleProductsWithCommerceEvents) {
             reportEvent = logSinglePurchaseEventWithProducts(event);
         } else {
             reportEvent = logPurchaseEventPerProduct(event);
@@ -86,12 +86,23 @@ var constructor = function () {
         var eventAttributes = mergeObjects(event.EventAttributes, {
             products: [],
         });
+
+        // All commerce events except for promotion/impression events will have a
+        // ProductAction property, but if this ever changes in the future, this
+        // check will prevent errors
+        if (!event.ProductAction) {
+            return false;
+        }
+
         if (event.ProductAction.TransactionId) {
             eventAttributes['Transaction Id'] =
                 event.ProductAction.TransactionId;
         }
 
-        if (event.ProductAction.ProductList.length) {
+        if (
+            event.ProductAction.ProductList &&
+            event.ProductAction.ProductList.length
+        ) {
             event.ProductAction.ProductList.forEach(function(_product) {
                 var product = getSanitizedCustomProperties(_product);
 
@@ -343,7 +354,7 @@ var constructor = function () {
     // A non-purchase commerce event can either log a single event with all products
     // or one event per product when the commerce event is expanded
     function logNonPurchaseCommerceEvent(event) {
-        if (bundleProductsWithEvent) {
+        if (bundleProductsWithCommerceEvents) {
             return logNonPurchaseCommerceEventWithProducts(event);
         } else {
             return logExpandedNonPurchaseCommerceEvents(event);
@@ -355,7 +366,15 @@ var constructor = function () {
             event.EventAttributes
         );
         var productArray = [];
-        if (event.ProductAction && event.ProductAction.ProductList) {
+
+        if (!event.ProductAction) {
+            return false;
+        }
+
+        if (
+            event.ProductAction.ProductList &&
+            event.ProductAction.ProductList.length
+        ) {
             event.ProductAction.ProductList.forEach(function(product) {
                 {
                     var sanitizedProduct = getSanitizedCustomProperties(
@@ -368,8 +387,11 @@ var constructor = function () {
         try {
             var brazeProductDetails = {
                 products: productArray,
-                'Transaction Id': event.ProductAction.TransactionId,
             };
+            var transactionId = event.ProductAction.TransactionId;
+            if (transactionId) {
+                brazeProductDetails['Transaction Id'] = transactionId;
+            }
             var brazeEcommerceEvent = {
                 EventName: event.EventName,
                 EventAttributes: mergeObjects(
@@ -571,8 +593,8 @@ var constructor = function () {
         mpCustomFlags = customFlags;
         try {
             forwarderSettings = settings;
-            bundleProductsWithEvent =
-                forwarderSettings.bundleProductsWithEvent === 'True';
+            bundleProductsWithCommerceEvents =
+                forwarderSettings.bundleProductsWithCommerceEvents === 'True';
             reportingService = service;
             // 30 min is Appboy default
             options.sessionTimeoutInSeconds =
