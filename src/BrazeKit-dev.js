@@ -637,9 +637,11 @@ function getId() {
 }
 
 function register(config) {
+    var forwarderNameWithVersion = [name, suffix].join('-');
     if (!config) {
         window.console.log(
-            'You must pass a config object to register the kit ' + name
+            'You must pass a config object to register the kit ' +
+                forwarderNameWithVersion
         );
         return;
     }
@@ -652,17 +654,19 @@ function register(config) {
     }
 
     if (isObject(config.kits)) {
-        config.kits[name] = {
+        config.kits[forwarderNameWithVersion] = {
             constructor: constructor,
         };
     } else {
         config.kits = {};
-        config.kits[name] = {
+        config.kits[forwarderNameWithVersion] = {
             constructor: constructor,
         };
     }
     window.console.log(
-        'Successfully registered ' + name + ' to your mParticle configuration'
+        'Successfully registered ' +
+            forwarderNameWithVersion +
+            ' to your mParticle configuration'
     );
 }
 

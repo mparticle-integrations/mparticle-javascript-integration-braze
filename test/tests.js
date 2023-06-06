@@ -1,7 +1,14 @@
-/* eslint-disable no-undef */
+// If we are testing this in a node environemnt, we load the common.js Braze kit
 
-describe('Braze Forwarder', function () {
-    var expandCommerceEvent = function (event) {
+var brazeInstance;
+if (typeof require !== 'undefined') {
+    brazeInstance = require('../dist/BrazeKit.common').default;
+} else {
+    brazeInstance = mpBrazeKit.default;
+}
+
+describe('Braze Forwarder', function() {
+    var expandCommerceEvent = function(event) {
             var eventAttributes = {};
             if (event.ProductAction && event.ProductAction.TransactionId) {
                 eventAttributes['Transaction Id'] =
@@ -295,6 +302,14 @@ describe('Braze Forwarder', function () {
         window.mParticle.forwarder.should.have.property('suffix', 'v4');
     });
 
+    it('should register a forwarder with version number onto a config', function() {
+        var config = {};
+        brazeInstance.register(config);
+        // window.mpBrazeKit.default.register(config);
+        config.should.have.property('kits');
+        config.kits.should.have.property('Appboy-v4');
+    });
+
     it('should open a new session and refresh in app messages upon initialization', function() {
         window.braze.should.have.property('initializeCalled', true);
         window.braze.should.have.property('openSessionCalled', true);
@@ -382,9 +397,7 @@ describe('Braze Forwarder', function () {
         window.braze.should.have.property('logPurchaseEventCalled', true);
         window.braze.should.have.property('logPurchaseName', 'Product Name');
         window.braze.purchaseEventProperties.should.have.lengthOf(1);
-        window.braze.purchaseEventProperties[0][0].should.equal(
-            'Product Name'
-        );
+        window.braze.purchaseEventProperties[0][0].should.equal('Product Name');
         window.braze.purchaseEventProperties[0][1].should.equal(50);
         window.braze.purchaseEventProperties[0][2].should.equal(1);
         window.braze.purchaseEventProperties[0][3]['attribute'].should.equal(
@@ -397,7 +410,7 @@ describe('Braze Forwarder', function () {
         );
     });
 
-    it('should log a purchase event with a transaction id', function () {
+    it('should log a purchase event with a transaction id', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
@@ -421,9 +434,7 @@ describe('Braze Forwarder', function () {
         window.braze.should.have.property('logPurchaseEventCalled', true);
         window.braze.should.have.property('logPurchaseName', 'Product Name');
         window.braze.purchaseEventProperties.should.have.lengthOf(1);
-        window.braze.purchaseEventProperties[0][0].should.equal(
-            'Product Name'
-        );
+        window.braze.purchaseEventProperties[0][0].should.equal('Product Name');
         window.braze.purchaseEventProperties[0][1].should.equal(50);
         window.braze.purchaseEventProperties[0][2].should.equal(1);
         window.braze.purchaseEventProperties[0][3]['attribute'].should.equal(
@@ -439,7 +450,7 @@ describe('Braze Forwarder', function () {
         );
     });
 
-    it('should log a non-purchase commerce event with a transaction id', function () {
+    it('should log a non-purchase commerce event with a transaction id', function() {
         mParticle.forwarder.process({
             EventName: 'Test Add To Cart',
             EventDataType: MessageType.Commerce,
@@ -477,7 +488,7 @@ describe('Braze Forwarder', function () {
         );
     });
 
-    it('should log a purchase event without attributes', function () {
+    it('should log a purchase event without attributes', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
@@ -500,9 +511,7 @@ describe('Braze Forwarder', function () {
         window.braze.should.have.property('logPurchaseEventCalled', true);
         window.braze.should.have.property('logPurchaseName', 'Product Name');
         window.braze.purchaseEventProperties.should.have.lengthOf(1);
-        window.braze.purchaseEventProperties[0][0].should.equal(
-            'Product Name'
-        );
+        window.braze.purchaseEventProperties[0][0].should.equal('Product Name');
         window.braze.purchaseEventProperties[0][1].should.equal(50);
         window.braze.purchaseEventProperties[0][2].should.equal(1);
         window.braze.purchaseEventProperties[0][3].should.not.have.properties(
@@ -537,9 +546,7 @@ describe('Braze Forwarder', function () {
         window.braze.should.have.property('logPurchaseEventCalled', true);
         window.braze.should.have.property('logPurchaseName', 'Product Name');
         window.braze.purchaseEventProperties.should.have.lengthOf(1);
-        window.braze.purchaseEventProperties[0][0].should.equal(
-            'Product Name'
-        );
+        window.braze.purchaseEventProperties[0][0].should.equal('Product Name');
         window.braze.purchaseEventProperties[0][1].should.equal(50);
         window.braze.purchaseEventProperties[0][2].should.equal(1);
         window.braze.purchaseEventProperties[0][3].should.not.have.properties(
@@ -953,9 +960,7 @@ describe('Braze Forwarder', function () {
 
     it('should set a custom user attribute', function() {
         mParticle.forwarder.setUserAttribute('test', 'result');
-        window.braze
-            .getUser()
-            .should.have.property('customAttributeSet', true);
+        window.braze.getUser().should.have.property('customAttributeSet', true);
         window.braze.getUser().customAttribute.should.equal('test');
         window.braze.getUser().customAttributeValue.should.equal('result');
     });
@@ -972,9 +977,7 @@ describe('Braze Forwarder', function () {
 
     it('should sanitize a custom user attribute', function() {
         mParticle.forwarder.setUserAttribute('$$tes$t', '$$res$ult');
-        window.braze
-            .getUser()
-            .should.have.property('customAttributeSet', true);
+        window.braze.getUser().should.have.property('customAttributeSet', true);
         window.braze.getUser().customAttribute.should.equal('tes$t');
         window.braze.getUser().customAttributeValue.should.equal('res$ult');
     });
