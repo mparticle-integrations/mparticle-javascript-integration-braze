@@ -291,6 +291,10 @@ describe('Braze Forwarder', function () {
         window.braze.should.have.property('metadata', ['mp']);
     });
 
+    it('should have a property of suffix', function() {
+        window.mParticle.forwarder.should.have.property('suffix', 'v4');
+    });
+
     it('should open a new session and refresh in app messages upon initialization', function() {
         window.braze.should.have.property('initializeCalled', true);
         window.braze.should.have.property('openSessionCalled', true);
@@ -919,8 +923,8 @@ describe('Braze Forwarder', function () {
         // We support $Age as a reserved attribute for Braze. However, since
         // Braze's API expects a year from us, this test will break every year,
         // since setting the age = 10 in 2021 will mean the user is born in 2011,
-        // but setting it in 2022 means the year is 2012.
-        window.braze.getUser().yearOfBirth.should.equal(2012);
+        // but setting it in 2023 means the year is 2013.
+        window.braze.getUser().yearOfBirth.should.equal(2013);
         window.braze.getUser().dayOfBirth.should.equal(1);
         window.braze.getUser().monthOfBirth.should.equal(1);
         window.braze.getUser().phoneSet.should.equal('1234567890');
