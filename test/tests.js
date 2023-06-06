@@ -305,7 +305,6 @@ describe('Braze Forwarder', function() {
     it('should register a forwarder with version number onto a config', function() {
         var config = {};
         brazeInstance.register(config);
-        // window.mpBrazeKit.default.register(config);
         config.should.have.property('kits');
         config.kits.should.have.property('Appboy-v4');
     });
