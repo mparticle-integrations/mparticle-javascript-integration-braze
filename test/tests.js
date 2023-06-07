@@ -1,4 +1,12 @@
 /* eslint-disable no-undef */
+// If we are testing this in a node environemnt, we load the common.js Braze kit
+
+var brazeInstance;
+if (typeof require !== 'undefined') {
+    brazeInstance = require('../dist/BrazeKit.common').default;
+} else {
+    brazeInstance = mpBrazeKit.default;
+}
 
 describe('Appboy Forwarder', function () {
     var expandCommerceEvent = function (event) {
@@ -290,6 +298,17 @@ describe('Appboy Forwarder', function () {
         window.appboy.should.have.property('apiKey', '123456');
         window.appboy.should.have.property('metadata', ['mp']);
     });
+
+     it('should have a property of suffix', function() {
+         window.mParticle.forwarder.should.have.property('suffix', 'v3');
+     });
+
+     it('should register a forwarder with version number onto a config', function() {
+         var config = {};
+         brazeInstance.register(config);
+         config.should.have.property('kits');
+         config.kits.should.have.property('Appboy-v3');
+     });
 
     it('should open a new session and refresh in app messages upon initialization', function() {
         window.appboy.should.have.property('initializeCalled', true);
@@ -919,8 +938,8 @@ describe('Appboy Forwarder', function () {
         // We support $Age as a reserved attribute for Braze. However, since
         // Braze's API expects a year from us, this test will break every year,
         // since setting the age = 10 in 2021 will mean the user is born in 2011,
-        // but setting it in 2022 means the year is 2012.
-        window.appboy.getUser().yearOfBirth.should.equal(2012);
+        // but setting it in 2023 means the year is 2013.
+        window.appboy.getUser().yearOfBirth.should.equal(2013);
         window.appboy.getUser().dayOfBirth.should.equal(1);
         window.appboy.getUser().monthOfBirth.should.equal(1);
         window.appboy.getUser().phoneSet.should.equal('1234567890');
