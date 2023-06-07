@@ -8,7 +8,7 @@ export default [
             file: 'dist/BrazeKit.iife.js',
             format: 'iife',
             exports: 'named',
-            name: 'mpBrazeKitv3',
+            name: 'mpBrazeKitV3',
             strict: false,
         },
         plugins: [
@@ -24,7 +24,7 @@ export default [
             file: 'dist/BrazeKit.common.js',
             format: 'cjs',
             exports: 'named',
-            name: 'mpBrazeKitv3',
+            name: 'mpBrazeKitV3',
             strict: false,
         },
         plugins: [
