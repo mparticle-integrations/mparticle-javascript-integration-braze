@@ -23,6 +23,11 @@ var name = 'Appboy',
         PageView: 3,
         PageEvent: 4,
         Commerce: 16,
+    },
+    CommerceEventTypes = {
+        PromotionView: 18,
+        PromotionClick: 19,
+        ProductImpression: 22,
     };
 
 var clusterMapping = {
@@ -68,32 +73,93 @@ var constructor = function () {
         dob: 'setDateOfBirth',
     };
 
+    var bundleProductsWithCommerceEvents = false;
+
+    // A purchase event can either log a single event with all products
+    // or multiple purchase events (one per product)
     function logPurchaseEvent(event) {
         var reportEvent = false;
+
+        if (bundleProductsWithCommerceEvents) {
+            reportEvent = logSinglePurchaseEventWithProducts(event);
+        } else {
+            reportEvent = logPurchaseEventPerProduct(event);
+        }
+        return reportEvent === true;
+    }
+
+    function logSinglePurchaseEventWithProducts(event) {
+        var quantity = 1;
+        var eventAttributes = mergeObjects(event.EventAttributes, {
+            products: [],
+        });
+
+        // All commerce events except for promotion/impression events will have a
+        // ProductAction property, but if this ever changes in the future, this
+        // check will prevent errors
+        if (!event.ProductAction) {
+            return false;
+        }
+
+        if (event.ProductAction.TransactionId) {
+            eventAttributes['Transaction Id'] =
+                event.ProductAction.TransactionId;
+        }
+
+        if (
+            event.ProductAction.ProductList &&
+            event.ProductAction.ProductList.length
+        ) {
+            eventAttributes.products = addProducts(
+                event.ProductAction.ProductList
+            );
+        }
+
+        kitLogger(
+            'braze.logPurchase',
+            event.EventName,
+            event.ProductAction.TotalAmount,
+            event.CurrencyCode,
+            quantity,
+            eventAttributes
+        );
+
+        reportEvent = braze.logPurchase(
+            event.EventName,
+            event.ProductAction.TotalAmount,
+            event.CurrencyCode,
+            quantity,
+            eventAttributes
+        );
+    }
+
+    function logPurchaseEventPerProduct(event) {
         if (event.ProductAction.ProductList) {
-            event.ProductAction.ProductList.forEach(function (product) {
+            event.ProductAction.ProductList.forEach(function(product) {
+                var productName;
+
+                if (forwarderSettings.forwardSkuAsProductName === 'True') {
+                    productName = product.Sku;
+                } else {
+                    productName = product.Name;
+                }
+                var sanitizedProductName = getSanitizedValueForBraze(
+                    productName
+                );
+
                 if (product.Attributes == null) {
                     product.Attributes = {};
                 }
-                product.Attributes['Sku'] = product.Sku;
 
-                var sanitizedProductName;
-                if (forwarderSettings.forwardSkuAsProductName === 'True') {
-                    sanitizedProductName = getSanitizedValueForBraze(
-                        String(product.Sku)
-                    );
-                } else {
-                    sanitizedProductName = getSanitizedValueForBraze(
-                        String(product.Name)
-                    );
-                }
+                product.Attributes['Sku'] = product.Sku;
 
                 var productAttributes = mergeObjects(product.Attributes, {
                     'Transaction Id': event.ProductAction.TransactionId,
                 });
 
-                var sanitizedProperties =
-                    getSanitizedCustomProperties(productAttributes);
+                var sanitizedProperties = getSanitizedCustomProperties(
+                    productAttributes
+                );
 
                 if (sanitizedProperties == null) {
                     return (
@@ -248,29 +314,8 @@ var constructor = function () {
     function processEvent(event) {
         var reportEvent = false;
 
-        if (
-            event.EventDataType == MessageType.Commerce &&
-            event.EventCategory == mParticle.CommerceEventType.ProductPurchase
-        ) {
-            reportEvent = logPurchaseEvent(event);
-        } else if (event.EventDataType == MessageType.Commerce) {
-            var listOfPageEvents =
-                mParticle.eCommerce.expandCommerceEvent(event);
-            if (listOfPageEvents != null) {
-                for (var i = 0; i < listOfPageEvents.length; i++) {
-                    // finalLoopResult keeps track of if any logBrazeEvent in this loop returns true or not
-                    var finalLoopResult = false;
-                    try {
-                        reportEvent = logBrazeEvent(listOfPageEvents[i]);
-                        if (reportEvent === true) {
-                            finalLoopResult = true;
-                        }
-                    } catch (err) {
-                        return 'Error logging page event' + err.message;
-                    }
-                }
-                reportEvent = finalLoopResult === true;
-            }
+        if (event.EventDataType == MessageType.Commerce) {
+            reportEvent = logCommerceEvent(event);
         } else if (event.EventDataType == MessageType.PageEvent) {
             reportEvent = logBrazeEvent(event);
         } else if (event.EventDataType == MessageType.PageView) {
@@ -288,6 +333,157 @@ var constructor = function () {
         if (reportEvent === true && reportingService) {
             reportingService(self, event);
         }
+    }
+
+    // mParticle commerce events use different Braze methods depending on if they are
+    // a purchase event or a non-purchase commerce event
+    function logCommerceEvent(event) {
+        if (
+            event.EventCategory === mParticle.CommerceEventType.ProductPurchase
+        ) {
+            reportEvent = logPurchaseEvent(event);
+            return reportEvent === true;
+        } else {
+            reportEvent = logNonPurchaseCommerceEvent(event);
+            return reportEvent === true;
+        }
+    }
+
+    // A non-purchase commerce event can either log a single event with all products
+    // or one event per product when the commerce event is expanded
+    function logNonPurchaseCommerceEvent(event) {
+        if (bundleProductsWithCommerceEvents) {
+            return logNonPurchaseCommerceEventWithProducts(event);
+        } else {
+            return logExpandedNonPurchaseCommerceEvents(event);
+        }
+    }
+
+    function logNonPurchaseCommerceEventWithProducts(mpEvent) {
+        const commerceEventAttrs = {};
+
+        try {
+            switch (mpEvent.EventCategory) {
+                case CommerceEventTypes.PromotionClick:
+                case CommerceEventTypes.PromotionView:
+                    commerceEventAttrs.promotions = addPromotions(
+                        mpEvent.PromotionAction
+                    );
+                    break;
+                case CommerceEventTypes.ProductImpression:
+                    commerceEventAttrs.impressions = addImpressions(
+                        mpEvent.ProductImpressions
+                    );
+                    break;
+                default:
+                    if (mpEvent.ProductAction.ProductList) {
+                        commerceEventAttrs.products = addProducts(
+                            mpEvent.ProductAction.ProductList
+                        );
+                    }
+                    var transactionId = mpEvent.ProductAction.TransactionId;
+                    if (transactionId) {
+                        commerceEventAttrs['Transaction Id'] = transactionId;
+                    }
+            }
+
+            var sanitizedProperties = getSanitizedCustomProperties(
+                mpEvent.EventAttributes
+            );
+
+            const brazeEvent = {
+                EventName: mpEvent.EventName,
+                EventAttributes: mergeObjects(
+                    commerceEventAttrs,
+                    sanitizedProperties
+                ),
+            };
+
+            reportEvent = logBrazeEvent(brazeEvent);
+            return reportEvent;
+        } catch (err) {
+            return 'Error logging commerce event' + err.message;
+        }
+    }
+
+    function addPromotions(promotionAction) {
+        if (promotionAction && promotionAction.PromotionList) {
+            return promotionAction.PromotionList;
+        }
+        return [];
+    }
+
+    function addImpressions(productImpressions) {
+        if (productImpressions.length) {
+            return productImpressions.map(function(impression) {
+                return {
+                    'Product Impression List': impression.ProductImpressionList,
+                    products: addProducts(impression.ProductList),
+                };
+            });
+        } else {
+            return [];
+        }
+    }
+
+    function addProducts(productList) {
+        const productArray = [];
+        if (!productList || productList.length === 0) {
+            return productArray;
+        }
+
+        productList.forEach(function(product) {
+            {
+                var sanitizedProduct = parseProduct(
+                    getSanitizedCustomProperties(product)
+                );
+                productArray.push(sanitizedProduct);
+            }
+        });
+
+        return productArray;
+    }
+
+    function parseProduct(_product) {
+        var product = {};
+
+        for (var key in _product) {
+            switch (key) {
+                case 'Sku':
+                    product.Id = _product[key];
+                    break;
+                case 'CouponCode':
+                    product['Coupon Code'] = _product[key];
+                    break;
+                case 'TotalAmount':
+                    product['Total Product Amount'] = _product[key];
+                    break;
+                default:
+                    product[key] = _product[key];
+            }
+        }
+
+        return product;
+    }
+
+    function logExpandedNonPurchaseCommerceEvents(event) {
+        var listOfPageEvents = mParticle.eCommerce.expandCommerceEvent(event);
+        if (listOfPageEvents !== null) {
+            for (var i = 0; i < listOfPageEvents.length; i++) {
+                // finalLoopResult keeps track of if any logBrazeEvent in this loop returns true or not
+                var finalLoopResult = false;
+                try {
+                    reportEvent = logBrazeEvent(listOfPageEvents[i]);
+                    if (reportEvent === true) {
+                        finalLoopResult = true;
+                    }
+                } catch (err) {
+                    return 'Error logging page event' + err.message;
+                }
+            }
+            reportEvent = finalLoopResult === true;
+        }
+        return reportEvent;
     }
 
     function removeUserAttribute(key) {
@@ -446,13 +642,15 @@ var constructor = function () {
         if (!self.logger) {
             // create a logger
             self.logger = {
-                verbose: function () {},
+                verbose: function() {},
             };
         }
         // eslint-disable-line no-unused-vars
         mpCustomFlags = customFlags;
         try {
             forwarderSettings = settings;
+            bundleProductsWithCommerceEvents =
+                forwarderSettings.bundleProductsWithCommerceEvents === 'True';
             reportingService = service;
             // 30 min is Braze default
             options.sessionTimeoutInSeconds =
@@ -619,7 +817,7 @@ var constructor = function () {
         var nonMethodArguments = Array.prototype.slice.call(arguments, 1);
         msg += '\n' + method + ':\n';
 
-        nonMethodArguments.forEach(function (arg) {
+        nonMethodArguments.forEach(function(arg) {
             if (isObject(arg) || Array.isArray(arg)) {
                 msg += JSON.stringify(arg);
             } else {
