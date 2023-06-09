@@ -8,8 +8,8 @@ if (typeof require !== 'undefined') {
     brazeInstance = mpBrazeKit.default;
 }
 
-describe('Appboy Forwarder', function () {
-    var expandCommerceEvent = function (event) {
+describe('Appboy Forwarder', function() {
+    var expandCommerceEvent = function(event) {
             var eventAttributes = {};
             if (event.ProductAction && event.ProductAction.TransactionId) {
                 eventAttributes['Transaction Id'] =
@@ -43,7 +43,6 @@ describe('Appboy Forwarder', function () {
             Social: 7,
             Other: 8,
             Media: 9,
-            ProductPurchase: 16,
             getName: function() {
                 return 'blahblah';
             },
@@ -62,6 +61,19 @@ describe('Appboy Forwarder', function () {
             ProductAddToWishlist: 20,
             ProductRemoveFromWishlist: 21,
             ProductImpression: 22,
+        },
+        ProductActionType = {
+            Unknown: 0,
+            AddToCart: 1,
+            RemoveFromCart: 2,
+            Checkout: 3,
+            CheckoutOption: 4,
+            Click: 5,
+            ViewDetail: 6,
+            Purchase: 7,
+            Refund: 8,
+            AddToWishlist: 9,
+            RemoveFromWishlist: 10,
         },
         IdentityType = {
             Other: 0,
@@ -377,7 +389,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -388,7 +400,9 @@ describe('Appboy Forwarder', function () {
                         Name: 'Product Name',
                         TotalAmount: 50,
                         Quantity: 1,
-                        Attributes: { attribute: 'whatever' },
+                        Attributes: {
+                            attribute: 'whatever',
+                        },
                         Sku: 12345,
                     },
                 ],
@@ -405,6 +419,7 @@ describe('Appboy Forwarder', function () {
         window.appboy.purchaseEventProperties[0][3]['attribute'].should.equal(
             'whatever'
         );
+
         window.appboy.purchaseEventProperties[0][3]['Sku'].should.equal(12345);
         reportService.event.should.have.property(
             'EventName',
@@ -412,11 +427,11 @@ describe('Appboy Forwarder', function () {
         );
     });
 
-    it('should log a purchase event with a transaction id', function () {
+    it('should log a purchase event with a transaction id', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 'foo-purchase-transaction-id',
@@ -454,14 +469,14 @@ describe('Appboy Forwarder', function () {
         );
     });
 
-    it('should log a non-purchase commerce event with a transaction id', function () {
+    it('should log a non-purchase commerce event with a transaction id', function() {
         mParticle.forwarder.process({
             EventName: 'Test Add To Cart',
             EventDataType: MessageType.Commerce,
             EventCategory: CommerceEventType.ProductAddToCart, // 10
             CurrencyCode: 'USD',
             ProductAction: {
-                ProductActionType: EventType.AddToCart, // 1
+                ProductActionType: ProductActionType.AddToCart, // 1
                 TransactionId: 'foo-add-to-cart-transaction-id',
                 TotalAmount: 50,
                 ProductList: [
@@ -492,11 +507,11 @@ describe('Appboy Forwarder', function () {
         );
     });
 
-    it('should log a purchase event without attributes', function () {
+    it('should log a purchase event without attributes', function() {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -532,7 +547,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -668,7 +683,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -680,7 +695,7 @@ describe('Appboy Forwarder', function () {
                         TotalAmount: 50,
                         Quantity: 1,
                         Attributes: { $$$attri$bute: '$$$$what$ever' },
-                        Sku: 12345,
+                        Sku: '12345',
                     },
                 ],
             },
@@ -772,7 +787,7 @@ describe('Appboy Forwarder', function () {
         mParticle.forwarder.process({
             EventName: 'Test Purchase Event',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.ProductPurchase,
+            EventCategory: CommerceEventType.ProductPurchase,
             CurrencyCode: 'USD',
             ProductAction: {
                 TransactionId: 1234,
@@ -1065,7 +1080,7 @@ describe('Appboy Forwarder', function () {
             EventDataType: 16,
             CurrencyCode: 'USD',
             ProductAction: {
-                ProductActionType: 7, // ProductActionType.Purchase value is 7
+                ProductActionType: CommerceEventType.ProductPurchase,
                 ProductList: [product1],
                 TransactionId: 'foo-transaction-id',
                 TotalAmount: 430,
@@ -1461,5 +1476,190 @@ USD,
 
         window.appboy.options.should.have.property('brazeSetting1', true);
         window.appboy.options.should.have.property('brazeSetting2', true);
+    });
+
+    it('should log a single non-purchase commerce event with multiple products if bundleProductsWithCommerceEvents is `True`', function() {
+        window.appboy = new MockAppboy();
+        mParticle.forwarder.init(
+            {
+                apiKey: '9123456',
+                bundleProductsWithCommerceEvents: 'True',
+            },
+            reportService.cb,
+            true,
+            null
+        );
+
+        var customAttributes = {
+            foo: 'bar',
+            baz: 'bar',
+        };
+
+        mParticle.forwarder.process({
+            EventName: 'Test Non-Purchase Commerce Event',
+            EventDataType: MessageType.Commerce,
+            EventCategory: CommerceEventType.ProductCheckout,
+            EventAttributes: customAttributes,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                TransactionId: 91234,
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: 50,
+                        Name: '$Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: {
+                            prodFoo1: 'prodBar1',
+                        },
+                        Sku: 12345,
+                    },
+                    {
+                        Price: 50,
+                        Name: '$Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: {
+                            prodFoo2: 'prodBar2',
+                        },
+                        Sku: 12345,
+                    },
+                ],
+            },
+        });
+
+        window.appboy.logCustomEventCalled.should.equal(true);
+        var expectedNonPurchaseCommerceEventProperties = {
+            'Transaction Id': 91234,
+            foo: 'bar',
+            baz: 'bar',
+            products: [
+                {
+                    Sku: 12345,
+                    Name: 'Product Name',
+                    Price: 50,
+                    Quantity: 1,
+                    TotalAmount: 50,
+                    Attributes: {
+                        prodFoo1: 'prodBar1',
+                    },
+                },
+                {
+                    Sku: 12345,
+                    Name: 'Product Name',
+                    Price: 50,
+                    Quantity: 1,
+                    TotalAmount: 50,
+                    Attributes: {
+                        prodFoo2: 'prodBar2',
+                    },
+                },
+            ],
+        };
+
+        var loggedNonPurchaseCommerceEventProperties =
+            window.appboy.eventProperties[0];
+
+        loggedNonPurchaseCommerceEventProperties['Transaction Id'].should.equal(
+            expectedNonPurchaseCommerceEventProperties['Transaction Id']
+        );
+        loggedNonPurchaseCommerceEventProperties.should.eql(
+            expectedNonPurchaseCommerceEventProperties
+        );
+    });
+
+    it('should log a single purchase commerce event with multiple products if bundleProductsWithCommerceEvents is `True`', function() {
+        window.appboy = new MockAppboy();
+        mParticle.forwarder.init(
+            {
+                apiKey: '9123456',
+                bundleProductsWithCommerceEvents: 'True',
+            },
+            reportService.cb,
+            true,
+            null
+        );
+        var customAttributes = {
+            foo: 'bar',
+            baz: 'bar',
+        };
+
+        mParticle.forwarder.process({
+            EventName: 'eCommerce - Purchase',
+            EventDataType: MessageType.Commerce,
+            EventCategory: CommerceEventType.ProductPurchase,
+            EventAttributes: customAttributes,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                ProductActionType: CommerceEventType.ProductPurchase,
+                TransactionId: 'foo-transaction-id',
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: 50,
+                        Name: '$Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: {
+                            prodFoo1: 'prodBar1',
+                        },
+                        Sku: 12345,
+                    },
+                    {
+                        Price: 50,
+                        Name: '$Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: {
+                            prodFoo2: 'prodBar2',
+                        },
+                        Sku: 12345,
+                    },
+                ],
+            },
+        });
+
+        var expectedPurchaseEvent = [
+            'eCommerce - Purchase',
+            50,
+            1,
+            {
+                'Transaction Id': 'foo-transaction-id',
+                foo: 'bar',
+                baz: 'bar',
+                products: [
+                    {
+                        Sku: 12345,
+                        Name: 'Product Name',
+                        Price: 50,
+                        Quantity: 1,
+                        TotalAmount: 50,
+                        Attributes: {
+                            prodFoo1: 'prodBar1',
+                        },
+                    },
+                    {
+                        Sku: 12345,
+                        Name: 'Product Name',
+                        Price: 50,
+                        Quantity: 1,
+                        TotalAmount: 50,
+                        Attributes: {
+                            prodFoo2: 'prodBar2',
+                        },
+                    },
+                ],
+            },
+        ];
+
+        window.appboy.should.have.property('logPurchaseEventCalled', true);
+        window.appboy.should.have.property(
+            'logPurchaseName',
+            'eCommerce - Purchase'
+        );
+        var purchaseEventProperties = window.appboy.purchaseEventProperties[0];
+
+        purchaseEventProperties.should.eql(expectedPurchaseEvent);
     });
 });
