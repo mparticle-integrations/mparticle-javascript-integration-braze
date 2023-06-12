@@ -8,22 +8,8 @@ if (typeof require !== 'undefined') {
     brazeInstance = mpBrazeKit.default;
 }
 
-describe('Appboy Forwarder', function() {
-    var expandCommerceEvent = function(event) {
-            var eventAttributes = {};
-            if (event.ProductAction && event.ProductAction.TransactionId) {
-                eventAttributes['Transaction Id'] =
-                    event.ProductAction.TransactionId;
-            }
-            return [
-                {
-                    EventName: 'Test EXPANDED Event',
-                    EventDataType: MessageType.PageEvent,
-                    EventAttributes: eventAttributes,
-                },
-            ];
-        },
-        MessageType = {
+describe('Appboy Forwarder', function () {
+    var MessageType = {
             SessionStart: 1,
             SessionEnd: 2,
             PageView: 3,
@@ -178,8 +164,8 @@ describe('Appboy Forwarder', function() {
             this.openSessionCalled = false;
             this.inAppMessageRefreshCalled = false;
             this.subscribeToNewInAppMessagesCalled = false;
-
-            this.logCustomEventName = null;
+            this.loggedEvents = [];
+            this.logCustomEventName = [];
             this.logPurchaseName = null;
             this.apiKey = null;
             this.baseUrl = null;
@@ -227,8 +213,10 @@ describe('Appboy Forwarder', function() {
 
             this.logCustomEvent = function(name, eventProperties) {
                 self.logCustomEventCalled = true;
-                self.logCustomEventName = name;
-                self.eventProperties.push(eventProperties);
+                self.loggedEvents.push({
+                    name: name,
+                    eventProperties: eventProperties,
+                });
 
                 // Return true to indicate event should be reported
                 return true;
@@ -273,12 +261,13 @@ describe('Appboy Forwarder', function() {
         reportService = new ReportingService();
 
     before(function() {
-        mParticle.EventType = EventType;
-        mParticle.IdentityType = IdentityType;
-        mParticle.MessageType = MessageType;
-        mParticle.CommerceEventType = CommerceEventType;
-        mParticle.eCommerce = {};
-        mParticle.eCommerce.expandCommerceEvent = expandCommerceEvent;
+        // mParticle.EventType = EventType;
+        // mParticle.IdentityType = IdentityType;
+        // mParticle.MessageType = MessageType;
+        // mParticle.CommerceEventType = CommerceEventType;
+
+        mParticle.init('test-key');
+        mParticle.getInstance()._Store.sessionId = 'foo-session-id';
     });
 
     beforeEach(function() {
@@ -337,7 +326,8 @@ describe('Appboy Forwarder', function() {
             EventDataType: MessageType.PageEvent,
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property('logCustomEventName', 'Test Event');
+        const loggedEvent = window.appboy.loggedEvents[0];
+        loggedEvent.should.have.property('name', 'Test Event');
 
         reportService.event.should.have.property('EventName', 'Test Event');
     });
@@ -351,12 +341,238 @@ describe('Appboy Forwarder', function() {
             },
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property(
-            'logCustomEventName',
-            'Test Event with attributes'
-        );
-        window.appboy.eventProperties.should.have.lengthOf(1);
-        window.appboy.eventProperties[0]['dog'].should.equal('rex');
+        const loggedEvent = window.appboy.loggedEvents[0];
+        loggedEvent.should.have.property('name', 'Test Event with attributes');
+        Object.keys(loggedEvent.eventProperties).should.have.lengthOf(1);
+        loggedEvent.eventProperties['dog'].should.equal('rex');
+    });
+
+    it('should log a promotion event via the logCustomEvent method', function() {
+        // This initialization is a hack in order to get sessionId to exist, which
+        // expandCommerceEvent depends on
+
+        mParticle.forwarder.process({
+            EventName: 'eCommerce - PromotionClick',
+            EventDataType: 16,
+            CurrencyCode: null,
+            EventCategory: 19,
+            PromotionAction: {
+                PromotionActionType: 2,
+                PromotionList: [
+                    {
+                        Id: 'my_promo_1',
+                        Creative: 'sale_banner_1',
+                        Name: 'App-wide 50% off sale',
+                    },
+                    {
+                        Id: 'my_promo_2',
+                        Creative: 'sale_banner_2',
+                        Name: 'App-wide 50% off sale',
+                    },
+                ],
+            },
+        });
+        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.appboy.loggedEvents.length.should.equal(2);
+        const promotionEvent1 = window.appboy.loggedEvents[0];
+        const promotionEvent2 = window.appboy.loggedEvents[1];
+
+        const expectedPromotionEvent1 = {
+            name: 'eCommerce - click - Item',
+            eventProperties: {
+                Creative: 'sale_banner_1',
+                Id: 'my_promo_1',
+                Name: 'App-wide 50% off sale',
+            },
+        };
+
+        const expectedPromotionEvent2 = {
+            name: 'eCommerce - click - Item',
+            eventProperties: {
+                Creative: 'sale_banner_2',
+                Id: 'my_promo_2',
+                Name: 'App-wide 50% off sale',
+            },
+        };
+
+        promotionEvent1.should.eql(expectedPromotionEvent1);
+        promotionEvent2.should.eql(expectedPromotionEvent2);
+    });
+
+    it('should log an impression event via the logCustomEvent method', function() {
+        // This initialization is a hack in order to get sessionId to exist, which
+        // expandCommerceEvent depends on
+        mParticle.init('test-key');
+        mParticle.getInstance()._Store.sessionId = 'foo-session-id';
+
+        mParticle.forwarder.process({
+            EventName: 'eCommerce - Impression',
+            EventDataType: 16,
+            EventCategory: 22,
+            ProductImpressions: [
+                {
+                    ProductImpressionList: 'Suggested Products List1',
+                    ProductList: [
+                        {
+                            Name: 'iphone',
+                            Sku: 'iphoneSKU',
+                            Price: 999,
+                            Quantity: 1,
+                            Brand: 'brand',
+                            Variant: 'variant',
+                            Category: 'category',
+                            Position: 1,
+                            CouponCode: 'coupon',
+                            TotalAmount: 999,
+                            Attributes: {
+                                prod1AttrKey1: 'value1',
+                                prod1AttrKey2: 'value2',
+                            },
+                        },
+                        {
+                            Name: 'galaxy',
+                            Sku: 'galaxySKU',
+                            Price: 799,
+                            Quantity: 1,
+                            Brand: 'brand',
+                            Variant: 'variant',
+                            Category: 'category',
+                            Position: 1,
+                            CouponCode: 'coupon',
+                            TotalAmount: 799,
+                            Attributes: {
+                                prod2AttrKey1: 'value1',
+                                prod2AttrKey2: 'value2',
+                            },
+                        },
+                    ],
+                },
+                {
+                    ProductImpressionList: 'Suggested Products List2',
+                    ProductList: [
+                        {
+                            Name: 'iphone',
+                            Sku: 'iphoneSKU',
+                            Price: 999,
+                            Quantity: 1,
+                            Brand: 'brand',
+                            Variant: 'variant',
+                            Category: 'category',
+                            Position: 1,
+                            CouponCode: 'coupon',
+                            TotalAmount: 999,
+                            Attributes: {
+                                prod1AttrKey1: 'value1',
+                                prod1AttrKey2: 'value2',
+                            },
+                        },
+                        {
+                            Name: 'galaxy',
+                            Sku: 'galaxySKU',
+                            Price: 799,
+                            Quantity: 1,
+                            Brand: 'brand',
+                            Variant: 'variant',
+                            Category: 'category',
+                            Position: 1,
+                            CouponCode: 'coupon',
+                            TotalAmount: 799,
+                            Attributes: {
+                                prod2AttrKey1: 'value1',
+                                prod2AttrKey2: 'value2',
+                            },
+                        },
+                    ],
+                },
+            ],
+        });
+
+        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.appboy.loggedEvents.length.should.equal(4);
+        const impressionEvent1 = window.appboy.loggedEvents[0];
+        const impressionEvent2 = window.appboy.loggedEvents[1];
+        const impressionEvent3 = window.appboy.loggedEvents[2];
+        const impressionEvent4 = window.appboy.loggedEvents[3];
+
+        const expectedImpressionEvent1 = {
+            name: 'eCommerce - Impression - Item',
+            eventProperties: {
+                prod1AttrKey1: 'value1',
+                prod1AttrKey2: 'value2',
+                'Coupon Code': 'coupon',
+                Brand: 'brand',
+                Category: 'category',
+                Name: 'iphone',
+                Id: 'iphoneSKU',
+                'Item Price': 999,
+                Quantity: 1,
+                Position: 1,
+                Variant: 'variant',
+                'Total Product Amount': 999,
+                'Product Impression List': 'Suggested Products List1',
+            },
+        };
+
+        const expectedImpressionEvent2 = {
+            name: 'eCommerce - Impression - Item',
+            eventProperties: {
+                prod2AttrKey1: 'value1',
+                prod2AttrKey2: 'value2',
+                'Coupon Code': 'coupon',
+                Brand: 'brand',
+                Category: 'category',
+                Name: 'galaxy',
+                Id: 'galaxySKU',
+                'Item Price': 799,
+                Quantity: 1,
+                Position: 1,
+                Variant: 'variant',
+                'Total Product Amount': 799,
+                'Product Impression List': 'Suggested Products List1',
+            },
+        };
+        const expectedImpressionEvent3 = {
+            name: 'eCommerce - Impression - Item',
+            eventProperties: {
+                prod1AttrKey1: 'value1',
+                prod1AttrKey2: 'value2',
+                'Coupon Code': 'coupon',
+                Brand: 'brand',
+                Category: 'category',
+                Name: 'iphone',
+                Id: 'iphoneSKU',
+                'Item Price': 999,
+                Quantity: 1,
+                Position: 1,
+                Variant: 'variant',
+                'Total Product Amount': 999,
+                'Product Impression List': 'Suggested Products List2',
+            },
+        };
+
+        const expectedImpressionEvent4 = {
+            name: 'eCommerce - Impression - Item',
+            eventProperties: {
+                prod2AttrKey1: 'value1',
+                prod2AttrKey2: 'value2',
+                'Coupon Code': 'coupon',
+                Brand: 'brand',
+                Category: 'category',
+                Name: 'galaxy',
+                Id: 'galaxySKU',
+                'Item Price': 799,
+                Quantity: 1,
+                Position: 1,
+                Variant: 'variant',
+                'Total Product Amount': 799,
+                'Product Impression List': 'Suggested Products List2',
+            },
+        };
+
+        impressionEvent1.should.eql(expectedImpressionEvent1);
+        impressionEvent2.should.eql(expectedImpressionEvent2);
+        impressionEvent3.should.eql(expectedImpressionEvent3);
+        impressionEvent4.should.eql(expectedImpressionEvent4);
     });
 
     it('should sanitize event names and property keys/values', function() {
@@ -368,12 +584,10 @@ describe('Appboy Forwarder', function() {
             },
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property(
-            'logCustomEventName',
-            'Test Event with attributes$'
-        );
-        window.appboy.eventProperties.should.have.lengthOf(1);
-        window.appboy.eventProperties[0]['dog'].should.equal('rex$');
+        const loggedEvent = window.appboy.loggedEvents[0];
+        loggedEvent.should.have.property('name', 'Test Event with attributes$');
+        Object.keys(loggedEvent.eventProperties).should.have.lengthOf(1);
+        loggedEvent.eventProperties['dog'].should.equal('rex$');
     });
 
     it('should not set if properties are invalid', function() {
@@ -492,19 +706,28 @@ describe('Appboy Forwarder', function() {
             },
         });
         window.appboy.should.have.property('logCustomEventCalled', true);
-        window.appboy.should.have.property(
-            'logCustomEventName',
-            'Test EXPANDED Event'
-        );
+        const loggedEvent = window.appboy.loggedEvents[0];
+        loggedEvent.should.have.property('name', 'eCommerce - unknown - Item');
 
-        window.appboy.eventProperties.should.have.lengthOf(1);
-        window.appboy.eventProperties[0]['Transaction Id'].should.equal(
-            'foo-add-to-cart-transaction-id'
-        );
+        var expectedEvent = {
+            name: 'eCommerce - unknown - Item',
+            eventProperties: {
+                attribute: 'whatever',
+                'Transaction Id': 'foo-add-to-cart-transaction-id',
+                'Total Amount': 50,
+                Name: 'Product Name',
+                Id: 12345,
+                'Item Price': '50',
+                Quantity: 1,
+                'Total Product Amount': 50,
+            },
+        };
         reportService.event.should.have.property(
             'EventName',
             'Test Add To Cart'
         );
+
+        loggedEvent.should.eql(expectedEvent);
     });
 
     it('should log a purchase event without attributes', function() {
@@ -580,14 +803,46 @@ describe('Appboy Forwarder', function() {
         ].should.equal(1234);
     });
 
-    it('should log a custom event for non-purchase commerce events', function() {
+    it.only('should log a custom event for non-purchase commerce events', function() {
+        debugger;
         mParticle.forwarder.process({
-            EventName: 'Test Non-Purchase Event',
+            EventName: 'Test Add To Cart',
             EventDataType: MessageType.Commerce,
-            EventCategory: EventType.Other,
+            EventCategory: CommerceEventType.ProductAddToCart, // 10
+            CurrencyCode: 'USD',
+            ProductAction: {
+                ProductActionType: CommerceEventType.ProductAddToCart, // 1
+                TransactionId: 'foo-add-to-cart-transaction-id',
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: '50',
+                        Name: 'Product Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: { attribute: 'whatever' },
+                        Sku: 12345,
+                    },
+                ],
+            },
         });
 
         window.appboy.should.have.property('logCustomEventCalled', true);
+
+        const expectedAddToCartEvent = {
+            name: 'eCommerce - unknown - Item',
+            eventProperties: 
+            {
+  "attribute": "whatever",
+  "Transaction Id": "foo-add-to-cart-transaction-id",
+  "Total Amount": 50,
+  "Name": "Product Name",
+  "Id": 12345,
+  "Item Price": "50",
+  "Quantity": 1,
+  "Total Product Amount": 50
+}
+        }
         reportService.event.should.have.property(
             'EventName',
             'Test Non-Purchase Event'
