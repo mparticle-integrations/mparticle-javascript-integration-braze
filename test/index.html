@@ -11,7 +11,6 @@
     <script src="../node_modules/should/should.js"></script>
     <script src="mockhttprequest.js"></script>
     <script>
-        var self = this;
         mParticle.addForwarder = function (forwarder) {
             mParticle.forwarder = new forwarder.constructor();
         }
