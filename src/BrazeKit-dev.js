@@ -16,6 +16,7 @@ window.braze = require('@braze/web-sdk');
 
 // This should remain Appboy and not Braze until the core SDK is able to parse the moduleID and not the name (go.mparticle.com/work/SQDSDKS-4655)
 var name = 'Appboy',
+    suffix = 'v4',
     moduleId = 28,
     version = '4.0.0',
     MessageType = {
@@ -44,6 +45,7 @@ var constructor = function () {
         mpCustomFlags;
 
     self.name = name;
+    self.suffix = suffix;
 
     var DefaultAttributeMethods = {
         $LastName: 'setLastName',
@@ -635,9 +637,11 @@ function getId() {
 }
 
 function register(config) {
+    var forwarderNameWithSuffix = [name, suffix].join('-');
     if (!config) {
         window.console.log(
-            'You must pass a config object to register the kit ' + name
+            'You must pass a config object to register the kit ' +
+                forwarderNameWithSuffix
         );
         return;
     }
@@ -650,17 +654,19 @@ function register(config) {
     }
 
     if (isObject(config.kits)) {
-        config.kits[name] = {
+        config.kits[forwarderNameWithSuffix] = {
             constructor: constructor,
         };
     } else {
         config.kits = {};
-        config.kits[name] = {
+        config.kits[forwarderNameWithSuffix] = {
             constructor: constructor,
         };
     }
     window.console.log(
-        'Successfully registered ' + name + ' to your mParticle configuration'
+        'Successfully registered ' +
+            forwarderNameWithSuffix +
+            ' to your mParticle configuration'
     );
 }
 
@@ -669,6 +675,9 @@ if (window && window.mParticle && window.mParticle.addForwarder) {
         name: name,
         constructor: constructor,
         getId: getId,
+        // A suffix is added if there are multiple different versions of
+        // a client kit.  This matches the suffix in the DB.
+        suffix: suffix,
     });
 }
 
