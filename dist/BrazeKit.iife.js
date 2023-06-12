@@ -1,4 +1,4 @@
-var mpBrazeKit = (function (exports) {
+var mpBrazeKitV4 = (function (exports) {
 
 	function getAugmentedNamespace(n) {
 	  var f = n.default;
@@ -462,8 +462,9 @@ var mpBrazeKit = (function (exports) {
 
 	// This should remain Appboy and not Braze until the core SDK is able to parse the moduleID and not the name (go.mparticle.com/work/SQDSDKS-4655)
 	var name = 'Appboy',
+	    suffix = 'v4',
 	    moduleId = 28,
-	    version = '4.0.0',
+	    version = '4.0.1',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -490,6 +491,7 @@ var mpBrazeKit = (function (exports) {
 	        mpCustomFlags;
 
 	    self.name = name;
+	    self.suffix = suffix;
 
 	    var DefaultAttributeMethods = {
 	        $LastName: 'setLastName',
@@ -1081,9 +1083,11 @@ var mpBrazeKit = (function (exports) {
 	}
 
 	function register(config) {
+	    var forwarderNameWithSuffix = [name, suffix].join('-');
 	    if (!config) {
 	        window.console.log(
-	            'You must pass a config object to register the kit ' + name
+	            'You must pass a config object to register the kit ' +
+	                forwarderNameWithSuffix
 	        );
 	        return;
 	    }
@@ -1096,17 +1100,19 @@ var mpBrazeKit = (function (exports) {
 	    }
 
 	    if (isObject(config.kits)) {
-	        config.kits[name] = {
+	        config.kits[forwarderNameWithSuffix] = {
 	            constructor: constructor,
 	        };
 	    } else {
 	        config.kits = {};
-	        config.kits[name] = {
+	        config.kits[forwarderNameWithSuffix] = {
 	            constructor: constructor,
 	        };
 	    }
 	    window.console.log(
-	        'Successfully registered ' + name + ' to your mParticle configuration'
+	        'Successfully registered ' +
+	            forwarderNameWithSuffix +
+	            ' to your mParticle configuration'
 	    );
 	}
 
@@ -1115,6 +1121,9 @@ var mpBrazeKit = (function (exports) {
 	        name: name,
 	        constructor: constructor,
 	        getId: getId,
+	        // A suffix is added if there are multiple different versions of
+	        // a client kit.  This matches the suffix in the DB.
+	        suffix: suffix,
 	    });
 	}
 
