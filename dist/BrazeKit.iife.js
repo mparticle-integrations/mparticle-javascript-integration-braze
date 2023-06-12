@@ -1,4 +1,4 @@
-var mpBrazeKit = (function (exports) {
+var mpBrazeKitV3 = (function (exports) {
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 	function createCommonjsModule(fn, module) {
@@ -303,8 +303,9 @@ var mpBrazeKit = (function (exports) {
 	//  limitations under the License.
 
 	var name = 'Appboy',
+	    suffix = 'v3',
 	    moduleId = 28,
-	    version = '3.0.6',
+	    version = '3.0.7',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -331,6 +332,7 @@ var mpBrazeKit = (function (exports) {
 	        mpCustomFlags;
 
 	    self.name = name;
+	    self.suffix = suffix;
 
 	    var DefaultAttributeMethods = {
 	        $LastName: 'setLastName',
@@ -925,9 +927,11 @@ var mpBrazeKit = (function (exports) {
 	}
 
 	function register(config) {
+	    var forwarderNameWithSuffix = [name, suffix].join('-');
 	    if (!config) {
 	        window.console.log(
-	            'You must pass a config object to register the kit ' + name
+	            'You must pass a config object to register the kit ' +
+	                forwarderNameWithSuffix
 	        );
 	        return;
 	    }
@@ -940,17 +944,19 @@ var mpBrazeKit = (function (exports) {
 	    }
 
 	    if (isObject(config.kits)) {
-	        config.kits[name] = {
+	        config.kits[forwarderNameWithSuffix] = {
 	            constructor: constructor,
 	        };
 	    } else {
 	        config.kits = {};
-	        config.kits[name] = {
+	        config.kits[forwarderNameWithSuffix] = {
 	            constructor: constructor,
 	        };
 	    }
 	    window.console.log(
-	        'Successfully registered ' + name + ' to your mParticle configuration'
+	        'Successfully registered ' +
+	            forwarderNameWithSuffix +
+	            ' to your mParticle configuration'
 	    );
 	}
 
@@ -959,6 +965,9 @@ var mpBrazeKit = (function (exports) {
 	        name: name,
 	        constructor: constructor,
 	        getId: getId,
+	        // A suffix is added if there are multiple different versions of
+	        // a client kit.  This matches the suffix in the DB.
+	        suffix: suffix,
 	    });
 	}
 
