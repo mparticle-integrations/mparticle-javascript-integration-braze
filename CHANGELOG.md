@@ -2,7 +2,10 @@
 
 --
 
-#### 3.0.5 - 2023-02-15
+#### 3.0.7 - 2023-06-12
+-   fix: Add suffix of v3 to forwarder (#22)
+
+#### 3.0.6 - 2023-02-15
 -   refactor: Update console warning and readme to reflect new rollout plans (#19)
 
 #### 3.0.5 - 2022-10-20
