@@ -1697,4 +1697,232 @@ USD,
 
         purchaseEventProperties.should.eql(expectedPurchaseEvent);
     });
+
+    it('should log promotion events via the logCustomEvent method', function() {
+        // This initialization is a hack in order to get sessionId to exist, which
+        // expandCommerceEvent depends on
+
+        mParticle.forwarder.process({
+            EventName: 'eCommerce - PromotionClick',
+            EventDataType: 16,
+            CurrencyCode: null,
+            EventCategory: 19,
+            PromotionAction: {
+                PromotionActionType: 2,
+                PromotionList: [
+                    {
+                        Id: 'my_promo_1',
+                        Creative: 'sale_banner_1',
+                        Name: 'App-wide 50% off sale',
+                    },
+                    {
+                        Id: 'my_promo_2',
+                        Creative: 'sale_banner_2',
+                        Name: 'App-wide 50% off sale',
+                    },
+                ],
+            },
+        });
+        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.appboy.loggedEvents.length.should.equal(2);
+        const promotionEvent1 = window.appboy.loggedEvents[0];
+        const promotionEvent2 = window.appboy.loggedEvents[1];
+
+        const expectedPromotionEvent1 = {
+            name: 'eCommerce - click - Item',
+            eventProperties: {
+                Creative: 'sale_banner_1',
+                Id: 'my_promo_1',
+                Name: 'App-wide 50% off sale',
+            },
+        };
+
+        const expectedPromotionEvent2 = {
+            name: 'eCommerce - click - Item',
+            eventProperties: {
+                Creative: 'sale_banner_2',
+                Id: 'my_promo_2',
+                Name: 'App-wide 50% off sale',
+            },
+        };
+
+        promotionEvent1.should.eql(expectedPromotionEvent1);
+        promotionEvent2.should.eql(expectedPromotionEvent2);
+    });
+
+    it('should log impression events via the logCustomEvent method', function() {
+        // This initialization is a hack in order to get sessionId to exist, which
+        // expandCommerceEvent depends on
+        mParticle.init('test-key');
+        mParticle.getInstance()._Store.sessionId = 'foo-session-id';
+
+        mParticle.forwarder.process({
+            EventName: 'eCommerce - Impression',
+            EventDataType: 16,
+            EventCategory: 22,
+            ProductImpressions: [
+                {
+                    ProductImpressionList: 'Suggested Products List1',
+                    ProductList: [
+                        {
+                            Name: 'iphone',
+                            Sku: 'iphoneSKU',
+                            Price: 999,
+                            Quantity: 1,
+                            Brand: 'brand',
+                            Variant: 'variant',
+                            Category: 'category',
+                            Position: 1,
+                            CouponCode: 'coupon',
+                            TotalAmount: 999,
+                            Attributes: {
+                                prod1AttrKey1: 'value1',
+                                prod1AttrKey2: 'value2',
+                            },
+                        },
+                        {
+                            Name: 'galaxy',
+                            Sku: 'galaxySKU',
+                            Price: 799,
+                            Quantity: 1,
+                            Brand: 'brand',
+                            Variant: 'variant',
+                            Category: 'category',
+                            Position: 1,
+                            CouponCode: 'coupon',
+                            TotalAmount: 799,
+                            Attributes: {
+                                prod2AttrKey1: 'value1',
+                                prod2AttrKey2: 'value2',
+                            },
+                        },
+                    ],
+                },
+                {
+                    ProductImpressionList: 'Suggested Products List2',
+                    ProductList: [
+                        {
+                            Name: 'iphone',
+                            Sku: 'iphoneSKU',
+                            Price: 999,
+                            Quantity: 1,
+                            Brand: 'brand',
+                            Variant: 'variant',
+                            Category: 'category',
+                            Position: 1,
+                            CouponCode: 'coupon',
+                            TotalAmount: 999,
+                            Attributes: {
+                                prod1AttrKey1: 'value1',
+                                prod1AttrKey2: 'value2',
+                            },
+                        },
+                        {
+                            Name: 'galaxy',
+                            Sku: 'galaxySKU',
+                            Price: 799,
+                            Quantity: 1,
+                            Brand: 'brand',
+                            Variant: 'variant',
+                            Category: 'category',
+                            Position: 1,
+                            CouponCode: 'coupon',
+                            TotalAmount: 799,
+                            Attributes: {
+                                prod2AttrKey1: 'value1',
+                                prod2AttrKey2: 'value2',
+                            },
+                        },
+                    ],
+                },
+            ],
+        });
+
+        window.appboy.should.have.property('logCustomEventCalled', true);
+        window.appboy.loggedEvents.length.should.equal(4);
+        const impressionEvent1 = window.appboy.loggedEvents[0];
+        const impressionEvent2 = window.appboy.loggedEvents[1];
+        const impressionEvent3 = window.appboy.loggedEvents[2];
+        const impressionEvent4 = window.appboy.loggedEvents[3];
+
+        const expectedImpressionEvent1 = {
+            name: 'eCommerce - Impression - Item',
+            eventProperties: {
+                prod1AttrKey1: 'value1',
+                prod1AttrKey2: 'value2',
+                'Coupon Code': 'coupon',
+                Brand: 'brand',
+                Category: 'category',
+                Name: 'iphone',
+                Id: 'iphoneSKU',
+                'Item Price': 999,
+                Quantity: 1,
+                Position: 1,
+                Variant: 'variant',
+                'Total Product Amount': 999,
+                'Product Impression List': 'Suggested Products List1',
+            },
+        };
+
+        const expectedImpressionEvent2 = {
+            name: 'eCommerce - Impression - Item',
+            eventProperties: {
+                prod2AttrKey1: 'value1',
+                prod2AttrKey2: 'value2',
+                'Coupon Code': 'coupon',
+                Brand: 'brand',
+                Category: 'category',
+                Name: 'galaxy',
+                Id: 'galaxySKU',
+                'Item Price': 799,
+                Quantity: 1,
+                Position: 1,
+                Variant: 'variant',
+                'Total Product Amount': 799,
+                'Product Impression List': 'Suggested Products List1',
+            },
+        };
+        const expectedImpressionEvent3 = {
+            name: 'eCommerce - Impression - Item',
+            eventProperties: {
+                prod1AttrKey1: 'value1',
+                prod1AttrKey2: 'value2',
+                'Coupon Code': 'coupon',
+                Brand: 'brand',
+                Category: 'category',
+                Name: 'iphone',
+                Id: 'iphoneSKU',
+                'Item Price': 999,
+                Quantity: 1,
+                Position: 1,
+                Variant: 'variant',
+                'Total Product Amount': 999,
+                'Product Impression List': 'Suggested Products List2',
+            },
+        };
+
+        const expectedImpressionEvent4 = {
+            name: 'eCommerce - Impression - Item',
+            eventProperties: {
+                prod2AttrKey1: 'value1',
+                prod2AttrKey2: 'value2',
+                'Coupon Code': 'coupon',
+                Brand: 'brand',
+                Category: 'category',
+                Name: 'galaxy',
+                Id: 'galaxySKU',
+                'Item Price': 799,
+                Quantity: 1,
+                Position: 1,
+                Variant: 'variant',
+                'Total Product Amount': 799,
+                'Product Impression List': 'Suggested Products List2',
+            },
+        };
+
+        impressionEvent1.should.eql(expectedImpressionEvent1);
+        impressionEvent2.should.eql(expectedImpressionEvent2);
+        impressionEvent3.should.eql(expectedImpressionEvent3);
+        impressionEvent4.should.eql(expectedImpressionEvent4);
+    });
 });
