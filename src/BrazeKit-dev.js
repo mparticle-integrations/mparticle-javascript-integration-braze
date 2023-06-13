@@ -110,19 +110,9 @@ var constructor = function () {
             event.ProductAction.ProductList &&
             event.ProductAction.ProductList.length
         ) {
-            event.ProductAction.ProductList.forEach(function(_product) {
-                var product = getSanitizedCustomProperties(_product);
-
-                var productName;
-                if (forwarderSettings.forwardSkuAsProductName === 'True') {
-                    productName = _product.Sku;
-                } else {
-                    productName = _product.Name;
-                }
-                product.Name = getSanitizedValueForAppboy(productName);
-
-                eventAttributes.products.push(product);
-            });
+            eventAttributes.products = addProducts(
+                event.ProductAction.ProductList
+            );
         }
 
         kitLogger(
@@ -385,7 +375,11 @@ var constructor = function () {
                     );
                     break;
                 default:
-                    commerceEventAttrs.products = addProducts(mpEvent);
+                    if (mpEvent.ProductAction.ProductList) {
+                        commerceEventAttrs.products = addProducts(
+                            mpEvent.ProductAction.ProductList
+                        );
+                    }
                     var transactionId = mpEvent.ProductAction.TransactionId;
                     if (transactionId) {
                         commerceEventAttrs['Transaction Id'] = transactionId;
@@ -423,7 +417,7 @@ var constructor = function () {
             return productImpressions.map(function(impression) {
                 return {
                     'Product Impression List': impression.ProductImpressionList,
-                    products: impression.ProductList,
+                    products: addProducts(impression.ProductList),
                 };
             });
         } else {
@@ -431,23 +425,44 @@ var constructor = function () {
         }
     }
 
-    function addProducts(mpEvent) {
+    function addProducts(productList) {
         const productArray = [];
-
-        if (
-            mpEvent.ProductAction.ProductList &&
-            mpEvent.ProductAction.ProductList.length
-        ) {
-            mpEvent.ProductAction.ProductList.forEach(function(product) {
-                {
-                    var sanitizedProduct = getSanitizedCustomProperties(
-                        product
-                    );
-                    productArray.push(sanitizedProduct);
-                }
-            });
+        if (!productList || productList.length === 0) {
+            return productArray;
         }
+
+        productList.forEach(function(product) {
+            {
+                var sanitizedProduct = parseProduct(
+                    getSanitizedCustomProperties(product)
+                );
+                productArray.push(sanitizedProduct);
+            }
+        });
+
         return productArray;
+    }
+
+    function parseProduct(_product) {
+        var product = {};
+
+        for (var key in _product) {
+            switch (key) {
+                case 'Sku':
+                    product.Id = _product[key];
+                    break;
+                case 'CouponCode':
+                    product['Coupon Code'] = _product[key];
+                    break;
+                case 'TotalAmount':
+                    product['Total Product Amount'] = _product[key];
+                    break;
+                default:
+                    product[key] = _product[key];
+            }
+        }
+
+        return product;
     }
 
     function logExpandedNonPurchaseCommerceEvents(event) {
