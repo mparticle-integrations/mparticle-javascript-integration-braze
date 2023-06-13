@@ -1698,7 +1698,7 @@ USD,
         purchaseEventProperties.should.eql(expectedPurchaseEvent);
     });
 
-    describe('promoimpression eventstion events', function() {
+    describe('promotion events', function() {
         const mpPromotionEvent = {
             EventName: 'eCommerce - PromotionClick',
             EventDataType: 16,
@@ -1788,7 +1788,7 @@ USD,
         });
     });
 
-    describe('promoimpression eventstion events', function() {
+    describe('impression events', function() {
         const mpImpressionEvent = {
             EventName: 'eCommerce - Impression',
             EventDataType: 16,

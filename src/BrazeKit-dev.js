@@ -367,35 +367,26 @@ var constructor = function () {
     }
 
     function logNonPurchaseCommerceEventWithProducts(mpEvent) {
-        var brazeEvent = {
-            EventAttributes: {},
-        };
+        const commerceEventAttrs = {};
 
         try {
             switch (mpEvent.EventCategory) {
                 case CommerceEventTypes.PromotionClick:
                 case CommerceEventTypes.PromotionView:
-                    brazeEvent.EventAttributes.promotions = addPromotions(
-                        mpEvent,
-                        brazeEvent
+                    commerceEventAttrs.promotions = addPromotions(
+                        mpEvent.PromotionAction
                     );
                     break;
                 case CommerceEventTypes.ProductImpression:
-                    brazeEvent.EventAttributes.impressions = addImpressions(
-                        mpEvent,
-                        brazeEvent
+                    commerceEventAttrs.impressions = addImpressions(
+                        mpEvent.ProductImpressions
                     );
                     break;
                 default:
-                    brazeEvent.EventAttributes.products = addProducts(
-                        mpEvent,
-                        brazeEvent
-                    );
+                    commerceEventAttrs.products = addProducts(mpEvent);
                     var transactionId = mpEvent.ProductAction.TransactionId;
                     if (transactionId) {
-                        brazeEvent.EventAttributes[
-                            'Transaction Id'
-                        ] = transactionId;
+                        commerceEventAttrs['Transaction Id'] = transactionId;
                     }
             }
 
@@ -403,11 +394,13 @@ var constructor = function () {
                 mpEvent.EventAttributes
             );
 
-            brazeEvent.EventName = mpEvent.EventName;
-            brazeEvent.EventAttributes = mergeObjects(
-                brazeEvent.EventAttributes,
-                sanitizedProperties
-            );
+            const brazeEvent = {
+                EventName: mpEvent.EventName,
+                EventAttributes: mergeObjects(
+                    commerceEventAttrs,
+                    sanitizedProperties
+                ),
+            };
 
             reportEvent = logAppboyEvent(brazeEvent);
             return reportEvent;
@@ -416,16 +409,16 @@ var constructor = function () {
         }
     }
 
-    function addPromotions(mpEvent) {
-        if (mpEvent.PromotionAction && mpEvent.PromotionAction.PromotionList) {
-            return mpEvent.PromotionAction.PromotionList;
+    function addPromotions(promotionAction) {
+        if (promotionAction && promotionAction.PromotionList) {
+            return promotionAction.PromotionList;
         }
         return [];
     }
 
-    function addImpressions(mpEvent) {
-        if (mpEvent.ProductImpressions) {
-            return mpEvent.ProductImpressions.map(function(impression) {
+    function addImpressions(productImpressions) {
+        if (productImpressions.length) {
+            return productImpressions.map(function(impression) {
                 return {
                     'Product Impression List': impression.ProductImpressionList,
                     products: impression.ProductList,
