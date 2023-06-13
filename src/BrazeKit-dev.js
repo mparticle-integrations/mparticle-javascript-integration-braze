@@ -437,6 +437,7 @@ var constructor = function () {
                 productArray.push(sanitizedProduct);
             }
         });
+
         return productArray;
     }
 
