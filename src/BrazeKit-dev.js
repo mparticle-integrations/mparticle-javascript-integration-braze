@@ -108,21 +108,9 @@ var constructor = function () {
             event.ProductAction.ProductList &&
             event.ProductAction.ProductList.length
         ) {
-            event.ProductAction.ProductList.forEach(function(_product) {
-                const product = parseProduct(
-                    getSanitizedCustomProperties(_product)
-                );
-
-                let productName;
-                if (forwarderSettings.forwardSkuAsProductName === 'True') {
-                    productName = _product.Sku;
-                } else {
-                    productName = _product.Name;
-                }
-                product.Name = getSanitizedValueForAppboy(productName);
-
-                eventAttributes.products.push(product);
-            });
+            eventAttributes.products = addProducts(
+                event.ProductAction.ProductList
+            );
         }
 
         kitLogger(
