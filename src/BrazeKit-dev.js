@@ -21,6 +21,11 @@ var name = 'Appboy',
         PageView: 3,
         PageEvent: 4,
         Commerce: 16,
+    },
+    CommerceEventTypes = {
+        PromotionView: 18,
+        PromotionClick: 19,
+        ProductImpression: 22,
     };
 
 var clusterMapping = {
@@ -361,21 +366,84 @@ var constructor = function () {
         }
     }
 
-    function logNonPurchaseCommerceEventWithProducts(event) {
-        var sanitizedProperties = getSanitizedCustomProperties(
-            event.EventAttributes
-        );
-        var productArray = [];
+    function logNonPurchaseCommerceEventWithProducts(mpEvent) {
+        var brazeEvent = {
+            EventAttributes: {},
+        };
 
-        if (!event.ProductAction) {
-            return false;
+        try {
+            switch (mpEvent.EventCategory) {
+                case CommerceEventTypes.PromotionClick:
+                case CommerceEventTypes.PromotionView:
+                    brazeEvent.EventAttributes.promotions = addPromotions(
+                        mpEvent,
+                        brazeEvent
+                    );
+                    break;
+                case CommerceEventTypes.ProductImpression:
+                    brazeEvent.EventAttributes.impressions = addImpressions(
+                        mpEvent,
+                        brazeEvent
+                    );
+                    break;
+                default:
+                    brazeEvent.EventAttributes.products = addProducts(
+                        mpEvent,
+                        brazeEvent
+                    );
+                    var transactionId = mpEvent.ProductAction.TransactionId;
+                    if (transactionId) {
+                        brazeEvent.EventAttributes[
+                            'Transaction Id'
+                        ] = transactionId;
+                    }
+            }
+
+            var sanitizedProperties = getSanitizedCustomProperties(
+                mpEvent.EventAttributes
+            );
+
+            brazeEvent.EventName = mpEvent.EventName;
+            brazeEvent.EventAttributes = mergeObjects(
+                brazeEvent.EventAttributes,
+                sanitizedProperties
+            );
+
+            reportEvent = logAppboyEvent(brazeEvent);
+            return reportEvent;
+        } catch (err) {
+            return 'Error logging commerce event' + err.message;
         }
+    }
+
+    function addPromotions(mpEvent) {
+        if (mpEvent.PromotionAction && mpEvent.PromotionAction.PromotionList) {
+            return mpEvent.PromotionAction.PromotionList;
+        }
+        return [];
+    }
+
+    function addImpressions(mpEvent) {
+        if (mpEvent.ProductImpressions) {
+            return mpEvent.ProductImpressions.map(function(impression) {
+                return {
+                    'Product Impression List': impression.ProductImpressionList,
+                    products: impression.ProductList,
+                };
+            });
+        } else {
+            return [];
+        }
+    }
+
+    function addProducts(mpEvent) {
+        const productArray = [];
 
         if (
-            event.ProductAction.ProductList &&
-            event.ProductAction.ProductList.length
+            mpEvent.ProductAction.ProductList &&
+            mpEvent.ProductAction.ProductList.length
         ) {
-            event.ProductAction.ProductList.forEach(function(product) {
+            mpEvent.ProductAction.ProductList.forEach(function(product) {
                 {
                     var sanitizedProduct = getSanitizedCustomProperties(
                         product
@@ -384,27 +452,7 @@ var constructor = function () {
                 }
             });
         }
-        try {
-            var brazeProductDetails = {
-                products: productArray,
-            };
-            var transactionId = event.ProductAction.TransactionId;
-            if (transactionId) {
-                brazeProductDetails['Transaction Id'] = transactionId;
-            }
-            var brazeEcommerceEvent = {
-                EventName: event.EventName,
-                EventAttributes: mergeObjects(
-                    brazeProductDetails,
-                    sanitizedProperties
-                ),
-            };
-
-            reportEvent = logAppboyEvent(brazeEcommerceEvent);
-            return reportEvent;
-        } catch (err) {
-            return 'Error logging page event' + err.message;
-        }
+        return productArray;
     }
 
     function logExpandedNonPurchaseCommerceEvents(event) {
@@ -761,7 +809,7 @@ var constructor = function () {
         var nonMethodArguments = Array.prototype.slice.call(arguments, 1);
         msg += '\n' + method + ':\n';
 
-        nonMethodArguments.forEach(function (arg) {
+        nonMethodArguments.forEach(function(arg) {
             if (isObject(arg) || Array.isArray(arg)) {
                 msg += JSON.stringify(arg);
             } else {
