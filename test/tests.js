@@ -1534,12 +1534,12 @@ USD,
         window.appboy.options.should.have.property('brazeSetting2', true);
     });
 
-    it('should log a single non-purchase commerce event with multiple products if bundleProductsWithCommerceEvents is `True`', function() {
+    it('should log a single non-purchase commerce event with multiple products if bundleCommerceEventData is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
                 apiKey: '9123456',
-                bundleProductsWithCommerceEvents: 'True',
+                bundleCommerceEventData: 'True',
             },
             reportService.cb,
             true,
@@ -1623,12 +1623,12 @@ USD,
         loggedNonPurchaseCommerce.should.eql(expectedNonPurchaseCommerceEvent);
     });
 
-    it('should log a single purchase commerce event with multiple products if bundleProductsWithCommerceEvents is `True`', function() {
+    it('should log a single purchase commerce event with multiple products if bundleCommerceEventData is `True`', function() {
         window.appboy = new MockAppboy();
         mParticle.forwarder.init(
             {
                 apiKey: '9123456',
-                bundleProductsWithCommerceEvents: 'True',
+                bundleCommerceEventData: 'True',
             },
             reportService.cb,
             true,
@@ -1773,7 +1773,7 @@ USD,
             mParticle.forwarder.init(
                 {
                     apiKey: '9123456',
-                    bundleProductsWithCommerceEvents: 'True',
+                    bundleCommerceEventData: 'True',
                 },
                 reportService.cb,
                 true,
@@ -1985,7 +1985,7 @@ USD,
             mParticle.forwarder.init(
                 {
                     apiKey: '9123456',
-                    bundleProductsWithCommerceEvents: 'True',
+                    bundleCommerceEventData: 'True',
                 },
                 reportService.cb,
                 true,

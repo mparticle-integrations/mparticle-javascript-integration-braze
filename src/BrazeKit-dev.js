@@ -73,14 +73,14 @@ var constructor = function () {
         dob: 'setDateOfBirth',
     };
 
-    var bundleProductsWithCommerceEvents = false;
+    var bundleCommerceEventData = false;
 
     // A purchase event can either log a single event with all products
     // or multiple purchase events (one per product)
     function logPurchaseEvent(event) {
         var reportEvent = false;
 
-        if (bundleProductsWithCommerceEvents) {
+        if (bundleCommerceEventData) {
             reportEvent = logSinglePurchaseEventWithProducts(event);
         } else {
             reportEvent = logPurchaseEventPerProduct(event);
@@ -351,7 +351,7 @@ var constructor = function () {
     // A non-purchase commerce event can either log a single event with all products
     // or one event per product when the commerce event is expanded
     function logNonPurchaseCommerceEvent(event) {
-        if (bundleProductsWithCommerceEvents) {
+        if (bundleCommerceEventData) {
             return logNonPurchaseCommerceEventWithProducts(event);
         } else {
             return logExpandedNonPurchaseCommerceEvents(event);
@@ -651,8 +651,8 @@ var constructor = function () {
         mpCustomFlags = customFlags;
         try {
             forwarderSettings = settings;
-            bundleProductsWithCommerceEvents =
-                forwarderSettings.bundleProductsWithCommerceEvents === 'True';
+            bundleCommerceEventData =
+                forwarderSettings.bundleCommerceEventData === 'True';
             reportingService = service;
             // 30 min is Appboy default
             options.sessionTimeoutInSeconds =
