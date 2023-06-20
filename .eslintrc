@@ -1,9 +1,11 @@
 {
     "env": {
-        "browser": true
+        "browser": true,
+        "es6": true
     },
     "globals": {
-        "appboy": true
+        "braze": true,
+        "mParticle": true,
     },
     "extends": ["plugin:prettier/recommended", "eslint:recommended"],
     "rules": {
