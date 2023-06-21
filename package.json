@@ -31,7 +31,7 @@
     },
     "dependencies": {
         "@braze/web-sdk": "^4.2.1",
-        "@mparticle/web-sdk": "^2.17.0"
+        "@mparticle/web-sdk": "^2.23.0"
     },
     "license": "Apache-2.0"
 }
