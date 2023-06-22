@@ -22,7 +22,8 @@ var name = 'Appboy',
         PageView: 3,
         PageEvent: 4,
         Commerce: 16,
-    };
+    },
+    CommerceEventType = mParticle.CommerceEventType;
 
 var clusterMapping = {
     '01': 'sdk.iad-01.braze.com',
@@ -191,43 +192,43 @@ var constructor = function () {
         let eventName;
 
         switch (eventType) {
-            case mParticle.CommerceEventType.ProductAddToCart:
+            case CommerceEventType.ProductAddToCart:
                 eventName = 'add_to_cart';
                 break;
-            case mParticle.CommerceEventType.ProductRemoveFromCart:
+            case CommerceEventType.ProductRemoveFromCart:
                 eventName = 'remove_from_cart';
                 break;
-            case mParticle.CommerceEventType.ProductCheckout:
+            case CommerceEventType.ProductCheckout:
                 eventName = 'checkout';
                 break;
-            case mParticle.CommerceEventType.ProductCheckoutOption:
+            case CommerceEventType.ProductCheckoutOption:
                 eventName = 'checkout_option';
                 break;
-            case mParticle.CommerceEventType.ProductClick:
+            case CommerceEventType.ProductClick:
                 eventName = 'click';
                 break;
-            case mParticle.CommerceEventType.ProductViewDetail:
+            case CommerceEventType.ProductViewDetail:
                 eventName = 'view_detail';
                 break;
-            case mParticle.CommerceEventType.ProductPurchase:
+            case CommerceEventType.ProductPurchase:
                 eventName = 'purchase';
                 break;
-            case mParticle.CommerceEventType.ProductRefund:
+            case CommerceEventType.ProductRefund:
                 eventName = 'refund';
                 break;
-            case mParticle.CommerceEventType.ProductAddToWishlist:
+            case CommerceEventType.ProductAddToWishlist:
                 eventName = 'add_to_wishlist';
                 break;
-            case mParticle.CommerceEventType.ProductRemoveFromWishlist:
+            case CommerceEventType.ProductRemoveFromWishlist:
                 eventName = 'remove_from_wishlist';
                 break;
-            case mParticle.CommerceEventType.PromotionView:
+            case CommerceEventType.PromotionView:
                 eventName = 'view';
                 break;
-            case mParticle.CommerceEventType.PromotionClick:
+            case CommerceEventType.PromotionClick:
                 eventName = 'click';
                 break;
-            case mParticle.CommerceEventType.ProductImpression:
+            case CommerceEventType.ProductImpression:
                 eventName = 'Impression';
                 break;
             default:
@@ -384,9 +385,7 @@ var constructor = function () {
     // mParticle commerce events use different appboy methods depending on if they are
     // a purchase event or a non-purchase commerce event
     function logCommerceEvent(event) {
-        if (
-            event.EventCategory === mParticle.CommerceEventType.ProductPurchase
-        ) {
+        if (event.EventCategory === CommerceEventType.ProductPurchase) {
             reportEvent = logPurchaseEvent(event);
             return reportEvent === true;
         } else {
@@ -410,13 +409,13 @@ var constructor = function () {
         const eventName = getCommerceEventName(mpEvent.EventCategory);
         try {
             switch (mpEvent.EventCategory) {
-                case mParticle.CommerceEventType.PromotionClick:
-                case mParticle.CommerceEventType.PromotionView:
+                case CommerceEventType.PromotionClick:
+                case CommerceEventType.PromotionView:
                     commerceEventAttrs.promotions = addPromotions(
                         mpEvent.PromotionAction
                     );
                     break;
-                case mParticle.CommerceEventType.ProductImpression:
+                case CommerceEventType.ProductImpression:
                     commerceEventAttrs.impressions = addImpressions(
                         mpEvent.ProductImpressions
                     );

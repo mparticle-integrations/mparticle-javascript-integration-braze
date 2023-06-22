@@ -33,21 +33,7 @@ describe('Appboy Forwarder', function () {
                 return 'blahblah';
             },
         },
-        CommerceEventType = {
-            ProductAddToCart: 10,
-            ProductRemoveFromCart: 11,
-            ProductCheckout: 12,
-            ProductCheckoutOption: 13,
-            ProductClick: 14,
-            ProductViewDetail: 15,
-            ProductPurchase: 16,
-            ProductRefund: 17,
-            PromotionView: 18,
-            PromotionClick: 19,
-            ProductAddToWishlist: 20,
-            ProductRemoveFromWishlist: 21,
-            ProductImpression: 22,
-        },
+        CommerceEventType = mParticle.CommerceEventType,
         IdentityType = {
             Other: 0,
             CustomerId: 1,
