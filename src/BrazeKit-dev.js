@@ -22,11 +22,6 @@ var name = 'Appboy',
         PageView: 3,
         PageEvent: 4,
         Commerce: 16,
-    },
-    CommerceEventTypes = {
-        PromotionView: 18,
-        PromotionClick: 19,
-        ProductImpression: 22,
     };
 
 var clusterMapping = {
@@ -93,6 +88,7 @@ var constructor = function () {
         var eventAttributes = mergeObjects(event.EventAttributes, {
             products: [],
         });
+        var eventName = getCommerceEventName(event.EventCategory);
 
         // All commerce events except for promotion/impression events will have a
         // ProductAction property, but if this ever changes in the future, this
@@ -117,7 +113,7 @@ var constructor = function () {
 
         kitLogger(
             'appboy.logPurchase',
-            event.EventName,
+            eventName,
             event.ProductAction.TotalAmount,
             event.CurrencyCode,
             quantity,
@@ -125,7 +121,7 @@ var constructor = function () {
         );
 
         reportEvent = appboy.logPurchase(
-            event.EventName,
+            eventName,
             event.ProductAction.TotalAmount,
             event.CurrencyCode,
             quantity,
@@ -188,6 +184,57 @@ var constructor = function () {
             });
         }
         return reportEvent === true;
+    }
+
+    function getCommerceEventName(eventType) {
+        const eventNamePrefix = 'eCommerce';
+        let eventName;
+
+        switch (eventType) {
+            case mParticle.CommerceEventType.ProductAddToCart:
+                eventName = 'add_to_cart';
+                break;
+            case mParticle.CommerceEventType.ProductRemoveFromCart:
+                eventName = 'remove_from_cart';
+                break;
+            case mParticle.CommerceEventType.ProductCheckout:
+                eventName = 'checkout';
+                break;
+            case mParticle.CommerceEventType.ProductCheckoutOption:
+                eventName = 'checkout_option';
+                break;
+            case mParticle.CommerceEventType.ProductClick:
+                eventName = 'click';
+                break;
+            case mParticle.CommerceEventType.ProductViewDetail:
+                eventName = 'view_detail';
+                break;
+            case mParticle.CommerceEventType.ProductPurchase:
+                eventName = 'purchase';
+                break;
+            case mParticle.CommerceEventType.ProductRefund:
+                eventName = 'refund';
+                break;
+            case mParticle.CommerceEventType.ProductAddToWishlist:
+                eventName = 'add_to_wishlist';
+                break;
+            case mParticle.CommerceEventType.ProductRemoveFromWishlist:
+                eventName = 'remove_from_wishlist';
+                break;
+            case mParticle.CommerceEventType.PromotionView:
+                eventName = 'view';
+                break;
+            case mParticle.CommerceEventType.PromotionClick:
+                eventName = 'click';
+                break;
+            case mParticle.CommerceEventType.ProductImpression:
+                eventName = 'Impression';
+                break;
+            default:
+                eventName = 'unknown';
+                break;
+        }
+        return [eventNamePrefix, eventName].join(' - ');
     }
 
     function logAppboyPageViewEvent(event) {
@@ -360,16 +407,16 @@ var constructor = function () {
 
     function logNonPurchaseCommerceEventWithProducts(mpEvent) {
         const commerceEventAttrs = {};
-
+        let eventName = getCommerceEventName(mpEvent.EventCategory);
         try {
             switch (mpEvent.EventCategory) {
-                case CommerceEventTypes.PromotionClick:
-                case CommerceEventTypes.PromotionView:
+                case mParticle.CommerceEventType.PromotionClick:
+                case mParticle.CommerceEventType.PromotionView:
                     commerceEventAttrs.promotions = addPromotions(
                         mpEvent.PromotionAction
                     );
                     break;
-                case CommerceEventTypes.ProductImpression:
+                case mParticle.CommerceEventType.ProductImpression:
                     commerceEventAttrs.impressions = addImpressions(
                         mpEvent.ProductImpressions
                     );
@@ -391,7 +438,7 @@ var constructor = function () {
             );
 
             const brazeEvent = {
-                EventName: mpEvent.EventName,
+                EventName: eventName,
                 EventAttributes: mergeObjects(
                     commerceEventAttrs,
                     sanitizedProperties
