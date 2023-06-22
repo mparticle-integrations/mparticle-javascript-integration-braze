@@ -407,7 +407,7 @@ var constructor = function () {
 
     function logNonPurchaseCommerceEventWithProducts(mpEvent) {
         const commerceEventAttrs = {};
-        let eventName = getCommerceEventName(mpEvent.EventCategory);
+        const eventName = getCommerceEventName(mpEvent.EventCategory);
         try {
             switch (mpEvent.EventCategory) {
                 case mParticle.CommerceEventType.PromotionClick:
