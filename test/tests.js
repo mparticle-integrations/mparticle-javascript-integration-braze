@@ -5,7 +5,7 @@ var brazeInstance;
 if (typeof require !== 'undefined') {
     brazeInstance = require('../dist/BrazeKit.common').default;
 } else {
-    brazeInstance = mpBrazeKit.default;
+    brazeInstance = mpBrazeKitV3.default;
 }
 
 describe('Appboy Forwarder', function () {
@@ -33,21 +33,7 @@ describe('Appboy Forwarder', function () {
                 return 'blahblah';
             },
         },
-        CommerceEventType = {
-            ProductAddToCart: 10,
-            ProductRemoveFromCart: 11,
-            ProductCheckout: 12,
-            ProductCheckoutOption: 13,
-            ProductClick: 14,
-            ProductViewDetail: 15,
-            ProductPurchase: 16,
-            ProductRefund: 17,
-            PromotionView: 18,
-            PromotionClick: 19,
-            ProductAddToWishlist: 20,
-            ProductRemoveFromWishlist: 21,
-            ProductImpression: 22,
-        },
+        CommerceEventType = mParticle.CommerceEventType,
         IdentityType = {
             Other: 0,
             CustomerId: 1,
@@ -298,16 +284,16 @@ describe('Appboy Forwarder', function () {
         window.appboy.should.have.property('metadata', ['mp']);
     });
 
-     it('should have a property of suffix', function() {
-         window.mParticle.forwarder.should.have.property('suffix', 'v3');
-     });
+    it('should have a property of suffix', function() {
+        window.mParticle.forwarder.should.have.property('suffix', 'v3');
+    });
 
-     it('should register a forwarder with version number onto a config', function() {
-         var config = {};
-         brazeInstance.register(config);
-         config.should.have.property('kits');
-         config.kits.should.have.property('Appboy-v3');
-     });
+    it('should register a forwarder with version number onto a config', function() {
+        var config = {};
+        brazeInstance.register(config);
+        config.should.have.property('kits');
+        config.kits.should.have.property('Appboy-v3');
+    });
 
     it('should open a new session and refresh in app messages upon initialization', function() {
         window.appboy.should.have.property('initializeCalled', true);
@@ -1554,7 +1540,7 @@ USD,
         mParticle.forwarder.process({
             EventName: 'eCommerce - AddToCart',
             EventDataType: MessageType.Commerce,
-            EventCategory: CommerceEventType.AddToCart,
+            EventCategory: CommerceEventType.ProductAddToCart,
             EventAttributes: customAttributes,
             CurrencyCode: 'USD',
             ProductAction: {
@@ -1588,7 +1574,7 @@ USD,
         window.appboy.logCustomEventCalled.should.equal(true);
 
         var expectedNonPurchaseCommerceEvent = {
-            name: 'eCommerce - AddToCart',
+            name: 'eCommerce - add_to_cart',
             eventProperties: {
                 'Transaction Id': 91234,
                 foo: 'bar',
@@ -1675,7 +1661,7 @@ USD,
         });
 
         var expectedPurchaseEvent = [
-            'eCommerce - Purchase',
+            'eCommerce - purchase',
             50,
             1,
             {
@@ -1710,7 +1696,7 @@ USD,
         window.appboy.should.have.property('logPurchaseEventCalled', true);
         window.appboy.should.have.property(
             'logPurchaseName',
-            'eCommerce - Purchase'
+            'eCommerce - purchase'
         );
         var purchaseEventProperties = window.appboy.purchaseEventProperties[0];
 
@@ -1786,7 +1772,7 @@ USD,
             const promotionEvent = window.appboy.loggedEvents[0];
 
             const expectedPromotionEvent = {
-                name: 'eCommerce - PromotionClick',
+                name: 'eCommerce - click',
                 eventProperties: {
                     promotions: [
                         {
