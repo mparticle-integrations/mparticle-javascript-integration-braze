@@ -32,21 +32,7 @@ describe('Braze Forwarder', function() {
                 return 'blahblah';
             },
         },
-        CommerceEventType = {
-            ProductAddToCart: 10,
-            ProductRemoveFromCart: 11,
-            ProductCheckout: 12,
-            ProductCheckoutOption: 13,
-            ProductClick: 14,
-            ProductViewDetail: 15,
-            ProductPurchase: 16,
-            ProductRefund: 17,
-            PromotionView: 18,
-            PromotionClick: 19,
-            ProductAddToWishlist: 20,
-            ProductRemoveFromWishlist: 21,
-            ProductImpression: 22,
-        },
+        CommerceEventType = mParticle.CommerceEventType,
         IdentityType = {
             Other: 0,
             CustomerId: 1,
@@ -1542,7 +1528,7 @@ USD,
         mParticle.forwarder.process({
             EventName: 'eCommerce - AddToCart',
             EventDataType: MessageType.Commerce,
-            EventCategory: CommerceEventType.AddToCart,
+            EventCategory: CommerceEventType.ProductAddToCart,
             EventAttributes: customAttributes,
             CurrencyCode: 'USD',
             ProductAction: {
@@ -1576,7 +1562,7 @@ USD,
         window.braze.logCustomEventCalled.should.equal(true);
 
         var expectedNonPurchaseCommerceEvent = {
-            name: 'eCommerce - AddToCart',
+            name: 'eCommerce - add_to_cart',
             eventProperties: {
                 'Transaction Id': 91234,
                 foo: 'bar',
@@ -1663,7 +1649,7 @@ USD,
         });
 
         var expectedPurchaseEvent = [
-            'eCommerce - Purchase',
+            'eCommerce - purchase',
             50,
             1,
             {
@@ -1698,7 +1684,7 @@ USD,
         window.braze.should.have.property('logPurchaseEventCalled', true);
         window.braze.should.have.property(
             'logPurchaseName',
-            'eCommerce - Purchase'
+            'eCommerce - purchase'
         );
         var purchaseEventProperties = window.braze.purchaseEventProperties[0];
 
@@ -1774,7 +1760,7 @@ USD,
             const promotionEvent = window.braze.loggedEvents[0];
 
             const expectedPromotionEvent = {
-                name: 'eCommerce - PromotionClick',
+                name: 'eCommerce - click',
                 eventProperties: {
                     promotions: [
                         {
