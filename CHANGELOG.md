@@ -2,8 +2,13 @@
 
 --
 
+## 4.0.2 - 2023-06-26
+- fix: Update @mparticle/web-sdk version in package.json
+- ci: Update node version (#35)
+- docs: Update readme to include Braze V4 SDK option (#28)
+
 ## 4.0.1 - 2023-06-12
-fix: Add suffix of v4 to forwarder (#21)
+- fix: Add suffix of v4 to forwarder (#21)
 
 ## 4.0.0 - 2022-10-19
 
