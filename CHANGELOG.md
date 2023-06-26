@@ -2,6 +2,10 @@
 
 --
 
+
+#### 3.0.8 - 2023-06-26
+-   fix: Update package.json, update logging to customer (#33)
+
 #### 3.0.7 - 2023-06-12
 -   fix: Add suffix of v3 to forwarder (#22)
 
