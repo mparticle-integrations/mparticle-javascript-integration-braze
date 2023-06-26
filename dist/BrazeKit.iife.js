@@ -305,7 +305,7 @@ var mpBrazeKitV3 = (function (exports) {
 	var name = 'Appboy',
 	    suffix = 'v3',
 	    moduleId = 28,
-	    version = '3.0.7',
+	    version = '3.0.8',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -730,7 +730,7 @@ var mpBrazeKitV3 = (function (exports) {
 	        customFlags
 	    ) {
 	        console.warn(
-	            'mParticle will soon update the Braze web kit and upgrade the Braze SDK that you are currently using from V3 to V4.  This will be an opt-in update, but we recommend you opt in when the update is available to get the latest bug fixes and features from Braze.  Please see https://docs.mparticle.com/integrations/braze/event for more information and necessary upgrade steps when you decide to opt in.'
+	            'mParticle now supports V4 of the Braze SDK. This is an opt-in update, and we recommend you opt in to get the latest bug fixes and features from Braze.  Please see https://docs.mparticle.com/integrations/braze/event for more information and necessary upgrade steps when you decide to opt in.'
 	        );
 	        // check to see if there is a logger for backwards compatibility, and if not, mock one to avoid errors
 	        if (!self.logger) {
