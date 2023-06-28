@@ -2,6 +2,9 @@
 
 --
 
+## 4.1.0 - 2023-06-28
+- feat: Support bundling products, impressions, and promotions as a single event (#36)
+
 ## 4.0.2 - 2023-06-26
 - fix: Update @mparticle/web-sdk version in package.json
 - ci: Update node version (#35)
