@@ -6,20 +6,14 @@
 </head>
 <body>
     <div id="mocha"></div>
-
+    <script src="../node_modules/@mparticle/web-sdk/dist/mparticle.js"></script>
     <script src="../node_modules/mocha/mocha.js"></script>
     <script src="../node_modules/should/should.js"></script>
     <script src="mockhttprequest.js"></script>
     <script>
-        var mp = function () {
-            var self = this;
-
-            this.addForwarder = function (forwarder) {
-                self.forwarder = new forwarder.constructor();
-            }
-        };
-
-        window.mParticle = new mp();
+        mParticle.addForwarder = function (forwarder) {
+            mParticle.forwarder = new forwarder.constructor();
+        }
     </script>
     <script src="../dist/BrazeKit.iife.js" data-cover></script>
 
