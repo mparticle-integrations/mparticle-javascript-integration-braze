@@ -19,7 +19,7 @@ Note that the following is only one example.  Everywhere you manually call `appb
 window.appboy.display.destroyFeed();
 ```
 
-Step 2: Roll out code changes to be used before February 15, 2023:
+Step 2: Roll out code changes prior to optin in to V4
 ```javascript
 if (window.appboy) {
 	window.appboy.display.destroyFeed();
@@ -27,12 +27,14 @@ if (window.appboy) {
 	window.braze.destroyFeed();
 }
 ```
-Step 3: After February 1, 2023, you can simplify your code after the mParticle Braze Web kit, which includes Braze SDK V4, has been released to our CDN:
+Step 3: Opt into Version 4.  Simply navigate to your connection settings and selection `Version 4` from the new Braze Web SDK Version drop down.  
+
+Step 4: After you opt in, you can simplify your code. We recommend testing and waiting at least 24 hours between opting in and removing previous instances of `appboy` and doing thorough testing of your application in a development environment to ensure everything is working:
 ```javascript
 window.braze.destroyFeed();
 ```
 
-Step 4: Push Notifications via service-worker.js
+Step 5: Push Notifications via service-worker.js
 If you use Push Notifications, we have updated the `service-worker.js` file.  In our testing, Braze’s push notifications work as expected regardless of what version of the service-worker is used, but we recommend updating this file to ensure future compatibility.  In your `service-worker.js` file, update the code to reference `https://static.mparticle.com/sdk/js/braze/service-worker-4.2.0.js` instead of `https://static.mparticle.com/sdk/js/braze/service-worker-3.5.0.js`.  Your `service-worker.js` file should now contain:
 
 ```javascript
