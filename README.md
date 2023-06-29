@@ -19,7 +19,7 @@ Note that the following is only one example.  Everywhere you manually call `appb
 window.appboy.display.destroyFeed();
 ```
 
-Step 2: Roll out code changes prior to optin in to V4
+Step 2: Roll out code changes prior to opting in to V4
 ```javascript
 if (window.appboy) {
 	window.appboy.display.destroyFeed();
