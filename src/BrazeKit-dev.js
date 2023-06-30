@@ -429,8 +429,25 @@ var constructor = function () {
                         );
                     }
                     var transactionId = mpEvent.ProductAction.TransactionId;
+                    var totalAmount = mpEvent.ProductAction.TotalAmount;
+                    var taxAmount = mpEvent.ProductAction.TaxAmount;
+                    var shippingAmount = mpEvent.ProductAction.ShippingAmount;
+                    var affiliation = mpEvent.ProductAction.Affiliation;
+
                     if (transactionId) {
                         commerceEventAttrs['Transaction Id'] = transactionId;
+                    }
+                    if (totalAmount) {
+                        commerceEventAttrs['Total Amount'] = totalAmount;
+                    }
+                    if (taxAmount) {
+                        commerceEventAttrs['Tax Amount'] = taxAmount;
+                    }
+                    if (shippingAmount) {
+                        commerceEventAttrs['Shipping Amount'] = shippingAmount;
+                    }
+                    if (affiliation) {
+                        commerceEventAttrs['Affiliation'] = affiliation;
                     }
             }
 
