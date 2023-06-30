@@ -1534,6 +1534,9 @@ USD,
             ProductAction: {
                 TransactionId: 91234,
                 TotalAmount: 50,
+                TaxAmount: 1,
+                ShippingAmount: 11,
+                Affiliation: 'affiliation',
                 ProductList: [
                     {
                         Price: 50,
@@ -1565,6 +1568,10 @@ USD,
             name: 'eCommerce - add_to_cart',
             eventProperties: {
                 'Transaction Id': 91234,
+                'Total Amount': 50,
+                'Tax Amount': 1,
+                'Shipping Amount': 11,
+                Affiliation: 'affiliation',
                 foo: 'bar',
                 baz: 'bar',
                 products: [
