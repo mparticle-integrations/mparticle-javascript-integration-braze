@@ -2,6 +2,9 @@
 
 --
 
+## 4.1.1 - 2023-06-30
+- fix: Support bundling products, impressions, and promotions as a single event (#36)
+
 ## 4.1.0 - 2023-06-28
 - feat: Support bundling products, impressions, and promotions as a single event (#36)
 
