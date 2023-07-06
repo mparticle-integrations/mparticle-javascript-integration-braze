@@ -755,6 +755,10 @@ var constructor = function () {
                 }
             }
 
+            if (true) {
+                //updated 
+            }
+
             if (testMode !== true) {
                 braze.initialize(forwarderSettings.apiKey, options);
                 finishBrazeInitialization(forwarderSettings);
