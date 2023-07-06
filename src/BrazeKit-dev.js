@@ -752,7 +752,7 @@ var constructor = function () {
                 var brazeFlags = mpCustomFlags[moduleId.toString()];
                 if (typeof brazeFlags.initOptions === 'function') {
                     brazeFlags.initOptions(options);
-                }git 
+                }
             }
 
             if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity.getCurrentuser().getMPID() != null) {
