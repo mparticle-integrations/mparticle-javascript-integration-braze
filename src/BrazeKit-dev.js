@@ -756,7 +756,7 @@ var constructor = function () {
             }
 
             if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity.getCurrentuser().getMPID() != null) {
-                onUserIdentified(mParitcle.Identity.getCurrentuser())
+                onUserIdentified(mParticle.Identity.getCurrentuser())
             }
 
             if (testMode !== true) {
