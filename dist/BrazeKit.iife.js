@@ -9172,7 +9172,7 @@ var mpBrazeKitV4 = (function (exports) {
 	var name = 'Appboy',
 	    suffix = 'v4',
 	    moduleId = 28,
-	    version = '4.1.0',
+	    version = '4.1.1',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -9583,8 +9583,25 @@ var mpBrazeKitV4 = (function (exports) {
 	                        );
 	                    }
 	                    var transactionId = mpEvent.ProductAction.TransactionId;
+	                    var totalAmount = mpEvent.ProductAction.TotalAmount;
+	                    var taxAmount = mpEvent.ProductAction.TaxAmount;
+	                    var shippingAmount = mpEvent.ProductAction.ShippingAmount;
+	                    var affiliation = mpEvent.ProductAction.Affiliation;
+
 	                    if (transactionId) {
 	                        commerceEventAttrs['Transaction Id'] = transactionId;
+	                    }
+	                    if (totalAmount) {
+	                        commerceEventAttrs['Total Amount'] = totalAmount;
+	                    }
+	                    if (taxAmount) {
+	                        commerceEventAttrs['Tax Amount'] = taxAmount;
+	                    }
+	                    if (shippingAmount) {
+	                        commerceEventAttrs['Shipping Amount'] = shippingAmount;
+	                    }
+	                    if (affiliation) {
+	                        commerceEventAttrs['Affiliation'] = affiliation;
 	                    }
 	            }
 
