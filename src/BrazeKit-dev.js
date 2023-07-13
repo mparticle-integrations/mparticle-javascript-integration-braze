@@ -755,16 +755,12 @@ var constructor = function () {
                 }
             }
 
-            if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity.getCurrentuser().getMPID() != null) {
-                onUserIdentified(mParticle.Identity.getCurrentuser())
-            }
-
             if (testMode !== true) {
                 braze.initialize(forwarderSettings.apiKey, options);
                 finishBrazeInitialization(forwarderSettings);
             } else {
                 if (!braze.initialize(forwarderSettings.apiKey, options)) {
-                    return 'Failed to initialize: ' + name;
+                    return 'Failed to initialize: ' + name;corrects 
                 }
                 finishBrazeInitialization(forwarderSettings);
             }
@@ -779,6 +775,11 @@ var constructor = function () {
     function finishBrazeInitialization(forwarderSettings) {
         braze.addSdkMetadata(['mp']);
         primeBrazeWebPush();
+
+        if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity.getCurrentUser().getMPID() != null) {
+            onUserIdentified(mParticle.Identity.getCurrentUser())
+        }
+        
         openSession(forwarderSettings);
     }
 

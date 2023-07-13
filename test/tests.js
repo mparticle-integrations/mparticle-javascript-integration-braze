@@ -244,10 +244,26 @@ describe('Braze Forwarder', function() {
             };
         },
         reportService = new ReportingService();
-
+        mParticle.Identity = {
+            getCurrentUser: function () {
+                return {
+                    getMPID: function () {
+                        return 'MPID123';
+                    },
+                    getUserIdentities: function () {
+                        return {
+                            userIdentities: {
+                                customerid: 'abc',
+                            },
+                        };
+                    },
+                };
+            },
+        };
     before(function() {
         // expandCommerceEvent is tightly coupled to mParticle being loaded
         // as well as having a few parameters on the Store.
+        // debugger;
         mParticle.init('test-key');
         mParticle.getInstance()._Store.sessionId = 'foo-session-id';
         mParticle.getInstance()._Store.dateLastEventSent = new Date();
@@ -1698,6 +1714,16 @@ USD,
         purchaseEventProperties.should.eql(expectedPurchaseEvent);
     });
 
+    it('should call changeUser and openSession on init with userIdentificationType MPID passed in forwarding settings', function() {   
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            userIdentificationType: 'MPID',
+        });
+
+        window.braze.userId.should.equal('MPID123');
+        window.braze.should.have.property('openSessionCalled', true);
+    });
+
     describe('promotion events', function() {
         const mpPromotionEvent = {
             EventName: 'eCommerce - PromotionClick',
@@ -2065,5 +2091,7 @@ USD,
 
             impressionEvent.should.eql(expectedImpressionEvent);
         });
+
+        
     });
 });

@@ -9914,7 +9914,7 @@ var mpBrazeKitV4 = (function (exports) {
 	                finishBrazeInitialization(forwarderSettings);
 	            } else {
 	                if (!braze.initialize(forwarderSettings.apiKey, options)) {
-	                    return 'Failed to initialize: ' + name;
+	                    return 'Failed to initialize: ' + name;corrects; 
 	                }
 	                finishBrazeInitialization(forwarderSettings);
 	            }
@@ -9929,6 +9929,26 @@ var mpBrazeKitV4 = (function (exports) {
 	    function finishBrazeInitialization(forwarderSettings) {
 	        braze.addSdkMetadata(['mp']);
 	        primeBrazeWebPush();
+	        
+	        // var user = {
+	        //         getUserIdentities: function() {
+	        //             return {
+	        //                 userIdentities: {
+	        //                     customerid: 'abc123',
+	        //                     email: 'test@test.com',
+	        //                     facebook: 'fbID1',
+	        //                 },
+	        //             };
+	        //         },
+	        //         getMPID: function() {
+	        //             return 'MPID123';
+	        //         },
+	        //     };
+
+	        if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity.getCurrentUser().getMPID() != null) {
+	            onUserIdentified(mParticle.Identity.getCurrentUser());
+	        }
+	        
 	        openSession(forwarderSettings);
 	    }
 
