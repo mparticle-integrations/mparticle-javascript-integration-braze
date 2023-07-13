@@ -9929,23 +9929,8 @@ var constructor = function () {
     function finishBrazeInitialization(forwarderSettings) {
         braze.addSdkMetadata(['mp']);
         primeBrazeWebPush();
-        
-        // var user = {
-        //         getUserIdentities: function() {
-        //             return {
-        //                 userIdentities: {
-        //                     customerid: 'abc123',
-        //                     email: 'test@test.com',
-        //                     facebook: 'fbID1',
-        //                 },
-        //             };
-        //         },
-        //         getMPID: function() {
-        //             return 'MPID123';
-        //         },
-        //     };
 
-        if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity.getCurrentUser().getMPID() != null) {
+        if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity != null && mParticle.Identity.getCurrentUser().getMPID() != null) {
             onUserIdentified(mParticle.Identity.getCurrentUser());
         }
         
