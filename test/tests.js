@@ -263,7 +263,6 @@ describe('Braze Forwarder', function() {
     before(function() {
         // expandCommerceEvent is tightly coupled to mParticle being loaded
         // as well as having a few parameters on the Store.
-        // debugger;
         mParticle.init('test-key');
         mParticle.getInstance()._Store.sessionId = 'foo-session-id';
         mParticle.getInstance()._Store.dateLastEventSent = new Date();
@@ -2091,7 +2090,5 @@ USD,
 
             impressionEvent.should.eql(expectedImpressionEvent);
         });
-
-        
     });
 });
