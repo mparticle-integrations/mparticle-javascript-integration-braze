@@ -9914,7 +9914,7 @@ var constructor = function () {
                 finishBrazeInitialization(forwarderSettings);
             } else {
                 if (!braze.initialize(forwarderSettings.apiKey, options)) {
-                    return 'Failed to initialize: ' + name;; 
+                    return 'Failed to initialize: ' + name;
                 }
                 finishBrazeInitialization(forwarderSettings);
             }
