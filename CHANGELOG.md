@@ -2,6 +2,10 @@
 
 --
 
+## 4.1.2 - 2023-07-25
+
+-   fix: Set MPID before open session ([#41](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/41))
+
 ## 4.1.1 - 2023-06-30
 - fix: Support bundling products, impressions, and promotions as a single event (#36)
 
