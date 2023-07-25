@@ -9172,7 +9172,7 @@ window.braze = require$$0;
 var name = 'Appboy',
     suffix = 'v4',
     moduleId = 28,
-    version = '4.1.1',
+    version = '4.1.2',
     MessageType = {
         PageView: 3,
         PageEvent: 4,
@@ -9929,6 +9929,11 @@ var constructor = function () {
     function finishBrazeInitialization(forwarderSettings) {
         braze.addSdkMetadata(['mp']);
         primeBrazeWebPush();
+
+        if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity != null && mParticle.Identity.getCurrentUser().getMPID() != null) {
+            onUserIdentified(mParticle.Identity.getCurrentUser());
+        }
+        
         openSession(forwarderSettings);
     }
 
