@@ -1144,6 +1144,56 @@ USD,
         mParticle.forwarder.msg.should.equal(expectedMessage);
     });
 
+    it('should log initial onUserIdentified message', function() {
+        var logs = [];
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            userIdentificationType: 'email',
+        });
+
+        mParticle.forwarder.logger = {
+            verbose: function(msg) {
+                logs.push(msg);
+            },
+        };
+        mParticle.forwarder.onUserIdentified({
+            getUserIdentities: function() {
+                return {
+                    userIdentities: { email: 'test@test.test' },
+                };
+            },
+        });
+
+        var expectedMessage = `mParticle - Braze Web Kit log:
+calling MpBrazeKit.onUserIdentified:\n`;
+
+        logs[0].should.equal(expectedMessage);
+    });
+
+    it('should log errors in onUserIdentified', function() {
+        var logs = [];
+
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            userIdentificationType: 'email',
+        });
+
+        mParticle.forwarder.logger = {
+            verbose: function(msg) {
+                logs.push(msg);
+            },
+        };
+
+        mParticle.forwarder.onUserIdentified({});
+
+        var expectedMessage = `mParticle - Braze Web Kit log:
+Error in calling MpBrazeKit.onUserIdentified:
+user.getUserIdentities is not a function,\n`;
+
+        logs[1].should.equal(expectedMessage);
+    });
+
     it('should not set baseUrl when passed an invalid cluster', function() {
         reportService.reset();
         window.braze = new MockBraze();

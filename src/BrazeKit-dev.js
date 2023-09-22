@@ -612,26 +612,35 @@ var constructor = function () {
 
     // onUserIdentified is not used in version 1 so there is no need to check for version number
     function onUserIdentified(user) {
-        var brazeUserIDType,
-            userIdentities = user.getUserIdentities().userIdentities;
+        kitLogger('calling MpBrazeKit.onUserIdentified');
 
-        if (forwarderSettings.userIdentificationType === 'MPID') {
-            brazeUserIDType = user.getMPID();
-        } else {
-            brazeUserIDType =
-                userIdentities[
-                    forwarderSettings.userIdentificationType.toLowerCase()
-                ];
-        }
+        try {
+            var brazeUserIDType,
+                userIdentities = user.getUserIdentities().userIdentities;
 
-        kitLogger('braze.changeUser', brazeUserIDType);
+            if (forwarderSettings.userIdentificationType === 'MPID') {
+                brazeUserIDType = user.getMPID();
+            } else {
+                brazeUserIDType =
+                    userIdentities[
+                        forwarderSettings.userIdentificationType.toLowerCase()
+                    ];
+            }
 
-        braze.changeUser(brazeUserIDType);
+            kitLogger('braze.changeUser', brazeUserIDType);
 
-        if (userIdentities.email) {
-            kitLogger('braze.getUser().setEmail', userIdentities.email);
+            braze.changeUser(brazeUserIDType);
 
-            braze.getUser().setEmail(userIdentities.email);
+            if (userIdentities.email) {
+                kitLogger('braze.getUser().setEmail', userIdentities.email);
+
+                braze.getUser().setEmail(userIdentities.email);
+            }
+        } catch (e) {
+            kitLogger(
+                'Error in calling MpBrazeKit.onUserIdentified',
+                e.message
+            );
         }
     }
 
