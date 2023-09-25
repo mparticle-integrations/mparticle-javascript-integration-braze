@@ -2,6 +2,10 @@
 
 --
 
+## 4.1.3 - 2023-09-25
+
+-   fix: Add custom logging for onUserIdentified [#42](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/42))
+
 ## 4.1.2 - 2023-07-25
 
 -   fix: Set MPID before open session ([#41](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/41))
