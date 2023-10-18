@@ -8,8 +8,8 @@ You can now select what version of the Braze SDK you want to use when setting up
 Please review the [Braze Changelog](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog#400) and [V4 migration guide](https://github.com/braze-inc/braze-web-sdk/blob/master/UPGRADE_GUIDE.md) to learn about the differences between V3 and V4 and what changes you will need to make in your code. The most significant breaking changes are the replacement of the `appboy` class name with `braze`, in addition to the removal and renaming of several APIs.
 
 You can opt into the latest major version of the Braze Web SDK whether you implement mParticle's Web SDK using npm or our snippet/CDN.
-* Customers who self-host mParticle via npm - You can use @mparticle/web-braze-kit version 4.0.0 in your package.json now! This has been available since 10/15/2022.
-* Customers who load mParticle via snippet/CDN - Opting in is available via the mParticle UI in your Braze connection settings.
+* Customers who self-host mParticle via npm - You should add @mparticle/web-braze-kit version 4.0.0 or greater in your package.json.  You must also select `Version 4` under `Braze Web SDK Version`  in the Braze connection settings.
+* Customers who load mParticle via snippet/CDN - You must  select `Version 4` under `Braze Web SDK Version`  in the Braze connection settings.
 
 Note that the following is only one example.  Everywhere you manually call `appboy` needs to be updated similar to the below. If you are using NPM, you can skip to step 3.  Please be sure to test your site fully in development prior to releasing.
 
@@ -27,7 +27,7 @@ if (window.appboy) {
 	window.braze.destroyFeed();
 }
 ```
-Step 3: After February 1, 2023, you can simplify your code after the mParticle Braze Web kit, which includes Braze SDK V4, has been released to our CDN:
+Step 3: Whether you are using the snippet or self hosting, you need to navigate to your Braze connection settings and select `Version 4` from the `Braze Web SDK Version` drop down.
 ```javascript
 window.braze.destroyFeed();
 ```
