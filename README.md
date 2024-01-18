@@ -33,10 +33,10 @@ window.braze.destroyFeed();
 ```
 
 Step 4: Push Notifications via service-worker.js
-If you use Push Notifications, we have updated the `service-worker.js` file.  In our testing, Braze’s push notifications work as expected regardless of what version of the service-worker is used, but we recommend updating this file to ensure future compatibility.  In your `service-worker.js` file, update the code to reference `https://static.mparticle.com/sdk/js/braze/service-worker-4.2.0.js` instead of `https://static.mparticle.com/sdk/js/braze/service-worker-3.5.0.js`.  Your `service-worker.js` file should now contain:
+If you use Push Notifications, we have updated the `service-worker.js` file.  In our testing, Braze’s push notifications work as expected regardless of what version of the service-worker is used, but we recommend updating this file to ensure future compatibility.  In your `service-worker.js` file, update the code to reference `https://static.mparticle.com/sdk/js/braze/service-worker-4.2.1.js` instead of `https://static.mparticle.com/sdk/js/braze/service-worker-3.5.0.js`.  Your `service-worker.js` file should now contain:
 
 ```javascript
-self.imports('https://static.mparticle.com/sdk/js/braze/service-worker-4.2.0.js')
+self.imports('https://static.mparticle.com/sdk/js/braze/service-worker-4.2.1.js')
 ```
 
 ### Transition from @mparticle/web-appboy-kit to @mparticle/web-braze-kit
