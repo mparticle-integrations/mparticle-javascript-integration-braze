@@ -745,6 +745,57 @@ describe('Braze Forwarder', function() {
         window.braze.should.have.property('logPurchaseName', '12345');
     });
 
+    it('should log a purchase event with SKU in place of product name if forwardSkuAsProductName and bundleCommerceEventData are true', function() {
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                forwardSkuAsProductName: 'True',
+                bundleCommerceEventData: 'True',
+            },
+            reportService.cb,
+            true,
+            null
+        );
+
+        mParticle.forwarder.process({
+            EventName: 'Test Purchase Event',
+            EventAttributes: {},
+            EventDataType: MessageType.Commerce,
+            EventCategory: CommerceEventType.ProductPurchase,
+            CurrencyCode: 'USD',
+            ProductAction: {
+                TransactionId: 1234,
+                TotalAmount: 50,
+                ProductList: [
+                    {
+                        Price: '50',
+                        Name: '$Product $Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: { $$$attri$bute: '$$$$what$ever' },
+                        Sku: '12345',
+                    },
+                    {
+                        Price: '50',
+                        Name: 'Another $Product $Name',
+                        TotalAmount: 50,
+                        Quantity: 1,
+                        Attributes: { $$$attri$bute: '$$$$what$ever2' },
+                        Sku: '2345',
+                    },
+                ],
+            },
+        });
+
+        window.braze.should.have.property('logPurchaseEventCalled', true);
+        braze.purchaseEventProperties[0][3].products[0].Name.should.equal(
+            '12345'
+        );
+        braze.purchaseEventProperties[0][3].products[1].Name.should.equal(
+            '2345'
+        );
+    });
+
     it('should log a page view with the page name if sendEventNameForPageView is true', function() {
         mParticle.forwarder.init(
             {
@@ -1002,7 +1053,7 @@ describe('Braze Forwarder', function() {
         // Braze's API expects a year from us, this test will break every year,
         // since setting the age = 10 in 2021 will mean the user is born in 2011,
         // but setting it in 2023 means the year is 2013.
-        window.braze.getUser().yearOfBirth.should.equal(2013);
+        window.braze.getUser().yearOfBirth.should.equal(2014);
         window.braze.getUser().dayOfBirth.should.equal(1);
         window.braze.getUser().monthOfBirth.should.equal(1);
         window.braze.getUser().phoneSet.should.equal('1234567890');
