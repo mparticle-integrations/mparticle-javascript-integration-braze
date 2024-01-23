@@ -70,6 +70,7 @@ var constructor = function () {
     };
 
     var bundleCommerceEventData = false;
+    var forwardSkuAsProductName = false;
 
     // A purchase event can either log a single event with all products
     // or multiple purchase events (one per product)
@@ -135,7 +136,7 @@ var constructor = function () {
             event.ProductAction.ProductList.forEach(function(product) {
                 var productName;
 
-                if (forwarderSettings.forwardSkuAsProductName === 'True') {
+                if (forwardSkuAsProductName) {
                     productName = product.Sku;
                 } else {
                     productName = product.Name;
@@ -510,11 +511,15 @@ var constructor = function () {
 
     function parseProduct(_product) {
         var product = {};
-
         for (var key in _product) {
             switch (key) {
                 case 'Sku':
                     product.Id = _product[key];
+                    break;
+                case 'Name':
+                    product.Name = forwardSkuAsProductName
+                        ? _product.Sku
+                        : _product.Name;
                     break;
                 case 'CouponCode':
                     product['Coupon Code'] = _product[key];
@@ -724,6 +729,8 @@ var constructor = function () {
             forwarderSettings = settings;
             bundleCommerceEventData =
                 forwarderSettings.bundleCommerceEventData === 'True';
+            forwardSkuAsProductName =
+                forwarderSettings.forwardSkuAsProductName === 'True';
             reportingService = service;
             // 30 min is Braze default
             options.sessionTimeoutInSeconds =
