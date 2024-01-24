@@ -2,6 +2,10 @@
 
 --
 
+## 4.1.4 - 2024-01-24
+
+-   fix: Forward SKU as product name when ecommerce events are bundled [#47](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/47)
+
 ## 4.1.3 - 2023-09-25
 
 -   fix: Add custom logging for onUserIdentified [#42](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/42))
