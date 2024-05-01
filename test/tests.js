@@ -971,7 +971,7 @@ describe('Braze Forwarder', function() {
         delete mParticle.getVersion;
     });
 
-    it('should set an identity on the user upon kit initialization', function() {
+    it('should set an identity on the user upon kit initialization when userIdentificationType is email', function() {
         mParticle.forwarder.init({
             apiKey: '123456',
             userIdentificationType: 'Email',
