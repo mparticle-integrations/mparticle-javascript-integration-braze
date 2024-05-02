@@ -632,9 +632,11 @@ var constructor = function () {
                     ];
             }
 
-            kitLogger('braze.changeUser', brazeUserIDType);
+            if (brazeUserIDType) {
+                kitLogger('braze.changeUser', brazeUserIDType);
 
-            braze.changeUser(brazeUserIDType);
+                braze.changeUser(brazeUserIDType);
+            }
 
             if (userIdentities.email) {
                 kitLogger('braze.getUser().setEmail', userIdentities.email);
