@@ -632,9 +632,11 @@ var constructor = function () {
                     ];
             }
 
-            kitLogger('braze.changeUser', brazeUserIDType);
+            if (brazeUserIDType) {
+                kitLogger('braze.changeUser', brazeUserIDType);
 
-            braze.changeUser(brazeUserIDType);
+                braze.changeUser(brazeUserIDType);
+            }
 
             if (userIdentities.email) {
                 kitLogger('braze.getUser().setEmail', userIdentities.email);
@@ -792,10 +794,16 @@ var constructor = function () {
         braze.addSdkMetadata(['mp']);
         primeBrazeWebPush();
 
-        if (forwarderSettings.userIdentificationType === 'MPID' && mParticle.Identity != null && mParticle.Identity.getCurrentUser().getMPID() != null) {
-            onUserIdentified(mParticle.Identity.getCurrentUser())
+        const currentUser =
+            mParticle.Identity !== null
+                ? mParticle.Identity.getCurrentUser()
+                : null;
+        const mpid = currentUser ? currentUser.getMPID() : null;
+
+        if (currentUser && mpid) {
+            onUserIdentified(currentUser);
         }
-        
+
         openSession(forwarderSettings);
     }
 

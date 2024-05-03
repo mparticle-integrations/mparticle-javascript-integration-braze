@@ -254,6 +254,7 @@ describe('Braze Forwarder', function() {
                         return {
                             userIdentities: {
                                 customerid: 'abc',
+                                email: 'email@gmail.com'
                             },
                         };
                     },
@@ -968,6 +969,25 @@ describe('Braze Forwarder', function() {
         (window.braze.getUser().emailSet === null).should.equal(true);
 
         delete mParticle.getVersion;
+    });
+
+    it('should set an identity on the user upon kit initialization when userIdentificationType is email', function() {
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            userIdentificationType: 'Email',
+        });
+
+        window.braze.userId.should.equal('email@gmail.com');
+        window.braze.getUser().emailSet.should.equal('email@gmail.com');
+    });
+
+    it('should not attempt to set an identity on braze if the userIdentificationType does not exist on the customer', function() {
+        mParticle.forwarder.init({
+            apiKey: '123456',
+            userIdentificationType: 'other2',
+        });
+
+        Should(window.braze.userId).equal(null);
     });
 
     it('should set main braze user identity from userIdentificationType ', function() {
