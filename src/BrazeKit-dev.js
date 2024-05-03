@@ -794,9 +794,12 @@ var constructor = function () {
         braze.addSdkMetadata(['mp']);
         primeBrazeWebPush();
 
-        const currentUser = mParticle.Identity != null ? mParticle.Identity.getCurrentUser() : null;
-        const mpid = currentUser.getMPID();
-        
+        const currentUser =
+            mParticle.Identity !== null
+                ? mParticle.Identity.getCurrentUser()
+                : null;
+        const mpid = currentUser ? currentUser.getMPID() : null;
+
         if (currentUser && mpid) {
             onUserIdentified(currentUser);
         }
