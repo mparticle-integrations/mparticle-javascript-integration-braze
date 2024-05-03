@@ -794,11 +794,11 @@ var constructor = function () {
         braze.addSdkMetadata(['mp']);
         primeBrazeWebPush();
 
-        if (
-            mParticle.Identity != null &&
-            mParticle.Identity.getCurrentUser().getMPID() != null
-        ) {
-            onUserIdentified(mParticle.Identity.getCurrentUser());
+        const currentUser = mParticle.Identity != null ? mParticle.Identity.getCurrentUser() : null;
+        const mpid = currentUser.getMPID();
+        
+        if (currentUser && mpid) {
+            onUserIdentified(currentUser);
         }
 
         openSession(forwarderSettings);
