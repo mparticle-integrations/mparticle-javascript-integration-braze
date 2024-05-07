@@ -2,6 +2,10 @@
 
 --
 
+## 4.1.5 - 2024-05-07
+
+-   fix: Allow any userIdentificationType to be used when initializing kit (#48)
+
 ## 4.1.4 - 2024-01-24
 
 -   fix: Forward SKU as product name when ecommerce events are bundled [#47](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/47)
