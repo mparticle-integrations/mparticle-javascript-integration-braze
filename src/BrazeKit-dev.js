@@ -129,6 +129,8 @@ var constructor = function () {
             quantity,
             eventAttributes
         );
+
+        return reportEvent;
     }
 
     function logPurchaseEventPerProduct(event) {

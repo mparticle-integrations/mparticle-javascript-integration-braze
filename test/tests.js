@@ -1756,6 +1756,7 @@ user.getUserIdentities is not a function,\n`;
             baz: 'bar',
         };
 
+        debugger;
         mParticle.forwarder.process({
             EventName: 'eCommerce - Purchase',
             EventDataType: MessageType.Commerce,
@@ -1832,6 +1833,8 @@ user.getUserIdentities is not a function,\n`;
         var purchaseEventProperties = window.braze.purchaseEventProperties[0];
 
         purchaseEventProperties.should.eql(expectedPurchaseEvent);
+
+        reportService.event.should.be.ok();
     });
 
     it('should call changeUser and openSession on init with userIdentificationType MPID passed in forwarding settings', function() {   
