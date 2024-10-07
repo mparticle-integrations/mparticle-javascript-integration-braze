@@ -130,7 +130,7 @@ var constructor = function () {
             eventAttributes
         );
 
-        return reportEvent;
+        return reportEvent === true;
     }
 
     function logPurchaseEventPerProduct(event) {
