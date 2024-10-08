@@ -1832,6 +1832,11 @@ user.getUserIdentities is not a function,\n`;
         var purchaseEventProperties = window.braze.purchaseEventProperties[0];
 
         purchaseEventProperties.should.eql(expectedPurchaseEvent);
+
+        reportService.event.should.have.property(
+            'EventName',
+            'eCommerce - Purchase'
+        );
     });
 
     it('should call changeUser and openSession on init with userIdentificationType MPID passed in forwarding settings', function() {   
