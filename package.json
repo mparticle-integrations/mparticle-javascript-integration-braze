@@ -12,7 +12,9 @@
     "scripts": {
         "build": "rollup --config rollup.config.js",
         "watch": "rollup --config rollup.config.js -w",
-        "test": "node test/boilerplate/test-karma.js"
+        "test": "node test/boilerplate/test-karma.js",
+        "watch:tests": "ENVIRONMENT=production rollup --config rollup.test.config.js -w",
+        "test:debug": "npm run build && npm run build:test && DEBUG=true karma start test/karma.config.js"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "22.0.1",
