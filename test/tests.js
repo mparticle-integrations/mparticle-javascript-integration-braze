@@ -80,7 +80,6 @@ describe('Braze Forwarder', function() {
             this.monthOfBirth = null;
             this.dayOfBirth = null;
             this.customAttributes = {};
-            // this.customAttributeValue = null;
 
             this.customAttributeSet = false;
 
@@ -1121,7 +1120,6 @@ describe('Braze Forwarder', function() {
         mParticle.forwarder.setUserAttribute('test', 'result');
         window.braze.getUser().should.have.property('customAttributeSet', true);
         window.braze.getUser().customAttributes['test'].should.equal('result');;
-        // window.braze.getUser().customAttributeValue.
     });
 
     it('should set a custom user attribute of diffferent types', function() {
