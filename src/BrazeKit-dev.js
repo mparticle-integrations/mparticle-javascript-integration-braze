@@ -726,9 +726,11 @@ var constructor = function () {
             userConsentState
         );
 
-        latestUserBrazeConsentString = JSON.stringify(currentConsentPayload);
+        if (!isEmpty(currentConsentPayload)) {
+            latestUserBrazeConsentString = JSON.stringify(
+                currentConsentPayload
+            );
 
-        if (latestUserBrazeConsentString.length) {
             setConsentOnBraze(currentConsentPayload);
         }
     }
@@ -742,7 +744,7 @@ var constructor = function () {
     }
 
     function maybeSetConsentBeforeEventLogged(event) {
-        if (latestUserBrazeConsentString && parsedConsentMappings.length) {
+        if (latestUserBrazeConsentString && !isEmpty(parsedConsentMappings)) {
             var eventConsentState = getEventConsentState(event.ConsentState);
 
             if (!isEmpty(eventConsentState)) {
