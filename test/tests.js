@@ -1920,7 +1920,7 @@ user.getUserIdentities is not a function,\n`;
             window.braze.user.customAttributeSet.should.equal(false);
         });
 
-        it('user consent should not be updated if a customer does not change his consent before logging an event', function() {
+        it('should not update user consent if a customer does not change consent before logging an event', function() {
             mParticle.forwarder.init({
                 apiKey: '123456',
                 userIdentificationType: 'MPID',
@@ -1968,7 +1968,7 @@ user.getUserIdentities is not a function,\n`;
             window.braze.user.customAttributeSet.should.equal(false);
         });
 
-        it('user consent should be updated if an event has a different consent than the previously set consent', function() {
+        it('should update user consent if an event has a different consent than the previously set consent', function() {
             mParticle.forwarder.init({
                 apiKey: '123456',
                 userIdentificationType: 'MPID',
