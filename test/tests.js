@@ -79,8 +79,7 @@ describe('Braze Forwarder', function() {
             this.yearOfBirth = null;
             this.monthOfBirth = null;
             this.dayOfBirth = null;
-            this.customAttribute = null;
-            this.customAttributeValue = null;
+            this.customAttributes = {};
 
             this.customAttributeSet = false;
 
@@ -136,8 +135,7 @@ describe('Braze Forwarder', function() {
 
             this.setCustomUserAttribute = function(key, value) {
                 self.customAttributeSet = true;
-                self.customAttribute = key;
-                self.customAttributeValue = !value ? '' : value;
+                self.customAttributes[key] = value;
             };
         },
         MockBraze = function() {
@@ -254,7 +252,25 @@ describe('Braze Forwarder', function() {
                         return {
                             userIdentities: {
                                 customerid: 'abc',
-                                email: 'email@gmail.com'
+                                email: 'email@gmail.com',
+                            },
+                        };
+                    },
+                    getConsentState: function() {
+                        return {
+                            getGDPRConsentState: function() {
+                                return {
+                                    'test purpose': {
+                                        Consented: false,
+                                        Timestamp: 1,
+                                        Document: 'some_consent',
+                                    },
+                                    'test 2': {
+                                        Consented: false,
+                                        Timestamp: 1,
+                                        Document: 'test_consent',
+                                    },
+                                };
                             },
                         };
                     },
@@ -1103,30 +1119,31 @@ describe('Braze Forwarder', function() {
     it('should set a custom user attribute', function() {
         mParticle.forwarder.setUserAttribute('test', 'result');
         window.braze.getUser().should.have.property('customAttributeSet', true);
-        window.braze.getUser().customAttribute.should.equal('test');
-        window.braze.getUser().customAttributeValue.should.equal('result');
+        window.braze.getUser().customAttributes['test'].should.equal('result');;
     });
 
     it('should set a custom user attribute of diffferent types', function() {
         mParticle.forwarder.setUserAttribute('testint', 3);
-        window.braze.getUser().customAttributeValue.should.equal(3);
+        window.braze.getUser().customAttributes['testint'].should.equal(3);
         var d = new Date();
         mParticle.forwarder.setUserAttribute('testdate', d);
-        window.braze.getUser().customAttributeValue.should.equal(d);
+        window.braze.getUser().customAttributes['testdate'].should.equal(d);
         mParticle.forwarder.setUserAttribute('testarray', ['3']);
-        window.braze.getUser().customAttributeValue[0].should.equal('3');
+        window.braze.getUser().customAttributes['testarray'][0].should.equal('3');
     });
 
     it('should sanitize a custom user attribute', function() {
         mParticle.forwarder.setUserAttribute('$$tes$t', '$$res$ult');
         window.braze.getUser().should.have.property('customAttributeSet', true);
-        window.braze.getUser().customAttribute.should.equal('tes$t');
-        window.braze.getUser().customAttributeValue.should.equal('res$ult');
+        window.braze
+            .getUser()
+            .customAttributes['tes$t'].should.equal('res$ult');
     });
 
     it('should sanitize a custom user attribute array', function() {
         mParticle.forwarder.setUserAttribute('att array', ['1', '$2$']);
-        window.braze.getUser().customAttributeValue[1].should.equal('2$');
+        window.braze.getUser().customAttributes['att array'][0].should.equal('1');
+        window.braze.getUser().customAttributes['att array'][1].should.equal('2$');
     });
 
     it('should not set a custom user attribute array on an invalid array', function() {
@@ -1145,15 +1162,13 @@ describe('Braze Forwarder', function() {
     it('should remove custom user attributes', function() {
         mParticle.forwarder.setUserAttribute('test', 'result');
         mParticle.forwarder.removeUserAttribute('test');
-        window.braze.getUser().customAttribute.should.equal('test');
-        window.braze.getUser().customAttributeValue.should.equal('');
+        (window.braze.getUser().customAttributes['test'] === null).should.equal(true);
     });
 
     it('should remove custom user attributes', function() {
         mParticle.forwarder.setUserAttribute('$$test', '$res$ul$t');
         mParticle.forwarder.removeUserAttribute('$test');
-        window.braze.getUser().customAttribute.should.equal('test');
-        window.braze.getUser().customAttributeValue.should.equal('');
+        (window.braze.getUser().customAttributes['test'] === null).should.equal(true);
     });
 
     it('should not set date of birth if passed an invalid value', function() {
@@ -1847,6 +1862,160 @@ user.getUserIdentities is not a function,\n`;
 
         window.braze.userId.should.equal('MPID123');
         window.braze.should.have.property('openSessionCalled', true);
+    });
+
+    describe('consent', function() {
+        beforeEach(function() {
+            window.braze = new MockBraze();
+        });
+        // consentMappingSdk below parses to:
+        // [{
+        //  map: 'Test Purpose',
+        //  value: 'google_ad_personalization'
+        // },
+        // {
+        //  map: 'Test 2,
+        //  value 'google_ad_user_data'
+        // }]
+        const consentMappingSDK =
+            '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;Test Purpose&quot;,&quot;maptype&quot;:&quot;ConsentPurposes&quot;,&quot;value&quot;:&quot;google_ad_personalization&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;Test 2&quot;,&quot;maptype&quot;:&quot;ConsentPurposes&quot;,&quot;value&quot;:&quot;google_ad_user_data&quot;}]';
+
+        it('should not call setCustomUserAttribute on user if there is no consentMappingSdk setting', function() {
+            mParticle.forwarder.init({
+                apiKey: '123456',
+                userIdentificationType: 'MPID',
+            });
+
+            window.braze.user.customAttributeSet = false;
+        });
+
+        it('should call setCustomUserAttribute on user if consent is set and consentMappingSdk is set, and there are mapped users', function() {
+            mParticle.forwarder.init({
+                apiKey: '123456',
+                userIdentificationType: 'MPID',
+                consentMappingSDK: consentMappingSDK,
+            });
+
+            window.braze.user.customAttributeSet = true;
+
+            var expectedResult = {
+                $google_ad_personalization: false,
+                $google_ad_user_data: false,
+            };
+
+            window.braze.user.customAttributes.should.deepEqual(expectedResult);
+        });
+
+        it('should not call setCustomUserAttribute on user if consent is set and consentMappingSdk is set, but user consent does not map to consentMappingSdk', function() {
+            // The below changes consent mapping purposes to Foo Purpose and Test 1 for this one test
+            const consentMappingSDK =
+                '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;Foo Purpose&quot;,&quot;maptype&quot;:&quot;ConsentPurposes&quot;,&quot;value&quot;:&quot;google_ad_personalization&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;Test 1&quot;,&quot;maptype&quot;:&quot;ConsentPurposes&quot;,&quot;value&quot;:&quot;google_ad_user_data&quot;}]';
+            mParticle.forwarder.init({
+                apiKey: '123456',
+                userIdentificationType: 'MPID',
+                consentMappingSDK: consentMappingSDK,
+            });
+
+            window.braze.user.customAttributeSet.should.equal(false);
+        });
+
+        it('should not update user consent if a customer does not change consent before logging an event', function() {
+            mParticle.forwarder.init({
+                apiKey: '123456',
+                userIdentificationType: 'MPID',
+                consentMappingSDK: consentMappingSDK,
+            });
+
+            window.braze.user.customAttributeSet.should.equal(true);
+
+            var expectedResult = {
+                $google_ad_personalization: false,
+                $google_ad_user_data: false,
+            };
+
+            window.braze.user.customAttributes.should.deepEqual(expectedResult);
+
+            // reset braze.user.customAttributes and customAttributeSet for the below tests
+            window.braze = new MockBraze();
+
+            window.braze.user.customAttributes.should.deepEqual({});
+            window.braze.user.customAttributeSet.should.equal(false);
+
+            mParticle.forwarder.process({
+                EventName: 'Test Event',
+                EventDataType: MessageType.PageEvent,
+                ConsentState: {
+                    getGDPRConsentState: function () {
+                        return {
+                            'test purpose': {
+                                Consented: false,
+                                Timestamp: Date.now(),
+                                Document: 'test purpose',
+                            },
+                            'test 2': {
+                                Consented: false,
+                                Timestamp: Date.now(),
+                                Document: 'test 2',
+                            },
+                        };
+                    },
+                },
+            });
+
+            // these settings not being updated from the tests immediately before .process above means that setCustomUserAttribute was not set
+            window.braze.user.customAttributes.should.deepEqual({});
+            window.braze.user.customAttributeSet.should.equal(false);
+        });
+
+        it('should update user consent if an event has a different consent than the previously set consent', function() {
+            mParticle.forwarder.init({
+                apiKey: '123456',
+                userIdentificationType: 'MPID',
+                consentMappingSDK: consentMappingSDK,
+            });
+
+            window.braze.user.customAttributeSet.should.equal(true);
+
+            var expectedResult = {
+                $google_ad_personalization: false,
+                $google_ad_user_data: false,
+            };
+
+            window.braze.user.customAttributes.should.deepEqual(expectedResult);
+
+            // reset braze.user.customAttributes and customAttributeSet
+            window.braze = new MockBraze();
+
+            window.braze.user.customAttributes.should.deepEqual({});
+            window.braze.user.customAttributeSet.should.equal(false);
+
+            mParticle.forwarder.process({
+                EventName: 'Test Event',
+                EventDataType: MessageType.PageEvent,
+                ConsentState: {
+                    getGDPRConsentState: function () {
+                        return {
+                            'test purpose': {
+                                Consented: true,
+                                Timestamp: Date.now(),
+                                Document: 'test purpose',
+                            },
+                            'test 2': {
+                                Consented: true,
+                                Timestamp: Date.now(),
+                                Document: 'test 2',
+                            },
+                        };
+                    },
+                },
+            });
+
+            window.braze.user.customAttributes.should.deepEqual({
+                $google_ad_personalization: true,
+                $google_ad_user_data: true,
+            });
+            window.braze.user.customAttributeSet.should.equal(true);
+        });
     });
 
     describe('promotion events', function() {
