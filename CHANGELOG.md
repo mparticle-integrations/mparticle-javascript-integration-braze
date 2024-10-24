@@ -2,6 +2,11 @@
 
 --
 
+## 4.2.0 - 2024-10-24
+
+-   fix: Report purchase events to mParticle when bundling ecommerce data [#50](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/50)
+-   feat: Implement Google EU Consent [#51](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/51)
+
 ## 4.1.5 - 2024-05-07
 
 -   fix: Allow any userIdentificationType to be used when initializing kit (#48)
