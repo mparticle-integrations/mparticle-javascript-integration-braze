@@ -1876,8 +1876,7 @@ user.getUserIdentities is not a function,\n`;
         // {
         //  map: 'Test 2,
         //  value 'google_ad_user_data'
-        // }
-        // ]
+        // }]
         const consentMappingSDK =
             '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;Test Purpose&quot;,&quot;maptype&quot;:&quot;ConsentPurposes&quot;,&quot;value&quot;:&quot;google_ad_personalization&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;Test 2&quot;,&quot;maptype&quot;:&quot;ConsentPurposes&quot;,&quot;value&quot;:&quot;google_ad_user_data&quot;}]';
 
