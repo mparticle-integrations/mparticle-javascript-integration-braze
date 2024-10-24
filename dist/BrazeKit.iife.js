@@ -9172,7 +9172,7 @@ var mpBrazeKitV4 = (function (exports) {
 	var name = 'Appboy',
 	    suffix = 'v4',
 	    moduleId = 28,
-	    version = '4.1.5',
+	    version = '4.2.0',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -9197,6 +9197,8 @@ var mpBrazeKitV4 = (function (exports) {
 	        forwarderSettings,
 	        options = {},
 	        reportingService,
+	        hasConsentMappings,
+	        parsedConsentMappings,
 	        mpCustomFlags;
 
 	    self.name = name;
@@ -9225,6 +9227,13 @@ var mpBrazeKitV4 = (function (exports) {
 
 	    var bundleCommerceEventData = false;
 	    var forwardSkuAsProductName = false;
+
+	    var brazeConsentKeys = [
+	        '$google_ad_user_data',
+	        '$google_ad_personalization'
+	    ];
+
+	    var latestUserBrazeConsentString;
 
 	    // A purchase event can either log a single event with all products
 	    // or multiple purchase events (one per product)
@@ -9283,6 +9292,8 @@ var mpBrazeKitV4 = (function (exports) {
 	            quantity,
 	            eventAttributes
 	        );
+
+	        return reportEvent === true;
 	    }
 
 	    function logPurchaseEventPerProduct(event) {
@@ -9516,6 +9527,7 @@ var mpBrazeKitV4 = (function (exports) {
 	    /**************************/
 	    function processEvent(event) {
 	        var reportEvent = false;
+	        maybeSetConsentBeforeEventLogged(event);
 
 	        if (event.EventDataType == MessageType.Commerce) {
 	            reportEvent = logCommerceEvent(event);
@@ -9861,6 +9873,110 @@ var mpBrazeKitV4 = (function (exports) {
 	        }
 	    }
 
+	    function prepareInitialConsent(user) {
+	        var userConsentState = getUserConsentState(user);
+
+	        var currentConsentPayload = generateBrazeConsentStatePayload(
+	            userConsentState
+	        );
+
+	        if (!isEmpty(currentConsentPayload)) {
+	            latestUserBrazeConsentString = JSON.stringify(
+	                currentConsentPayload
+	            );
+
+	            setConsentOnBraze(currentConsentPayload);
+	        }
+	    }
+
+	    function setConsentOnBraze(currentConsentPayload) {
+	        for (var key in currentConsentPayload) {
+	            braze
+	                .getUser()
+	                .setCustomUserAttribute(key, currentConsentPayload[key]);
+	        }
+	    }
+
+	    function maybeSetConsentBeforeEventLogged(event) {
+	        if (latestUserBrazeConsentString && !isEmpty(parsedConsentMappings)) {
+	            var eventConsentState = getEventConsentState(event.ConsentState);
+
+	            if (!isEmpty(eventConsentState)) {
+	                var eventBrazeConsent = generateBrazeConsentStatePayload(
+	                    eventConsentState
+	                );
+	                var eventBrazeConsentAsString = JSON.stringify(
+	                    eventBrazeConsent
+	                );
+
+	                if (
+	                    eventBrazeConsentAsString !== latestUserBrazeConsentString
+	                ) {
+	                    setConsentOnBraze(eventBrazeConsent);
+	                    latestUserBrazeConsentString = eventBrazeConsentAsString;
+	                }
+	            }
+	        }
+	    }
+
+	    function getEventConsentState(eventConsentState) {
+	        return eventConsentState && eventConsentState.getGDPRConsentState
+	            ? eventConsentState.getGDPRConsentState()
+	            : {};
+	    }
+
+	    function generateBrazeConsentStatePayload(consentState) {
+	        if (!parsedConsentMappings) return {};
+
+	        var payload = {};
+
+	        // These are Braze's consent constants for Braze's Audience Sync to Google
+	        // https://www.braze.com/docs/partners/canvas_steps/google_audience_sync
+
+	        var googleToBrazeConsentMap = {
+	            google_ad_user_data: '$google_ad_user_data',
+	            google_ad_personalization: '$google_ad_personalization',
+	        };
+
+	        for (var i = 0; i <= parsedConsentMappings.length - 1; i++) {
+	            var mappingEntry = parsedConsentMappings[i];
+	            // Although consent purposes can be inputted into the UI in any casing
+	            // the SDK will automatically lowercase them to prevent pseudo-duplicate
+	            // consent purposes, so we call `toLowerCase` on the consentMapping purposes here
+	            var mpMappedConsentName = mappingEntry.map.toLowerCase();
+	            // that mappingEntry.value returned from the server does not have a $ appended, so we have to add it
+	            var brazeMappedConsentName =
+	                googleToBrazeConsentMap[mappingEntry.value];
+
+	            if (
+	                consentState[mpMappedConsentName] &&
+	                brazeMappedConsentName &&
+	                brazeConsentKeys.indexOf(brazeMappedConsentName) !== -1
+	            ) {
+	                payload[brazeMappedConsentName] =
+	                    consentState[mpMappedConsentName].Consented;
+	            }
+	        }
+
+	        return payload;
+	    }
+
+	    function getUserConsentState(user) {
+	        var userConsentState = {};
+
+	        var consentState = user.getConsentState();
+
+	        if (consentState && consentState.getGDPRConsentState) {
+	            userConsentState = consentState.getGDPRConsentState();
+	        }
+
+	        return userConsentState;
+	    }
+
+	    function parseConsentSettingsString(consentMappingString) {
+	        return JSON.parse(consentMappingString.replace(/&quot;/g, '"'));
+	    }
+
 	    function initForwarder(
 	        settings,
 	        service,
@@ -9905,6 +10021,15 @@ var mpBrazeKitV4 = (function (exports) {
 	            if (forwarderSettings.serviceWorkerLocation) {
 	                options.serviceWorkerLocation =
 	                    forwarderSettings.serviceWorkerLocation;
+	            }
+
+	            if (forwarderSettings.consentMappingSDK) {
+	                parsedConsentMappings = parseConsentSettingsString(
+	                    forwarderSettings.consentMappingSDK
+	                );
+	                if (parsedConsentMappings.length) {
+	                    hasConsentMappings = true;
+	                }
 	            }
 
 	            var cluster =
@@ -9956,6 +10081,9 @@ var mpBrazeKitV4 = (function (exports) {
 
 	        if (currentUser && mpid) {
 	            onUserIdentified(currentUser);
+	            if (hasConsentMappings) {
+	                prepareInitialConsent(currentUser);
+	            }
 	        }
 
 	        openSession(forwarderSettings);
@@ -10142,6 +10270,10 @@ var mpBrazeKitV4 = (function (exports) {
 	    return (
 	        val != null && typeof val === 'object' && Array.isArray(val) === false
 	    );
+	}
+
+	function isEmpty(value) {
+	    return value == null || !(Object.keys(value) || value).length;
 	}
 
 	var BrazeKitDev = {
