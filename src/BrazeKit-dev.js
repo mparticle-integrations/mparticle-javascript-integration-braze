@@ -702,6 +702,7 @@ var constructor = function () {
             }
 
             // Display the message if it's a push primer message and shouldDisplay is true
+            // If it is not a push primer, we should show the message if the setting for register_inapp === 'True'
             if (
                 (pushPrimer && shouldDisplay) ||
                 (!pushPrimer && forwarderSettings.register_inapp === 'True')
