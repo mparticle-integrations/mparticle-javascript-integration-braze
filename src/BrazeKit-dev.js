@@ -16,7 +16,7 @@ window.braze = require('@braze/web-sdk');
 
 // This should remain Appboy and not Braze until the core SDK is able to parse the moduleID and not the name (go.mparticle.com/work/SQDSDKS-4655)
 var name = 'Appboy',
-    suffix = 'v4',
+    suffix = 'v5',
     moduleId = 28,
     version = '4.2.0',
     MessageType = {
@@ -666,27 +666,31 @@ var constructor = function () {
     function primeBrazeWebPush() {
         // The following code block is based on Braze's best practice for implementing
         // their push primer.  We only modify it to include pushPrimer and register_inapp settings.
-        // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/integration/#soft-push-prompts
+        // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/push_notifications/soft_push_prompt
         braze.subscribeToInAppMessage(function (inAppMessage) {
             var shouldDisplay = true;
             var pushPrimer = false;
             if (inAppMessage instanceof braze.InAppMessage) {
-                // Read the key-value pair for msg-id
-                var msgId = inAppMessage.extras['msg-id'];
-
-                // If this is our push primer message
-                if (msgId == 'push-primer') {
+                // access the key-value pairs, defined as `extras`
+                const keyValuePairs = inAppMessage.extras || {};
+                // check the value of our key `msg-id` defined in the Braze dashboard
+                if (keyValuePairs['msg-id'] === 'push-primer') {
                     pushPrimer = true;
-                    // We don't want to display the soft push prompt to users on browsers that don't support push, or if the user
-                    // has already granted/blocked permission
+                    // We don't want to display the soft push prompt to users on browsers
+                    // that don't support push, or if the user has already granted/blocked permission
                     if (
-                        !braze.isPushSupported() ||
+                        braze.isPushSupported() === false ||
                         braze.isPushPermissionGranted() ||
                         braze.isPushBlocked()
                     ) {
+                        // do not call `showInAppMessage`
                         shouldDisplay = false;
+                        return;
                     }
-                    if (inAppMessage.buttons[0] != null) {
+
+                    // user is eligible to receive the native prompt
+                    // register a click handler on one of the two buttons
+                    if (inAppMessage.buttons[0]) {
                         // Prompt the user when the first button is clicked
                         inAppMessage.buttons[0].subscribeToClickedEvent(
                             function() {
@@ -698,6 +702,7 @@ var constructor = function () {
             }
 
             // Display the message if it's a push primer message and shouldDisplay is true
+            // If it is not a push primer, we should show the message if the setting for register_inapp === 'True'
             if (
                 (pushPrimer && shouldDisplay) ||
                 (!pushPrimer && forwarderSettings.register_inapp === 'True')
@@ -854,7 +859,7 @@ var constructor = function () {
             options.sessionTimeoutInSeconds =
                 forwarderSettings.ABKSessionTimeoutKey || 1800;
             options.sdkFlavor = 'mparticle';
-            options.enableHtmlInAppMessages =
+            options.allowUserSuppliedJavascript =
                 forwarderSettings.enableHtmlInAppMessages == 'True';
             options.doNotLoadFontAwesome =
                 forwarderSettings.doNotLoadFontAwesome == 'True';
