@@ -2,6 +2,12 @@
 
 --
 
+## 5.5.0 - 2024-10-30
+
+⚠️ **Breaking** - The mParticle web Braze kit now supports Braze's Web SDK v5.5.0.  Breaking changes cna be viewed at [Braze's changelog](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog/#500). There may be API changes that affect you if you call `braze` directly from your code.
+-   feat: Support Braze Web SDK V5 [#52)](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/52)
+    * Full details about the changes and recommended code changes can be found on mParticle's [Braze integration docs page](https://docs.mparticle.com/integrations/braze/event).
+
 ## 4.2.0 - 2024-10-24
 
 -   fix: Report purchase events to mParticle when bundling ecommerce data [#50](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/50)
