@@ -142,7 +142,7 @@ var constructor = function () {
     }
 
     function logPurchaseEventPerProduct(event) {
-        var reportEvent;
+        var reportEvent = false;
         if (event.ProductAction.ProductList) {
             event.ProductAction.ProductList.forEach(function(product) {
                 var productName;
