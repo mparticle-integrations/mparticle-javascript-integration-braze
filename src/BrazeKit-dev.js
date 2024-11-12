@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 window.braze = require('@braze/web-sdk');
 //  Copyright 2015 mParticle, Inc.
 //
@@ -131,7 +130,7 @@ var constructor = function () {
             eventAttributes
         );
 
-        reportEvent = braze.logPurchase(
+        var reportEvent = braze.logPurchase(
             eventName,
             event.ProductAction.TotalAmount,
             event.CurrencyCode,
@@ -143,6 +142,7 @@ var constructor = function () {
     }
 
     function logPurchaseEventPerProduct(event) {
+        var reportEvent = false;
         if (event.ProductAction.ProductList) {
             event.ProductAction.ProductList.forEach(function(product) {
                 var productName;
@@ -399,6 +399,7 @@ var constructor = function () {
     // mParticle commerce events use different Braze methods depending on if they are
     // a purchase event or a non-purchase commerce event
     function logCommerceEvent(event) {
+        var reportEvent = false;
         if (event.EventCategory === CommerceEventType.ProductPurchase) {
             reportEvent = logPurchaseEvent(event);
             return reportEvent === true;
@@ -476,7 +477,7 @@ var constructor = function () {
                 ),
             };
 
-            reportEvent = logBrazeEvent(brazeEvent);
+            var reportEvent = logBrazeEvent(brazeEvent);
             return reportEvent;
         } catch (err) {
             return 'Error logging commerce event' + err.message;
@@ -548,6 +549,7 @@ var constructor = function () {
     }
 
     function logExpandedNonPurchaseCommerceEvents(event) {
+        var reportEvent = false;
         var listOfPageEvents = mParticle.eCommerce.expandCommerceEvent(event);
         if (listOfPageEvents !== null) {
             for (var i = 0; i < listOfPageEvents.length; i++) {
