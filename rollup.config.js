@@ -41,7 +41,6 @@ export default [
         output: {
             file: 'dist/BrazeKit.esm.js',
             format: 'esm',
-            exports: 'named',
             name: 'mpBrazeKitV5',
             strict: false,
             inlineDynamicImports: true,

@@ -4,7 +4,7 @@ var brazeInstance;
 if (typeof require !== 'undefined') {
     brazeInstance = require('../dist/BrazeKit.common').default;
 } else {
-    brazeInstance = mpBrazeKitV4.default;
+    brazeInstance = mpBrazeKitV5.default;
 }
 
 describe('Braze Forwarder', function() {
@@ -316,14 +316,14 @@ describe('Braze Forwarder', function() {
     });
 
     it('should have a property of suffix', function() {
-        window.mParticle.forwarder.should.have.property('suffix', 'v4');
+        window.mParticle.forwarder.should.have.property('suffix', 'v5');
     });
 
     it('should register a forwarder with version number onto a config', function() {
         var config = {};
         brazeInstance.register(config);
         config.should.have.property('kits');
-        config.kits.should.have.property('Appboy-v4');
+        config.kits.should.have.property('Appboy-v5');
     });
 
     it('should open a new session and refresh in app messages upon initialization', function() {

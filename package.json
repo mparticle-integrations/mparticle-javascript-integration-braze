@@ -5,8 +5,10 @@
     "description": "mParticle integration sdk for Braze",
     "main": "dist/BrazeKit.common.js",
     "browser": "dist/BrazeKit.common.js",
+    "module": "dist/BrazeKit.esm.js",
     "files": [
-        "dist/BrazeKit.common.js"
+        "dist/BrazeKit.common.js",
+        "dist/BrazeKit.esm.js"
     ],
     "repository": "https://github.com/mparticle-integrations/mparticle-javascript-integration-braze",
     "scripts": {

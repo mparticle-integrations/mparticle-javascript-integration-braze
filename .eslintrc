@@ -6,6 +6,8 @@
     "globals": {
         "braze": true,
         "mParticle": true,
+        "require": true,
+        "module": true
     },
     "extends": ["plugin:prettier/recommended", "eslint:recommended"],
     "rules": {
