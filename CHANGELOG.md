@@ -2,7 +2,11 @@
 
 --
 
-## 5.5.0 - 2024-10-30
+## 5.0.1 - 2024-11-13
+-   ci: Add esm support [#53](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/53)
+-   fix: Update package.json to support esm, define missing variable declarations [#54](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/54)
+
+## 5.0.0 - 2024-10-30
 
 ⚠️ **Breaking** - The mParticle web Braze kit now supports Braze's Web SDK v5.5.0.  Breaking changes cna be viewed at [Braze's changelog](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog/#500). There may be API changes that affect you if you call `braze` directly from your code.
 -   feat: Support Braze Web SDK V5 [#52)](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/52)
