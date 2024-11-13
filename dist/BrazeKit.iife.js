@@ -1,4 +1,4 @@
-var mpBrazeKitV4 = (function (exports) {
+var mpBrazeKitV5 = (function (exports) {
 
 	function getAugmentedNamespace(n) {
 	  var f = n.default;
@@ -10002,8 +10002,6 @@ var mpBrazeKitV4 = (function (exports) {
 
 	var require$$0 = /*@__PURE__*/getAugmentedNamespace(src);
 
-	/* eslint-disable no-undef */
-
 	window.braze = require$$0;
 	//  Copyright 2015 mParticle, Inc.
 	//
@@ -10023,7 +10021,7 @@ var mpBrazeKitV4 = (function (exports) {
 	var name = 'Appboy',
 	    suffix = 'v5',
 	    moduleId = 28,
-	    version = '5.0.0',
+	    version = '5.0.1',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -10136,7 +10134,7 @@ var mpBrazeKitV4 = (function (exports) {
 	            eventAttributes
 	        );
 
-	        reportEvent = braze.logPurchase(
+	        var reportEvent = braze.logPurchase(
 	            eventName,
 	            event.ProductAction.TotalAmount,
 	            event.CurrencyCode,
@@ -10148,6 +10146,7 @@ var mpBrazeKitV4 = (function (exports) {
 	    }
 
 	    function logPurchaseEventPerProduct(event) {
+	        var reportEvent = false;
 	        if (event.ProductAction.ProductList) {
 	            event.ProductAction.ProductList.forEach(function(product) {
 	                var productName;
@@ -10404,6 +10403,7 @@ var mpBrazeKitV4 = (function (exports) {
 	    // mParticle commerce events use different Braze methods depending on if they are
 	    // a purchase event or a non-purchase commerce event
 	    function logCommerceEvent(event) {
+	        var reportEvent = false;
 	        if (event.EventCategory === CommerceEventType.ProductPurchase) {
 	            reportEvent = logPurchaseEvent(event);
 	            return reportEvent === true;
@@ -10481,7 +10481,7 @@ var mpBrazeKitV4 = (function (exports) {
 	                ),
 	            };
 
-	            reportEvent = logBrazeEvent(brazeEvent);
+	            var reportEvent = logBrazeEvent(brazeEvent);
 	            return reportEvent;
 	        } catch (err) {
 	            return 'Error logging commerce event' + err.message;
@@ -10553,6 +10553,7 @@ var mpBrazeKitV4 = (function (exports) {
 	    }
 
 	    function logExpandedNonPurchaseCommerceEvents(event) {
+	        var reportEvent = false;
 	        var listOfPageEvents = mParticle.eCommerce.expandCommerceEvent(event);
 	        if (listOfPageEvents !== null) {
 	            for (var i = 0; i < listOfPageEvents.length; i++) {

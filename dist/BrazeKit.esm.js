@@ -1,5 +1,3 @@
-Object.defineProperty(exports, '__esModule', { value: true });
-
 function getAugmentedNamespace(n) {
   var f = n.default;
 	if (typeof f == "function") {
@@ -11140,4 +11138,4 @@ var BrazeKitDev = {
     },
 };
 
-exports["default"] = BrazeKitDev;
+export { BrazeKitDev as default };
