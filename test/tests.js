@@ -1089,7 +1089,7 @@ describe('Braze Forwarder', function() {
         // Braze's API expects a year from us, this test will break every year,
         // since setting the age = 10 in 2021 will mean the user is born in 2011,
         // but setting it in 2023 means the year is 2013.
-        window.braze.getUser().yearOfBirth.should.equal(2014);
+        window.braze.getUser().yearOfBirth.should.equal(2015);
         window.braze.getUser().dayOfBirth.should.equal(1);
         window.braze.getUser().monthOfBirth.should.equal(1);
         window.braze.getUser().phoneSet.should.equal('1234567890');
@@ -1364,6 +1364,32 @@ user.getUserIdentities is not a function,\n`;
         window.braze.should.have.property('baseUrl', 'sdk.fra-01.braze.eu');
     });
 
+    it('should use the AU data center when dataCenterLocation is set to AU and no host is passed', function() {
+        reportService.reset();
+        window.braze = new MockBraze();
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                dataCenterLocation: 'AU',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
+        window.braze.baseUrl.should.equal('sdk.au-01.braze.com');
+    });
+
     it('should use the 01 clusterMapping url when 01 number is passed to cluster', function() {
         reportService.reset();
         window.braze = new MockBraze();
@@ -1475,6 +1501,33 @@ user.getUserIdentities is not a function,\n`;
         window.braze.baseUrl.should.equal('sdk.iad-04.braze.com');
     });
 
+    it('should use the 05 clusterMapping url when 05 number is passed to cluster', function() {
+        reportService.reset();
+        window.braze = new MockBraze();
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '05',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
+
+        window.braze.baseUrl.should.equal('sdk.iad-05.braze.com');
+    });
+
     it('should use the 06 clusterMapping url when 06 number is passed to cluster', function() {
         reportService.reset();
         window.braze = new MockBraze();
@@ -1500,6 +1553,33 @@ user.getUserIdentities is not a function,\n`;
         );
 
         window.braze.baseUrl.should.equal('sdk.iad-06.braze.com');
+    });
+
+    it('should use the 07 clusterMapping url when 07 number is passed to cluster', function() {
+        reportService.reset();
+        window.braze = new MockBraze();
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                cluster: '07',
+            },
+            reportService.cb,
+            true,
+            null,
+            {
+                gender: 'm',
+            },
+            [
+                {
+                    Identity: 'testUser',
+                    Type: IdentityType.CustomerId,
+                },
+            ],
+            '1.1',
+            'My App'
+        );
+
+        window.braze.baseUrl.should.equal('sdk.iad-07.braze.com');
     });
 
     it('should use the 08 clusterMapping url when 08 number is passed to cluster', function() {
