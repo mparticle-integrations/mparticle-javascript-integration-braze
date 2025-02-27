@@ -2,6 +2,10 @@
 
 --
 
+## 5.0.2 - 2025-02-27
+
+-   feat: Add AU Endpoint [(#56)](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/56)
+
 ## 5.0.1 - 2024-11-13
 -   ci: Add esm support [#53](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/53)
 -   fix: Update package.json to support esm, define missing variable declarations [#54](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/54)
