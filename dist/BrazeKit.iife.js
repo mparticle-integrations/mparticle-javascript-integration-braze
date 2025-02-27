@@ -10021,7 +10021,7 @@ var mpBrazeKitV5 = (function (exports) {
 	var name = 'Appboy',
 	    suffix = 'v5',
 	    moduleId = 28,
-	    version = '5.0.1',
+	    version = '5.0.2',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -10036,9 +10036,11 @@ var mpBrazeKitV5 = (function (exports) {
 	    '04': 'sdk.iad-04.braze.com',
 	    '05': 'sdk.iad-05.braze.com',
 	    '06': 'sdk.iad-06.braze.com',
+	    '07': 'sdk.iad-07.braze.com',
 	    '08': 'sdk.iad-08.braze.com',
 	    EU: 'sdk.fra-01.braze.eu',
 	    EU02: 'sdk.fra-02.braze.eu',
+	    AU: 'sdk.au-01.braze.com',
 	};
 
 	var constructor = function () {
