@@ -1117,9 +1117,9 @@ describe('Braze Forwarder', function() {
         (window.braze.getUser().yearOfBirth === null).should.equal(true);
     });
 
-    it('it should set subscription group for mapped attributes when value is boolean', function() {
+    it('decodeSubscriptionGroupMappings should return parsed subscriptionGroupIds map when proper setting is given', function () {
         // sample subscriptionGroupMapping from config
-        const subscriptionGroupMapping = '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest1&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest2&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000001&quot;}]';
+        var subscriptionGroupMapping = '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest1&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest2&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000001&quot;}]';
 
         // initialize Braze kit with subscriptionGroupMappings
         mParticle.forwarder.init(
@@ -1133,17 +1133,77 @@ describe('Braze Forwarder', function() {
         );
 
         // get the decoded mapped subscriptionGroup
-        const parsedSubscriptionGroupMapping = mParticle.forwarder.decodeSubscriptionGroupMappings(subscriptionGroupMapping);
+        var parsedSubscriptionGroupMapping = mParticle.forwarder.decodeSubscriptionGroupMappings(subscriptionGroupMapping);
+        var expectedResult = {
+            'subscriptionGroupTest1': '00000000-0000-0000-0000-000000000000',
+            'subscriptionGroupTest2': '00000000-0000-0000-0000-000000000001',
+        };
+
+        parsedSubscriptionGroupMapping.should.deepEqual(expectedResult);
+    });
+
+    it('should set subscription group for mapped attributes when value is true with type boolean', function() {
+        // sample subscriptionGroupMapping from config
+        var subscriptionGroupMapping = '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest1&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest2&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000001&quot;}]';
+
+        // initialize Braze kit with subscriptionGroupMappings
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                subscriptionGroupMapping: subscriptionGroupMapping,
+            },
+            reportService.cb,
+            true,
+            null
+        );
+
+        // get the decoded mapped subscriptionGroup
+        var parsedSubscriptionGroupMapping = mParticle.forwarder.decodeSubscriptionGroupMappings(subscriptionGroupMapping);
 
         // set attribute subscriptionGroupTest1 with boolean value true should call Braze's addToSubscriptionGroup since it's mapped
         mParticle.forwarder.setUserAttribute('subscriptionGroupTest1', true);
-        const mappedSubscriptionGroupId1 = parsedSubscriptionGroupMapping['subscriptionGroupTest1'];
-        window.braze.getUser().subscriptionGroup[mappedSubscriptionGroupId1].should.equal(true);
+        var mappedSubscriptionGroupId = parsedSubscriptionGroupMapping['subscriptionGroupTest1'];
+        window.braze.getUser().subscriptionGroup[mappedSubscriptionGroupId].should.equal(true);
+    });
+
+    it('should set subscription group for mapped attributes when value is false with type boolean', function() {
+        // sample subscriptionGroupMapping from config
+        var subscriptionGroupMapping = '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest1&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest2&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000001&quot;}]';
+
+        // initialize Braze kit with subscriptionGroupMappings
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                subscriptionGroupMapping: subscriptionGroupMapping,
+            },
+            reportService.cb,
+            true,
+            null
+        );
+
+        // get the decoded mapped subscriptionGroup
+        var parsedSubscriptionGroupMapping = mParticle.forwarder.decodeSubscriptionGroupMappings(subscriptionGroupMapping);
 
         // set attribute subscriptionGroupTest2 with boolean value false should call Braze's removeFromSubscriptionGroup since it's mapped
         mParticle.forwarder.setUserAttribute('subscriptionGroupTest2', false);
-        const mappedSubscriptionGroupId2 = parsedSubscriptionGroupMapping['subscriptionGroupTest2'];
-        window.braze.getUser().subscriptionGroup[mappedSubscriptionGroupId2].should.equal(false);
+        var mappedSubscriptionGroupId = parsedSubscriptionGroupMapping['subscriptionGroupTest2'];
+        window.braze.getUser().subscriptionGroup[mappedSubscriptionGroupId].should.equal(false);
+    });
+
+    it('should not set subscription group for mapped attributes when value type is not boolean', function() {
+        // sample subscriptionGroupMapping from config
+        var subscriptionGroupMapping = '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest1&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest2&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000001&quot;}]';
+
+        // initialize Braze kit with subscriptionGroupMappings
+        mParticle.forwarder.init(
+            {
+                apiKey: '123456',
+                subscriptionGroupMapping: subscriptionGroupMapping,
+            },
+            reportService.cb,
+            true,
+            null
+        );
 
         // should log error if mapped attribute value is not type boolean
         mParticle.forwarder.logger = {
@@ -1151,7 +1211,8 @@ describe('Braze Forwarder', function() {
                 mParticle.forwarder.msg = msg;
             },
         };
-        mParticle.forwarder.setUserAttribute('subscriptionGroupTest1', 'test');
+
+        mParticle.forwarder.setUserAttribute('subscriptionGroupTest1', 'testStringValue');
         var expectedMessage = `mParticle - Braze Web Kit log:\nCan\'t call setSubscriptionGroups on forwarder Appboy, setSubscriptionGroups must set this value to a boolean:\n`;
         mParticle.forwarder.msg.should.equal(expectedMessage)
     });

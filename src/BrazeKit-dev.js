@@ -573,23 +573,18 @@ var constructor = function () {
     }
 
     function setSubscriptionGroups(key, value) {
-        const subscriptionGroupId = parsedSubscriptionGroupMapping[key];
-        if (!(typeof value === 'boolean')) {
+        var subscriptionGroupId = parsedSubscriptionGroupMapping[key];
+
+        if (typeof value !== 'boolean') {
             kitLogger("Can't call setSubscriptionGroups on forwarder " +
-	            name +
-	            ', setSubscriptionGroups must set this value to a boolean');
+                name +
+                ', setSubscriptionGroups must set this value to a boolean');
             return;
-        } else {
-            if (!value) {
-                kitLogger('braze.getUser().removeFromSubscriptionGroup', subscriptionGroupId);
-
-	            braze.getUser().removeFromSubscriptionGroup(subscriptionGroupId);
-            } else {
-                kitLogger('braze.getUser().addToSubscriptionGroup', subscriptionGroupId);
-
-	            braze.getUser().addToSubscriptionGroup(subscriptionGroupId);
-            }
         }
+
+        var action = value ? 'addToSubscriptionGroup' : 'removeFromSubscriptionGroup';
+        kitLogger('braze.getUser().' + action, subscriptionGroupId);
+        braze.getUser()[action](subscriptionGroupId);
     }
 
     function removeUserAttribute(key) {
@@ -609,29 +604,31 @@ var constructor = function () {
     }
 
     function setUserAttribute(key, value) {
-        if (!(key in DefaultAttributeMethods)) {
-            if (parsedSubscriptionGroupMapping[key]) {
-                setSubscriptionGroups(key, value)
-            } else {
-                var sanitizedKey = getSanitizedValueForBraze(key);
-                var sanitizedValue = getSanitizedValueForBraze(value);
-                if (value != null && sanitizedValue == null) {
-                    return 'Value did not pass validation for ' + key;
-                }
-
-                kitLogger(
-                    'braze.getUser().setCustomUserAttribute',
-                    sanitizedKey,
-                    sanitizedValue
-                );
-
-                braze
-                    .getUser()
-                    .setCustomUserAttribute(sanitizedKey, sanitizedValue);
-            }
-        } else {
+        if (key in DefaultAttributeMethods) {
             return setDefaultAttribute(key, value);
         }
+
+        if (parsedSubscriptionGroupMapping[key]) {
+            setSubscriptionGroups(key, value);
+            return;
+        }
+
+        var sanitizedKey = getSanitizedValueForBraze(key);
+        var sanitizedValue = getSanitizedValueForBraze(value);
+
+        if (value != null && sanitizedValue == null) {
+            return 'Value did not pass validation for ' + key;
+        }
+
+        kitLogger(
+            'braze.getUser().setCustomUserAttribute',
+            sanitizedKey,
+            sanitizedValue
+        );
+
+        braze
+            .getUser()
+            .setCustomUserAttribute(sanitizedKey, sanitizedValue);
     }
 
     function setUserIdentity(id, type) {
@@ -913,7 +910,7 @@ var constructor = function () {
             }
 
             if (forwarderSettings.subscriptionGroupMapping) {
-                parsedSubscriptionGroupMapping = decodeSubscriptionGroupMappings(forwarderSettings.subscriptionGroupMapping)
+                parsedSubscriptionGroupMapping = decodeSubscriptionGroupMappings(forwarderSettings.subscriptionGroupMapping);
             }
 
             var cluster =
@@ -995,15 +992,15 @@ var constructor = function () {
     }
 
     function decodeSubscriptionGroupMappings(subscriptionGroupSetting) {
-        let subscriptionGroupIds = {}; 
-      	const decodedSetting = subscriptionGroupSetting.replace(/&quot;/g, '"');
-        const parsedSetting = JSON.parse(decodedSetting)
+        var subscriptionGroupIds = {}; 
+      	var decodedSetting = subscriptionGroupSetting.replace(/&quot;/g, '"');
+        var parsedSetting = JSON.parse(decodedSetting);
         for (let subscriptionGroupMap of parsedSetting) {
-            const key = subscriptionGroupMap.map
-            const value = subscriptionGroupMap.value
-            subscriptionGroupIds[key] = value
+            var key = subscriptionGroupMap.map;
+            var value = subscriptionGroupMap.value;
+            subscriptionGroupIds[key] = value;
         }
-        return subscriptionGroupIds
+        return subscriptionGroupIds;
     }
 
     function getSanitizedStringForBraze(value) {
