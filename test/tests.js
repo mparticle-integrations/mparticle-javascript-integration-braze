@@ -1121,17 +1121,6 @@ describe('Braze Forwarder', function() {
         // sample subscriptionGroupMapping from config
         var subscriptionGroupMapping = '[{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest1&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;},{&quot;jsmap&quot;:null,&quot;map&quot;:&quot;subscriptionGroupTest2&quot;,&quot;maptype&quot;:&quot;UserAttributeClass.Name&quot;,&quot;value&quot;:&quot;00000000-0000-0000-0000-000000000001&quot;}]';
 
-        // initialize Braze kit with subscriptionGroupMappings
-        mParticle.forwarder.init(
-            {
-                apiKey: '123456',
-                subscriptionGroupMapping: subscriptionGroupMapping,
-            },
-            reportService.cb,
-            true,
-            null
-        );
-
         // get the decoded mapped subscriptionGroup
         var parsedSubscriptionGroupMapping = mParticle.forwarder.decodeSubscriptionGroupMappings(subscriptionGroupMapping);
         var expectedResult = {
