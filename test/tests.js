@@ -1206,6 +1206,35 @@ describe('Braze Forwarder', function() {
         mParticle.forwarder.msg.should.equal(expectedMessage)
     });
 
+    it.only('should handle malformed JSON in decodeSubscriptionGroupMappings gracefully', function() {
+        // Mock console.error to capture the error message
+        var originalConsoleError = console.error;
+        var errorMessages = [];
+        console.error = function(message) {
+            console.log('console.error', message);
+            errorMessages.push(message);
+        };
+
+        // Test with malformed JSON (truly invalid JSON that will cause parse error)
+        var malformedSubscriptionGroupMapping = 'invalid json string that will cause parse error';
+
+        // This should not throw an error and should return an empty object
+        var result = mParticle.forwarder.decodeSubscriptionGroupMappings(malformedSubscriptionGroupMapping);
+
+        // Verify it returns an empty object
+        result.should.deepEqual({});
+
+        // Verify error was logged
+        errorMessages.length.should.equal(1);
+
+        errorMessages[0].should.equal(
+            'Unable to configure custom Braze subscription group mappings.'
+        );
+
+        // Restore console.error
+        console.error = originalConsoleError;
+    });
+
     it('should not set default values if a string is not passed as the attribute', function() {
         mParticle.forwarder.setUserAttribute('first_name', 'John');
         mParticle.forwarder.setUserAttribute('last_name', 'Doe');

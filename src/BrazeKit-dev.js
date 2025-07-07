@@ -992,13 +992,19 @@ var constructor = function () {
     }
 
     function decodeSubscriptionGroupMappings(subscriptionGroupSetting) {
-        var subscriptionGroupIds = {}; 
-      	var decodedSetting = subscriptionGroupSetting.replace(/&quot;/g, '"');
-        var parsedSetting = JSON.parse(decodedSetting);
-        for (let subscriptionGroupMap of parsedSetting) {
-            var key = subscriptionGroupMap.map;
-            var value = subscriptionGroupMap.value;
-            subscriptionGroupIds[key] = value;
+        var subscriptionGroupIds = {};
+        try {
+            var decodedSetting = subscriptionGroupSetting.replace(/&quot;/g, '"');
+            var parsedSetting = JSON.parse(decodedSetting);
+            for (let subscriptionGroupMap of parsedSetting) {
+                var key = subscriptionGroupMap.map;
+                var value = subscriptionGroupMap.value;
+                subscriptionGroupIds[key] = value;
+            }
+        } catch (e) {
+            console.error(
+                'Unable to configure custom Braze subscription group mappings.'
+            );
         }
         return subscriptionGroupIds;
     }
