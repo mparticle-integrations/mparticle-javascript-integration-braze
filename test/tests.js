@@ -1206,7 +1206,7 @@ describe('Braze Forwarder', function() {
         mParticle.forwarder.msg.should.equal(expectedMessage)
     });
 
-    it.only('should handle malformed JSON in decodeSubscriptionGroupMappings gracefully', function() {
+    it('should handle malformed JSON in decodeSubscriptionGroupMappings gracefully', function() {
         // Mock console.error to capture the error message
         var originalConsoleError = console.error;
         var errorMessages = [];
