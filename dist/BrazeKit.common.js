@@ -10021,7 +10021,7 @@ window.braze = require$$0;
 var name = 'Appboy',
     suffix = 'v5',
     moduleId = 28,
-    version = '5.0.2',
+    version = '5.0.3',
     MessageType = {
         PageView: 3,
         PageEvent: 4,
@@ -10050,6 +10050,7 @@ var constructor = function () {
         reportingService,
         hasConsentMappings,
         parsedConsentMappings,
+        parsedSubscriptionGroupMapping = {},
         mpCustomFlags;
 
     self.name = name;
@@ -10575,6 +10576,21 @@ var constructor = function () {
         return reportEvent;
     }
 
+    function setSubscriptionGroups(key, value) {
+        var subscriptionGroupId = parsedSubscriptionGroupMapping[key];
+
+        if (typeof value !== 'boolean') {
+            kitLogger("Can't call setSubscriptionGroups on forwarder " +
+                name +
+                ', setSubscriptionGroups must set this value to a boolean');
+            return;
+        }
+
+        var action = value ? 'addToSubscriptionGroup' : 'removeFromSubscriptionGroup';
+        kitLogger('braze.getUser().' + action, subscriptionGroupId);
+        braze.getUser()[action](subscriptionGroupId);
+    }
+
     function removeUserAttribute(key) {
         if (!(key in DefaultAttributeMethods)) {
             var sanitizedKey = getSanitizedValueForBraze(key);
@@ -10592,25 +10608,31 @@ var constructor = function () {
     }
 
     function setUserAttribute(key, value) {
-        if (!(key in DefaultAttributeMethods)) {
-            var sanitizedKey = getSanitizedValueForBraze(key);
-            var sanitizedValue = getSanitizedValueForBraze(value);
-            if (value != null && sanitizedValue == null) {
-                return 'Value did not pass validation for ' + key;
-            }
-
-            kitLogger(
-                'braze.getUser().setCustomUserAttribute',
-                sanitizedKey,
-                sanitizedValue
-            );
-
-            braze
-                .getUser()
-                .setCustomUserAttribute(sanitizedKey, sanitizedValue);
-        } else {
+        if (key in DefaultAttributeMethods) {
             return setDefaultAttribute(key, value);
         }
+
+        if (parsedSubscriptionGroupMapping[key]) {
+            setSubscriptionGroups(key, value);
+            return;
+        }
+
+        var sanitizedKey = getSanitizedValueForBraze(key);
+        var sanitizedValue = getSanitizedValueForBraze(value);
+
+        if (value != null && sanitizedValue == null) {
+            return 'Value did not pass validation for ' + key;
+        }
+
+        kitLogger(
+            'braze.getUser().setCustomUserAttribute',
+            sanitizedKey,
+            sanitizedValue
+        );
+
+        braze
+            .getUser()
+            .setCustomUserAttribute(sanitizedKey, sanitizedValue);
     }
 
     function setUserIdentity(id, type) {
@@ -10891,6 +10913,10 @@ var constructor = function () {
                 }
             }
 
+            if (forwarderSettings.subscriptionGroupMapping) {
+                parsedSubscriptionGroupMapping = decodeSubscriptionGroupMappings(forwarderSettings.subscriptionGroupMapping);
+            }
+
             var cluster =
                 forwarderSettings.cluster ||
                 forwarderSettings.dataCenterLocation;
@@ -10969,6 +10995,24 @@ var constructor = function () {
         }
     }
 
+    function decodeSubscriptionGroupMappings(subscriptionGroupSetting) {
+        var subscriptionGroupIds = {};
+        try {
+            var decodedSetting = subscriptionGroupSetting.replace(/&quot;/g, '"');
+            var parsedSetting = JSON.parse(decodedSetting);
+            for (let subscriptionGroupMap of parsedSetting) {
+                var key = subscriptionGroupMap.map;
+                var value = subscriptionGroupMap.value;
+                subscriptionGroupIds[key] = value;
+            }
+        } catch (e) {
+            console.error(
+                'Unable to configure custom Braze subscription group mappings.'
+            );
+        }
+        return subscriptionGroupIds;
+    }
+
     function getSanitizedStringForBraze(value) {
         if (typeof value === 'string') {
             if (value.substr(0, 1) === '$') {
@@ -11033,6 +11077,7 @@ var constructor = function () {
     this.onUserIdentified = onUserIdentified;
     this.removeUserAttribute = removeUserAttribute;
     this.decodeClusterSetting = decodeClusterSetting;
+    this.decodeSubscriptionGroupMappings = decodeSubscriptionGroupMappings;
 
     /* An example output of this logger if we pass in a purchase event for 1 iPhone
      with a SKU of iphoneSku that cost $999 with a product attribute of 
