@@ -2,6 +2,10 @@
 
 --
 
+## 5.0.3 - 2025-08-11
+
+-   feat: Add support to forward subscriptionGroupIds [(#57)](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/57))
+
 ## 5.0.2 - 2025-02-27
 
 -   feat: Add AU Endpoint [(#56)](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/56)
