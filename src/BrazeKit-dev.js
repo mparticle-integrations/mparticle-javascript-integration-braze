@@ -856,7 +856,7 @@ var constructor = function () {
             options.sessionTimeoutInSeconds =
                 forwarderSettings.ABKSessionTimeoutKey || 1800;
             options.sdkFlavor = 'mparticle';
-            options.enableHtmlInAppMessages =
+            options.allowUserSuppliedJavascript =
                 forwarderSettings.enableHtmlInAppMessages == 'True';
             options.doNotLoadFontAwesome =
                 forwarderSettings.doNotLoadFontAwesome == 'True';
