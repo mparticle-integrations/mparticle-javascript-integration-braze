@@ -993,7 +993,8 @@ describe('Appboy Forwarder', function () {
         window.appboy.getUser().emailSet.should.equal('test2@gmail.com');
 
         // We support $Age as a reserved attribute for Braze. However, since
-        // Braze's API expects a year from us, we calculate expected year dynamically.
+        // Braze's API expects a year, so we calculate expected year dynamically.
+        // The 10 matches the $Age value set above to avoid the test from breaking each year.
         var expectedYearOfBirth = new Date().getFullYear() - 10;
         window.appboy.getUser().yearOfBirth.should.equal(expectedYearOfBirth);
         window.appboy.getUser().dayOfBirth.should.equal(1);
