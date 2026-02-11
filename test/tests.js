@@ -1086,10 +1086,9 @@ describe('Braze Forwarder', function() {
         window.braze.getUser().emailSet.should.equal('test2@gmail.com');
 
         // We support $Age as a reserved attribute for Braze. However, since
-        // Braze's API expects a year from us, this test will break every year,
-        // since setting the age = 10 in 2021 will mean the user is born in 2011,
-        // but setting it in 2023 means the year is 2013.
-        window.braze.getUser().yearOfBirth.should.equal(2014);
+        // Braze's API expects a year, so we calculate expected year dynamically.
+        var expectedYearOfBirth = new Date().getFullYear() - 10;
+        window.braze.getUser().yearOfBirth.should.equal(expectedYearOfBirth);
         window.braze.getUser().dayOfBirth.should.equal(1);
         window.braze.getUser().monthOfBirth.should.equal(1);
         window.braze.getUser().phoneSet.should.equal('1234567890');
