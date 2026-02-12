@@ -8,7 +8,7 @@ You can now select what version of the Braze SDK you want to use when setting up
 Please review the [Braze Changelog](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog#400) and [V4 migration guide](https://github.com/braze-inc/braze-web-sdk/blob/master/UPGRADE_GUIDE.md) to learn about the differences between V3 and V4 and what changes you will need to make in your code. The most significant breaking changes are the replacement of the `appboy` class name with `braze`, in addition to the removal and renaming of several APIs.
 
 You can opt into the latest major version of the Braze Web SDK whether you implement mParticle's Web SDK using npm or our snippet/CDN.
-* Customers who self-host mParticle via npm - You can use @mparticle/web-braze-kit version 4.0.0 in your package.json now! This has been available since 10/15/2022.
+* Customers who self-host mParticle via npm - You should add @mparticle/web-braze-kit version 4.0.0 or greater in your package.json now! You must also select `Version 4` under `Braze Web SDK Version`  in the Braze connection settings.
 * Customers who load mParticle via snippet/CDN - Opting in is available via the mParticle UI in your Braze connection settings.
 
 Note that the following is only one example.  Everywhere you manually call `appboy` needs to be updated similar to the below. If you are using NPM, you can skip to step 3.  Please be sure to test your site fully in development prior to releasing.
@@ -35,10 +35,10 @@ window.braze.destroyFeed();
 ```
 
 Step 5: Push Notifications via service-worker.js
-If you use Push Notifications, we have updated the `service-worker.js` file.  In our testing, Braze’s push notifications work as expected regardless of what version of the service-worker is used, but we recommend updating this file to ensure future compatibility.  In your `service-worker.js` file, update the code to reference `https://static.mparticle.com/sdk/js/braze/service-worker-4.2.0.js` instead of `https://static.mparticle.com/sdk/js/braze/service-worker-3.5.0.js`.  Your `service-worker.js` file should now contain:
+If you use Push Notifications, we have updated the `service-worker.js` file.  In our testing, Braze’s push notifications work as expected regardless of what version of the service-worker is used, but we recommend updating this file to ensure future compatibility.  In your `service-worker.js` file, update the code to reference `https://static.mparticle.com/sdk/js/braze/service-worker-4.2.1.js` instead of `https://static.mparticle.com/sdk/js/braze/service-worker-3.5.0.js`.  Your `service-worker.js` file should now contain:
 
 ```javascript
-self.imports('https://static.mparticle.com/sdk/js/braze/service-worker-4.2.0.js')
+self.imports('https://static.mparticle.com/sdk/js/braze/service-worker-4.2.1.js')
 ```
 
 ### Transition from @mparticle/web-appboy-kit to @mparticle/web-braze-kit
