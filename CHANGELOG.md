@@ -2,6 +2,11 @@
 
 --
 
+
+## 4.2.2 - 2026-02-12
+-   fix: Replace enableHtmlInAppMessages deprecated method with allowUserSuppliedJavascript (v4 [#61](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/61)
+
+
 ## 4.2.1 - 2024-10-24
 -   fix: Declare reportEvent where previously undeclared [#55](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/55)
 
