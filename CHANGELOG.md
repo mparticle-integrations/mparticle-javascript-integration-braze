@@ -2,6 +2,9 @@
 
 --
 
+#### 3.0.9 - 2026-02-12
+-   feat: Support bundling products, impressions, and promotions as a single event (#37)
+-   fix: Replace enableHtmlInAppMessages deprecated method with allowUserSuppliedJavascript (v3) (#60)
 
 #### 3.0.8 - 2023-06-26
 -   fix: Update package.json, update logging to customer (#33)
