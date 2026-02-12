@@ -10021,7 +10021,7 @@ window.braze = require$$0;
 var name = 'Appboy',
     suffix = 'v4',
     moduleId = 28,
-    version = '4.2.1',
+    version = '4.2.2',
     MessageType = {
         PageView: 3,
         PageEvent: 4,
@@ -10860,7 +10860,7 @@ var constructor = function () {
             options.sessionTimeoutInSeconds =
                 forwarderSettings.ABKSessionTimeoutKey || 1800;
             options.sdkFlavor = 'mparticle';
-            options.enableHtmlInAppMessages =
+            options.allowUserSuppliedJavascript =
                 forwarderSettings.enableHtmlInAppMessages == 'True';
             options.doNotLoadFontAwesome =
                 forwarderSettings.doNotLoadFontAwesome == 'True';
