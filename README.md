@@ -11,7 +11,7 @@ You can opt into the latest major version of the Braze Web SDK whether you imple
 * Customers who self-host mParticle via npm - You should add @mparticle/web-braze-kit version 5.0.0 or greater in your package.json.  You must also select `Version 5` under `Braze Web SDK Version`  in the Braze connection settings.
 * Customers who load mParticle via snippet/CDN - You must  select `Version 5` under `Braze Web SDK Version`  in the Braze connection settings.
 
-Note that the following is only one example.  Everywhere you manually call `appboy` needs to be updated similar to the below. If you are using NPM, you can skip to step 3.  Please be sure to test your site fully in development prior to releasing.
+Note that the following is only one example of migrating from V3 to V5.  Everywhere you manually call `appboy` needs to be updated similar to the below. If you are using NPM, you can skip to step 3.  Please be sure to test your site fully in development prior to releasing.
 
 
 * Step 1: Legacy code sample. Find all the places where your code references the `appboy.display` namespace. Braze has removed all instances of the `display` namespace:
@@ -40,12 +40,6 @@ If you use Push Notifications, we have updated the `service-worker.js` file.  In
 ```javascript
 self.importScripts('https://static.mparticle.com/sdk/js/braze/service-worker-5.5.0.js')
 ```
-
-### Transition from @mparticle/web-appboy-kit to @mparticle/web-braze-kit
-
-The legacy @mparticle/web-appboy-kit from npm includes version 2 of the Braze Web SDK.  As part of this update, we've created a new [Braze web kit repo](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze) to replace our deprecated [Appboy web kit repo](https://github.com/mparticle-integrations/mparticle-javascript-integration-appboy).  If you are still using `@mparticle/web-appboy-kit`, you will need to consider the breaking changes Braze made between V2 and V3 of the Braze SDK (found [here](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog/#300)) as well as the instructions above to get from V2 to V5 of the Braze SDK.
-
-
 
 
 # License
