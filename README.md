@@ -3,9 +3,9 @@
 ⚠️⚠️⚠️
 # Notice! Opt in is now available for Braze Web SDK V5 - Action Required
 
-You can now select what version of the Braze SDK you want to use when setting up a Braze connection in the mParticle UI.  Braze occasionally makes breaking changes to their SDK, so if you call `appboy` directly in your code, you will have to update your code to ensure your website performs as expected when updating versions of Braze.
+You can now select what version of the Braze SDK you want to use when setting up a Braze connection in the mParticle UI.  Braze occasionally makes breaking changes to their SDK, so if you call `braze` directly in your code, you will have to update your code to ensure your website performs as expected when updating versions of Braze.
 
-Please review the [Braze Changelog](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog#500) and [V5 migration guide](https://github.com/braze-inc/braze-web-sdk/blob/master/UPGRADE_GUIDE.md) to learn about the differences between V4 and V5 and what changes you will need to make in your code. The most significant breaking changes are the replacement of the `appboy` class name with `braze`, in addition to the removal and renaming of several APIs.
+Please review the [Braze Changelog](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog#500) and [V5 migration guide](https://github.com/braze-inc/braze-web-sdk/blob/master/UPGRADE_GUIDE.md) to learn about the differences between V4 and V5 and what changes you will need to make in your code. The most significant breaking changes are the removal of the deprecated `enableHtmlInAppMessages` initialization option (replaced by `allowUserSuppliedJavascript`), in addition to the removal and renaming of several APIs.
 
 You can opt into the latest major version of the Braze Web SDK whether you implement mParticle's Web SDK using npm or our snippet/CDN.
 * Customers who self-host mParticle via npm - You should add @mparticle/web-braze-kit version 5.0.0 or greater in your package.json.  You must also select `Version 5` under `Braze Web SDK Version`  in the Braze connection settings.
@@ -14,7 +14,7 @@ You can opt into the latest major version of the Braze Web SDK whether you imple
 Note that the following is only one example.  Everywhere you manually call `appboy` needs to be updated similar to the below. If you are using NPM, you can skip to step 3.  Please be sure to test your site fully in development prior to releasing.
 
 
-* Step 1: Legacy code sample. Find all the places where your code references the `appboy.display` namespace.  Braze has removed all instances of the `display` namespace:
+* Step 1: Legacy code sample. Find all the places where your code references the `appboy.display` namespace. Braze has removed all instances of the `display` namespace:
 ```javascript
 window.appboy.display.destroyFeed();
 ```
