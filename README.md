@@ -22,12 +22,6 @@ If you use Push Notifications, we have updated the `service-worker.js` file.  In
 self.importScripts('https://static.mparticle.com/sdk/js/braze/service-worker-6.5.0.js')
 ```
 
-### Transition from @mparticle/web-appboy-kit to @mparticle/web-braze-kit
-
-The legacy @mparticle/web-appboy-kit from npm includes version 2 of the Braze Web SDK.  As part of this update, we've created a new [Braze web kit repo](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze) to replace our deprecated [Appboy web kit repo](https://github.com/mparticle-integrations/mparticle-javascript-integration-appboy).  If you are still using `@mparticle/web-appboy-kit`, you will need to consider the breaking changes Braze made between V2 and V3 of the Braze SDK (found [here](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog/#300)) as well as the instructions above to get from V2 to V6 of the Braze SDK.
-
-
-
 
 # License
 
