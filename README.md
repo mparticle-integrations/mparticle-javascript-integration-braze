@@ -16,7 +16,7 @@ Step 1: Whether you are using the snippet or self hosting, you need to navigate 
 Step 2: Remove or replace any calls to removed APIs (e.g. News Feed methods such as `destroyFeed()`, `toggleFeed()`, `showFeed()`) and update any renamed APIs per the migration guide. We recommend testing thoroughly in a development environment before releasing.
 
 Step 3: Push Notifications via service-worker.js
-If you use Push Notifications, we have updated the `service-worker.js` file.  In our testing, Braze's push notifications work as expected regardless of what version of the service-worker is used, but we recommend updating this file to ensure future compatibility.  In your `service-worker.js` file, update the code to reference `https://static.mparticle.com/sdk/js/braze/service-worker-6.5.0.js` instead of `https://static.mparticle.com/sdk/js/braze/service-worker-5.5.0.js`.  Your `service-worker.js` file should now contain:
+If you use Push Notifications, your `service-worker.js` file should be updated to reference `https://static.mparticle.com/sdk/js/braze/service-worker-6.5.0.js` instead of `https://static.mparticle.com/sdk/js/braze/service-worker-5.5.0.js`.  Your `service-worker.js` file should now contain:
 
 ```javascript
 self.importScripts('https://static.mparticle.com/sdk/js/braze/service-worker-6.5.0.js')
