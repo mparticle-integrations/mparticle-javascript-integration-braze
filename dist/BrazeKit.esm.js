@@ -19,47 +19,47 @@ function getAugmentedNamespace(n) {
 	return a;
 }
 
-const r = {
+const E = {
   init: function (n) {
-    (void 0 === n && void 0 !== r.zg) || (r.zg = !!n), r.t || (r.t = !0);
+    (void 0 === n && void 0 !== E.zg) || (E.zg = !!n), E.i || (E.i = !0);
   },
   destroy: function () {
-    (r.t = !1), (r.zg = void 0), (r.vd = void 0);
+    (E.i = !1), (E.zg = void 0), (E.Rd = void 0);
   },
   setLogger: function (n) {
     "function" == typeof n
-      ? (r.init(), (r.vd = n))
-      : r.info("Ignoring setLogger call since logger is not a function");
+      ? (E.init(), (E.Rd = n))
+      : E.info("Ignoring setLogger call since logger is not a function");
   },
   toggleLogging: function () {
-    r.init(),
-      r.zg
-        ? (console.log("Disabling Braze logging"), (r.zg = !1))
-        : (console.log("Enabled Braze logging"), (r.zg = !0));
+    E.init(),
+      E.zg
+        ? (console.log("Disabling Braze logging"), (E.zg = !1))
+        : (console.log("Enabled Braze logging"), (E.zg = !0));
   },
   info: function (n) {
-    if (r.zg) {
+    if (E.zg) {
       const o = "Braze: " + n;
-      null != r.vd ? r.vd(o) : console.log(o);
+      null != E.Rd ? E.Rd(o) : console.log(o);
     }
   },
   warn: function (n) {
-    if (r.zg) {
-      const o = "Braze SDK Warning: " + n + " (v5.5.0)";
-      null != r.vd ? r.vd(o) : console.warn(o);
+    if (E.zg) {
+      const o = "Braze SDK Warning: " + n + " (v6.5.0)";
+      null != E.Rd ? E.Rd(o) : console.warn(o);
     }
   },
   error: function (n) {
-    if (r.zg) {
-      const o = "Braze SDK Error: " + n + " (v5.5.0)";
-      null != r.vd ? r.vd(o) : console.error(o);
+    if (E.zg) {
+      const o = "Braze SDK Error: " + n + " (v6.5.0)";
+      null != E.Rd ? E.Rd(o) : console.error(o);
     }
   },
 };
-var r$1 = r;
+var E$1 = E;
 
-const ei = {
-  Tn: function (t) {
+const ui = {
+  Nu: function (t) {
     const r = (t + "=".repeat((4 - (t.length % 4)) % 4))
         .replace(/\-/g, "+")
         .replace(/_/g, "/"),
@@ -70,69 +70,87 @@ const ei = {
   },
 };
 
-const i = {
+const f = {
     CustomEvent: "ce",
     Pr: "p",
-    Ku: "pc",
-    vc: "ca",
-    Ua: "i",
-    Ls: "ie",
-    M: "cci",
-    R: "ccic",
-    k: "ccc",
-    F: "ccd",
-    ql: "ss",
-    xl: "se",
-    Xi: "si",
-    $i: "sc",
-    Oi: "sbc",
-    Cc: "sfe",
-    mo: "iec",
-    Ju: "lr",
-    Eu: "uae",
-    O: "ci",
-    D: "cc",
-    Xu: "lcaa",
-    Gu: "lcar",
-    On: "inc",
-    Ln: "add",
-    Rn: "rem",
-    $n: "set",
-    Bn: "ncam",
-    Hu: "sgu",
-    Fr: "ffi",
-  },
-  or = { Ar: "feed_displayed", Ec: "content_cards_displayed" };
+    jd: "pc",
+    ev: "ca",
+    Fl: "i",
+    wl: "ie",
+    Xt: "cci",
+    Zt: "ccic",
+    Lt: "ccc",
+    Qt: "ccd",
+    Sm: "ss",
+    hm: "se",
+    wn: "si",
+    zn: "sc",
+    Sn: "sbc",
+    tv: "sfe",
+    om: "iec",
+    yd: "lr",
+    kd: "uae",
+    Dd: "lcaa",
+    Ad: "lcar",
+    Zu: "inc",
+    Qu: "add",
+    Xu: "rem",
+    Yu: "set",
+    Vu: "ncam",
+    $d: "sgu",
+    xo: "ffi",
+    ro: "bi",
+    ut: "bc",
+  };
 
-const p = {
-  W: function () {
-    const t = (t = !1) => {
-      const n = (Math.random().toString(16) + "000000000").substr(2, 8);
-      return t ? "-" + n.substr(0, 4) + "-" + n.substr(4, 4) : n;
+const P = {
+  se: function () {
+    if ("undefined" != typeof window && window.crypto) {
+      if ("function" == typeof window.crypto.randomUUID)
+        return window.crypto.randomUUID();
+      if ("function" == typeof window.crypto.getRandomValues)
+        try {
+          const n = new Uint8Array(16);
+          window.crypto.getRandomValues(n),
+            (n[6] = (15 & n[6]) | 64),
+            (n[8] = (63 & n[8]) | 128);
+          const t = Array.from(n, (n) => ("0" + n.toString(16)).slice(-2));
+          return [
+            t.slice(0, 4).join(""),
+            t.slice(4, 6).join(""),
+            t.slice(6, 8).join(""),
+            t.slice(8, 10).join(""),
+            t.slice(10, 16).join(""),
+          ].join("-");
+        } catch (n) {}
+    }
+    const n = (n = !1) => {
+      const t = (Math.random().toString(16) + "000000000").substr(2, 8);
+      return n ? "-" + t.substr(0, 4) + "-" + t.substr(4, 4) : t;
     };
-    return t() + t(!0) + t(!0) + t();
+    return n() + n(!0) + n(!0) + n();
   },
 };
-var p$1 = p;
+var P$1 = P;
 
-class A {
+class et {
   constructor(t, e) {
     (this.database = t),
-      (this.vd = e),
+      (this.Rd = e),
       (this.parent = "undefined" == typeof window ? self : window),
       (this.database = t),
-      (this.vd = e);
+      (this.Rd = e);
   }
-  Dd() {
+  Ud() {
     if ("indexedDB" in this.parent) return this.parent.indexedDB;
   }
   isSupported() {
     var t;
     try {
-      if (null == this.Dd()) return !1;
+      if (null == this.Ud()) return !1;
       {
         const e =
-          null === (t = this.Dd()) || void 0 === t
+          null === (t = this.Ud()) || void 0 === t
             ? void 0
             : t.open("Braze IndexedDB Support Test");
         if (
@@ -142,10 +160,10 @@ class A {
           "undefined" != typeof window)
         ) {
           const t = window,
-            e = t.chrome || t.browser || t.pd;
+            e = t.chrome || t.browser || t.Od;
           if (e && e.runtime && e.runtime.id)
             return (
-              this.vd.info(
+              this.Rd.info(
                 "Not using IndexedDB for storage because we are running inside an extension",
               ),
               !1
@@ -155,37 +173,37 @@ class A {
       }
     } catch (t) {
       return (
-        this.vd.info(
+        this.Rd.info(
           "Not using IndexedDB for storage due to following error: " + t,
         ),
         !1
       );
     }
   }
-  Bd(t, e) {
+  Kd(t, e) {
     var n;
     const o =
-      null === (n = this.Dd()) || void 0 === n
+      null === (n = this.Ud()) || void 0 === n
         ? void 0
-        : n.open(this.database.Sd, this.database.VERSION);
+        : n.open(this.database.Ld, this.database.VERSION);
     if (null == o) return "function" == typeof e && e(), !1;
     const i = this;
     return (
       (o.onupgradeneeded = (t) => {
         var e;
-        i.vd.info(
+        i.Rd.info(
           "Upgrading indexedDB " +
-            i.database.Sd +
+            i.database.Ld +
             " to v" +
             i.database.VERSION +
             "...",
         );
         const n = null === (e = t.target) || void 0 === e ? void 0 : e.result;
-        for (const t in i.database.hs) {
+        for (const t in i.database.Fs) {
           const e = t;
-          i.database.hs.hasOwnProperty(t) &&
-            !n.objectStoreNames.contains(i.database.hs[e]) &&
-            n.createObjectStore(i.database.hs[e]);
+          i.database.Fs.hasOwnProperty(t) &&
+            !n.objectStoreNames.contains(i.database.Fs[e]) &&
+            n.createObjectStore(i.database.Fs[e]);
         }
       }),
       (o.onsuccess = (n) => {
@@ -194,7 +212,7 @@ class A {
         (r.onversionchange = () => {
           r.close(),
             "function" == typeof e && e(),
-            i.vd.error(
+            i.Rd.error(
               "Needed to close the database unexpectedly because of an upgrade in another tab",
             );
         }),
@@ -204,9 +222,9 @@ class A {
         var n;
         const o = t;
         return (
-          i.vd.info(
+          i.Rd.info(
             "Could not open indexedDB " +
-              i.database.Sd +
+              i.database.Ld +
               " v" +
               i.database.VERSION +
               ": " +
@@ -222,16 +240,16 @@ class A {
   setItem(t, e, n, o, i) {
     if (!this.isSupported()) return "function" == typeof i && i(), !1;
     const r = this;
-    return this.Bd((d) => {
+    return this.Kd((d) => {
       if (!d.objectStoreNames.contains(t))
         return (
-          r.vd.error(
+          r.Rd.error(
             "Could not store object " +
               e +
               " in " +
               t +
               " on indexedDB " +
-              r.database.Sd +
+              r.database.Ld +
               " - " +
               t +
               " is not a valid objectStore",
@@ -243,13 +261,13 @@ class A {
       s.oncomplete = () => d.close();
       const u = s.objectStore(t).put(n, e);
       (u.onerror = () => {
-        r.vd.error(
+        r.Rd.error(
           "Could not store object " +
             e +
             " in " +
             t +
             " on indexedDB " +
-            r.database.Sd,
+            r.database.Ld,
         ),
           "function" == typeof i && i();
       }),
@@ -261,16 +279,16 @@ class A {
   getItem(t, e, n) {
     if (!this.isSupported()) return !1;
     const o = this;
-    return this.Bd((i) => {
+    return this.Kd((i) => {
       if (!i.objectStoreNames.contains(t))
         return (
-          o.vd.error(
+          o.Rd.error(
             "Could not retrieve object " +
               e +
               " in " +
               t +
               " on indexedDB " +
-              o.database.Sd +
+              o.database.Ld +
               " - " +
               t +
               " is not a valid objectStore",
@@ -281,13 +299,13 @@ class A {
       r.oncomplete = () => i.close();
       const d = r.objectStore(t).get(e);
       (d.onerror = () => {
-        o.vd.error(
+        o.Rd.error(
           "Could not retrieve object " +
             e +
             " in " +
             t +
             " on indexedDB " +
-            o.database.Sd,
+            o.database.Ld,
         );
       }),
         (d.onsuccess = (t) => {
@@ -297,17 +315,17 @@ class A {
         });
     });
   }
-  jr(t, e, n) {
+  kr(t, e, n) {
     if (!this.isSupported()) return "function" == typeof n && n(), !1;
     const o = this;
-    return this.Bd((i) => {
+    return this.Kd((i) => {
       if (!i.objectStoreNames.contains(t))
         return (
-          o.vd.error(
+          o.Rd.error(
             "Could not retrieve last record from " +
               t +
               " on indexedDB " +
-              o.database.Sd +
+              o.database.Ld +
               " - " +
               t +
               " is not a valid objectStore",
@@ -319,8 +337,8 @@ class A {
       r.oncomplete = () => i.close();
       const d = r.objectStore(t).openCursor(null, "prev");
       (d.onerror = () => {
-        o.vd.error(
-          "Could not open cursor for " + t + " on indexedDB " + o.database.Sd,
+        o.Rd.error(
+          "Could not open cursor for " + t + " on indexedDB " + o.database.Ld,
         ),
           "function" == typeof n && n();
       }),
@@ -333,19 +351,19 @@ class A {
         });
     }, n);
   }
-  re(t, e) {
+  je(t, e) {
     if (!this.isSupported()) return !1;
     const n = this;
-    return this.Bd((o) => {
+    return this.Kd((o) => {
       if (!o.objectStoreNames.contains(t))
         return (
-          n.vd.error(
+          n.Rd.error(
             "Could not delete record " +
               e +
               " from " +
               t +
               " on indexedDB " +
-              n.database.Sd +
+              n.database.Ld +
               " - " +
               t +
               " is not a valid objectStore",
@@ -355,28 +373,28 @@ class A {
       const i = o.transaction([t], "readwrite");
       i.oncomplete = () => o.close();
       i.objectStore(t).delete(e).onerror = () => {
-        n.vd.error(
+        n.Rd.error(
           "Could not delete record " +
             e +
             " from " +
             t +
             " on indexedDB " +
-            n.database.Sd,
+            n.database.Ld,
         );
       };
     });
   }
-  ss(t, e) {
+  Ds(t, e) {
     if (!this.isSupported()) return !1;
     const n = this;
-    return this.Bd((o) => {
+    return this.Kd((o) => {
       if (!o.objectStoreNames.contains(t))
         return (
-          n.vd.error(
+          n.Rd.error(
             "Could not retrieve objects from " +
               t +
               " on indexedDB " +
-              n.database.Sd +
+              n.database.Ld +
               " - " +
               t +
               " is not a valid objectStore",
@@ -390,18 +408,18 @@ class A {
         s = [];
       (d.onerror = () => {
         s.length > 0
-          ? (n.vd.info(
+          ? (n.Rd.info(
               "Cursor closed midway through for " +
                 t +
                 " on indexedDB " +
-                n.database.Sd,
+                n.database.Ld,
             ),
             e(s))
-          : n.vd.error(
+          : n.Rd.error(
               "Could not open cursor for " +
                 t +
                 " on indexedDB " +
-                n.database.Sd,
+                n.database.Ld,
             );
       }),
         (d.onsuccess = (t) => {
@@ -421,79 +439,79 @@ class A {
   clearData() {
     if (!this.isSupported()) return !1;
     const t = [];
-    for (const e in this.database.hs) {
+    for (const e in this.database.Fs) {
       const n = e;
-      this.database.hs.hasOwnProperty(e) &&
-        this.database.hs[n] !== this.database.hs.ae &&
-        t.push(this.database.hs[n]);
+      this.database.Fs.hasOwnProperty(e) &&
+        this.database.Fs[n] !== this.database.Fs.be &&
+        t.push(this.database.Fs[n]);
     }
     const e = this;
-    return this.Bd(function (n) {
+    return this.Kd(function (n) {
       const o = n.transaction(t, "readwrite");
       o.oncomplete = () => n.close();
       for (let n = 0; n < t.length; n++) {
         const i = t[n];
         o.objectStore(i).clear().onerror = function () {
-          e.vd.error(
+          e.Rd.error(
             "Could not clear " +
               this.source.name +
               " on indexedDB " +
-              e.database.Sd,
+              e.database.Ld,
           );
         };
       }
       o.onerror = function () {
-        e.vd.error(
-          "Could not clear object stores on indexedDB " + e.database.Sd,
+        e.Rd.error(
+          "Could not clear object stores on indexedDB " + e.database.Ld,
         );
       };
     });
   }
 }
-A.ts = {
-  Zt: {
-    Sd: "AppboyServiceWorkerAsyncStorage",
+et.Us = {
+  Rs: {
+    Ld: "AppboyServiceWorkerAsyncStorage",
     VERSION: 6,
-    hs: {
-      Ka: "data",
-      hr: "pushClicks",
-      cu: "pushSubscribed",
-      Cd: "fallbackDevice",
-      es: "cardUpdates",
-      ae: "optOut",
-      wr: "pendingData",
-      jh: "sdkAuthenticationSignature",
+    Fs: {
+      Ze: "data",
+      vr: "pushClicks",
+      Fu: "pushSubscribed",
+      Gd: "fallbackDevice",
+      As: "cardUpdates",
+      be: "optOut",
+      zr: "pendingData",
+      qh: "sdkAuthenticationSignature",
     },
-    ie: 1,
+    fe: 1,
   },
 };
 
-var zt = {
-  Eo: "allowCrawlerActivity",
-  _o: "baseUrl",
-  Io: "noCookies",
-  So: "devicePropertyAllowlist",
-  Aa: "disablePushTokenMaintenance",
-  Ao: "enableLogging",
-  No: "enableSdkAuthentication",
-  qa: "manageServiceWorkerExternally",
-  Oo: "minimumIntervalBetweenTriggerActionsInSeconds",
-  Ro: "sessionTimeoutInSeconds",
-  Po: "appVersion",
-  Lo: "appVersionNumber",
-  Ma: "serviceWorkerLocation",
-  ka: "safariWebsitePushId",
-  zn: "localization",
-  bo: "contentSecurityNonce",
-  Do: "allowUserSuppliedJavascript",
-  jo: "inAppMessageZIndex",
-  ho: "openInAppMessagesInNewTab",
-  en: "openNewsFeedCardsInNewTab",
-  Lh: "requireExplicitInAppMessageDismissal",
-  Mo: "doNotLoadFontAwesome",
-  Uo: "deviceId",
-  _a: "serviceWorkerScope",
-  Wo: "sdkFlavor",
+var $t = {
+  Ph: "allowCrawlerActivity",
+  Wh: "baseUrl",
+  Vh: "noCookies",
+  Kh: "devicePropertyAllowlist",
+  La: "disablePushTokenMaintenance",
+  $h: "enableLogging",
+  Yh: "enableSdkAuthentication",
+  Ka: "manageServiceWorkerExternally",
+  Xh: "minimumIntervalBetweenTriggerActionsInSeconds",
+  Zh: "sessionTimeoutInSeconds",
+  Qh: "appVersion",
+  Xa: "appVersionNumber",
+  Ga: "serviceWorkerLocation",
+  Ia: "safariWebsitePushId",
+  Wa: "localization",
+  er: "contentSecurityNonce",
+  te: "allowUserSuppliedJavascript",
+  $a: "inAppMessageZIndex",
+  Ja: "openInAppMessagesInNewTab",
+  Oh: "requireExplicitInAppMessageDismissal",
+  Za: "doNotLoadFontAwesome",
+  tl: "deviceId",
+  Ha: "serviceWorkerScope",
+  Ne: "dustHost",
+  il: "sdkFlavor",
   tn: "openCardsInNewTab",
 };
 
@@ -507,11 +525,11 @@ function values(t) {
         e.push(t[r]);
   return e;
 }
-function validateValueIsFromEnum(t, e, n, o) {
-  const c = values(t);
+function validateValueIsFromEnum(t, e, r, n) {
+  const o = values(t);
   return (
-    -1 !== c.indexOf(e) ||
-    (r$1.error(`${n} Valid values from ${o} are "${c.join('"/"')}".`), !1)
+    -1 !== o.indexOf(e) ||
+    (E$1.error(`${r} Valid values from ${n} are "${o.join('"/"')}".`), !1)
   );
 }
 function isArray(t) {
@@ -524,19 +542,6 @@ function isDate(t) {
 }
 function isObject$1(t) {
   return "[object Object]" === Object.prototype.toString.call(t);
-}
-function intersection(t, ...e) {
-  null == t && (t = []);
-  const r = [],
-    n = arguments.length;
-  for (let e = 0, o = t.length; e < o; e++) {
-    const o = t[e];
-    if (-1 !== r.indexOf(o)) continue;
-    let c = 1;
-    for (c = 1; c < n && -1 !== arguments[c].indexOf(o); c++);
-    c === n && r.push(o);
-  }
-  return r;
 }
 function keys(t) {
   const e = [];
@@ -626,42 +631,43 @@ function secondsInTheFuture(e) {
 }
 
 const MAX_PURCHASE_QUANTITY = 100;
-const MUST_BE_IN_APP_MESSAGE_WARNING =
-  "inAppMessage must be an InAppMessage object";
-const MUST_BE_CARD_WARNING_SUFFIX = "must be a Card object";
 const FEED_ANIMATION_DURATION = 500;
-const LOG_CUSTOM_EVENT_STRING = "logCustomEvent";
-const SET_CUSTOM_USER_ATTRIBUTE_STRING = "setCustomUserAttribute";
-const BRAZE_MUST_BE_INITIALIZED_ERROR =
-  "Braze must be initialized before calling methods.";
 const GLOBAL_RATE_LIMIT_CAPACITY_DEFAULT = 30;
 const GLOBAL_RATE_LIMIT_REFILL_RATE_DEFAULT = 30;
 const LAST_REQUEST_TO_ENDPOINT_MS_AGO_DEFAULT = 72e5;
-const MAX_ERROR_RETRIES_CONTENT_CARDS = 3;
+const MAX_RETRY_COUNT_PER_REQUEST = 15;
 const REQUEST_ATTEMPT_DEFAULT = 1;
+const REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT = 1e4;
+const REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT = 3;
+const REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT = 3e5;
+const CoreStrings = {
+  ee: "Braze must be initialized before calling methods.",
+  $e: "logCustomEvent",
+  Ku: "setCustomUserAttribute",
+};
 
-class T {
+class m {
   constructor() {
-    this._e = {};
-  }
-  Nt(t) {
-    if ("function" != typeof t) return null;
-    const i = p$1.W();
-    return (this._e[i] = t), i;
-  }
-  removeSubscription(t) {
-    delete this._e[t];
-  }
-  removeAllSubscriptions() {
-    this._e = {};
-  }
-  ic() {
-    return Object.keys(this._e).length;
+    this.jn = {};
   }
   Rt(t) {
+    if ("function" != typeof t) return null;
+    const i = P$1.se();
+    return (this.jn[i] = t), i;
+  }
+  removeSubscription(t) {
+    delete this.jn[t];
+  }
+  removeAllSubscriptions() {
+    this.jn = {};
+  }
+  De() {
+    return Object.keys(this.jn).length;
+  }
+  L(t) {
     const i = [];
-    for (const s in this._e) {
-      const r = this._e[s];
+    for (const s in this.jn) {
+      const r = this.jn[s];
       i.push(r(t));
     }
     return i;
@@ -669,65 +675,65 @@ class T {
 }
 
 class Card {
-  constructor(t, i, s, h, n, l, e, r, u, E, o, T, I, a, c, N) {
+  constructor(t, i, s, h, l, n, e, r, u, E, T, o, a, I, N, A) {
     (this.id = t),
       (this.viewed = i),
       (this.title = s),
       (this.imageUrl = h),
-      (this.description = n),
-      (this.created = l),
-      (this.updated = e),
-      (this.categories = r),
-      (this.expiresAt = u),
-      (this.url = E),
-      (this.linkText = o),
-      (this.aspectRatio = T),
-      (this.extras = I),
-      (this.pinned = a),
-      (this.dismissible = c),
-      (this.clicked = N),
+      (this.description = l),
+      (this.updated = n),
+      (this.expiresAt = e),
+      (this.url = r),
+      (this.linkText = u),
+      (this.aspectRatio = E),
+      (this.extras = T),
+      (this.pinned = o),
+      (this.dismissible = a),
+      (this.clicked = I),
+      (this.language = N),
+      (this.altImageText = A),
       (this.id = t),
       (this.viewed = i || !1),
       (this.title = s || ""),
       (this.imageUrl = h),
-      (this.description = n || ""),
-      (this.created = l || null),
-      (this.updated = e || null),
-      (this.categories = r || []),
-      (this.expiresAt = u || null),
-      (this.url = E),
-      (this.linkText = o),
-      null == T
+      (this.description = l || ""),
+      (this.updated = n || null),
+      (this.expiresAt = e || null),
+      (this.url = r),
+      (this.linkText = u),
+      null == E
         ? (this.aspectRatio = null)
-        : ((T = parseFloat(T.toString())),
-          (this.aspectRatio = isNaN(T) ? null : T)),
-      (this.extras = I || {}),
-      (this.pinned = a || !1),
-      (this.dismissible = c || !1),
+        : ((E = parseFloat(E.toString())),
+          (this.aspectRatio = isNaN(E) ? null : E)),
+      (this.extras = T || {}),
+      (this.pinned = o || !1),
+      (this.dismissible = a || !1),
       (this.dismissed = !1),
-      (this.clicked = N || !1),
+      (this.clicked = I || !1),
       (this.isControl = !1),
+      (this.language = N || null),
+      (this.altImageText = A || null),
       (this.test = !1),
-      (this.Et = null),
-      (this.Tt = null),
-      (this.It = null);
+      (this.ti = null),
+      (this.ii = null),
+      (this.si = null);
   }
   subscribeToClickedEvent(t) {
-    return this.St().Nt(t);
+    return this.hi().Rt(t);
   }
   subscribeToDismissedEvent(t) {
-    return this.At().Nt(t);
+    return this.li().Rt(t);
   }
   removeSubscription(t) {
-    this.St().removeSubscription(t), this.At().removeSubscription(t);
+    this.hi().removeSubscription(t), this.li().removeSubscription(t);
   }
   removeAllSubscriptions() {
-    this.St().removeAllSubscriptions(), this.At().removeAllSubscriptions();
+    this.hi().removeAllSubscriptions(), this.li().removeAllSubscriptions();
   }
   dismissCard() {
     if (!this.dismissible || this.dismissed) return;
     "function" == typeof this.logCardDismissal && this.logCardDismissal();
-    let t = this.T;
+    let t = this.ae;
     !t && this.id && (t = document.getElementById(this.id)),
       t &&
         ((t.style.height = t.offsetHeight + "px"),
@@ -739,158 +745,163 @@ class Card {
             (t.style.margin = "0"),
             setTimeout(function () {
               t && t.parentNode && t.parentNode.removeChild(t);
-            }, Card.Dt));
+            }, Card.ni));
         }, FEED_ANIMATION_DURATION));
   }
-  St() {
-    return null == this.Et && (this.Et = new T()), this.Et;
+  hi() {
+    return null == this.ti && (this.ti = new m()), this.ti;
   }
-  At() {
-    return null == this.Tt && (this.Tt = new T()), this.Tt;
+  li() {
+    return null == this.ii && (this.ii = new m()), this.ii;
   }
-  K() {
+  Wt() {
     const t = new Date().valueOf();
     return (
-      !(null != this.It && t - this.It < Card.Ct) &&
-      ((this.It = t), (this.viewed = !0), !0)
+      !(null != this.si && t - this.si < Card.ei) &&
+      ((this.si = t), (this.viewed = !0), !0)
     );
   }
-  p() {
-    (this.viewed = !0), (this.clicked = !0), this.St().Rt();
+  $t() {
+    (this.viewed = !0), (this.clicked = !0), this.hi().L();
   }
-  N() {
+  Ot() {
     return (
       !(!this.dismissible || this.dismissed) &&
-      ((this.dismissed = !0), this.At().Rt(), !0)
+      ((this.dismissed = !0), this.li().L(), !0)
     );
   }
-  Lt(t) {
-    if (null == t || t[Card._t.ht] !== this.id) return !0;
-    if (t[Card._t.Ot]) return !1;
+  ri(t) {
+    if (null == t || t[Card.ui.rs] !== this.id) return !0;
+    if (t[Card.ui.Ei]) return !1;
     if (
-      null != t[Card._t.nt] &&
+      null != t[Card.ui.ps] &&
       null != this.updated &&
-      parseInt(t[Card._t.nt]) < convertMsToSeconds(this.updated.valueOf())
+      parseInt(t[Card.ui.ps]) < convertMsToSeconds(this.updated.valueOf())
     )
       return !0;
     if (
-      (t[Card._t.et] && !this.viewed && (this.viewed = !0),
-      t[Card._t.zt] && !this.clicked && (this.clicked = t[Card._t.zt]),
-      null != t[Card._t.rt] && (this.title = t[Card._t.rt]),
-      null != t[Card._t.ot] && (this.imageUrl = t[Card._t.ot]),
-      null != t[Card._t.ct] && (this.description = t[Card._t.ct]),
-      null != t[Card._t.nt])
+      (t[Card.ui.os] && !this.viewed && (this.viewed = !0),
+      t[Card.ui.js] && !this.clicked && (this.clicked = t[Card.ui.js]),
+      null != t[Card.ui.cs] && (this.title = t[Card.ui.cs]),
+      null != t[Card.ui.ns] && (this.imageUrl = t[Card.ui.ns]),
+      null != t[Card.ui.ds] && (this.description = t[Card.ui.ds]),
+      null != t[Card.ui.ps])
     ) {
-      const i = dateFromUnixTimestamp(t[Card._t.nt]);
+      const i = dateFromUnixTimestamp(t[Card.ui.ps]);
       null != i && (this.updated = i);
     }
-    if (null != t[Card._t.lt]) {
+    if (null != t[Card.ui.us]) {
       let i;
-      (i = t[Card._t.lt] === Card.Mt ? null : dateFromUnixTimestamp(t[Card._t.lt])),
+      (i = t[Card.ui.us] === Card.Ti ? null : dateFromUnixTimestamp(t[Card.ui.us])),
         (this.expiresAt = i);
     }
     if (
-      (null != t[Card._t.URL] && (this.url = t[Card._t.URL]),
-      null != t[Card._t.ft] && (this.linkText = t[Card._t.ft]),
-      null != t[Card._t.xt])
+      (null != t[Card.ui.URL] && (this.url = t[Card.ui.URL]),
+      null != t[Card.ui.ls] && (this.linkText = t[Card.ui.ls]),
+      null != t[Card.ui.fs])
     ) {
-      const i = parseFloat(t[Card._t.xt].toString());
+      const i = parseFloat(t[Card.ui.fs].toString());
       this.aspectRatio = isNaN(i) ? null : i;
     }
     return (
-      null != t[Card._t.bt] && (this.extras = t[Card._t.bt]),
-      null != t[Card._t.gt] && (this.pinned = t[Card._t.gt]),
-      null != t[Card._t.jt] && (this.dismissible = t[Card._t.jt]),
-      null != t[Card._t.kt] && (this.test = t[Card._t.kt]),
+      null != t[Card.ui.xs] && (this.extras = t[Card.ui.xs]),
+      null != t[Card.ui.bs] && (this.pinned = t[Card.ui.bs]),
+      null != t[Card.ui.gs] && (this.dismissible = t[Card.ui.gs]),
+      null != t[Card.ui.zs] && (this.language = t[Card.ui.zs]),
+      null != t[Card.ui.ks] && (this.altImageText = t[Card.ui.ks]),
+      null != t[Card.ui.qs] && (this.test = t[Card.ui.qs]),
       !0
     );
   }
-  Y() {
-    r$1.error("Must be implemented in a subclass");
+  gt() {
+    E$1.error("Must be implemented in a subclass");
   }
 }
-(Card.Mt = -1),
-  (Card._t = {
-    ht: "id",
-    et: "v",
-    jt: "db",
-    Ot: "r",
-    nt: "ca",
-    gt: "p",
-    lt: "ea",
-    bt: "e",
-    Z: "tp",
-    ot: "i",
-    rt: "tt",
-    ct: "ds",
+(Card.Ti = -1),
+  (Card.ui = {
+    rs: "id",
+    os: "v",
+    gs: "db",
+    Ei: "r",
+    ps: "ca",
+    bs: "p",
+    us: "ea",
+    xs: "e",
+    ts: "tp",
+    ns: "i",
+    cs: "tt",
+    ds: "ds",
     URL: "u",
-    ft: "dm",
-    xt: "ar",
-    zt: "cl",
-    kt: "t",
+    ls: "dm",
+    fs: "ar",
+    js: "cl",
+    qs: "t",
+    zs: "language",
+    ks: "image_alt",
   }),
-  (Card.it = {
-    st: "captioned_image",
-    Pt: "text_announcement",
-    Ut: "short_news",
-    Gt: "banner_image",
-    Xt: "control",
+  (Card.es = {
+    hs: "captioned_image",
+    oi: "text_announcement",
+    ai: "short_news",
+    Ii: "banner_image",
+    Ni: "control",
   }),
-  (Card.tt = {
-    ht: "id",
-    et: "v",
-    jt: "db",
-    dt: "cr",
-    nt: "ca",
-    gt: "p",
-    ut: "t",
-    lt: "ea",
-    bt: "e",
-    Z: "tp",
-    ot: "i",
-    rt: "tt",
-    ct: "ds",
+  (Card.ss = {
+    rs: "id",
+    os: "v",
+    gs: "db",
+    Ai: "cr",
+    ps: "ca",
+    bs: "p",
+    ci: "t",
+    us: "ea",
+    xs: "e",
+    ts: "tp",
+    ns: "i",
+    cs: "tt",
+    ds: "ds",
     URL: "u",
-    ft: "dm",
-    xt: "ar",
-    zt: "cl",
-    kt: "s",
+    ls: "dm",
+    fs: "ar",
+    js: "cl",
+    qs: "s",
+    zs: "l",
+    ks: "ia",
   }),
-  (Card.vt = {
-    Vt: "ADVERTISING",
-    Wt: "ANNOUNCEMENTS",
-    wt: "NEWS",
-    Ft: "SOCIAL",
+  (Card.mi = {
+    Si: "ADVERTISING",
+    Di: "ANNOUNCEMENTS",
+    pi: "NEWS",
+    di: "SOCIAL",
   }),
-  (Card.Dt = 400),
-  (Card.Ct = 1e4);
+  (Card.ni = 400),
+  (Card.ei = 1e4);
 
 class ImageOnly extends Card {
-  constructor(s, t, i, h, r, e, l, n, o, a, u, c, d, m) {
-    super(s, t, null, i, null, h, r, e, l, n, o, a, u, c, d, m),
-      (this._ = "ab-image-only"),
-      (this.S = !1),
+  constructor(s, t, i, h, l, r, e, n, o, u, a, c, d) {
+    super(s, t, null, i, null, h, l, r, null, e, n, o, u, a, c, d),
+      (this.ie = "ab-image-only"),
+      (this.ne = !1),
       (this.test = !1);
   }
-  Y() {
+  gt() {
     const s = {};
     return (
-      (s[Card.tt.Z] = Card.it.Gt),
-      (s[Card.tt.ht] = this.id),
-      (s[Card.tt.et] = this.viewed),
-      (s[Card.tt.ot] = this.imageUrl),
-      (s[Card.tt.nt] = this.updated),
-      (s[Card.tt.dt] = this.created),
-      (s[Card.tt.ut] = this.categories),
-      (s[Card.tt.lt] = this.expiresAt),
-      (s[Card.tt.URL] = this.url),
-      (s[Card.tt.ft] = this.linkText),
-      (s[Card.tt.xt] = this.aspectRatio),
-      (s[Card.tt.bt] = this.extras),
-      (s[Card.tt.gt] = this.pinned),
-      (s[Card.tt.jt] = this.dismissible),
-      (s[Card.tt.zt] = this.clicked),
-      (s[Card.tt.kt] = this.test),
+      (s[Card.ss.ts] = Card.es.Ii),
+      (s[Card.ss.rs] = this.id),
+      (s[Card.ss.os] = this.viewed),
+      (s[Card.ss.ns] = this.imageUrl),
+      (s[Card.ss.ps] = this.updated),
+      (s[Card.ss.us] = this.expiresAt),
+      (s[Card.ss.URL] = this.url),
+      (s[Card.ss.fs] = this.aspectRatio),
+      (s[Card.ss.xs] = this.extras),
+      (s[Card.ss.bs] = this.pinned),
+      (s[Card.ss.gs] = this.dismissible),
+      (s[Card.ss.js] = this.clicked),
+      (s[Card.ss.zs] = this.language),
+      (s[Card.ss.ks] = this.altImageText),
+      (s[Card.ss.qs] = this.test),
       s
     );
   }
@@ -899,31 +910,31 @@ class ImageOnly extends Card {
 class CaptionedImage extends Card {
   constructor(t, s, i, h, e, r, a, o, c, n, d, p, u, l, m, f) {
     super(t, s, i, h, e, r, a, o, c, n, d, p, u, l, m, f),
-      (this._ = "ab-captioned-image"),
-      (this.S = !0),
+      (this.ie = "ab-captioned-image"),
+      (this.ne = !0),
       (this.test = !1);
   }
-  Y() {
+  gt() {
     const t = {};
     return (
-      (t[Card.tt.Z] = Card.it.st),
-      (t[Card.tt.ht] = this.id),
-      (t[Card.tt.et] = this.viewed),
-      (t[Card.tt.rt] = this.title),
-      (t[Card.tt.ot] = this.imageUrl),
-      (t[Card.tt.ct] = this.description),
-      (t[Card.tt.nt] = this.updated),
-      (t[Card.tt.dt] = this.created),
-      (t[Card.tt.ut] = this.categories),
-      (t[Card.tt.lt] = this.expiresAt),
-      (t[Card.tt.URL] = this.url),
-      (t[Card.tt.ft] = this.linkText),
-      (t[Card.tt.xt] = this.aspectRatio),
-      (t[Card.tt.bt] = this.extras),
-      (t[Card.tt.gt] = this.pinned),
-      (t[Card.tt.jt] = this.dismissible),
-      (t[Card.tt.zt] = this.clicked),
-      (t[Card.tt.kt] = this.test),
+      (t[Card.ss.ts] = Card.es.hs),
+      (t[Card.ss.rs] = this.id),
+      (t[Card.ss.os] = this.viewed),
+      (t[Card.ss.cs] = this.title),
+      (t[Card.ss.ns] = this.imageUrl),
+      (t[Card.ss.ds] = this.description),
+      (t[Card.ss.ps] = this.updated),
+      (t[Card.ss.us] = this.expiresAt),
+      (t[Card.ss.URL] = this.url),
+      (t[Card.ss.ls] = this.linkText),
+      (t[Card.ss.fs] = this.aspectRatio),
+      (t[Card.ss.xs] = this.extras),
+      (t[Card.ss.bs] = this.pinned),
+      (t[Card.ss.gs] = this.dismissible),
+      (t[Card.ss.js] = this.clicked),
+      (t[Card.ss.zs] = this.language),
+      (t[Card.ss.ks] = this.altImageText),
+      (t[Card.ss.qs] = this.test),
       t
     );
   }
@@ -932,65 +943,65 @@ class CaptionedImage extends Card {
 class ClassicCard extends Card {
   constructor(s, t, i, h, r, c, e, a, o, d, l, n, u, p, f, m) {
     super(s, t, i, h, r, c, e, a, o, d, l, n, u, p, f, m),
-      (this._ = "ab-classic-card"),
-      (this.S = !0);
+      (this.ie = "ab-classic-card"),
+      (this.ne = !0);
   }
-  Y() {
+  gt() {
     const s = {};
     return (
-      (s[Card.tt.Z] = Card.it.Ut),
-      (s[Card.tt.ht] = this.id),
-      (s[Card.tt.et] = this.viewed),
-      (s[Card.tt.rt] = this.title),
-      (s[Card.tt.ot] = this.imageUrl),
-      (s[Card.tt.ct] = this.description),
-      (s[Card.tt.nt] = this.updated),
-      (s[Card.tt.dt] = this.created),
-      (s[Card.tt.ut] = this.categories),
-      (s[Card.tt.lt] = this.expiresAt),
-      (s[Card.tt.URL] = this.url),
-      (s[Card.tt.ft] = this.linkText),
-      (s[Card.tt.xt] = this.aspectRatio),
-      (s[Card.tt.bt] = this.extras),
-      (s[Card.tt.gt] = this.pinned),
-      (s[Card.tt.jt] = this.dismissible),
-      (s[Card.tt.zt] = this.clicked),
-      (s[Card.tt.kt] = this.test),
+      (s[Card.ss.ts] = Card.es.ai),
+      (s[Card.ss.rs] = this.id),
+      (s[Card.ss.os] = this.viewed),
+      (s[Card.ss.cs] = this.title),
+      (s[Card.ss.ns] = this.imageUrl),
+      (s[Card.ss.ds] = this.description),
+      (s[Card.ss.ps] = this.updated),
+      (s[Card.ss.us] = this.expiresAt),
+      (s[Card.ss.URL] = this.url),
+      (s[Card.ss.ls] = this.linkText),
+      (s[Card.ss.fs] = this.aspectRatio),
+      (s[Card.ss.xs] = this.extras),
+      (s[Card.ss.bs] = this.pinned),
+      (s[Card.ss.gs] = this.dismissible),
+      (s[Card.ss.js] = this.clicked),
+      (s[Card.ss.zs] = this.language),
+      (s[Card.ss.ks] = this.altImageText),
+      (s[Card.ss.qs] = this.test),
       s
     );
   }
 }
 
 class ControlCard extends Card {
-  constructor(l, t, s, i, n, r) {
-    super(l, t, null, null, null, null, s, null, i, null, null, null, n, r),
+  constructor(t, s, l, i, r, n) {
+    super(t, s, null, null, null, l, i, null, null, null, r, n),
       (this.isControl = !0),
-      (this._ = "ab-control-card"),
-      (this.S = !1);
+      (this.ie = "ab-control-card"),
+      (this.ne = !1);
   }
-  Y() {
-    const l = {};
+  gt() {
+    const t = {};
     return (
-      (l[Card.tt.Z] = Card.it.Xt),
-      (l[Card.tt.ht] = this.id),
-      (l[Card.tt.et] = this.viewed),
-      (l[Card.tt.nt] = this.updated),
-      (l[Card.tt.lt] = this.expiresAt),
-      (l[Card.tt.bt] = this.extras),
-      (l[Card.tt.gt] = this.pinned),
-      (l[Card.tt.kt] = this.test),
-      l
+      (t[Card.ss.ts] = Card.es.Ni),
+      (t[Card.ss.rs] = this.id),
+      (t[Card.ss.os] = this.viewed),
+      (t[Card.ss.ps] = this.updated),
+      (t[Card.ss.us] = this.expiresAt),
+      (t[Card.ss.xs] = this.extras),
+      (t[Card.ss.bs] = this.pinned),
+      (t[Card.ss.qs] = this.test),
+      t
     );
   }
 }
 
 function getAlias(e) {
-  const t = null == e ? void 0 : e.j(STORAGE_KEYS.C._E);
+  const t = null == e ? void 0 : e.dt(STORAGE_KEYS.ft.uE);
   let n;
   return t && (n = { label: t.l, name: t.a }), n;
 }
 
-class ve {
+class De {
   constructor(t, s, i, r, e) {
     (this.userId = t),
       (this.type = s),
@@ -1003,7 +1014,7 @@ class ve {
       (this.sessionId = r),
       (this.data = e);
   }
-  Mr() {
+  Hn() {
     var t;
     const s = {
       name: this.type,
@@ -1012,14 +1023,14 @@ class ve {
       session_id: this.sessionId,
     };
     null != this.userId && (s.user_id = this.userId);
-    const i = (null === (t = e.Sr()) || void 0 === t ? void 0 : t.Fh()) || !1;
+    const i = (null === (t = r.Sr()) || void 0 === t ? void 0 : t.wh()) || !1;
     if (!s.user_id && !i) {
-      const t = getAlias(e.l());
+      const t = getAlias(r.p());
       t && (s.alias = t);
     }
     return s;
   }
-  Y() {
+  gt() {
     return {
       u: this.userId,
       t: this.type,
@@ -1029,13 +1040,13 @@ class ve {
     };
   }
   static fromJson(t) {
-    return new ve(t.user_id, t.name, t.time, t.session_id, t.data);
+    return new De(t.user_id, t.name, t.time, t.session_id, t.data);
   }
-  static RE(t) {
+  static gE(t) {
     return null != t && isObject$1(t) && null != t.t && "" !== t.t;
   }
-  static qn(t) {
-    return new ve(t.u, t.t, t.ts, t.s, t.d);
+  static _u(t) {
+    return new De(t.u, t.t, t.ts, t.s, t.d);
   }
 }
 
@@ -1044,19 +1055,19 @@ const getErrorMessage = (r) =>
 
 class _t {
   constructor(t, e, i) {
-    (this.eu = t),
-      null == t && (t = p$1.W()),
-      !i || isNaN(i) ? (this.Dl = new Date().valueOf()) : (this.Dl = i),
-      (this.eu = t),
-      (this.Wl = new Date().valueOf()),
-      (this.Hl = e);
+    (this.Tu = t),
+      null == t && (t = P$1.se()),
+      !i || isNaN(i) ? (this.lm = new Date().valueOf()) : (this.lm = i),
+      (this.Tu = t),
+      (this.gm = new Date().valueOf()),
+      (this.pm = e);
   }
-  Y() {
-    return `g:${encodeURIComponent(this.eu)}|e:${this.Hl}|c:${this.Dl}|l:${
-      this.Wl
+  gt() {
+    return `g:${encodeURIComponent(this.Tu)}|e:${this.pm}|c:${this.lm}|l:${
+      this.gm
     }`;
   }
-  static hE(t) {
+  static AE(t) {
     if ("string" != typeof t) return null;
     const e = t.lastIndexOf("|e:"),
       i = t.substring(0, e),
@@ -1067,7 +1078,7 @@ class _t {
       (t = t.replace(i, `g:${n}`))
     );
   }
-  static qn(t) {
+  static _u(t) {
     let e;
     if ("string" == typeof t)
       try {
@@ -1079,15 +1090,15 @@ class _t {
             if (!isNaN(e)) return e;
           };
         (e = new _t(decodeURIComponent(r(i[0])), n(i[1]), n(i[2]))),
-          (e.Wl = n(i[3]));
+          (e.gm = n(i[3]));
       } catch (e) {
-        r$1.info(
+        E$1.info(
           `Unable to parse cookie string ${t}, failed with error: ${getErrorMessage(e)}`,
         );
       }
     else {
       if (null == t || null == t.g) return null;
-      (e = new _t(t.g, t.e, t.c)), (e.Wl = t.l);
+      (e = new _t(t.g, t.e, t.c)), (e.gm = t.l);
     }
     return e;
   }
@@ -1111,13 +1122,13 @@ function decodeBrazeActions(t) {
     const r = new Uint16Array(n.buffer);
     return String.fromCharCode(...r);
   } catch (t) {
-    return r$1.error("Unable to decode Base64: " + t), null;
+    return E$1.error("Unable to decode Base64: " + t), null;
   }
 }
 
 const BRAZE_ACTIONS = {
   types: {
-    ro: "container",
+    io: "container",
     logCustomEvent: "logCustomEvent",
     setEmailNotificationSubscriptionType:
       "setEmailNotificationSubscriptionType",
@@ -1128,55 +1139,49 @@ const BRAZE_ACTIONS = {
     removeFromSubscriptionGroup: "removeFromSubscriptionGroup",
     addToCustomAttributeArray: "addToCustomAttributeArray",
     removeFromCustomAttributeArray: "removeFromCustomAttributeArray",
-    no: "openLink",
-    ao: "openLinkInWebView",
+    mo: "openLink",
+    uo: "openLinkInWebView",
   },
-  properties: { type: "type", oo: "steps", eo: "args" },
+  properties: { type: "type", eo: "steps", so: "args" },
 };
 const INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES = {
-  Vi: "unknownBrazeAction",
-  Yi: "noPushPrompt",
+  Pn: "unknownBrazeAction",
+  cp: "noPushPrompt",
 };
-const ineligibleBrazeActionURLErrorMessage = (t, o) => {
-  switch (t) {
-    case INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Vi:
-      return `${o} contains an unknown braze action type and will not be displayed.`;
-    case INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Yi:
-      return `${o} contains a push prompt braze action, but is not eligible for a push prompt. Ignoring.`;
-    default:
-      return "";
-  }
-};
+const ineligibleBrazeActionURLErrorMessage = (t, o) =>
+  t === INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Pn
+    ? `${o} contains an unknown braze action type and will not be displayed.`
+    : "";
 function getDecodedBrazeAction(t) {
   try {
     const o = t.match(BRAZE_ACTION_URI_REGEX),
-      n = o ? o[0].length : null,
-      e = n ? t.substring(n) : null;
-    if (null == n || n > t.length - 1 || !e)
-      return void r$1.error(
+      r = o ? o[0].length : null,
+      n = r ? t.substring(r) : null;
+    if (null == r || r > t.length - 1 || !n)
+      return void E$1.error(
         `Did not find base64 encoded brazeAction in url to process : ${t}`,
       );
-    const i = decodeBrazeActions(e);
-    return i
-      ? JSON.parse(i)
-      : void r$1.error(`Failed to decode base64 encoded brazeAction: ${e}`);
+    const e = decodeBrazeActions(n);
+    return e
+      ? JSON.parse(e)
+      : void E$1.error(`Failed to decode base64 encoded brazeAction: ${n}`);
   } catch (o) {
-    return void r$1.error(`Failed to process brazeAction URL ${t} : ${getErrorMessage(o)}`);
+    return void E$1.error(`Failed to process brazeAction URL ${t} : ${getErrorMessage(o)}`);
   }
 }
-function so(t, o) {
+function po(t, o) {
   let r = !1;
   if (o) for (const n of o) if (((r = r || t(n)), r)) return !0;
   return !1;
 }
 function containsUnknownBrazeAction(t) {
   const o = BRAZE_ACTIONS.properties.type,
-    r = BRAZE_ACTIONS.properties.oo;
+    r = BRAZE_ACTIONS.properties.eo;
   try {
     if (null == t) return !0;
     const n = t[o];
-    return n === BRAZE_ACTIONS.types.ro
-      ? so(containsUnknownBrazeAction, t[r])
+    return n === BRAZE_ACTIONS.types.io
+      ? po(containsUnknownBrazeAction, t[r])
       : !isValidBrazeActionType(n);
   } catch (t) {
     return !0;
@@ -1185,10 +1190,10 @@ function containsUnknownBrazeAction(t) {
 function containsPushPrimerBrazeAction(t) {
   if (!t || !isValidBrazeActionJson(t)) return !1;
   const o = BRAZE_ACTIONS.properties.type,
-    r = BRAZE_ACTIONS.properties.oo,
+    r = BRAZE_ACTIONS.properties.eo,
     n = t[o];
-  return n === BRAZE_ACTIONS.types.ro
-    ? so(containsPushPrimerBrazeAction, t[r])
+  return n === BRAZE_ACTIONS.types.io
+    ? po(containsPushPrimerBrazeAction, t[r])
     : n === BRAZE_ACTIONS.types.requestPushPermission;
 }
 
@@ -1205,21 +1210,22 @@ const CUSTOM_ATTRIBUTE_RESERVED_OPERATORS = [
   "$google_ad_personalization",
   "$google_ad_user_data",
 ];
-const EMAIL_ADDRESS_REGEX = new RegExp(/^.+@.+\..+$/);
+const EMAIL_ADDRESS_REGEX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const BRAZE_ACTION_URI_REGEX = /^brazeActions:\/\/v\d+\//;
-function validateCustomString(t, e, n) {
-  const o =
+const VALID_UTF8_STRING_NO_WHITESPACES_REGEX = /^[^\s]+$/;
+function validateCustomString(t, e, r) {
+  const n =
     null != t &&
     "string" == typeof t &&
     ("" === t || null != t.match(CUSTOM_DATA_REGEX));
-  return o || r$1.error(`Cannot ${e} because ${n} "${t}" is invalid.`), o;
+  return n || E$1.error(`Cannot ${e} because ${r} "${t}" is invalid.`), n;
 }
 function validateCustomAttributeKey(t) {
   return (
     null != t &&
       t.match(CUSTOM_ATTRIBUTE_SPECIAL_CHARS_REGEX) &&
       -1 === CUSTOM_ATTRIBUTE_RESERVED_OPERATORS.indexOf(t) &&
-      r$1.warn("Custom attribute keys cannot contain '$' or '.'"),
+      E$1.warn("Custom attribute keys cannot contain '$' or '.'"),
     validateCustomString(t, "set custom user attribute", "the given key")
   );
 }
@@ -1229,141 +1235,141 @@ function validatePropertyType(t) {
     null == t || "number" === e || "boolean" === e || isDate(t) || "string" === e
   );
 }
-function _validateNestedProperties(t, e, n) {
-  const o = -1 !== n;
-  if (o && n > 50)
-    return r$1.error("Nested attributes cannot be more than 50 levels deep."), !1;
-  const i = o ? n + 1 : -1;
+function _validateNestedProperties(t, e, r) {
+  const n = -1 !== r;
+  if (n && r > 50)
+    return E$1.error("Nested attributes cannot be more than 50 levels deep."), !1;
+  const o = n ? r + 1 : -1;
   if (isArray(t) && isArray(e)) {
     for (let r = 0; r < t.length && r < e.length; r++)
       if (
         (isDate(t[r]) && (e[r] = toValidBackendTimeString(t[r])),
-        !_validateNestedProperties(t[r], e[r], i))
+        !_validateNestedProperties(t[r], e[r], o))
       )
         return !1;
   } else {
     if (!isObject$1(t)) return validatePropertyType(t);
     for (const r of keys(t)) {
-      const n = t[r];
-      if (o && !validateCustomAttributeKey(r)) return !1;
-      if (isDate(n)) {
-        e[r] = toValidBackendTimeString(n);
+      const i = t[r];
+      if (n && !validateCustomAttributeKey(r)) return !1;
+      if (isDate(i)) {
+        e[r] = toValidBackendTimeString(i);
       }
-      if (!_validateNestedProperties(n, e[r], i)) return !1;
+      if (!_validateNestedProperties(i, e[r], o)) return !1;
     }
   }
   return !0;
 }
-function _validateEventPropertyValue(t, e, n, o, i) {
-  let a;
+function _validateEventPropertyValue(t, e, r, n, o) {
+  let i;
   return (
-    (a =
+    (i =
       isObject$1(t) || isArray(t)
-        ? _validateNestedProperties(t, e, i ? 1 : -1)
+        ? _validateNestedProperties(t, e, o ? 1 : -1)
         : validatePropertyType(t)),
-    a || r$1.error(`Cannot ${n} because ${o} "${t}" is invalid.`),
-    a
+    i || E$1.error(`Cannot ${r} because ${n} "${t}" is invalid.`),
+    i
   );
 }
-function validateStandardString(t, e, n, o = !1) {
-  const i = "string" == typeof t || (null === t && o);
-  return i || r$1.error(`Cannot ${e} because ${n} "${t}" is invalid.`), i;
+function validateStandardString(t, e, r, n = !1) {
+  const o = "string" == typeof t || (null === t && n);
+  return o || E$1.error(`Cannot ${e} because ${r} "${t}" is invalid.`), o;
 }
-function validateCustomProperties(t, e, n, o, i) {
+function validateCustomProperties(t, e, r, n, o) {
   if ((null == t && (t = {}), "object" != typeof t || isArray(t)))
     return (
-      r$1.error(`${e} requires that ${n} be an object. Ignoring ${i}.`),
+      E$1.error(`${e} requires that ${r} be an object. Ignoring ${o}.`),
       [!1, null]
     );
-  let a, s;
-  e === SET_CUSTOM_USER_ATTRIBUTE_STRING ? ((a = 76800), (s = "75KB")) : ((a = 51200), (s = "50KB"));
-  const u = JSON.stringify(t);
-  if (getByteLength(u) > a)
+  let i, a;
+  e === CoreStrings.Ku ? ((i = 76800), (a = "75KB")) : ((i = 51200), (a = "50KB"));
+  const s = JSON.stringify(t);
+  if (getByteLength(s) > i)
     return (
-      r$1.error(
-        `Could not ${o} because ${n} was greater than the max size of ${s}.`,
+      E$1.error(
+        `Could not ${n} because ${r} was greater than the max size of ${a}.`,
       ),
       [!1, null]
     );
-  let l;
+  let u;
   try {
-    l = JSON.parse(u);
+    u = JSON.parse(s);
   } catch (t) {
     return (
-      r$1.error(`Could not ${o} because ${n} did not contain valid JSON.`),
+      E$1.error(`Could not ${n} because ${r} did not contain valid JSON.`),
       [!1, null]
     );
   }
   for (const r in t) {
-    if (e === SET_CUSTOM_USER_ATTRIBUTE_STRING && !validateCustomAttributeKey(r)) return [!1, null];
-    if (!validateCustomString(r, o, `the ${i} property name`))
+    if (e === CoreStrings.Ku && !validateCustomAttributeKey(r)) return [!1, null];
+    if (!validateCustomString(r, n, `the ${o} property name`))
       return [!1, null];
-    const n = t[r];
-    if (e !== SET_CUSTOM_USER_ATTRIBUTE_STRING && null == n) {
-      delete t[r], delete l[r];
+    const i = t[r];
+    if (e !== CoreStrings.Ku && null == i) {
+      delete t[r], delete u[r];
       continue;
     }
-    isDate(n) && (l[r] = toValidBackendTimeString(n));
+    isDate(i) && (u[r] = toValidBackendTimeString(i));
     if (
       !_validateEventPropertyValue(
+        i,
+        u[r],
         n,
-        l[r],
-        o,
-        `the ${i} property "${r}"`,
-        e === SET_CUSTOM_USER_ATTRIBUTE_STRING,
+        `the ${o} property "${r}"`,
+        e === CoreStrings.Ku,
       )
     )
       return [!1, null];
   }
-  return [!0, l];
+  return [!0, u];
 }
 function validateCustomAttributeArrayType(t, e) {
-  let n = !1,
-    o = !1;
-  const i = () => {
-    r$1.error(
+  let r = !1,
+    n = !1;
+  const o = () => {
+    E$1.error(
       "Custom attribute arrays must be either string arrays or object arrays.",
     );
   };
-  for (const r of e)
-    if ("string" == typeof r) {
-      if (o) return i(), [!1, !1];
+  for (const i of e)
+    if ("string" == typeof i) {
+      if (n) return o(), [!1, !1];
       if (
         !validateCustomString(
-          r,
+          i,
           `set custom user attribute "${t}"`,
           "the element in the given array",
         )
       )
         return [!1, !1];
-      n = !0;
+      r = !0;
     } else {
-      if (!isObject$1(r)) return i(), [!1, !1];
-      if (n) return i(), [!1, !1];
+      if (!isObject$1(i)) return o(), [!1, !1];
+      if (r) return o(), [!1, !1];
       if (
         !validateCustomProperties(
-          r,
-          SET_CUSTOM_USER_ATTRIBUTE_STRING,
+          i,
+          CoreStrings.Ku,
           "attribute value",
           `set custom user attribute "${t}"`,
           "custom user attribute",
         )
       )
         return [!1, !1];
-      o = !0;
+      n = !0;
     }
-  return [n, o];
+  return [r, n];
 }
 function isValidEmail(t) {
-  return (
-    "string" == typeof t && null != t.toLowerCase().match(EMAIL_ADDRESS_REGEX)
-  );
+  if ("string" != typeof t) return !1;
+  const e = t.length;
+  return !(0 === e || e > 256) && EMAIL_ADDRESS_REGEX.test(t.toLowerCase());
 }
 function isValidBrazeActionJson(t) {
   if (!(BRAZE_ACTIONS.properties.type in t)) return !1;
   switch (t[BRAZE_ACTIONS.properties.type]) {
-    case BRAZE_ACTIONS.types.ro:
-      if (BRAZE_ACTIONS.properties.oo in t) return !0;
+    case BRAZE_ACTIONS.types.io:
+      if (BRAZE_ACTIONS.properties.eo in t) return !0;
       break;
     case BRAZE_ACTIONS.types.logCustomEvent:
     case BRAZE_ACTIONS.types.setEmailNotificationSubscriptionType:
@@ -1373,9 +1379,9 @@ function isValidBrazeActionJson(t) {
     case BRAZE_ACTIONS.types.removeFromSubscriptionGroup:
     case BRAZE_ACTIONS.types.addToCustomAttributeArray:
     case BRAZE_ACTIONS.types.removeFromCustomAttributeArray:
-    case BRAZE_ACTIONS.types.no:
-    case BRAZE_ACTIONS.types.ao:
-      if (BRAZE_ACTIONS.properties.eo in t) return !0;
+    case BRAZE_ACTIONS.types.mo:
+    case BRAZE_ACTIONS.types.uo:
+      if (BRAZE_ACTIONS.properties.so in t) return !0;
       break;
     case BRAZE_ACTIONS.types.requestPushPermission:
       return !0;
@@ -1393,41 +1399,44 @@ function isValidBrazeActionType(t) {
     e
   );
 }
+function isValidBannerPlacementId(t) {
+  return VALID_UTF8_STRING_NO_WHITESPACES_REGEX.test(t);
+}
 
 class User {
   constructor(t, e) {
-    (this.yt = t), (this.Ui = e), (this.yt = t), (this.Ui = e);
+    (this.vs = t), (this.Ru = e), (this.vs = t), (this.Ru = e);
   }
   getUserId(t) {
-    const e = this.yt.getUserId();
+    const e = this.vs.getUserId();
     if ("function" != typeof t) return e;
-    r$1.warn(
+    E$1.warn(
       "The callback for getUserId is deprecated. You can access its return value directly instead (e.g. `const id = braze.getUser().getUserId()`)",
     ),
       t(e);
   }
   addAlias(t, e) {
     return !validateStandardString(t, "add alias", "the alias", !1) || t.length <= 0
-      ? (r$1.error("addAlias requires a non-empty alias"), !1)
+      ? (E$1.error("addAlias requires a non-empty alias"), !1)
       : !validateStandardString(e, "add alias", "the label", !1) || e.length <= 0
-      ? (r$1.error("addAlias requires a non-empty label"), !1)
-      : this.Ui.Cn(t, e).L;
+      ? (E$1.error("addAlias requires a non-empty label"), !1)
+      : this.Ru.Gu(t, e).W;
   }
   setFirstName(t) {
     return (
       !!validateStandardString(t, "set first name", "the firstName", !0) &&
-      this.yt.nu("first_name", t)
+      this.vs.zu("first_name", t)
     );
   }
   setLastName(t) {
     return (
-      !!validateStandardString(t, "set last name", "the lastName", !0) && this.yt.nu("last_name", t)
+      !!validateStandardString(t, "set last name", "the lastName", !0) && this.vs.zu("last_name", t)
     );
   }
   setEmail(t) {
     return null === t || isValidEmail(t)
-      ? this.yt.nu("email", t)
-      : (r$1.error(
+      ? this.vs.zu("email", t)
+      : (E$1.error(
           `Cannot set email address - "${t}" did not pass RFC-5322 validation.`,
         ),
         !1);
@@ -1443,42 +1452,44 @@ class User {
           `Gender "${t}" is not a valid gender.`,
           "User.Genders",
         )
-      ) && this.yt.nu("gender", t)
+      ) && this.vs.zu("gender", t)
     );
   }
-  setDateOfBirth(t, e, s) {
-    return null === t && null === e && null === s
-      ? this.yt.nu("dob", null)
+  setDateOfBirth(t, e, r) {
+    return null === t && null === e && null === r
+      ? this.vs.zu("dob", null)
       : ((t = null != t ? parseInt(t.toString()) : null),
         (e = null != e ? parseInt(e.toString()) : null),
-        (s = null != s ? parseInt(s.toString()) : null),
+        (r = null != r ? parseInt(r.toString()) : null),
         null == t ||
         null == e ||
-        null == s ||
+        null == r ||
         isNaN(t) ||
         isNaN(e) ||
-        isNaN(s) ||
+        isNaN(r) ||
         e > 12 ||
         e < 1 ||
-        s > 31 ||
-        s < 1
-          ? (r$1.error(
+        r > 31 ||
+        r < 1
+          ? (E$1.error(
               "Cannot set date of birth - parameters should comprise a valid date e.g. setDateOfBirth(1776, 7, 4);",
             ),
             !1)
-          : this.yt.nu("dob", `${t}-${e}-${s}`));
+          : this.vs.zu("dob", `${t}-${e}-${r}`));
   }
   setCountry(t) {
-    return !!validateStandardString(t, "set country", "the country", !0) && this.yt.nu("country", t);
+    return (
+      !!validateStandardString(t, "set country", "the country", !0) && this.vs.zu("country", t)
+    );
   }
   setHomeCity(t) {
     return (
-      !!validateStandardString(t, "set home city", "the homeCity", !0) && this.yt.nu("home_city", t)
+      !!validateStandardString(t, "set home city", "the homeCity", !0) && this.vs.zu("home_city", t)
     );
   }
   setLanguage(t) {
     return (
-      !!validateStandardString(t, "set language", "the language", !0) && this.yt.nu("language", t)
+      !!validateStandardString(t, "set language", "the language", !0) && this.vs.zu("language", t)
     );
   }
   setEmailNotificationSubscriptionType(t) {
@@ -1488,7 +1499,7 @@ class User {
         t,
         `Email notification setting "${t}" is not a valid subscription type.`,
         "User.NotificationSubscriptionTypes",
-      ) && this.yt.nu("email_subscribe", t)
+      ) && this.vs.zu("email_subscribe", t)
     );
   }
   setPushNotificationSubscriptionType(t) {
@@ -1498,56 +1509,56 @@ class User {
         t,
         `Push notification setting "${t}" is not a valid subscription type.`,
         "User.NotificationSubscriptionTypes",
-      ) && this.yt.nu("push_subscribe", t)
+      ) && this.vs.zu("push_subscribe", t)
     );
   }
   setPhoneNumber(t) {
     return (
       !!validateStandardString(t, "set phone number", "the phoneNumber", !0) &&
-      (null === t || t.match(User.En)
-        ? this.yt.nu("phone", t)
-        : (r$1.error(`Cannot set phone number - "${t}" did not pass validation.`),
+      (null === t || t.match(User.Hu)
+        ? this.vs.zu("phone", t)
+        : (E$1.error(`Cannot set phone number - "${t}" did not pass validation.`),
           !1))
     );
   }
-  setLastKnownLocation(t, e, s, n, i) {
+  setLastKnownLocation(t, e, r, s, n) {
     return null == t || null == e
-      ? (r$1.error(
+      ? (E$1.error(
           "Cannot set last-known location - latitude and longitude are required.",
         ),
         !1)
       : ((t = parseFloat(t.toString())),
         (e = parseFloat(e.toString())),
+        null != r && (r = parseFloat(r.toString())),
         null != s && (s = parseFloat(s.toString())),
         null != n && (n = parseFloat(n.toString())),
-        null != i && (i = parseFloat(i.toString())),
         isNaN(t) ||
         isNaN(e) ||
+        (null != r && isNaN(r)) ||
         (null != s && isNaN(s)) ||
-        (null != n && isNaN(n)) ||
-        (null != i && isNaN(i))
-          ? (r$1.error(
+        (null != n && isNaN(n))
+          ? (E$1.error(
               "Cannot set last-known location - all supplied parameters must be numeric.",
             ),
             !1)
           : t > 90 || t < -90 || e > 180 || e < -180
-          ? (r$1.error(
+          ? (E$1.error(
               "Cannot set last-known location - latitude and longitude are bounded by ±90 and ±180 respectively.",
             ),
             !1)
-          : (null != s && s < 0) || (null != i && i < 0)
-          ? (r$1.error(
+          : (null != r && r < 0) || (null != n && n < 0)
+          ? (E$1.error(
               "Cannot set last-known location - accuracy and altitudeAccuracy may not be negative.",
             ),
             !1)
-          : this.Ui.setLastKnownLocation(this.yt.getUserId(), t, e, n, s, i).L);
+          : this.Ru.setLastKnownLocation(this.vs.getUserId(), t, e, s, r, n).W);
   }
   setCustomUserAttribute(t, e, r) {
     if (!validateCustomAttributeKey(t)) return !1;
     const s = (e) => {
       const [r] = validateCustomProperties(
         e,
-        SET_CUSTOM_USER_ATTRIBUTE_STRING,
+        CoreStrings.Ku,
         "attribute value",
         `set custom user attribute "${t}"`,
         "custom user attribute",
@@ -1557,11 +1568,11 @@ class User {
     if (isArray(e)) {
       const [r, n] = validateCustomAttributeArrayType(t, e);
       if (!r && !n && 0 !== e.length) return !1;
-      if (r || 0 === e.length) return this.Ui.Fn(i.$n, t, e).L;
+      if (r || 0 === e.length) return this.Ru.Mu(f.Yu, t, e).W;
       for (const t of e) if (!s(t)) return !1;
     } else if (isObject$1(e)) {
       if (!s(e)) return !1;
-      if (r) return this.Ui.Fn(i.Bn, t, e).L;
+      if (r) return this.Ru.Mu(f.Vu, t, e).W;
     } else {
       if (!(void 0 !== e && validatePropertyType(e))) return !1;
       if (
@@ -1575,7 +1586,7 @@ class User {
       )
         return !1;
     }
-    return this.yt.setCustomUserAttribute(t, e);
+    return this.vs.setCustomUserAttribute(t, e);
   }
   addToCustomAttributeArray(t, e) {
     return (
@@ -1584,7 +1595,7 @@ class User {
         null != e &&
         !validateCustomString(e, "add to custom user attribute array", "the given value")
       ) &&
-      this.Ui.Fn(i.Ln, t, e).L
+      this.Ru.Mu(f.Qu, t, e).W
     );
   }
   removeFromCustomAttributeArray(t, e) {
@@ -1594,35 +1605,35 @@ class User {
         null != e &&
         !validateCustomString(e, "remove from custom user attribute array", "the given value")
       ) &&
-      this.Ui.Fn(i.Rn, t, e).L
+      this.Ru.Mu(f.Xu, t, e).W
     );
   }
   incrementCustomUserAttribute(t, e) {
     if (!validateCustomString(t, "increment custom user attribute", "the given key")) return !1;
     null == e && (e = 1);
-    const s = parseInt(e.toString());
-    return isNaN(s) || s !== parseFloat(e.toString())
-      ? (r$1.error(
+    const r = parseInt(e.toString());
+    return isNaN(r) || r !== parseFloat(e.toString())
+      ? (E$1.error(
           `Cannot increment custom user attribute because the given incrementValue "${e}" is not an integer.`,
         ),
         !1)
-      : this.Ui.Fn(i.On, t, s).L;
+      : this.Ru.Mu(f.Zu, t, r).W;
   }
-  setCustomLocationAttribute(t, e, s) {
+  setCustomLocationAttribute(t, e, r) {
     return (
       !!validateCustomString(t, "set custom location attribute", "the given key") &&
-      ((null !== e || null !== s) &&
+      ((null !== e || null !== r) &&
       ((e = null != e ? parseFloat(e.toString()) : null),
-      (s = null != s ? parseFloat(s.toString()) : null),
-      (null == e && null != s) ||
-        (null != e && null == s) ||
+      (r = null != r ? parseFloat(r.toString()) : null),
+      (null == e && null != r) ||
+        (null != e && null == r) ||
         (null != e && (isNaN(e) || e > 90 || e < -90)) ||
-        (null != s && (isNaN(s) || s > 180 || s < -180)))
-        ? (r$1.error(
+        (null != r && (isNaN(r) || r > 180 || r < -180)))
+        ? (E$1.error(
             "Received invalid values for latitude and/or longitude. Latitude and longitude are bounded by ±90 and ±180 respectively, or must both be null for removal.",
           ),
           !1)
-        : this.Ui.Gn(t, e, s).L)
+        : this.Ru.Na(t, e, r).W)
     );
   }
   addToSubscriptionGroup(t) {
@@ -1632,11 +1643,11 @@ class User {
       "subscription group ID",
       !1,
     ) || t.length <= 0
-      ? (r$1.error(
+      ? (E$1.error(
           "addToSubscriptionGroup requires a non-empty subscription group ID",
         ),
         !1)
-      : this.Ui.Hn(t, User.Kn.SUBSCRIBED).L;
+      : this.Ru.Ra(t, User.Pa.SUBSCRIBED).W;
   }
   removeFromSubscriptionGroup(t) {
     return !validateStandardString(
@@ -1645,17 +1656,28 @@ class User {
       "subscription group ID",
       !1,
     ) || t.length <= 0
-      ? (r$1.error(
+      ? (E$1.error(
           "removeFromSubscriptionGroup requires a non-empty subscription group ID",
         ),
         !1)
-      : this.Ui.Hn(t, User.Kn.UNSUBSCRIBED).L;
+      : this.Ru.Ra(t, User.Pa.UNSUBSCRIBED).W;
   }
-  Pn(t, e, r, s, n) {
-    this.yt.Pn(t, e, r, s, n), this.Ui.Mn();
+  setLineId(t) {
+    return validateStandardString(t, "set LINE user ID", "the ID", !0) &&
+      0 !== (null == t ? void 0 : t.length)
+      ? t && t.length > User.Oa
+        ? (E$1.error(
+            `Rejected LINE user ID ${t} because it is longer than ${User.Oa} characters.`,
+          ),
+          !1)
+        : this.vs.zu("native_line_id", t)
+      : (E$1.error("setLineId requires a non-empty ID"), !1);
   }
-  Sn(t) {
-    this.yt.Sn(t);
+  gu(t, e, r, s, n) {
+    this.vs.gu(t, e, r, s, n), this.Ru.Ya();
+  }
+  wu(t) {
+    this.vs.wu(t);
   }
 }
 (User.Genders = {
@@ -1671,23 +1693,24 @@ class User {
     SUBSCRIBED: "subscribed",
     UNSUBSCRIBED: "unsubscribed",
   }),
-  (User.En = /^[0-9 .\\(\\)\\+\\-]+$/),
-  (User.Kn = { SUBSCRIBED: "subscribed", UNSUBSCRIBED: "unsubscribed" }),
-  (User.Yn = "user_id"),
-  (User.lu = "custom"),
-  (User.lr = 997);
+  (User.Hu = /^[0-9 .\\(\\)\\+\\-]+$/),
+  (User.Pa = { SUBSCRIBED: "subscribed", UNSUBSCRIBED: "unsubscribed" }),
+  (User.Va = "user_id"),
+  (User.Bu = "custom"),
+  (User.mr = 997),
+  (User.Oa = 33);
 
-class ge {
+class Oe {
   constructor() {}
-  ef() {}
-  sf() {}
-  Da(t) {}
-  static ff(t, e) {
+  ff() {}
+  cf() {}
+  rc(t) {}
+  static lf(t, e) {
     if (t && e)
-      if (((t = t.toLowerCase()), isArray(e.nf))) {
-        for (let r = 0; r < e.nf.length; r++)
-          if (-1 !== t.indexOf(e.nf[r].toLowerCase())) return e.identity;
-      } else if (-1 !== t.indexOf(e.nf.toLowerCase())) return e.identity;
+      if (((t = t.toLowerCase()), isArray(e.uf))) {
+        for (let r = 0; r < e.uf.length; r++)
+          if (-1 !== t.indexOf(e.uf[r].toLowerCase())) return e.identity;
+      } else if (-1 !== t.indexOf(e.uf.toLowerCase())) return e.identity;
   }
 }
 
@@ -1697,15 +1720,16 @@ const Browsers = {
   oO: "Opera",
   Bg: "Safari",
   OO: "Firefox",
+  Sg: "ChatGPTBrowser",
 };
 const OperatingSystems = {
-  xg: "Android",
-  io: "iOS",
+  Dg: "Android",
+  co: "iOS",
   Pg: "Mac",
-  Og: "Windows",
+  kg: "Windows",
 };
 
-class ai extends ge {
+class gi extends Oe {
   constructor() {
     if (
       (super(),
@@ -1714,23 +1738,23 @@ class ai extends ge {
       (this.version = null),
       this.userAgentData)
     ) {
-      const t = this.hc();
+      const t = this.hf();
       (this.browser = t.browser || "Unknown Browser"),
         (this.version = t.version || "Unknown Version");
     }
     this.OS = null;
   }
-  ef() {
+  ff() {
     return this.browser;
   }
-  sf() {
+  cf() {
     return this.version;
   }
-  Da(t) {
+  rc(t) {
     if (this.OS) return Promise.resolve(this.OS);
     const s = (s) => {
       for (let r = 0; r < t.length; r++) {
-        const i = ai.ff(s, t[r]);
+        const i = gi.lf(s, t[r]);
         if (i) return (this.OS = i), this.OS;
       }
       return s;
@@ -1741,12 +1765,12 @@ class ai extends ge {
           .then((t) => (t.platform ? s(t.platform) : navigator.platform))
           .catch(() => navigator.platform);
   }
-  hc() {
+  hf() {
     const t = {},
       s = this.userAgentData.brands;
     if (s && s.length)
       for (const r of s) {
-        const s = this.uc(Browsers),
+        const s = this.af(Browsers),
           i = r.brand.match(s);
         if (i && i.length > 0) {
           (t.browser = i[0]), (t.version = r.version);
@@ -1755,7 +1779,7 @@ class ai extends ge {
       }
     return t;
   }
-  uc(t) {
+  af(t) {
     const s = [];
     for (const r in t) {
       const i = r;
@@ -1770,33 +1794,33 @@ class ai extends ge {
   }
 }
 
-class oi extends ge {
+class Si extends Oe {
   constructor() {
-    super(), (this.fd = oi.hc(navigator.userAgent || ""));
+    super(), (this.Vd = Si.hf(navigator.userAgent || ""));
   }
-  ef() {
-    return this.fd[0] || "Unknown Browser";
+  ff() {
+    return this.Vd[0] || "Unknown Browser";
   }
-  sf() {
-    return this.fd[1] || "Unknown Version";
+  cf() {
+    return this.Vd[1] || "Unknown Version";
   }
-  Da(r) {
+  rc(r) {
     for (let n = 0; n < r.length; n++) {
       const e = r[n].string;
-      let i = oi.ff(e, r[n]);
+      let i = Si.lf(e, r[n]);
       if (i)
         return (
-          i === OperatingSystems.Pg && navigator.maxTouchPoints > 1 && (i = OperatingSystems.io),
+          i === OperatingSystems.Pg && navigator.maxTouchPoints > 1 && (i = OperatingSystems.co),
           Promise.resolve(i)
         );
     }
     return Promise.resolve(navigator.platform);
   }
-  static hc(r) {
+  static hf(r) {
     let n,
       e =
         r.match(
-          /(samsungbrowser|tizen|roku|konqueror|icab|crios|opera|ucbrowser|chrome|safari|firefox|camino|msie|trident(?=\/))\/?\s*(\.?\d+(\.\d+)*)/i,
+          /(samsungbrowser|tizen|roku|konqueror|icab|crios|opera|ucbrowser|chatgptbrowser|chrome|safari|firefox|camino|msie|trident(?=\/))\/?\s*(\.?\d+(\.\d+)*)/i,
         ) || [];
     if (-1 !== r.indexOf("(Web0S; Linux/SmartTV)"))
       return ["LG Smart TV", null];
@@ -1810,18 +1834,20 @@ class oi extends ge {
     if (-1 !== r.indexOf("PhilipsTV")) return ["Philips Smart TV", null];
     if (r.match(/\b(Roku)\b/)) return ["Roku", null];
     if (r.match(/\bAFTM\b/)) return ["Amazon Fire Stick", null];
-    if (
-      e[1] === Browsers.rO &&
-      ((n = r.match(/\b(OPR|Edge|EdgA|Edg|UCBrowser)\/(\.?\d+(\.\d+)*)/)),
-      null != n)
-    )
-      return (
-        (n = n.slice(1)),
-        (n[0] = n[0].replace("OPR", Browsers.oO)),
-        (n[0] = n[0].replace("EdgA", Browsers.eO)),
-        "Edg" === n[0] && (n[0] = Browsers.eO),
-        [n[0], n[1]]
-      );
+    if (e[1] === Browsers.rO) {
+      if (r.includes(Browsers.Sg)) return [Browsers.Sg, e[2]];
+      if (
+        ((n = r.match(/\b(OPR|Edge|EdgA|Edg|UCBrowser)\/(\.?\d+(\.\d+)*)/)),
+        null != n)
+      )
+        return (
+          (n = n.slice(1)),
+          (n[0] = n[0].replace("OPR", Browsers.oO)),
+          (n[0] = n[0].replace("EdgA", Browsers.eO)),
+          "Edg" === n[0] && (n[0] = Browsers.eO),
+          [n[0], n[1]]
+        );
+    }
     if (
       e[1] === Browsers.Bg &&
       ((n = r.match(/\b(EdgiOS)\/(\.?\d+(\.\d+)*)/)), null != n)
@@ -1849,15 +1875,20 @@ class oi extends ge {
   }
 }
 
-class ui {
+class vi {
   constructor() {
-    const t = navigator.userAgentData ? ai : oi;
-    (this.Sg = new t()),
+    let t;
+    (t =
+      navigator.userAgent.toLowerCase().includes(Browsers.Sg.toLowerCase()) ||
+      !navigator.userAgentData
+        ? Si
+        : gi),
+      (this.vg = new t()),
       (this.userAgent = navigator.userAgent),
-      (this.browser = this.Sg.ef()),
-      (this.version = this.Sg.sf()),
+      (this.browser = this.vg.ff()),
+      (this.version = this.vg.cf()),
       (this.OS = null),
-      this.Da().then((t) => (this.OS = t));
+      this.rc().then((t) => (this.OS = t));
     const i = navigator;
     (this.language = (
       i.userLanguage ||
@@ -1866,26 +1897,24 @@ class ui {
       i.systemLanguage ||
       ""
     ).toLowerCase()),
-      (this.Qo = ui.vg(this.userAgent));
+      (this.Il = vi.xg(this.userAgent));
   }
-  IE() {
+  fE() {
     return this.browser === Browsers.Bg;
   }
-  Ca() {
+  nc() {
     return this.OS || null;
   }
-  Da() {
+  rc() {
     return this.OS
       ? Promise.resolve(this.OS)
-      : this.Sg.Da(ui.kg).then((t) => ((this.OS = t), t));
+      : this.vg.rc(vi.Og).then((t) => ((this.OS = t), t));
   }
-  static vg(t) {
+  static xg(t) {
     t = t.toLowerCase();
     const i = [
-      "googlebot",
-      "bingbot",
+      "bot",
       "slurp",
-      "duckduckbot",
       "baiduspider",
       "yandex",
       "facebookexternalhit",
@@ -1894,111 +1923,122 @@ class ui {
       "https://github.com/prerender/prerender",
       "aolbuild",
       "bingpreview",
-      "msnbot",
-      "adsbot",
       "mediapartners-google",
       "teoma",
       "taiko",
+      "facebookexternalhit",
+      "facebookcatalog",
+      "meta-webindexer",
+      "meta-externalads",
+      "meta-externalagent",
+      "meta-externalfetcher",
     ];
     for (let n = 0; n < i.length; n++) if (-1 !== t.indexOf(i[n])) return !0;
     return !1;
   }
 }
-ui.kg = [
-  { string: navigator.platform, nf: "Win", identity: OperatingSystems.Og },
-  { string: navigator.platform, nf: "Mac", identity: OperatingSystems.Pg },
-  { string: navigator.platform, nf: "BlackBerry", identity: "BlackBerry" },
-  { string: navigator.platform, nf: "FreeBSD", identity: "FreeBSD" },
-  { string: navigator.platform, nf: "OpenBSD", identity: "OpenBSD" },
-  { string: navigator.platform, nf: "Nintendo", identity: "Nintendo" },
-  { string: navigator.platform, nf: "SunOS", identity: "SunOS" },
-  { string: navigator.platform, nf: "PlayStation", identity: "PlayStation" },
-  { string: navigator.platform, nf: "X11", identity: "X11" },
+vi.Og = [
+  { string: navigator.platform, uf: "Win", identity: OperatingSystems.kg },
+  { string: navigator.platform, uf: "Mac", identity: OperatingSystems.Pg },
+  { string: navigator.platform, uf: "BlackBerry", identity: "BlackBerry" },
+  { string: navigator.platform, uf: "FreeBSD", identity: "FreeBSD" },
+  { string: navigator.platform, uf: "OpenBSD", identity: "OpenBSD" },
+  { string: navigator.platform, uf: "Nintendo", identity: "Nintendo" },
+  { string: navigator.platform, uf: "SunOS", identity: "SunOS" },
+  { string: navigator.platform, uf: "PlayStation", identity: "PlayStation" },
+  { string: navigator.platform, uf: "X11", identity: "X11" },
   {
     string: navigator.userAgent,
-    nf: ["iPhone", "iPad", "iPod"],
-    identity: OperatingSystems.io,
+    uf: ["iPhone", "iPad", "iPod"],
+    identity: OperatingSystems.co,
   },
-  { string: navigator.platform, nf: "Pike v", identity: OperatingSystems.io },
-  { string: navigator.userAgent, nf: ["Web0S"], identity: "WebOS" },
+  { string: navigator.platform, uf: "Pike v", identity: OperatingSystems.co },
+  { string: navigator.userAgent, uf: ["Web0S"], identity: "WebOS" },
+  { string: navigator.userAgent, uf: "Tizen", identity: "Tizen" },
+  { string: navigator.userAgent, uf: "Coolita", identity: "Other Smart TV" },
+  { string: navigator.userAgent, uf: "WhaleTV", identity: "Other Smart TV" },
   {
     string: navigator.platform,
-    nf: ["Linux armv7l", "Android"],
-    identity: OperatingSystems.xg,
+    uf: ["Linux armv7l", "Android"],
+    identity: OperatingSystems.Dg,
   },
-  { string: navigator.userAgent, nf: ["Android"], identity: OperatingSystems.xg },
-  { string: navigator.platform, nf: "Linux", identity: "Linux" },
+  { string: navigator.userAgent, uf: ["Android"], identity: OperatingSystems.Dg },
+  { string: navigator.platform, uf: "Linux", identity: "Linux" },
 ];
-const X = new ui();
+const ro = new vi();
 
 const STORAGE_KEYS = {
-  iu: {
-    su: "ab.storage.userId",
-    Uo: "ab.storage.deviceId",
-    El: "ab.storage.sessionId",
+  Ou: {
+    Cu: "ab.storage.userId",
+    tl: "ab.storage.deviceId",
+    um: "ab.storage.sessionId",
   },
-  C: {
-    ec: "ab.test",
+  ft: {
+    Qc: "ab.test",
     tE: "ab.storage.events",
     eE: "ab.storage.attributes",
     sE: "ab.storage.attributes.anonymous_user",
-    Fa: "ab.storage.device",
-    Jh: "ab.storage.sdk_metadata",
-    Qh: "ab.storage.session_id_for_cached_metadata",
-    In: "ab.storage.pushToken",
-    Ai: "ab.storage.newsFeed",
-    Bi: "ab.storage.lastNewsFeedRefresh",
-    J: "ab.storage.cardImpressions",
-    ul: "ab.storage.serverConfig",
-    rE: "ab.storage.triggers",
-    oE: "ab.storage.triggers.ts",
-    Nl: "ab.storage.messagingSessionStart",
-    bs: "ab.storage.cc",
-    js: "ab.storage.ccLastFullSync",
-    Rs: "ab.storage.ccLastCardUpdated",
-    nE: "ab.storage.ccRateLimitCurrentTokenCount",
-    Ru: "ab.storage.globalRateLimitCurrentTokenCount",
-    bu: "ab.storage.dynamicRateLimitCurrentTokenCount",
-    v: "ab.storage.ccClicks",
-    H: "ab.storage.ccImpressions",
-    A: "ab.storage.ccDismissals",
+    ac: "ab.storage.device",
+    Dl: "ab.storage.sdk_metadata",
+    Tl: "ab.storage.session_id_for_cached_metadata",
+    Uu: "ab.storage.pushToken",
+    rE: "ab.storage.cardImpressions",
+    jc: "ab.storage.serverConfig",
+    oE: "ab.storage.triggers",
+    nE: "ab.storage.triggers.ts",
+    dm: "ab.storage.messagingSessionStart",
+    Ps: "ab.storage.cc",
+    Gs: "ab.storage.ccLastFullSync",
+    Hs: "ab.storage.ccLastCardUpdated",
+    uc: "ab.storage.globalRateLimitCurrentTokenCount",
+    fc: "ab.storage.dynamicRateLimitCurrentTokenCount",
+    Jt: "ab.storage.ccClicks",
+    Vt: "ab.storage.ccImpressions",
+    Pt: "ab.storage.ccDismissals",
     aE: "ab.storage.lastDisplayedTriggerTimesById",
     iE: "ab.storage.lastDisplayedTriggerTime",
     EE: "ab.storage.triggerFireInstancesById",
-    wh: "ab.storage.signature",
-    xs: "ab.storage.brazeSyncRetryCount",
-    Us: "ab.storage.sdkVersion",
-    vi: "ab.storage.ff",
-    wi: "ab.storage.ffImpressions",
-    zi: "ab.storage.ffLastRefreshAt",
-    Si: "ab.storage.ff.sessionId",
+    xh: "ab.storage.signature",
+    SE: "ab.storage.brazeSyncRetryCount",
+    Qs: "ab.storage.sdkVersion",
+    lo: "ab.storage.ff",
+    vo: "ab.storage.ffImpressions",
+    Do: "ab.storage.ffLastRefreshAt",
+    Co: "ab.storage.ff.sessionId",
     lE: "ab.storage.lastReqToEndpoint",
-    SE: "ab.storage.requestAttempts",
-    Xr: "ab.storage.deferredIam",
-    du: "ab.storage.lastSdkReq",
-    _E: "ab.storage.alias",
+    _E: "ab.storage.requestAttempts",
+    Wn: "ab.storage.deferredIam",
+    Jl: "ab.storage.lastSdkReq",
+    uE: "ab.storage.alias",
+    vt: "ab.storage.banners",
+    Dt: "ab.storage.banners.impressions",
+    Bt: "ab.storage.banners.sessionId",
+    Ue: "ab.storage.dust.mite",
+    Ne: "ab.storage.dust.host",
+    Te: "ab.storage.dust.auth",
+    ze: "ab.storage.dust.expiration",
   },
-  se: "ab.optOut",
+  pe: "ab.optOut",
 };
-class Q {
+class ee {
   constructor(t, e) {
-    (this.uE = t), (this.TE = e), (this.uE = t), (this.TE = e);
+    (this.TE = t), (this.cE = e), (this.TE = t), (this.cE = e);
   }
-  Vh(t) {
-    const e = keys(STORAGE_KEYS.iu),
-      s = new Q.ee(t);
-    for (const t of e) s.remove(STORAGE_KEYS.iu[t]);
+  Sl(t) {
+    const e = keys(STORAGE_KEYS.Ou),
+      s = new ee.le(t);
+    for (const t of e) s.remove(STORAGE_KEYS.Ou[t]);
   }
-  uu(t, e) {
+  Iu(t, e) {
     let s = null;
-    null != e && e instanceof _t && (s = e.Y()), this.uE.store(t, s);
+    null != e && e instanceof _t && (s = e.gt()), this.TE.store(t, s);
   }
-  cE(t) {
-    const e = this.tu(t);
-    null != e && ((e.Wl = new Date().valueOf()), this.uu(t, e));
+  hE(t) {
+    const e = this.$u(t);
+    null != e && ((e.gm = new Date().valueOf()), this.Iu(t, e));
   }
-  tu(t) {
-    const e = this.uE.br(t),
+  $u(t) {
+    const e = this.TE.jr(t),
       s = ((t) => {
         let e;
         try {
@@ -2009,44 +2049,44 @@ class Q {
         return e;
       })(e);
     let r;
-    if (s) (r = _t.qn(s) || null), r && this.uu(t, r);
+    if (s) (r = _t._u(s) || null), r && this.Iu(t, r);
     else {
-      const s = _t.hE(e);
-      (r = _t.qn(s) || null), s !== e && r && this.uu(t, r);
+      const s = _t.AE(e);
+      (r = _t._u(s) || null), s !== e && r && this.Iu(t, r);
     }
     return r;
   }
-  Al(t) {
-    this.uE.remove(t);
+  xm(t) {
+    this.TE.remove(t);
   }
-  Kh() {
-    const t = keys(STORAGE_KEYS.iu);
+  Al() {
+    const t = keys(STORAGE_KEYS.Ou);
     let e;
     for (const s of t)
-      (e = this.tu(STORAGE_KEYS.iu[s])),
-        null != e && this.uu(STORAGE_KEYS.iu[s], e);
+      (e = this.$u(STORAGE_KEYS.Ou[s])),
+        null != e && this.Iu(STORAGE_KEYS.Ou[s], e);
   }
-  zo(t) {
+  ol(t) {
     let e;
     if (null == t || 0 === t.length) return !1;
     e = isArray(t) ? t : [t];
-    let s = this.TE.br(STORAGE_KEYS.C.tE);
+    let s = this.cE.jr(STORAGE_KEYS.ft.tE);
     (null != s && isArray(s)) || (s = []);
-    for (let t = 0; t < e.length; t++) s.push(e[t].Y());
-    return this.TE.store(STORAGE_KEYS.C.tE, s);
+    for (let t = 0; t < e.length; t++) s.push(e[t].gt());
+    return this.cE.store(STORAGE_KEYS.ft.tE, s);
   }
-  kl(t) {
-    return null != t && this.zo([t]);
+  wm(t) {
+    return null != t && this.ol([t]);
   }
-  AE() {
-    let t = this.TE.br(STORAGE_KEYS.C.tE);
-    this.TE.remove(STORAGE_KEYS.C.tE), null == t && (t = []);
+  RE() {
+    let t = this.cE.jr(STORAGE_KEYS.ft.tE);
+    this.cE.remove(STORAGE_KEYS.ft.tE), null == t && (t = []);
     const e = [];
     let s = !1,
       r = null;
     if (isArray(t))
       for (let s = 0; s < t.length; s++)
-        ve.RE(t[s]) ? e.push(ve.qn(t[s])) : (r = s);
+        De.gE(t[s]) ? e.push(De._u(t[s])) : (r = s);
     else s = !0;
     if (s || null != r) {
       let o = "Stored events could not be deserialized as Events";
@@ -2059,160 +2099,160 @@ class Q {
           typeof t +
           ": " +
           JSON.stringify(t)),
-        e.push(new ve(null, i.Ls, new Date().valueOf(), null, { e: o }));
+        e.push(new De(null, f.wl, new Date().valueOf(), null, { e: o }));
     }
     return e;
   }
-  I(t, e) {
+  bt(t, e) {
     return (
       !!validateValueIsFromEnum(
-        STORAGE_KEYS.C,
+        STORAGE_KEYS.ft,
         t,
         "StorageManager cannot store object.",
         "STORAGE_KEYS.OBJECTS",
-      ) && this.TE.store(t, e)
+      ) && this.cE.store(t, e)
     );
   }
-  j(t) {
+  dt(t) {
     return (
       !!validateValueIsFromEnum(
-        STORAGE_KEYS.C,
+        STORAGE_KEYS.ft,
         t,
         "StorageManager cannot retrieve object.",
         "STORAGE_KEYS.OBJECTS",
-      ) && this.TE.br(t)
+      ) && this.cE.jr(t)
     );
   }
-  ii(t) {
+  zt(t) {
     return (
       !!validateValueIsFromEnum(
-        STORAGE_KEYS.C,
+        STORAGE_KEYS.ft,
         t,
         "StorageManager cannot remove object.",
         "STORAGE_KEYS.OBJECTS",
-      ) && (this.TE.remove(t), !0)
+      ) && (this.cE.remove(t), !0)
     );
   }
   clearData() {
-    const t = keys(STORAGE_KEYS.iu),
-      e = keys(STORAGE_KEYS.C);
+    const t = keys(STORAGE_KEYS.Ou),
+      e = keys(STORAGE_KEYS.ft);
     for (let e = 0; e < t.length; e++) {
       const s = t[e];
-      this.uE.remove(STORAGE_KEYS.iu[s]);
+      this.TE.remove(STORAGE_KEYS.Ou[s]);
     }
     for (let t = 0; t < e.length; t++) {
       const s = e[t];
-      this.TE.remove(STORAGE_KEYS.C[s]);
+      this.cE.remove(STORAGE_KEYS.ft[s]);
     }
   }
-  gE(t) {
-    return t || STORAGE_KEYS.C.sE;
+  OE(t) {
+    return t || STORAGE_KEYS.ft.sE;
   }
-  Pa(t) {
-    let e = this.TE.br(STORAGE_KEYS.C.eE);
+  Xl(t) {
+    let e = this.cE.jr(STORAGE_KEYS.ft.eE);
     null == e && (e = {});
-    const s = this.gE(t[User.Yn]),
+    const s = this.OE(t[User.Va]),
       r = e[s];
     for (const o in t)
-      o !== User.Yn &&
+      o !== User.Va &&
         (null == e[s] || (r && null == r[o])) &&
-        this.mu(t[User.Yn], o, t[o]);
+        this.Eu(t[User.Va], o, t[o]);
   }
-  mu(t, e, s) {
-    let r = this.TE.br(STORAGE_KEYS.C.eE);
+  Eu(t, e, s) {
+    let r = this.cE.jr(STORAGE_KEYS.ft.eE);
     null == r && (r = {});
-    const o = this.gE(t);
+    const o = this.OE(t);
     let n = r[o];
     if (
-      (null == n && ((n = {}), null != t && (n[User.Yn] = t)), e === User.lu)
+      (null == n && ((n = {}), null != t && (n[User.Va] = t)), e === User.Bu)
     ) {
       null == n[e] && (n[e] = {});
       for (const t in s) n[e][t] = s[t];
     } else n[e] = s;
-    return (r[o] = n), this.TE.store(STORAGE_KEYS.C.eE, r);
+    return (r[o] = n), this.cE.store(STORAGE_KEYS.ft.eE, r);
   }
-  OE() {
-    const t = this.TE.br(STORAGE_KEYS.C.eE);
-    this.TE.remove(STORAGE_KEYS.C.eE);
+  IE() {
+    const t = this.cE.jr(STORAGE_KEYS.ft.eE);
+    this.cE.remove(STORAGE_KEYS.ft.eE);
     const e = [];
     for (const s in t) null != t[s] && e.push(t[s]);
     return e;
   }
-  ru(t) {
-    const e = this.TE.br(STORAGE_KEYS.C.eE);
+  Lu(t) {
+    const e = this.cE.jr(STORAGE_KEYS.ft.eE);
     if (null != e) {
-      const s = this.gE(null),
+      const s = this.OE(null),
         r = e[s];
       null != r &&
         ((e[s] = void 0),
-        this.TE.store(STORAGE_KEYS.C.eE, e),
-        (r[User.Yn] = t),
-        this.Pa(r));
+        this.cE.store(STORAGE_KEYS.ft.eE, e),
+        (r[User.Va] = t),
+        this.Xl(r));
     }
-    const s = this.tu(STORAGE_KEYS.iu.El);
+    const s = this.$u(STORAGE_KEYS.Ou.um);
     let r = null;
-    null != s && (r = s.eu);
-    const o = this.AE();
+    null != s && (r = s.Tu);
+    const o = this.RE();
     if (null != o)
       for (let e = 0; e < o.length; e++) {
         const s = o[e];
-        null == s.userId && s.sessionId == r && (s.userId = t), this.kl(s);
+        null == s.userId && s.sessionId == r && (s.userId = t), this.wm(s);
       }
   }
   dE() {
-    return this.TE.fE;
+    return this.cE.bE;
   }
 }
-(Q.rc = class {
+(ee.Wc = class {
   constructor(t) {
-    (this.rn = t), (this.rn = t), (this.fE = X.IE() ? 3 : 10);
+    (this.tu = t), (this.tu = t), (this.bE = ro.fE() ? 3 : 10);
   }
-  bE(t) {
-    return t + "." + this.rn;
+  mE(t) {
+    return t + "." + this.tu;
   }
   store(t, e) {
     const s = { v: e };
     try {
-      return localStorage.setItem(this.bE(t), JSON.stringify(s)), !0;
+      return localStorage.setItem(this.mE(t), JSON.stringify(s)), !0;
     } catch (t) {
-      return r$1.info("Storage failure: " + getErrorMessage(t)), !1;
+      return E$1.info("Storage failure: " + getErrorMessage(t)), !1;
     }
   }
-  br(t) {
+  jr(t) {
     try {
       let e = null;
-      const s = localStorage.getItem(this.bE(t));
+      const s = localStorage.getItem(this.mE(t));
       return null != s && (e = JSON.parse(s)), null == e ? null : e.v;
     } catch (t) {
-      return r$1.info("Storage retrieval failure: " + getErrorMessage(t)), null;
+      return E$1.info("Storage retrieval failure: " + getErrorMessage(t)), null;
     }
   }
   remove(t) {
     try {
-      localStorage.removeItem(this.bE(t));
+      localStorage.removeItem(this.mE(t));
     } catch (t) {
-      return r$1.info("Storage removal failure: " + getErrorMessage(t)), !1;
+      return E$1.info("Storage removal failure: " + getErrorMessage(t)), !1;
     }
   }
 }),
-  (Q.ac = class {
+  (ee.Xc = class {
     constructor() {
-      (this.mE = {}), (this.KE = 5242880), (this.fE = 3);
+      (this.KE = {}), (this.YE = 5242880), (this.bE = 3);
     }
     store(t, e) {
       const s = { value: e },
-        o = this.YE(e);
-      return o > this.KE
-        ? (r$1.info(
+        r = this.NE(e);
+      return r > this.YE
+        ? (E$1.info(
             "Storage failure: object is ≈" +
-              o +
+              r +
               " bytes which is greater than the max of " +
-              this.KE,
+              this.YE,
           ),
           !1)
-        : ((this.mE[t] = s), !0);
+        : ((this.KE[t] = s), !0);
     }
-    YE(t) {
+    NE(t) {
       const e = [],
         s = [t];
       let r = 0;
@@ -2229,27 +2269,27 @@ class Q {
       }
       return r;
     }
-    br(t) {
-      const e = this.mE[t];
+    jr(t) {
+      const e = this.KE[t];
       return null == e ? null : e.value;
     }
     remove(t) {
-      this.mE[t] = null;
+      this.KE[t] = null;
     }
   }),
-  (Q.ee = class {
+  (ee.le = class {
     constructor(t, e) {
-      (this.rn = t),
-        (this.NE = e),
-        (this.rn = t),
-        (this.CE = this.GE()),
-        (this.DE = 576e3),
-        (this.NE = !!e);
+      (this.tu = t),
+        (this.DE = e),
+        (this.tu = t),
+        (this.GE = this.CE()),
+        (this.ME = 576e3),
+        (this.DE = !!e);
     }
-    bE(t) {
-      return null != this.rn ? t + "." + this.rn : t;
+    mE(t) {
+      return null != this.tu ? t + "." + this.tu : t;
     }
-    GE() {
+    CE() {
       let t = 0,
         e = document.location.hostname;
       const s = e.split("."),
@@ -2264,12 +2304,12 @@ class Q {
         e
       );
     }
-    ne() {
+    me() {
       const t = new Date();
-      return t.setTime(t.getTime() + 60 * this.DE * 1e3), t.getFullYear();
+      return t.setTime(t.getTime() + 60 * this.ME * 1e3), t.getFullYear();
     }
-    ME() {
-      const t = values(STORAGE_KEYS.iu),
+    pE() {
+      const t = values(STORAGE_KEYS.Ou),
         e = document.cookie.split(";");
       for (let s = 0; s < e.length; s++) {
         let r = e[s];
@@ -2282,45 +2322,45 @@ class Q {
           }
         if (o) {
           const t = r.split("=")[0];
-          -1 === t.indexOf("." + this.rn) && this.pE(t);
+          -1 === t.indexOf("." + this.tu) && this.UE(t);
         }
       }
     }
     store(t, e) {
-      this.ME();
+      this.pE();
       const s = new Date();
-      s.setTime(s.getTime() + 60 * this.DE * 1e3);
-      const o = "expires=" + s.toUTCString(),
-        n = "domain=" + this.CE;
-      let a;
-      a = this.NE ? e : encodeURIComponent(e);
-      const i = this.bE(t) + "=" + a + ";" + o + ";" + n + ";path=/";
-      return i.length >= 4093
-        ? (r$1.info(
+      s.setTime(s.getTime() + 60 * this.ME * 1e3);
+      const r = "expires=" + s.toUTCString(),
+        o = "domain=" + this.GE;
+      let n;
+      n = this.DE ? e : encodeURIComponent(e);
+      const a = this.mE(t) + "=" + n + ";" + r + ";" + o + ";path=/";
+      return a.length >= 4093
+        ? (E$1.info(
             "Storage failure: string is " +
-              i.length +
+              a.length +
               " chars which is too large to store as a cookie.",
           ),
           !1)
-        : ((document.cookie = i), !0);
+        : ((document.cookie = a), !0);
     }
-    br(t) {
+    jr(t) {
       const e = [],
-        s = this.bE(t) + "=",
-        o = document.cookie.split(";");
-      for (let n = 0; n < o.length; n++) {
-        let a = o[n];
-        for (; " " === a.charAt(0); ) a = a.substring(1);
-        if (0 === a.indexOf(s))
+        s = this.mE(t) + "=",
+        r = document.cookie.split(";");
+      for (let o = 0; o < r.length; o++) {
+        let n = r[o];
+        for (; " " === n.charAt(0); ) n = n.substring(1);
+        if (0 === n.indexOf(s))
           try {
             let t;
-            (t = this.NE
-              ? a.substring(s.length, a.length)
-              : decodeURIComponent(a.substring(s.length, a.length))),
+            (t = this.DE
+              ? n.substring(s.length, n.length)
+              : decodeURIComponent(n.substring(s.length, n.length))),
               e.push(t);
           } catch (e) {
             return (
-              r$1.info("Storage retrieval failure: " + getErrorMessage(e)),
+              E$1.info("Storage retrieval failure: " + getErrorMessage(e)),
               this.remove(t),
               null
             );
@@ -2329,106 +2369,106 @@ class Q {
       return e.length > 0 ? e[e.length - 1] : null;
     }
     remove(t) {
-      this.pE(this.bE(t));
+      this.UE(this.mE(t));
     }
-    pE(t) {
+    UE(t) {
       const e = t + "=;expires=" + new Date(0).toUTCString();
       (document.cookie = e), (document.cookie = e + ";path=/");
-      const s = e + ";domain=" + this.CE;
+      const s = e + ";domain=" + this.GE;
       (document.cookie = s), (document.cookie = s + ";path=/");
     }
   }),
-  (Q.tc = class {
+  (ee.Jc = class {
     constructor(t, e, s) {
-      (this.rn = t),
+      (this.tu = t),
         (this.vE = []),
-        e && this.vE.push(new Q.ee(t)),
-        s && this.vE.push(new Q.rc(t)),
-        this.vE.push(new Q.ac());
+        e && this.vE.push(new ee.le(t)),
+        s && this.vE.push(new ee.Wc(t)),
+        this.vE.push(new ee.Xc());
     }
     store(t, e) {
       let s = !0;
       for (let r = 0; r < this.vE.length; r++) s = this.vE[r].store(t, e) && s;
       return s;
     }
-    br(t) {
+    jr(t) {
       for (let e = 0; e < this.vE.length; e++) {
-        const s = this.vE[e].br(t);
+        const s = this.vE[e].jr(t);
         if (null != s) return s;
       }
       return null;
     }
     remove(t) {
-      new Q.ee(this.rn).remove(t);
+      new ee.le(this.tu).remove(t);
       for (let e = 0; e < this.vE.length; e++) this.vE[e].remove(t);
     }
   });
 
-class qt {
+class kt {
   constructor(t, i, s) {
-    (this.u = t),
-      (this.Jn = i),
-      (this.Qn = s),
-      (this.u = t),
-      (this.Jn = i || !1),
-      (this.Qn = s),
-      (this.Xn = new T()),
-      (this.Zn = 0),
-      (this.gh = 1);
+    (this.B = t),
+      (this.gh = i),
+      (this.ph = s),
+      (this.B = t),
+      (this.gh = i || !1),
+      (this.ph = s),
+      (this.Fh = new m()),
+      (this.kh = 0),
+      (this.fh = 1);
   }
-  Fh() {
-    return this.Jn;
+  wh() {
+    return this.gh;
   }
-  kh() {
-    return this.u.j(STORAGE_KEYS.C.wh);
+  jh() {
+    return this.B.dt(STORAGE_KEYS.ft.xh);
   }
   setSdkAuthenticationSignature(t) {
-    const i = this.kh();
-    this.u.I(STORAGE_KEYS.C.wh, t);
-    const s = A.ts.Zt;
-    new A(s, r$1).setItem(s.hs.jh, this.gh, t), i !== t && this.Vs();
-  }
-  xh() {
-    this.u.ii(STORAGE_KEYS.C.wh);
-    const t = A.ts.Zt;
-    new A(t, r$1).re(t.hs.jh, this.gh);
-  }
-  subscribeToSdkAuthenticationFailures(t) {
-    return this.Qn.Nt(t);
-  }
-  qh(t) {
-    this.Qn.Rt(t);
+    const i = this.jh();
+    this.B.bt(STORAGE_KEYS.ft.xh, t);
+    const e = et.Us.Rs;
+    new et(e, E$1).setItem(e.Fs.qh, this.fh, t), i !== t && this.Z();
   }
   yh() {
-    this.Xn.removeAllSubscriptions();
+    this.B.zt(STORAGE_KEYS.ft.xh);
+    const t = et.Us.Rs;
+    new et(t, E$1).je(t.Fs.qh, this.fh);
   }
-  Bh() {
-    this.Zn += 1;
+  subscribeToSdkAuthenticationFailures(t) {
+    return this.ph.Rt(t);
+  }
+  Bh(t) {
+    this.ph.L(t);
   }
   Gh() {
-    return this.Zn;
+    this.Fh.removeAllSubscriptions();
   }
-  Vs() {
-    this.Zn = 0;
+  Hh() {
+    this.kh += 1;
+  }
+  Jh() {
+    return this.kh;
+  }
+  Z() {
+    this.kh = 0;
   }
 }
 
-class y {
+class t {
   constructor() {}
-  Ss(a) {}
+  N(a) {}
   changeUser(a = !1) {}
   clearData(a = !1) {}
 }
 
-class Gt {
+class Jt {
   constructor(s) {
     (this.id = s), (this.id = s);
   }
-  Mr() {
+  Hn() {
     const s = {};
     return (
       null != this.browser && (s.browser = this.browser),
-      null != this.Ta && (s.browser_version = this.Ta),
+      null != this.ec && (s.browser_version = this.ec),
       null != this.os && (s.os_version = this.os),
       null != this.resolution && (s.resolution = this.resolution),
       null != this.language && (s.locale = this.language),
@@ -2451,48 +2491,48 @@ var DeviceProperties = {
 
 class Ot {
   constructor(t, e) {
-    (this.u = t),
-      (this.Ia = e),
-      (this.u = t),
+    (this.B = t),
+      (this.tc = e),
+      (this.B = t),
       null == e && (e = values(DeviceProperties)),
-      (this.Ia = e);
+      (this.tc = e);
   }
-  ce(t = !0) {
-    let e = this.u.tu(STORAGE_KEYS.iu.Uo);
-    null == e && ((e = new _t(p$1.W())), t && this.u.uu(STORAGE_KEYS.iu.Uo, e));
-    const r = new Gt(e.eu);
-    for (let t = 0; t < this.Ia.length; t++) {
-      switch (this.Ia[t]) {
+  ve(t = !0) {
+    let e = this.B.$u(STORAGE_KEYS.Ou.tl);
+    null == e && ((e = new _t(P$1.se())), t && this.B.Iu(STORAGE_KEYS.Ou.tl, e));
+    const r = new Jt(e.Tu);
+    for (let t = 0; t < this.tc.length; t++) {
+      switch (this.tc[t]) {
         case DeviceProperties.BROWSER:
-          r.browser = X.browser;
+          r.browser = ro.browser;
           break;
         case DeviceProperties.BROWSER_VERSION:
-          r.Ta = X.version;
+          r.ec = ro.version;
           break;
         case DeviceProperties.OS:
-          r.os = this.Da();
+          r.os = this.rc();
           break;
         case DeviceProperties.RESOLUTION:
-          r.Sa = screen.width + "x" + screen.height;
+          r.sc = screen.width + "x" + screen.height;
           break;
         case DeviceProperties.LANGUAGE:
-          r.language = X.language;
+          r.language = ro.language;
           break;
         case DeviceProperties.TIME_ZONE:
-          r.timeZone = this.Oa(new Date());
+          r.timeZone = this.oc(new Date());
           break;
         case DeviceProperties.USER_AGENT:
-          r.userAgent = X.userAgent;
+          r.userAgent = ro.userAgent;
       }
     }
     return r;
   }
-  Da() {
-    if (X.Ca()) return X.Ca();
-    const t = this.u.j(STORAGE_KEYS.C.Fa);
-    return t && t.os_version ? t.os_version : X.Da();
+  rc() {
+    if (ro.nc()) return ro.nc();
+    const t = this.B.dt(STORAGE_KEYS.ft.ac);
+    return t && t.os_version ? t.os_version : ro.rc();
   }
-  Oa(t) {
+  oc(t) {
     let e = !1;
     if ("undefined" != typeof Intl && "function" == typeof Intl.DateTimeFormat)
       try {
@@ -2501,17 +2541,17 @@ class Ot {
           if (null != t && "" !== t) return t;
         }
       } catch (t) {
-        r$1.info(
+        E$1.info(
           "Intl.DateTimeFormat threw an error, cannot detect user's time zone:" +
             getErrorMessage(t),
         ),
           (e = !0);
       }
     if (e) return "";
-    const s = t.getTimezoneOffset();
-    return this.Ga(s);
+    const r = t.getTimezoneOffset();
+    return this.cc(r);
   }
-  Ga(t) {
+  cc(t) {
     const e = Math.trunc(t / 60),
       r = Math.trunc(t % 60);
     let s = "GMT";
@@ -2528,456 +2568,114 @@ class Ot {
 }
 
 var Xt = {
-  Na: "invalid_api_key",
-  Xa: "blacklisted",
-  $a: "no_device_identifier",
-  Ba: "invalid_json_response",
-  Ra: "empty_response",
+  Bl: "invalid_api_key",
+  zl: "blacklisted",
+  jl: "no_device_identifier",
+  Cl: "invalid_json_response",
+  yl: "empty_response",
   __: "sdk_auth_error",
 };
 
-const D = {
-  _s: {
-    Ka: "data",
-    Xs: "content_cards/sync",
-    Ri: "feature_flags/sync",
-    Tr: "template",
+const h = {
+  H: {
+    Ze: "data",
+    vi: "content_cards/sync",
+    wo: "feature_flags/sync",
+    On: "template",
+    G: "banners/sync",
   },
-  ku: (t) => (null == t ? void 0 : t.j(STORAGE_KEYS.C.lE)),
-  sm: (t) => (null == t ? void 0 : t.j(STORAGE_KEYS.C.SE)),
-  nm: (t, e) => {
-    null == t || t.I(STORAGE_KEYS.C.lE, e);
+  bc: (t) => (null == t ? void 0 : t.dt(STORAGE_KEYS.ft.lE)),
+  Am: (t) => (null == t ? void 0 : t.dt(STORAGE_KEYS.ft._E)),
+  Rm: (t, e) => {
+    null == t || t.bt(STORAGE_KEYS.ft.lE, e);
   },
-  um: (t, e) => {
-    null == t || t.I(STORAGE_KEYS.C.SE, e);
+  qm: (t, e) => {
+    null == t || t.bt(STORAGE_KEYS.ft._E, e);
   },
-  Wa: (t, e) => {
+  Pl: (t, e) => {
     if (!t || !e) return -1;
-    const s = D.ku(t);
+    const s = h.bc(t);
     if (null == s) return -1;
     const n = s[e];
     return null == n || isNaN(n) ? -1 : n;
   },
-  Ya: (t, e) => {
+  Ul: (t, e) => {
     let s = REQUEST_ATTEMPT_DEFAULT;
     if (!t || !e) return s;
-    const n = D.sm(t);
+    const n = h.Am(t);
     return null == n ? s : ((s = n[e]), null == s || isNaN(s) ? REQUEST_ATTEMPT_DEFAULT : s);
   },
-  Hs: (t, e, s) => {
+  K: (t, e, s) => {
     if (!t || !e) return;
-    let n = D.ku(t);
-    null == n && (n = {}), (n[e] = s), D.nm(t, n);
+    let n = h.bc(t);
+    null == n && (n = {}), (n[e] = s), h.Rm(t, n);
   },
-  Ws: (t, e, s) => {
+  xl: (t, e, s) => {
     if (!t || !e) return;
-    let n = D.sm(t);
-    null == n && (n = {}), (n[e] = s), D.um(t, n);
+    let n = h.Am(t);
+    null == n && (n = {}), (n[e] = s), h.qm(t, n);
   },
-  ti: (t, e) => {
+  fi: (t, e) => {
+    t && e && h.xl(t, e, REQUEST_ATTEMPT_DEFAULT);
+  },
+  Zl: (t, e) => {
     if (!t || !e) return;
-    const s = D.Ya(t, e);
-    D.Ws(t, e, s + 1);
+    const s = h.Ul(t, e);
+    h.xl(t, e, s + 1);
   },
 };
 
-class Pt {
-  constructor(t, e, i, s, r, n, o, h, a, u, l, c) {
-    (this.on = t),
-      (this.u = e),
-      (this.Ko = i),
-      (this.yt = s),
-      (this.oi = r),
-      (this.qt = n),
-      (this.rn = o),
-      (this.Go = h),
-      (this.Bo = a),
-      (this.Vo = u),
-      (this.appVersion = l),
-      (this.Xh = c),
-      (this.Hh = (t) => (null == t ? "" : `${t} `)),
-      (this.on = t),
-      (this.u = e),
-      (this.Ko = i),
-      (this.yt = s),
-      (this.oi = r),
-      (this.qt = n),
-      (this.rn = o),
-      (this.Go = h),
-      (this.Bo = a),
-      (this.Vo = u),
-      (this.appVersion = l),
-      (this.Xh = c),
-      (this.Yh = ["npm"]);
-  }
-  $s(t, e = !1, i = !1) {
-    const s = this.on.ce(!i),
-      r = s.Mr(),
-      n = this.u.j(STORAGE_KEYS.C.Fa);
-    isEqual(n, r) || (t.device = r),
-      (t.api_key = this.rn),
-      (t.time = convertMsToSeconds(new Date().valueOf(), !0));
-    const a = this.u.j(STORAGE_KEYS.C.Jh) || [],
-      u = this.u.j(STORAGE_KEYS.C.Qh) || "";
-    if (
-      (this.Yh.length > 0 &&
-        (!isEqual(a, this.Yh) || u !== this.oi.xi()) &&
-        (t.sdk_metadata = this.Yh),
-      (t.sdk_version = this.Bo),
-      this.Vo && (t.sdk_flavor = this.Vo),
-      (t.app_version = this.appVersion),
-      (t.app_version_code = this.Xh),
-      (t.device_id = s.id),
-      e)
-    ) {
-      const e = this.yt.getUserId();
-      null != e && (t.user_id = e);
-    }
-    if (!t.user_id && !this.Ko.Fh()) {
-      const e = getAlias(this.u);
-      e && (t.alias = e);
-    }
-    return t;
-  }
-  Qs(e, s, n) {
-    const o = s.auth_error,
-      h = s.error;
-    if (!o && !h) return !0;
-    if (o) {
-      let t;
-      this.Ko.Bh();
-      const i = { errorCode: o.error_code };
-      for (const t of n)
-        isArray(t) && "X-Braze-Auth-Signature" === t[0] && (i.signature = t[1]);
-      e.respond_with && e.respond_with.user_id
-        ? (i.userId = e.respond_with.user_id)
-        : e.user_id && (i.userId = e.user_id);
-      const s = o.reason;
-      return (
-        s
-          ? ((i.reason = s), (t = `due to ${s}`))
-          : (t = `with error code ${o.error_code}.`),
-        this.Ko.Fh() ||
-          (t +=
-            ' Please use the "enableSdkAuthentication" initialization option to enable authentication.'),
-        r$1.error(`SDK Authentication failed ${t}`),
-        this.Zh(e.events || [], e.attributes || []),
-        this.Ko.qh(i),
-        !1
-      );
-    }
-    if (h) {
-      let n,
-        o = h;
-      switch (o) {
-        case Xt.Ra:
-          return (
-            (n = "Received successful response with empty body."),
-            t$1.q(i.Ls, { e: n }),
-            r$1.info(n),
-            !1
-          );
-        case Xt.Ba:
-          return (
-            (n = "Received successful response with invalid JSON"),
-            t$1.q(i.Ls, { e: n + ": " + s.response }),
-            r$1.info(n),
-            !1
-          );
-        case Xt.Na:
-          o = `The API key "${e.api_key}" is invalid for the baseUrl ${this.Go}`;
-          break;
-        case Xt.Xa:
-          o =
-            "Sorry, we are not currently accepting your requests. If you think this is in error, please contact us.";
-          break;
-        case Xt.$a:
-          o = "No device identifier. Please contact support@braze.com";
-      }
-      r$1.error("Backend error: " + o);
-    }
-    return !1;
-  }
-  La(t, e, i, s) {
-    return !!((t && 0 !== t.length) || (e && 0 !== e.length) || i || s);
-  }
-  Ea(t, e, i, s, r = !1) {
-    const n = [],
-      o = (t) => t || "",
-      h = o(this.yt.getUserId());
-    let a = this.Ir(t, e);
-    const u = [],
-      l = [];
-    let c,
-      d = null;
-    if (i.length > 0) {
-      const t = [];
-      for (const e of i) {
-        if (((c = e.Mr()), this.Ko.Fh())) {
-          if (h && !c.user_id) {
-            d || (d = {}), d.events || (d.events = []), d.events.push(c);
-            continue;
-          }
-          if (o(c.user_id) !== h) {
-            l.push(c);
-            continue;
-          }
-        }
-        t.push(c);
-      }
-      t.length > 0 && (a.events = t);
-    }
-    if (s.length > 0) {
-      const t = [];
-      for (const e of s)
-        e && (this.Ko.Fh() && o(e.user_id) !== h ? u.push(e) : t.push(e));
-      t.length > 0 && (a.attributes = t);
-    }
-    if ((this.Zh(l, u), (a = this.$s(a, !0, r)), d)) {
-      d = this.$s(d, !1, r);
-      const t = { requestData: d, headers: this.Ps(d, D._s.Ka) };
-      n.push(t);
-    }
-    if (a && !this.La(a.events, a.attributes, t, e)) return d ? n : null;
-    const f = { requestData: a, headers: this.Ps(a, D._s.Ka) };
-    return n.push(f), n;
-  }
-  Zh(t, e) {
-    if (t) {
-      const e = [];
-      for (const i of t) {
-        const t = ve.fromJson(i);
-        (t.time = convertSecondsToMs(t.time)), e.push(t);
-      }
-      this.u.zo(e);
-    }
-    if (e) for (const t of e) this.u.Pa(t);
-  }
-  Ys(t, e) {
-    let i = "HTTP error ";
-    null != t && (i += t + " "), (i += e), r$1.error(i);
-  }
-  qr(e) {
-    return t$1.q(i.Ua, { n: e });
-  }
-  Ir(t, e, i) {
-    const s = {};
-    t && (s.feed = !0), e && (s.triggers = !0);
-    const r = null != i ? i : this.yt.getUserId();
-    if ((r && (s.user_id = r), !s.user_id && !this.Ko.Fh())) {
-      const t = getAlias(this.u);
-      t && (s.alias = t);
-    }
-    return (s.config = { config_time: this.qt.hi() }), { respond_with: s };
-  }
-  Ha(t) {
-    const e = new Date().valueOf();
-    let i = LAST_REQUEST_TO_ENDPOINT_MS_AGO_DEFAULT.toString();
-    const s = D.Wa(this.u, t);
-    if (-1 !== s) {
-      i = (e - s).toString();
-    }
-    return i;
-  }
-  Ps(t, e, i = !1) {
-    const s = [["X-Braze-Api-Key", this.rn]],
-      r = this.Ha(e);
-    s.push(["X-Braze-Last-Req-Ms-Ago", r]);
-    const n = D.Ya(this.u, e).toString();
-    s.push(["X-Braze-Req-Attempt", n]);
-    let h = !1;
-    if (
-      (null != t.respond_with &&
-        t.respond_with.triggers &&
-        (s.push(["X-Braze-TriggersRequest", "true"]), (h = !0)),
-      null != t.respond_with &&
-        t.respond_with.feed &&
-        (s.push(["X-Braze-FeedRequest", "true"]), (h = !0)),
-      e === D._s.Xs)
-    ) {
-      s.push(["X-Braze-ContentCardsRequest", "true"]);
-      let t = this.u.j(STORAGE_KEYS.C.xs);
-      (t && i) || ((t = 0), this.u.I(STORAGE_KEYS.C.xs, t)),
-        s.push(["BRAZE-SYNC-RETRY-COUNT", t.toString()]),
-        (h = !0);
-    }
-    if (
-      (e === D._s.Ri &&
-        (s.push(["X-Braze-FeatureFlagsRequest", "true"]), (h = !0)),
-      h && s.push(["X-Braze-DataRequest", "true"]),
-      this.Ko.Fh())
-    ) {
-      const t = this.Ko.kh();
-      null != t && s.push(["X-Braze-Auth-Signature", t]);
-    }
-    return s;
-  }
-  Ja(t, e, i, s) {
-    window.setTimeout(() => {
-      r$1.info(`Retrying rate limited ${this.Hh(s)}SDK request.`),
-        this.Gs(e, i, s);
-    }, t);
-  }
-  Gs(t, e, i, s) {
-    if (!this.Qa(i))
-      return (
-        r$1.info(`${this.Hh(i)}SDK request being rate limited.`),
-        void ("function" == typeof s && s())
-      );
-    const n = this.Va();
-    if (!n.Za)
-      return (
-        r$1.info(
-          `${this.Hh(
-            i,
-          )}SDK request being rate limited. Request will be retried in ${Math.trunc(
-            n.au / 1e3,
-          )} seconds.`,
-        ),
-        void this.Ja(n.au, t, e, i)
-      );
-    this.u.I(STORAGE_KEYS.C.du, new Date().valueOf());
-    const h = t.device;
-    h && h.os_version instanceof Promise
-      ? h.os_version.then((i) => {
-          (t.device.os_version = i), e(n.fu);
-        })
-      : e(n.fu);
-  }
-  vu(t) {
-    var e;
-    null === (e = this.u) || void 0 === e || e.I(STORAGE_KEYS.C.Ru, t);
-  }
-  gu(t, e) {
-    let i = this.pu();
-    null == i && (i = {}), (i[t] = e), this.u.I(STORAGE_KEYS.C.bu, i);
-  }
-  qu() {
-    var t;
-    return null === (t = this.u) || void 0 === t ? void 0 : t.j(STORAGE_KEYS.C.Ru);
-  }
-  pu() {
-    var t;
-    return null === (t = this.u) || void 0 === t ? void 0 : t.j(STORAGE_KEYS.C.bu);
-  }
-  Au(t, e, i, s, r = "") {
-    let n;
-    if (r) {
-      const t = this.pu();
-      n = null == t || isNaN(t[r]) ? e : t[r];
-    } else (n = this.qu()), (null == n || isNaN(n)) && (n = e);
-    const o = (t - s) / 1e3;
-    return (n = Math.min(n + o / i, e)), n;
-  }
-  Du(t, e) {
-    return Math.max(0, (1 - t) * e * 1e3);
-  }
-  Tu(t, e = "") {
-    var i, s, r, n, h;
-    const a = { Za: !0, fu: -1, au: 0 };
-    if ((null == t && (t = !0), !t && !e)) return a;
-    let u,
-      l,
-      c = null;
-    if (t) c = null === (i = this.u) || void 0 === i ? void 0 : i.j(STORAGE_KEYS.C.du);
-    else {
-      const t = D.ku(this.u);
-      if (null == t || null == t[e]) return a;
-      c = t[e];
-    }
-    if (null == c || isNaN(c)) return a;
-    if (
-      (t
-        ? ((u =
-            (null === (s = this.qt) || void 0 === s ? void 0 : s.Cu()) || -1),
-          (l =
-            (null === (r = this.qt) || void 0 === r ? void 0 : r.Su()) || -1))
-        : ((u =
-            (null === (n = this.qt) || void 0 === n ? void 0 : n.Bu(e)) || -1),
-          (l =
-            (null === (h = this.qt) || void 0 === h ? void 0 : h.wu(e)) || -1)),
-      -1 === u || -1 === l)
-    )
-      return a;
-    const d = new Date().valueOf();
-    let f = this.Au(d, u, l, c, e);
-    return f < 1
-      ? ((a.Za = !1), (a.au = this.Du(f, l)), a)
-      : ((f = Math.trunc(f) - 1),
-        (a.fu = f),
-        t ? this.vu(f) : this.gu(e, f),
-        a);
-  }
-  Va() {
-    return this.Tu(!0);
-  }
-  Qa(t) {
-    const e = this.Tu(!1, t);
-    return !(e && !e.Za);
-  }
-  Vs() {
-    this.Ko.Vs();
-  }
-  Os() {
-    return this.Go;
-  }
-  addSdkMetadata(t) {
-    for (const e of t) -1 === this.Yh.indexOf(e) && this.Yh.push(e);
-  }
-}
-
-const C = {
-  Ks: (t) => {
+const l = {
+  O: (t) => {
     let e, o;
     try {
-      const n = () => {
-        r$1.error("This browser does not have any supported ajax options!");
+      const r = () => {
+        E$1.error("This browser does not have any supported ajax options!");
       };
-      let s = !1;
-      if ((window.XMLHttpRequest && (s = !0), !s)) return void n();
+      let n = !1;
+      if ((window.XMLHttpRequest && (n = !0), !n)) return void r();
       e = new XMLHttpRequest();
-      const i = () => {
+      const s = (o) => {
         "function" == typeof t.error && t.error(e.status),
-          "function" == typeof t.Zs && t.Zs(!1);
+          "function" == typeof t.tt && t.tt(!1, o);
       };
       (e.onload = () => {
         let o = !1;
-        if (4 === e.readyState)
-          if (
-            ((o = (e.status >= 200 && e.status < 300) || 304 === e.status), o)
-          ) {
-            if ("function" == typeof t.L) {
-              let o, r;
-              try {
-                (o = JSON.parse(e.responseText)),
-                  (r = e.getAllResponseHeaders());
-              } catch (o) {
-                const n = {
-                  error: "" === e.responseText ? Xt.Ra : Xt.Ba,
-                  response: e.responseText,
-                };
-                (0, t.L)(n, r);
-              }
-              o && t.L(o, r);
+        if (4 !== e.readyState) return;
+        o = (e.status >= 200 && e.status < 300) || 304 === e.status;
+        const r = e.getAllResponseHeaders();
+        if (o) {
+          if ("function" == typeof t.W) {
+            let o;
+            try {
+              o = JSON.parse(e.responseText);
+            } catch (o) {
+              const n = {
+                error: "" === e.responseText ? Xt.yl : Xt.Cl,
+                response: e.responseText,
+              };
+              (0, t.W)(n, r);
             }
-            "function" == typeof t.Zs && t.Zs(!0);
-          } else i();
+            o && t.W(o, r);
+          }
+          "function" == typeof t.tt && t.tt(!0, r);
+        } else s(r);
       }),
         (e.onerror = () => {
-          i();
+          s(e.getAllResponseHeaders());
         }),
         (e.ontimeout = () => {
-          i();
+          s();
         }),
         (o = JSON.stringify(t.data)),
         e.open("POST", t.url, !0),
         e.setRequestHeader("Content-type", "application/json"),
         e.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-      const f = t.headers || [];
-      for (const t of f) e.setRequestHeader(t[0], t[1]);
+      const i = t.headers || [];
+      for (const t of i) e.setRequestHeader(t[0], t[1]);
       e.send(o);
     } catch (t) {
-      r$1.error(`Network request error: ${getErrorMessage(t)}`);
+      E$1.error(`Network request error: ${getErrorMessage(t)}`);
     }
   },
 };
@@ -2994,623 +2692,1145 @@ const readResponseHeaders = (t) => {
   return e;
 };
 
+class Mt {
+  constructor(t, e, i, s, r, n, o, a, h, u, l, c) {
+    (this.eu = t),
+      (this.B = e),
+      (this.hl = i),
+      (this.vs = s),
+      (this.C = r),
+      (this.h = n),
+      (this.tu = o),
+      (this.al = a),
+      (this.sl = h),
+      (this.rl = u),
+      (this.appVersion = l),
+      (this.vl = c),
+      (this.Rl = (t) => (null == t ? "" : `${t} `)),
+      (this.eu = t),
+      (this.B = e),
+      (this.hl = i),
+      (this.vs = s),
+      (this.C = r),
+      (this.h = n),
+      (this.tu = o),
+      (this.al = a),
+      (this.sl = h),
+      (this.rl = u),
+      (this.appVersion = l),
+      (this.vl = c),
+      (this.bl = ["npm"]),
+      (this.ql = {});
+  }
+  $(t, e = !1, i = !1) {
+    const r = this.eu.ve(!i),
+      n = r.Hn(),
+      o = this.B.dt(STORAGE_KEYS.ft.ac);
+    isEqual(o, n) || (t.device = n),
+      (t.api_key = this.tu),
+      (t.time = convertMsToSeconds(new Date().valueOf(), !0));
+    const a = this.B.dt(STORAGE_KEYS.ft.Dl) || [],
+      h = this.B.dt(STORAGE_KEYS.ft.Tl) || "";
+    this.bl.length > 0 &&
+      (!isEqual(a, this.bl) || h !== this.C.yt()) &&
+      (t.sdk_metadata = this.bl),
+      (t.sdk_version = this.sl),
+      this.rl && (t.sdk_flavor = this.rl),
+      (t.app_version = this.appVersion),
+      (t.app_version_code = this.vl),
+      (t.device_id = r.id);
+    const u = this.vs.getUserId();
+    if ((e && null !== u && (t.user_id = u), !u && !this.hl.wh())) {
+      const e = getAlias(this.B);
+      e && (t.alias = e);
+    }
+    return t;
+  }
+  Y(t, e, i) {
+    const s = e.auth_error,
+      r = e.error;
+    if (!s && !r) return !0;
+    if (s) {
+      let e;
+      this.hl.Hh();
+      const r = { errorCode: s.error_code };
+      for (const t of i)
+        isArray(t) && "X-Braze-Auth-Signature" === t[0] && (r.signature = t[1]);
+      t.respond_with && t.respond_with.user_id
+        ? (r.userId = t.respond_with.user_id)
+        : t.user_id && (r.userId = t.user_id);
+      const n = s.reason;
+      return (
+        n
+          ? ((r.reason = n), (e = `due to ${n}`))
+          : (e = `with error code ${s.error_code}.`),
+        this.hl.wh() ||
+          (e +=
+            ' Please use the "enableSdkAuthentication" initialization option to enable authentication.'),
+        E$1.error(`SDK Authentication failed ${e}`),
+        this.kl(t.events || [], t.attributes || []),
+        this.hl.Bh(r),
+        !1
+      );
+    }
+    if (r) {
+      let i,
+        s = r;
+      switch (s) {
+        case Xt.yl:
+          return (
+            (i = "Received successful response with empty body."),
+            v$1.lt(f.wl, { e: i }),
+            E$1.info(i),
+            !1
+          );
+        case Xt.Cl:
+          return (
+            (i = "Received successful response with invalid JSON"),
+            v$1.lt(f.wl, { e: i + ": " + e.response }),
+            E$1.info(i),
+            !1
+          );
+        case Xt.Bl:
+          s = `The API key "${t.api_key}" is invalid for the baseUrl ${this.al}`;
+          break;
+        case Xt.zl:
+          s =
+            "Sorry, we are not currently accepting your requests. If you think this is in error, please contact us.";
+          break;
+        case Xt.jl:
+          s = "No device identifier. Please contact support@braze.com";
+      }
+      E$1.error("Backend error: " + s);
+    }
+    return !1;
+  }
+  Ml(t, e, i) {
+    return !!((t && 0 !== t.length) || (e && 0 !== e.length) || i);
+  }
+  $l(t, e, i, s = !1) {
+    const r = [],
+      n = (t) => t || "",
+      o = n(this.vs.getUserId());
+    let a = this.Xn(t);
+    const u = [],
+      l = [];
+    let c,
+      d = null;
+    if (e.length > 0) {
+      const t = [];
+      for (const i of e) {
+        if (((c = i.Hn()), this.hl.wh())) {
+          if (o && !c.user_id) {
+            d || (d = {}), d.events || (d.events = []), d.events.push(c);
+            continue;
+          }
+          if (n(c.user_id) !== o) {
+            l.push(c);
+            continue;
+          }
+        }
+        t.push(c);
+      }
+      t.length > 0 && (a.events = t);
+    }
+    if (i.length > 0) {
+      const t = [];
+      for (const e of i)
+        e && (this.hl.wh() && n(e.user_id) !== o ? u.push(e) : t.push(e));
+      t.length > 0 && (a.attributes = t);
+    }
+    if ((this.kl(l, u), (a = this.$(a, !1, s)), d)) {
+      d = this.$(d, !1, s);
+      const t = { requestData: d, headers: this.A(d, h.H.Ze) };
+      r.push(t);
+    }
+    if (a && !this.Ml(a.events, a.attributes, t)) return d ? r : null;
+    const f = { requestData: a, headers: this.A(a, h.H.Ze) };
+    return r.push(f), r;
+  }
+  kl(t, e) {
+    if (t) {
+      const e = [];
+      for (const i of t) {
+        const t = De.fromJson(i);
+        (t.time = convertSecondsToMs(t.time)), e.push(t);
+      }
+      this.B.ol(e);
+    }
+    if (e) for (const t of e) this.B.Xl(t);
+  }
+  _(t, e) {
+    let i = "HTTP error ";
+    null != t && (i += t + " "), (i += e), E$1.error(i);
+  }
+  Ll(t) {
+    return v$1.lt(f.Fl, { n: t });
+  }
+  Xn(t, e) {
+    const i = {};
+    t && (i.triggers = !0);
+    const s = null != e ? e : this.vs.getUserId();
+    if ((s && (i.user_id = s), !i.user_id && !this.hl.wh())) {
+      const t = getAlias(this.B);
+      t && (i.alias = t);
+    }
+    return (i.config = { config_time: this.h.xt() }), { respond_with: i };
+  }
+  Kl(t) {
+    const e = new Date().valueOf();
+    let i = LAST_REQUEST_TO_ENDPOINT_MS_AGO_DEFAULT.toString();
+    const s = h.Pl(this.B, t);
+    if (-1 !== s) {
+      i = (e - s).toString();
+    }
+    return i;
+  }
+  A(t, e, i = !1) {
+    const s = [["X-Braze-Api-Key", this.tu]],
+      r = this.Kl(e);
+    s.push(["X-Braze-Last-Req-Ms-Ago", r]);
+    const n = h.Ul(this.B, e).toString();
+    s.push(["X-Braze-Req-Attempt", n]);
+    let o = !1;
+    if (
+      (null != t.respond_with &&
+        t.respond_with.triggers &&
+        (s.push(["X-Braze-TriggersRequest", "true"]), (o = !0)),
+      e === h.H.vi)
+    ) {
+      s.push(["X-Braze-ContentCardsRequest", "true"]);
+      let t = h.Ul(this.B, h.H.vi);
+      (t && !i) || ((t = 1), h.xl(this.B, h.H.vi, t));
+      const e = Math.max(0, t - 1);
+      s.push(["BRAZE-SYNC-RETRY-COUNT", e.toString()]), (o = !0);
+    }
+    if (
+      (e === h.H.wo &&
+        (s.push(["X-Braze-FeatureFlagsRequest", "true"]), (o = !0)),
+      o && s.push(["X-Braze-DataRequest", "true"]),
+      this.hl.wh())
+    ) {
+      const t = this.hl.jh();
+      null != t && s.push(["X-Braze-Auth-Signature", t]);
+    }
+    return s;
+  }
+  Hl(t, e, i, s) {
+    if (this.ql[s]) return;
+    const r = window.setTimeout(() => {
+      E$1.info(`Retrying rate limited ${this.Rl(s)}SDK request.`),
+        this.J(e, i, s);
+    }, t);
+    this.ql[s] = r;
+  }
+  fo() {
+    for (const t in this.ql) {
+      const e = this.ql[t];
+      window.clearTimeout(e);
+    }
+    this.ql = {};
+  }
+  J(t, e, i, r) {
+    if (!this.Ol(i))
+      return (
+        E$1.info(`${this.Rl(i)}SDK request being rate limited.`),
+        void ("function" == typeof r && r())
+      );
+    const n = this.Gl();
+    if (!n.Wl)
+      return (
+        this.Hl(n.Yl, t, e, i),
+        void E$1.info(
+          `${this.Rl(
+            i,
+          )}SDK request being rate limited. Request will be retried in ${Math.trunc(
+            n.Yl / 1e3,
+          )} seconds.`,
+        )
+      );
+    this.B.bt(STORAGE_KEYS.ft.Jl, new Date().valueOf());
+    const o = t.device;
+    o && o.os_version instanceof Promise
+      ? o.os_version.then((i) => {
+          (t.device.os_version = i), e(n.Ql);
+        })
+      : e(n.Ql);
+  }
+  Vl(t) {
+    const e = t ? readResponseHeaders(t) : null;
+    if (!e || !e["retry-after"]) return null;
+    const i = e["retry-after"];
+    if (isNaN(i) && !isNaN(Date.parse(i)))
+      return { type: "date", value: Date.parse(i) };
+    if (!isNaN(parseFloat(i.toString())))
+      return { type: "timestamp", value: 1e3 * parseFloat(i.toString()) };
+    {
+      const t =
+        "Received unexpected value for retry-after header in /sync response";
+      v$1.lt(f.wl, { e: t + ": " + i });
+    }
+    return null;
+  }
+  et(t, e, i, s, r, n) {
+    if (h.Ul(this.B, i) >= MAX_RETRY_COUNT_PER_REQUEST) return;
+    let o;
+    n = n || 0;
+    const a = this.Vl(t);
+    r();
+    const u = (t) => {
+      const r = window.setTimeout(() => {
+        e();
+      }, t);
+      s(r), h.Zl(this.B, i);
+    };
+    if (a && !isNaN(a.value)) {
+      switch (a.type) {
+        case "date":
+          (o = a.value - new Date().getTime() + n), o < 0 && e();
+          break;
+        case "timestamp":
+          o = a.value + n;
+      }
+      u(o);
+    } else n ? u(n) : h.fi(this.B, i);
+  }
+  hc(t) {
+    var e;
+    null === (e = this.B) || void 0 === e || e.bt(STORAGE_KEYS.ft.uc, t);
+  }
+  lc(t, e) {
+    let i = this.dc();
+    null == i && (i = {}), (i[t] = e), this.B.bt(STORAGE_KEYS.ft.fc, i);
+  }
+  mc() {
+    var t;
+    return null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.uc);
+  }
+  dc() {
+    var t;
+    return null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.fc);
+  }
+  vc(t, e, i, s, r = "") {
+    let n;
+    if (r) {
+      const t = this.dc();
+      n = null == t || isNaN(t[r]) ? e : t[r];
+    } else (n = this.mc()), (null == n || isNaN(n)) && (n = e);
+    const o = (t - s) / 1e3;
+    return (n = Math.min(n + o / i, e)), n;
+  }
+  Rc(t, e) {
+    return Math.max(0, (1 - t) * e * 1e3);
+  }
+  gc(t, e = "") {
+    var i, r, n, o, a;
+    const u = { Wl: !0, Ql: -1, Yl: 0 };
+    if ((null == t && (t = !0), !t && !e)) return u;
+    let l,
+      c,
+      d = null;
+    if (t) d = null === (i = this.B) || void 0 === i ? void 0 : i.dt(STORAGE_KEYS.ft.Jl);
+    else {
+      const t = h.bc(this.B);
+      if (null == t || null == t[e]) return u;
+      d = t[e];
+    }
+    if (null == d || isNaN(d)) return u;
+    if (
+      (t
+        ? ((l =
+            (null === (r = this.h) || void 0 === r ? void 0 : r.qc()) || -1),
+          (c = (null === (n = this.h) || void 0 === n ? void 0 : n.Ac()) || -1))
+        : ((l =
+            (null === (o = this.h) || void 0 === o ? void 0 : o.Dc(e)) || -1),
+          (c =
+            (null === (a = this.h) || void 0 === a ? void 0 : a.Tc(e)) || -1)),
+      -1 === l || -1 === c)
+    )
+      return u;
+    const f = new Date().valueOf();
+    let m = this.vc(f, l, c, d, e);
+    return m < 1
+      ? ((u.Wl = !1), (u.Yl = this.Rc(m, c)), u)
+      : ((m = Math.trunc(m) - 1),
+        (u.Ql = m),
+        t ? this.hc(m) : this.lc(e, m),
+        u);
+  }
+  Gl() {
+    return this.gc(!0);
+  }
+  Ol(t) {
+    const e = this.gc(!1, t);
+    return !(e && !e.Wl);
+  }
+  Z() {
+    this.hl.Z();
+  }
+  V() {
+    return this.al;
+  }
+  addSdkMetadata(t) {
+    for (const e of t) -1 === this.bl.indexOf(e) && this.bl.push(e);
+  }
+}
+
 const randomInclusive = (t, a) => (
   (t = Math.ceil(t)),
   (a = Math.floor(a)),
   Math.floor(Math.random() * (a - t + 1)) + t
 );
 
-class s {
+class H {
   constructor(t = !1, s = []) {
-    (this.L = t), (this.ge = s), (this.L = t), (this.ge = s);
+    (this.W = t), (this.Ee = s), (this.W = t), (this.Ee = s);
   }
-  P(t) {
-    (this.L = this.L && t.L), this.ge.push(...t.ge);
+  Yt(t) {
+    (this.W = this.W && t.W), this.Ee.push(...t.Ee);
   }
 }
 
-const yt = {
-  pn: () =>
+const vt = {
+  cu: () =>
     "serviceWorker" in navigator &&
     "undefined" != typeof ServiceWorkerRegistration &&
     "showNotification" in ServiceWorkerRegistration.prototype &&
     "PushManager" in window,
-  yn: () =>
+  lu: () =>
     "safari" in window &&
     "pushNotification" in window.safari &&
     "function" == typeof window.safari.pushNotification.permission &&
     "function" == typeof window.safari.pushNotification.requestPermission,
-  isPushSupported: () => yt.pn() || yt.yn(),
+  isPushSupported: () => vt.cu() || vt.lu(),
   isPushBlocked: () => {
-    const i =
-        yt.isPushSupported() &&
+    const o =
+        vt.isPushSupported() &&
         "Notification" in window &&
         null != window.Notification &&
         null != window.Notification.permission &&
         "denied" === window.Notification.permission,
-      n =
-        yt.isPushSupported() &&
+      i =
+        vt.isPushSupported() &&
         (!("Notification" in window) || null == window.Notification);
-    return i || n;
+    return o || i;
   },
   isPushPermissionGranted: () =>
-    yt.isPushSupported() &&
+    vt.isPushSupported() &&
     "Notification" in window &&
     null != window.Notification &&
     null != window.Notification.permission &&
     "granted" === window.Notification.permission,
-  Wi: () =>
-    !yt.isPushBlocked() &&
-    yt.isPushSupported() &&
-    !yt.isPushPermissionGranted(),
+  En: () =>
+    vt.isPushBlocked()
+      ? { Gn: !1, reason: "blocked" }
+      : vt.isPushSupported()
+      ? vt.isPushPermissionGranted()
+        ? { Gn: !1, reason: "permissionGranted" }
+        : { Gn: !0 }
+      : { Gn: !1, reason: "unsupported" },
+  Nn: (o, i) =>
+    "blocked" === o
+      ? `${i} containing a push prompt is not being shown because the user has already declined push permission prompt.`
+      : "unsupported" === o
+      ? `${i} containing a push prompt is not being shown because the browser doesn't support push notifications.`
+      : `${i} containing a push prompt is not being shown because the user has already accepted the permission prompt.`,
 };
-var yt$1 = yt;
+var vt$1 = vt;
 
-class Lt {
-  constructor(t, i, s, e, h, o, n, r, u, l) {
-    (this.rn = t),
-      (this.baseUrl = i),
-      (this.oi = s),
-      (this.on = e),
-      (this.yt = h),
-      (this.qt = o),
-      (this.u = n),
-      (this.yu = r),
-      (this.Ko = u),
-      (this.$t = l),
-      (this.rn = t),
-      (this.baseUrl = i),
-      (this.ju = 0),
-      (this.fE = n.dE() || 0),
-      (this.$u = null),
-      (this.oi = s),
-      (this.on = e),
-      (this.yt = h),
-      (this.qt = o),
-      (this.u = n),
-      (this.Ko = u),
-      (this.$t = l),
-      (this.yu = r),
-      (this.Fu = new T()),
-      (this.Lu = null),
-      (this.Mu = 50),
-      (this.Pu = !1);
+const IamStrings = {
+  sS: "inAppMessage must be an InAppMessage object",
+  eS: "ab-pause-scrolling",
+};
+
+function removeAllVisibleInAppMessages() {
+  const o = document.querySelectorAll(".ab-iam-root");
+  for (let t = 0; t < o.length; t++) {
+    const s = o[t];
+    if (s.id) {
+      const o = s.id + "-css",
+        t = document.getElementById(o);
+      t && t.parentNode && t.parentNode.removeChild(t);
+    }
+    s.parentNode && s.parentNode.removeChild(s);
   }
-  xu(t, i) {
-    return !t && !i && this.Ko.Gh() >= this.Mu;
+  const t = document.getElementsByClassName(IamStrings.eS);
+  for (let o = 0; o < t.length; o++) {
+    const s = t[o].classList;
+    s.contains(IamStrings.eS) && s.remove(IamStrings.eS);
   }
-  Iu(t) {
-    let s = this.oi.Gl();
+}
+
+class Wt {
+  constructor(t, i, s, e, h, n, o, r, l, u) {
+    (this.tu = t),
+      (this.baseUrl = i),
+      (this.C = s),
+      (this.eu = e),
+      (this.vs = h),
+      (this.h = n),
+      (this.B = o),
+      (this.$c = r),
+      (this.hl = l),
+      (this.j = u),
+      (this.tu = t),
+      (this.baseUrl = i),
+      (this.Zc = 0),
+      (this.bE = o.dE() || 0),
+      (this.sd = null),
+      (this.C = s),
+      (this.eu = e),
+      (this.vs = h),
+      (this.h = n),
+      (this.B = o),
+      (this.hl = l),
+      (this.j = u),
+      (this.$c = r),
+      (this.hd = new m()),
+      (this.nd = null),
+      (this.rd = 50),
+      (this.ld = !1),
+      (this.ud = !1);
+  }
+  ad(t, i) {
+    return !t && !i && this.hl.Jh() >= this.rd;
+  }
+  md(t) {
+    let i = this.C.am();
     if (t.length > 0) {
-      const e = this.yt.getUserId();
-      for (const h of t) {
-        const t = (!h.userId && !e) || h.userId === e;
-        h.type === i.ql && t && (s = !0);
+      const s = this.vs.getUserId();
+      for (const e of t) {
+        const t = (!e.userId && !s) || e.userId === s;
+        e.type === f.Sm && t && (i = !0);
       }
     }
-    return s;
+    return i;
   }
-  Nu(t = !1, i = !1, s = !0, e, h, n, u = !1, l = !1) {
-    s && this.Ou();
-    const a = this.u.AE(),
-      c = this.u.OE();
-    let d = !1;
-    const m = (t, i, r = -1) => {
-        let u = !1;
-        const l = new Date().valueOf();
-        D.Hs(this.u, D._s.Ka, l),
-          -1 !== r && i.push(["X-Braze-Req-Tokens-Remaining", r.toString()]),
-          C.Ks({
-            url: this.baseUrl + "/data/",
-            data: t,
-            headers: i,
-            L: (s) => {
+  fd(t = !1, i = !0, e, n, o, r = !1, u = !1) {
+    i && this.gd();
+    const c = this.B.RE(),
+      d = this.B.IE();
+    let m = !1;
+    const f = (t, r, u = -1) => {
+        const c = new Date().valueOf();
+        h.K(this.B, h.H.Ze, c),
+          -1 !== u && r.push(["X-Braze-Req-Tokens-Remaining", u.toString()]);
+        let d = !1;
+        l.O({
+          url: this.baseUrl + "/data/",
+          data: t,
+          headers: r,
+          W: (i) => {
+            null != t.respond_with &&
+              t.respond_with.triggers &&
+              (this.Zc = Math.max(this.Zc - 1, 0)),
+              this.j.Y(t, i, r)
+                ? (this.hl.Z(),
+                  this.h.Sc(i),
+                  (null != t.respond_with &&
+                    t.respond_with.user_id != this.vs.getUserId()) ||
+                    (null != t.device && this.B.bt(STORAGE_KEYS.ft.ac, t.device),
+                    null != t.sdk_metadata &&
+                      (this.B.bt(STORAGE_KEYS.ft.Dl, t.sdk_metadata),
+                      this.B.bt(STORAGE_KEYS.ft.Tl, this.C.yt())),
+                    this.$c(i),
+                    h.xl(this.B, h.H.Ze, 1),
+                    "function" == typeof e && e()))
+                : i.auth_error && (d = !0);
+          },
+          error: () => {
+            (d = !0),
               null != t.respond_with &&
                 t.respond_with.triggers &&
-                (this.ju = Math.max(this.ju - 1, 0)),
-                this.$t.Qs(t, s, i)
-                  ? (this.Ko.Vs(),
-                    this.qt.al(s),
-                    (null != t.respond_with &&
-                      t.respond_with.user_id != this.yt.getUserId()) ||
-                      (null != t.device && this.u.I(STORAGE_KEYS.C.Fa, t.device),
-                      null != t.sdk_metadata &&
-                        (this.u.I(STORAGE_KEYS.C.Jh, t.sdk_metadata),
-                        this.u.I(STORAGE_KEYS.C.Qh, this.oi.xi())),
-                      this.yu(s),
-                      D.Ws(this.u, D._s.Ka, 1),
-                      "function" == typeof e && e()))
-                  : s.auth_error && (u = !0);
-            },
-            error: () => {
-              null != t.respond_with &&
-                t.respond_with.triggers &&
-                (this.ju = Math.max(this.ju - 1, 0)),
-                this.$t.Zh(t.events, t.attributes),
-                "function" == typeof h && h();
-            },
-            Zs: (t) => {
-              if (("function" == typeof n && n(t), s && !d)) {
-                if (t && !u) this.zu();
-                else {
-                  D.ti(this.u, D._s.Ka);
-                  let t = this.$u;
-                  (null == t || t < 1e3 * this.fE) && (t = 1e3 * this.fE),
-                    this.zu(Math.min(3e5, randomInclusive(1e3 * this.fE, 3 * t)));
-                }
-                d = !0;
+                (this.Zc = Math.max(this.Zc - 1, 0)),
+              this.j.kl(t.events, t.attributes),
+              "function" == typeof n && n();
+          },
+          tt: (t, s) => {
+            "function" == typeof o && o(!d);
+            const e = this.j.Vl(s);
+            let n = 0;
+            if (e)
+              switch (e.type) {
+                case "date":
+                  n = Math.max(e.value - new Date().valueOf(), 0);
+                  break;
+                case "timestamp":
+                  n = e.value;
               }
-            },
-          });
+            if (i && !m) {
+              if (d) {
+                h.Zl(this.B, h.H.Ze);
+                const t = this.h.st(),
+                  i = this.h.it(),
+                  s = this.h.nt();
+                let e = this.sd;
+                (null == e || e < t) && (e = t);
+                const o = Math.min(s, randomInclusive(t, e * i)) + n;
+                this.pd(o);
+              } else this.pd(Math.max(1e3 * this.bE, n));
+              m = !0;
+            }
+          },
+        });
       },
-      f = this.Iu(a),
-      g = i || f;
-    if (this.xu(u, f))
-      return void r$1.info(
+      g = this.md(c),
+      p = t || g;
+    if (this.ad(r, g))
+      return void E$1.info(
         "Declining to flush data due to 50 consecutive authentication failures",
       );
-    if (s && !this.$t.La(a, c, t, g))
-      return this.zu(), void ("function" == typeof n && n(!0));
-    const v = this.$t.Ea(t, g, a, c, l);
-    g && this.ju++;
-    let p = !1;
+    if (i && !this.j.Ml(c, d, p))
+      return this.pd(), void ("function" == typeof o && o(!0));
+    const v = this.j.$l(p, c, d, u);
+    p && this.Zc++;
+    let b = !1;
     if (v)
       for (const t of v)
-        this.$t.Gs(
+        this.j.J(
           t.requestData,
-          (i) => m(t.requestData, t.headers, i),
-          D._s.Ka,
-          h,
+          (i) => f(t.requestData, t.headers, i),
+          h.H.Ze,
+          n,
         ),
-          (p = !0);
-    this.Ko.Fh() && s && !p
-      ? this.zu()
-      : f && (r$1.info("Invoking new session subscriptions"), this.Fu.Rt());
+          (b = !0);
+    this.hl.wh() && i && !b
+      ? this.pd()
+      : g &&
+        (E$1.info("Invoking new session subscriptions"),
+        this.hd.L(),
+        (this.ud = !0));
   }
-  Uu() {
-    return this.ju > 0;
+  vd() {
+    return this.Zc > 0;
   }
-  zu(t = 1e3 * this.fE) {
-    this.Pu ||
-      (this.Ou(),
-      (this.Lu = window.setTimeout(() => {
+  pd(t = 1e3 * this.bE) {
+    this.ld ||
+      (this.gd(),
+      (this.nd = window.setTimeout(() => {
         if (document.hidden) {
           const t = "visibilitychange",
             i = () => {
               document.hidden ||
-                (document.removeEventListener(t, i, !1), this.Nu());
+                (document.removeEventListener(t, i, !1), this.fd());
             };
           document.addEventListener(t, i, !1);
-        } else this.Nu();
+        } else this.fd();
       }, t)),
-      (this.$u = t));
+      (this.sd = t));
   }
-  Ou() {
-    null != this.Lu && (clearTimeout(this.Lu), (this.Lu = null));
+  gd() {
+    null != this.nd && (clearTimeout(this.nd), (this.nd = null));
   }
   initialize() {
-    (this.Pu = !1), this.zu();
+    (this.ld = !1), this.pd();
   }
   destroy() {
-    this.Fu.removeAllSubscriptions(),
-      this.Ko.yh(),
-      this.Ou(),
-      (this.Pu = !0),
-      this.Nu(void 0, void 0, !1, void 0, void 0, void 0, void 0, !0),
-      (this.Lu = null);
+    this.hd.removeAllSubscriptions(),
+      this.hl.Gh(),
+      this.gd(),
+      (this.ld = !0),
+      this.fd(void 0, !1, void 0, void 0, void 0, void 0, !0),
+      (this.nd = null),
+      (this.ud = !1);
   }
-  mr(t) {
-    return this.Fu.Nt(t);
+  rn(t) {
+    return this.ud ? (t(), null) : this.hd.Rt(t);
   }
   openSession() {
-    const t = this.oi.xi() !== this.oi.xo();
-    t && (this.u.cE(STORAGE_KEYS.iu.Uo), this.u.cE(STORAGE_KEYS.iu.su)),
-      this.Nu(void 0, !1, void 0, () => {
-        this.u.ii(STORAGE_KEYS.C.wi);
+    const t = this.C.yt() !== this.C.el();
+    t && (this.B.hE(STORAGE_KEYS.Ou.tl), this.B.hE(STORAGE_KEYS.Ou.Cu)),
+      this.fd(!1, void 0, () => {
+        t && (this.B.zt(STORAGE_KEYS.ft.vo), this.B.zt(STORAGE_KEYS.ft.Dt));
       }),
-      this.Mn(),
+      this.Ya(),
       t &&
         Promise.resolve().then(function () { return pushManagerFactory; }).then((t) => {
-          if (this.Pu) return;
-          const i = t.default.m();
+          if (this.ld) return;
+          const i = t.default.ra();
           if (
             null != i &&
-            (yt$1.isPushPermissionGranted() || yt$1.isPushBlocked())
+            (vt$1.isPushPermissionGranted() || vt$1.isPushBlocked())
           ) {
             const t = () => {
-                i.mn()
-                  ? r$1.info(
+                i.du()
+                  ? E$1.info(
                       "Push token maintenance is disabled, not refreshing token for backend.",
                     )
                   : i.subscribe();
               },
-              s = (i, s) => {
+              e = (i, s) => {
                 s && t();
               },
-              e = () => {
-                const i = this.u.j(STORAGE_KEYS.C.In);
+              h = () => {
+                const i = this.B.dt(STORAGE_KEYS.ft.Uu);
                 (null == i || i) && t();
               },
-              h = A.ts.Zt;
-            new A(h, r$1).jr(h.hs.cu, s, e);
+              n = et.Us.Rs;
+            new et(n, E$1).kr(n.Fs.Fu, e, h);
           }
         });
   }
-  _u() {
-    this.u.ii(STORAGE_KEYS.C.vi), this.u.ii(STORAGE_KEYS.C.bs), this.u.ii(STORAGE_KEYS.C.Xr);
+  bd() {
+    this.B.zt(STORAGE_KEYS.ft.lo), this.B.zt(STORAGE_KEYS.ft.Ps), this.B.zt(STORAGE_KEYS.ft.Wn);
   }
-  changeUser(t, i, s) {
-    const e = this.yt.getUserId();
-    if (e !== t) {
-      this.oi.yl(),
-        this._u(),
-        null != e && this.Nu(void 0, !1, void 0, void 0, void 0),
-        this.yt.ou(t),
-        s ? this.Ko.setSdkAuthenticationSignature(s) : this.Ko.xh();
-      for (let t = 0; t < i.length; t++) i[t].changeUser(null == e);
-      null != e && this.u.ii(STORAGE_KEYS.C.J),
-        this.u.ii(STORAGE_KEYS.C.Fa),
-        this.u.ii(STORAGE_KEYS.C.nE),
-        this.u.ii(STORAGE_KEYS.C._E),
+  wd() {
+    var t, i;
+    this.B.zt(STORAGE_KEYS.ft.Jl), this.B.zt(STORAGE_KEYS.ft.lE);
+    const e = h.H;
+    for (const i in e) {
+      const s = e[i];
+      this.j.lc(s, null === (t = this.h) || void 0 === t ? void 0 : t.Dc(s));
+    }
+    this.j.hc(null === (i = this.h) || void 0 === i ? void 0 : i.qc());
+  }
+  changeUser(t, i, e) {
+    const h = this.vs.getUserId();
+    if (h !== t) {
+      this.C.jm(),
+        this.bd(),
+        removeAllVisibleInAppMessages(),
+        null != h && this.fd(void 0, !1, void 0, void 0, void 0),
+        this.vs.Ju(t),
+        e ? this.hl.setSdkAuthenticationSignature(e) : this.hl.yh();
+      for (let t = 0; t < i.length; t++) i[t].changeUser(null == h);
+      this.j.fo(),
+        null != h && this.B.zt(STORAGE_KEYS.ft.rE),
+        this.B.zt(STORAGE_KEYS.ft.ac),
+        this.B.zt(STORAGE_KEYS.ft.uE),
+        this.wd(),
         this.openSession(),
-        r$1.info('Changed user to "' + t + '".');
+        E$1.info('Changed user to "' + t + '".');
     } else {
       let i = "Doing nothing.";
-      s &&
-        this.Ko.kh() !== s &&
-        (this.Ko.setSdkAuthenticationSignature(s),
+      e &&
+        this.hl.jh() !== e &&
+        (this.hl.setSdkAuthenticationSignature(e),
         (i = "Updated SDK authentication signature")),
-        r$1.info(`Current user is already ${t}. ${i}`);
+        E$1.info(`Current user is already ${t}. ${i}`);
     }
   }
   requestImmediateDataFlush(t) {
-    this.Ou(), this.oi.xo();
-    this.Nu(
-      void 0,
+    this.gd(), this.C.el();
+    this.fd(
       void 0,
       void 0,
       void 0,
       () => {
-        r$1.error("Failed to flush data, request will be retried automatically.");
+        E$1.error("Failed to flush data, request will be retried automatically.");
       },
       t,
       !0,
     );
   }
-  requestFeedRefresh() {
-    this.oi.xo(), this.Nu(!0);
+  yr(t, i) {
+    this.C.el(),
+      E$1.info("Requesting explicit trigger refresh."),
+      this.fd(!0, void 0, t, i);
+  }
+  Gu(t, i) {
+    const e = f.kd,
+      h = { a: t, l: i },
+      n = v$1.lt(e, h);
+    return (
+      n && (E$1.info(`Logged alias ${t} with label ${i}`), this.B.bt(STORAGE_KEYS.ft.uE, h)),
+      n
+    );
+  }
+  Mu(t, i, s) {
+    if (this.h.qu(i))
+      return (
+        E$1.info(`Custom Attribute "${i}" is blocklisted, ignoring.`), new H()
+      );
+    const e = { key: i, value: s },
+      h = v$1.lt(t, e);
+    if (h) {
+      const t = "object" == typeof s ? JSON.stringify(s, null, 2) : s;
+      E$1.info(`Logged custom attribute: ${i} with value: ${t}`);
+    }
+    return h;
+  }
+  setLastKnownLocation(t, i, s, e, h, n) {
+    const o = { latitude: i, longitude: s };
+    null != e && (o.altitude = e),
+      null != h && (o.ll_accuracy = h),
+      null != n && (o.alt_accuracy = n);
+    const r = v$1.lt(f.yd, o, t || void 0);
+    return (
+      r &&
+        E$1.info(`Set user last known location as ${JSON.stringify(o, null, 2)}`),
+      r
+    );
   }
   $r(t, i) {
-    this.oi.xo(),
-      r$1.info("Requesting explicit trigger refresh."),
-      this.Nu(void 0, !0, void 0, t, i);
+    const s = this.C.el();
+    return new De(this.vs.getUserId(), f.jd, t, s, { cid: i });
   }
-  Cn(s, e) {
-    const h = i.Eu,
-      n = { a: s, l: e },
-      u = t$1.q(h, n);
-    return (
-      u && (r$1.info(`Logged alias ${s} with label ${e}`), this.u.I(STORAGE_KEYS.C._E, n)), u
-    );
+  Sd(t, i) {
+    return new et(t, i);
   }
-  Fn(i, e, h) {
-    if (this.qt.hu(e))
-      return (
-        r$1.info(`Custom Attribute "${e}" is blocklisted, ignoring.`), new s()
-      );
-    const o = { key: e, value: h },
-      n = t$1.q(i, o);
-    if (n) {
-      const t = "object" == typeof h ? JSON.stringify(h, null, 2) : h;
-      r$1.info(`Logged custom attribute: ${e} with value: ${t}`);
-    }
-    return n;
-  }
-  setLastKnownLocation(s, e, h, o, n, u) {
-    const l = { latitude: e, longitude: h };
-    null != o && (l.altitude = o),
-      null != n && (l.ll_accuracy = n),
-      null != u && (l.alt_accuracy = u);
-    const a = t$1.q(i.Ju, l, s || void 0);
-    return (
-      a &&
-        r$1.info(`Set user last known location as ${JSON.stringify(l, null, 2)}`),
-      a
-    );
-  }
-  kr(t, s) {
-    const e = this.oi.xo();
-    return new ve(this.yt.getUserId(), i.Ku, t, e, { cid: s });
-  }
-  Wu(t, i) {
-    return new A(t, i);
-  }
-  Mn() {
-    const t = A.ts.Zt;
-    this.Wu(t, r$1).setItem(t.hs.Ka, 1, {
+  Ya() {
+    const t = et.Us.Rs;
+    this.Sd(t, E$1).setItem(t.Fs.Ze, 1, {
       baseUrl: this.baseUrl,
-      data: { api_key: this.rn, device_id: this.on.ce().id },
-      userId: this.yt.getUserId(),
-      sdkAuthEnabled: this.Ko.Fh(),
+      data: { api_key: this.tu, device_id: this.eu.ve().id },
+      userId: this.vs.getUserId(),
+      sdkAuthEnabled: this.hl.wh(),
     });
   }
-  yr(t) {
+  Fr(t) {
     for (const i of t)
-      if (i.api_key === this.rn) this.$t.Zh(i.events, i.attributes);
+      if (i.api_key === this.tu) this.j.kl(i.events, i.attributes);
       else {
-        const t = A.ts.Zt;
-        new A(t, r$1).setItem(t.hs.wr, p$1.W(), i);
+        const t = et.Us.Rs;
+        new et(t, E$1).setItem(t.Fs.zr, P$1.se(), i);
       }
   }
-  Gn(e, h, o) {
-    if (this.qt.hu(e))
+  Na(t, i, s) {
+    if (this.h.qu(t))
       return (
-        r$1.info(`Custom Attribute "${e}" is blocklisted, ignoring.`), new s()
+        E$1.info(`Custom Attribute "${t}" is blocklisted, ignoring.`), new H()
       );
-    let n, u;
+    let e, h;
     return (
-      null === h && null === o
-        ? ((n = i.Gu), (u = { key: e }))
-        : ((n = i.Xu), (u = { key: e, latitude: h, longitude: o })),
-      t$1.q(n, u)
+      null === i && null === s
+        ? ((e = f.Ad), (h = { key: t }))
+        : ((e = f.Dd), (h = { key: t, latitude: i, longitude: s })),
+      v$1.lt(e, h)
     );
   }
-  Hn(s, e) {
-    const h = { group_id: s, status: e };
-    return t$1.q(i.Hu, h);
+  Ra(t, i) {
+    const s = { group_id: t, status: i };
+    return v$1.lt(f.$d, s);
   }
 }
 
-class Jt {
+class li {
   constructor(
     t = 0,
     i = [],
     s = [],
     h = [],
     e = null,
-    r = null,
-    l = { enabled: !1 },
-    a = { enabled: !1, refresh_rate_limit: void 0 },
-    n = { enabled: !0, capacity: GLOBAL_RATE_LIMIT_CAPACITY_DEFAULT, refill_rate: GLOBAL_RATE_LIMIT_REFILL_RATE_DEFAULT, endpoint_overrides: {} },
+    l = null,
+    r = { enabled: !1 },
+    n = { enabled: !1, refresh_rate_limit: void 0 },
+    a = { enabled: !0, capacity: GLOBAL_RATE_LIMIT_CAPACITY_DEFAULT, refill_rate: GLOBAL_RATE_LIMIT_REFILL_RATE_DEFAULT, endpoint_overrides: {} },
+    o = null,
+    u = null,
+    c = null,
   ) {
-    (this.hl = t),
-      (this.gl = i),
-      (this.fl = s),
-      (this.bl = h),
-      (this.Rl = e),
-      (this.cl = r),
-      (this.ml = l),
-      (this.ai = a),
-      (this.ol = n),
-      (this.hl = t),
-      (this.gl = i),
-      (this.fl = s),
-      (this.bl = h),
-      (this.Rl = e),
-      (this.cl = r),
-      (this.ml = l),
-      (this.ai = a),
-      (this.ol = n);
+    (this.kc = t),
+      (this.Ic = i),
+      (this.Kc = s),
+      (this.Pc = h),
+      (this.Oc = e),
+      (this.xc = l),
+      (this.Gc = r),
+      (this.Xr = n),
+      (this.Nc = a),
+      (this.banners = o),
+      (this.dust = u),
+      (this.Hc = c),
+      (this.kc = t),
+      (this.Ic = i),
+      (this.Kc = s),
+      (this.Pc = h),
+      (this.Oc = e),
+      (this.xc = l),
+      (this.Gc = r),
+      (this.Xr = n),
+      (this.Nc = a),
+      (this.banners = o),
+      (this.dust = u),
+      (this.Hc = c);
   }
-  Y() {
+  gt() {
     return {
-      s: "5.5.0",
-      l: this.hl,
-      e: this.gl,
-      a: this.fl,
-      p: this.bl,
-      m: this.Rl,
-      v: this.cl,
-      c: this.ml,
-      f: this.ai,
-      grl: this.ol,
+      s: "6.5.0",
+      l: this.kc,
+      e: this.Ic,
+      a: this.Kc,
+      p: this.Pc,
+      m: this.Oc,
+      v: this.xc,
+      c: this.Gc,
+      f: this.Xr,
+      grl: this.Nc,
+      b: this.banners,
+      d: this.dust,
+      rb: this.Hc,
     };
   }
-  static qn(t) {
+  static _u(t) {
     let i = t.l;
     return (
-      "5.5.0" !== t.s && (i = 0),
-      new Jt(i, t.e, t.a, t.p, t.m, t.v, t.c, t.f, t.grl)
+      "6.5.0" !== t.s && (i = 0),
+      new li(i, t.e, t.a, t.p, t.m, t.v, t.c, t.f, t.grl, t.b, t.d, t.rb)
     );
   }
 }
 
-class Dt {
+class Bt {
   constructor(t) {
-    (this.u = t),
-      (this.u = t),
-      (this.tl = new T()),
-      (this.el = new T()),
-      (this.il = new T()),
-      (this.sl = null),
-      (this.rl = null);
+    (this.B = t),
+      (this.B = t),
+      (this.Ec = new m()),
+      (this.Bc = new m()),
+      (this.wc = new m()),
+      (this.Cc = new m()),
+      (this.yc = new m()),
+      (this.Fc = null),
+      (this.Lc = null);
   }
-  ll() {
-    if (null == this.rl) {
-      const t = this.u.j(STORAGE_KEYS.C.ul);
-      this.rl = null != t ? Jt.qn(t) : new Jt();
+  Mc() {
+    if (null == this.Lc) {
+      const t = this.B.dt(STORAGE_KEYS.ft.jc);
+      this.Lc = null != t ? li._u(t) : new li();
     }
-    return this.rl;
+    return this.Lc;
   }
-  hi() {
-    return this.ll().hl;
+  xt() {
+    return this.Mc().kc;
   }
-  al(t) {
+  Sc(t) {
+    var i, e, n, r;
     if (null != t && null != t.config) {
-      const e = t.config;
-      if (e.time > this.ll().hl) {
-        const t = (t) => (null == t ? this.ll().ol : t),
-          i = new Jt(
-            e.time,
-            e.events_blacklist,
-            e.attributes_blacklist,
-            e.purchases_blacklist,
-            e.messaging_session_timeout,
-            e.vapid_public_key,
-            e.content_cards,
-            e.feature_flags,
-            t(e.global_request_rate_limit),
+      const l = t.config;
+      if (l.time > this.Mc().kc) {
+        const t = (t) => (null == t ? this.Mc().Nc : t),
+          u = new li(
+            l.time,
+            l.events_blacklist,
+            l.attributes_blacklist,
+            l.purchases_blacklist,
+            l.messaging_session_timeout,
+            l.vapid_public_key,
+            l.content_cards,
+            l.feature_flags,
+            t(l.global_request_rate_limit),
+            l.banners,
+            l.dust,
+            l.request_backoff,
           );
-        let s = !1;
-        null != i.cl && this.Wn() !== i.cl && (s = !0);
-        let r = !1;
-        null != i.ml.enabled && this.ei() !== i.ml.enabled && (r = !0);
-        let n = !1;
-        null != i.ai.enabled && this.mi() !== i.ai.enabled && (n = !0),
-          (this.rl = i),
-          this.u.I(STORAGE_KEYS.C.ul, i.Y()),
-          s && this.tl.Rt(),
-          r && this.el.Rt(),
-          n && this.il.Rt();
+        let o = !1;
+        null != u.xc && this.ju() !== u.xc && (o = !0);
+        let a = !1;
+        null != u.Gc.enabled && this.wi() !== u.Gc.enabled && (a = !0);
+        let h = !1;
+        null != u.Xr.enabled && this.Yr() !== u.Xr.enabled && (h = !0);
+        let c = !1;
+        null !=
+          (null === (i = u.banners) || void 0 === i ? void 0 : i.enabled) &&
+          this.kt() !==
+            (null === (e = u.banners) || void 0 === e ? void 0 : e.enabled) &&
+          (c = !0);
+        let d = !1;
+        null != (null === (n = u.dust) || void 0 === n ? void 0 : n.enabled) &&
+          this.Ye() !==
+            (null === (r = u.dust) || void 0 === r ? void 0 : r.enabled) &&
+          (d = !0),
+          (this.Lc = u),
+          this.B.bt(STORAGE_KEYS.ft.jc, u.gt()),
+          o && this.Ec.L(),
+          a && this.Bc.L(),
+          h && this.wc.L(),
+          c && this.Cc.L(),
+          d && this.yc.L();
       }
     }
   }
-  _n(t) {
-    const e = this.tl.Nt(t);
-    return this.sl && this.tl.removeSubscription(this.sl), (this.sl = e), e;
+  xu(t) {
+    const i = this.Ec.Rt(t);
+    return this.Fc && this.Ec.removeSubscription(this.Fc), (this.Fc = i), i;
   }
-  Ms(t) {
-    return this.el.Nt(t);
+  Ci(t) {
+    return this.Bc.Rt(t);
   }
-  bi(t) {
-    return this.il.Nt(t);
+  jo(t) {
+    return this.wc.Rt(t);
   }
-  me(t) {
-    return -1 !== this.ll().gl.indexOf(t);
+  P(t) {
+    return this.Cc.Rt(t);
   }
-  hu(t) {
-    return -1 !== this.ll().fl.indexOf(t);
+  Tr(t) {
+    return this.yc.Rt(t);
+  }
+  Ce(t) {
+    return -1 !== this.Mc().Ic.indexOf(t);
+  }
+  qu(t) {
+    return -1 !== this.Mc().Kc.indexOf(t);
   }
   Dr(t) {
-    return -1 !== this.ll().bl.indexOf(t);
+    return -1 !== this.Mc().Pc.indexOf(t);
   }
-  dl() {
-    return this.ll().Rl;
+  _c() {
+    return this.Mc().Oc;
   }
-  Wn() {
-    return this.ll().cl;
+  ju() {
+    return this.Mc().xc;
   }
-  ei() {
-    return this.ll().ml.enabled || !1;
+  wi() {
+    return this.Mc().Gc.enabled || !1;
   }
-  Cl() {
-    const t = this.ll().ol;
+  Vc() {
+    const t = this.Mc().Nc;
     return !(!t || null == t.enabled) && t.enabled;
   }
-  Cu() {
-    if (!this.Cl()) return -1;
-    const t = this.ll().ol;
+  qc() {
+    if (!this.Vc()) return -1;
+    const t = this.Mc().Nc;
     return null == t.capacity || t.capacity < 10 ? -1 : t.capacity;
   }
-  Su() {
-    if (!this.Cl()) return -1;
-    const t = this.ll().ol;
+  Ac() {
+    if (!this.Vc()) return -1;
+    const t = this.Mc().Nc;
     return null == t.refill_rate || t.refill_rate <= 0 ? -1 : t.refill_rate;
   }
-  vl(t) {
-    const e = this.ll().ol.endpoint_overrides;
-    return null == e ? null : e[t];
+  zc(t) {
+    const i = this.Mc().Nc.endpoint_overrides;
+    return null == i ? null : i[t];
   }
-  Bu(t) {
-    const e = this.vl(t);
-    return null == e || isNaN(e.capacity) || e.capacity <= 0 ? -1 : e.capacity;
+  Dc(t) {
+    const i = this.zc(t);
+    return null == i || isNaN(i.capacity) || i.capacity <= 0 ? -1 : i.capacity;
   }
-  wu(t) {
-    const e = this.vl(t);
-    return null == e || isNaN(e.refill_rate) || e.refill_rate <= 0
+  Tc(t) {
+    const i = this.zc(t);
+    return null == i || isNaN(i.refill_rate) || i.refill_rate <= 0
       ? -1
-      : e.refill_rate;
+      : i.refill_rate;
   }
-  mi() {
-    return this.ll().ai.enabled && null == this.Di()
-      ? (t$1.q(i.Ls, { e: "Missing feature flag refresh_rate_limit." }), !1)
-      : this.ll().ai.enabled || !1;
+  Yr() {
+    return this.Mc().Xr.enabled && null == this.yo()
+      ? (v$1.lt(f.wl, { e: "Missing feature flag refresh_rate_limit." }), !1)
+      : this.Mc().Xr.enabled || !1;
   }
-  Di() {
-    return this.ll().ai.refresh_rate_limit;
+  yo() {
+    return this.Mc().Xr.refresh_rate_limit;
+  }
+  kt() {
+    var t;
+    return (
+      (null === (t = this.Mc().banners) || void 0 === t ? void 0 : t.enabled) ||
+      null
+    );
+  }
+  oe() {
+    var t;
+    return (
+      (null === (t = this.Mc().banners) || void 0 === t
+        ? void 0
+        : t.max_placements) || 0
+    );
+  }
+  Ye() {
+    var t;
+    return (
+      (null === (t = this.Mc().dust) || void 0 === t ? void 0 : t.enabled) || !1
+    );
+  }
+  st() {
+    var t;
+    const i =
+      null === (t = this.Mc().Hc) || void 0 === t
+        ? void 0
+        : t.min_sleep_duration_ms;
+    return null != i ? i : REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT;
+  }
+  it() {
+    var t;
+    const i =
+      null === (t = this.Mc().Hc) || void 0 === t ? void 0 : t.scale_factor;
+    return null != i ? i : REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT;
+  }
+  nt() {
+    var t;
+    const i =
+      null === (t = this.Mc().Hc) || void 0 === t
+        ? void 0
+        : t.max_sleep_duration_ms;
+    return null != i ? i : REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
   }
 }
 
-class Mt {
+class Vt {
   constructor(s, t, i, e) {
-    (this.u = s),
-      (this.yt = t),
-      (this.qt = i),
-      (this.wl = e),
-      (this.u = s),
-      (this.yt = t),
-      (this.qt = i),
-      (this.Sl = 1e3),
+    (this.B = s),
+      (this.vs = t),
+      (this.h = i),
+      (this.tm = e),
+      (this.B = s),
+      (this.vs = t),
+      (this.h = i),
+      (this.im = 1e3),
       (null == e || isNaN(e)) && (e = 1800),
-      e < this.Sl / 1e3 &&
-        (r$1.info(
+      e < this.im / 1e3 &&
+        (E$1.info(
           "Specified session timeout of " +
             e +
             "s is too small, using the minimum session timeout of " +
-            this.Sl / 1e3 +
+            this.im / 1e3 +
             "s instead.",
         ),
-        (e = this.Sl / 1e3)),
-      (this.wl = e);
+        (e = this.im / 1e3)),
+      (this.tm = e);
   }
-  jl(s, t) {
-    return new ve(this.yt.getUserId(), i.xl, s, t.eu, { d: convertMsToSeconds(s - t.Dl) });
+  nm(s, t) {
+    return new De(this.vs.getUserId(), f.hm, s, t.Tu, { d: convertMsToSeconds(s - t.lm) });
   }
-  xi() {
-    const s = this.u.tu(STORAGE_KEYS.iu.El);
-    return null == s ? null : s.eu;
+  yt() {
+    const t = this.B.$u(STORAGE_KEYS.Ou.um);
+    return null == t ? null : t.Tu;
   }
-  Gl() {
-    const s = new Date().valueOf(),
-      t = this.qt.dl(),
-      i = this.u.j(STORAGE_KEYS.C.Nl);
-    if (null != i && null == t) return !1;
-    let e = !1;
-    return (
-      null == i ? (e = !0) : null != t && (e = s - i > 1e3 * t),
-      e && this.u.I(STORAGE_KEYS.C.Nl, s),
-      e
-    );
+  am() {
+    const t = new Date().valueOf(),
+      i = this.h._c();
+    if (null == i) return !1;
+    const e = this.B.dt(STORAGE_KEYS.ft.dm),
+      n = null == e || t - e > 1e3 * i;
+    return n && this.B.bt(STORAGE_KEYS.ft.dm, t), n;
   }
-  zl(s, t) {
-    return null == t || null == t.Hl || (!(s - t.Dl < this.Sl) && t.Hl < s);
+  fm(s, t) {
+    return null == t || null == t.pm || (!(s - t.lm < this.im) && t.pm < s);
   }
-  xo() {
-    const s = new Date().valueOf(),
-      t = s + 1e3 * this.wl,
-      e = this.u.tu(STORAGE_KEYS.iu.El);
-    if (this.zl(s, e)) {
-      let n = "Generating session start event with time " + s;
+  el() {
+    const t = new Date().valueOf(),
+      i = t + 1e3 * this.tm,
+      e = this.B.$u(STORAGE_KEYS.Ou.um);
+    if (this.fm(t, e)) {
+      let n = "Generating session start event with time " + t;
       if (null != e) {
-        let s = e.Wl;
-        s - e.Dl < this.Sl && (s = e.Dl + this.Sl),
-          this.u.kl(this.jl(s, e)),
+        let s = e.gm;
+        s - e.lm < this.im && (s = e.lm + this.im),
+          this.B.wm(this.nm(s, e)),
           (n += " (old session ended " + s + ")");
       }
-      (n += ". Will expire " + t.valueOf()), r$1.info(n);
-      const l = new _t(p$1.W(), t);
-      this.u.kl(new ve(this.yt.getUserId(), i.ql, s, l.eu)),
-        this.u.uu(STORAGE_KEYS.iu.El, l);
-      return null == this.u.j(STORAGE_KEYS.C.Nl) && this.u.I(STORAGE_KEYS.C.Nl, s), l.eu;
+      (n += ". Will expire " + i.valueOf()), E$1.info(n);
+      const o = new _t(P$1.se(), i);
+      this.B.wm(new De(this.vs.getUserId(), f.Sm, t, o.Tu)),
+        this.B.Iu(STORAGE_KEYS.Ou.um, o);
+      return null == this.B.dt(STORAGE_KEYS.ft.dm) && this.B.bt(STORAGE_KEYS.ft.dm, t), o.Tu;
     }
-    if (null != e) return (e.Wl = s), (e.Hl = t), this.u.uu(STORAGE_KEYS.iu.El, e), e.eu;
+    if (null != e) return (e.gm = t), (e.pm = i), this.B.Iu(STORAGE_KEYS.Ou.um, e), e.Tu;
   }
-  yl() {
-    const s = this.u.tu(STORAGE_KEYS.iu.El);
-    null != s &&
-      (this.u.Al(STORAGE_KEYS.iu.El), this.u.kl(this.jl(new Date().valueOf(), s)));
+  jm() {
+    const t = this.B.$u(STORAGE_KEYS.Ou.um);
+    null != t &&
+      (this.B.xm(STORAGE_KEYS.Ou.um), this.B.wm(this.nm(new Date().valueOf(), t)));
   }
 }
 
-const Wt = {
-  Wh: function (e, t = !1) {
-    let a = !1;
+const Kt = {
+  _l: function (e, o = !1) {
+    let t = !1;
     try {
       if (localStorage && localStorage.getItem)
         try {
-          localStorage.setItem(STORAGE_KEYS.C.ec, "true"),
-            localStorage.getItem(STORAGE_KEYS.C.ec) &&
-              (localStorage.removeItem(STORAGE_KEYS.C.ec), (a = !0));
+          localStorage.setItem(STORAGE_KEYS.ft.Qc, "true"),
+            localStorage.getItem(STORAGE_KEYS.ft.Qc) &&
+              (localStorage.removeItem(STORAGE_KEYS.ft.Qc), (t = !0));
         } catch (e) {
           if (
             !(
@@ -3621,17 +3841,17 @@ const Wt = {
             )
           )
             throw e;
-          a = !0;
+          t = !0;
         }
     } catch (e) {
-      r$1.info("Local Storage not supported!");
+      E$1.info("Local Storage not supported!");
     }
-    const n = Wt.oc(),
-      c = new Q.tc(e, n && !t, a);
-    let l;
-    return (l = a ? new Q.rc(e) : new Q.ac()), new Q(c, l);
+    const r = Kt.Uc(),
+      a = new ee.Jc(e, r && !o, t);
+    let n;
+    return (n = t ? new ee.Wc(e) : new ee.Xc()), new ee(a, n);
   },
-  oc: function () {
+  Uc: function () {
     return (
       navigator.cookieEnabled ||
       ("cookie" in document &&
@@ -3643,16 +3863,23 @@ const Wt = {
 };
 
 class ControlMessage {
-  constructor(t, s) {
-    (this.triggerId = t),
-      (this.messageExtras = s),
-      (this.triggerId = t),
-      (this.messageExtras = s),
+  constructor(s, t) {
+    (this.triggerId = s),
+      (this.messageExtras = t),
+      (this.triggerId = s),
+      (this.messageExtras = t),
       (this.extras = {}),
-      (this.isControl = !0);
+      (this.isControl = !0),
+      (this.Gt = !1);
   }
-  static fromJson(t) {
-    return new ControlMessage(t.trigger_id, t.message_extras);
+  static fromJson(s) {
+    return new ControlMessage(s.trigger_id, s.message_extras);
+  }
+  Wt() {
+    return !this.Gt && ((this.Gt = !0), !0);
+  }
+  sm() {
+    return this.Gt;
   }
 }
 
@@ -3674,33 +3901,33 @@ function _isInView(t, n = !1, e = !1, s = !1) {
       !s)
   );
 }
-const DOMUtils = { dc: null, po: _isInView };
-const DIRECTIONS = { Oe: "up", Qe: "down", U: "left", V: "right" };
+const DOMUtils = { lp: null, td: _isInView };
+const DIRECTIONS = { Uo: "up", Vo: "down", de: "left", ce: "right" };
 function supportsPassive() {
-  if (null == DOMUtils.dc) {
-    DOMUtils.dc = !1;
+  if (null == DOMUtils.lp) {
+    DOMUtils.lp = !1;
     try {
       const t = Object.defineProperty({}, "passive", {
         get: () => {
-          DOMUtils.dc = !0;
+          DOMUtils.lp = !0;
         },
       });
       window.addEventListener("testPassive", () => {}, t),
         window.removeEventListener("testPassive", () => {}, t);
     } catch (t) {
-      r$1.error(getErrorMessage(t));
+      E$1.error(getErrorMessage(t));
     }
   }
-  return DOMUtils.dc;
+  return DOMUtils.lp;
 }
 function addPassiveEventListener(t, n, e = () => {}) {
   t.addEventListener(n, e, !!supportsPassive() && { passive: !0 });
 }
 function topIsInView(t) {
-  return DOMUtils.po(t, !0, !1, !1);
+  return DOMUtils.td(t, !0, !1, !1);
 }
 function bottomIsInView(t) {
-  return DOMUtils.po(t, !1, !0, !1);
+  return DOMUtils.td(t, !1, !0, !1);
 }
 function clickElement(t) {
   if (t.onclick) {
@@ -3719,15 +3946,15 @@ function detectSwipe(t, n, e) {
       const l = s - o.touches[0].clientX,
         u = i - o.touches[0].clientY;
       Math.abs(l) > Math.abs(u) && Math.abs(l) >= 25
-        ? (((l > 0 && n === DIRECTIONS.U) || (l < 0 && n === DIRECTIONS.V)) &&
+        ? (((l > 0 && n === DIRECTIONS.de) || (l < 0 && n === DIRECTIONS.ce)) &&
             e(o),
           (s = null),
           (i = null))
         : Math.abs(u) >= 25 &&
           (((u > 0 &&
-            n === DIRECTIONS.Oe &&
+            n === DIRECTIONS.Uo &&
             t.scrollTop === t.scrollHeight - t.offsetHeight) ||
-            (u < 0 && n === DIRECTIONS.Qe && 0 === t.scrollTop)) &&
+            (u < 0 && n === DIRECTIONS.Vo && 0 === t.scrollTop)) &&
             e(o),
           (s = null),
           (i = null));
@@ -3746,7 +3973,7 @@ function buildSvg(t, n, e) {
   );
 }
 
-const KeyCodes = { Fo: 32, lo: 9, To: 13, mh: 27 };
+const KeyCodes = { Ho: 32, Wo: 9, Go: 13, Ih: 27 };
 
 const isIFrame = (e) => null !== e && "IFRAME" === e.tagName;
 
@@ -3759,21 +3986,21 @@ class InAppMessage {
     e,
     E,
     n,
+    T,
     o,
     r,
     l,
     u,
     a,
+    A,
     I,
     c,
-    A,
     O,
-    _,
-    m,
     L,
+    _,
     N,
-    S,
     R,
+    S,
     M,
     D,
     C,
@@ -3782,6 +4009,8 @@ class InAppMessage {
     b,
     P,
     p,
+    f,
+    G,
   ) {
     (this.message = t),
       (this.messageAlignment = s),
@@ -3790,21 +4019,21 @@ class InAppMessage {
       (this.triggerId = e),
       (this.clickAction = E),
       (this.uri = n),
-      (this.openTarget = o),
-      (this.dismissType = r),
-      (this.duration = l),
-      (this.icon = u),
-      (this.imageUrl = a),
-      (this.imageStyle = I),
-      (this.iconColor = c),
-      (this.iconBackgroundColor = A),
-      (this.backgroundColor = O),
-      (this.textColor = _),
-      (this.closeButtonColor = m),
-      (this.animateIn = L),
+      (this.openTarget = T),
+      (this.dismissType = o),
+      (this.duration = r),
+      (this.icon = l),
+      (this.imageUrl = u),
+      (this.imageStyle = a),
+      (this.iconColor = A),
+      (this.iconBackgroundColor = I),
+      (this.backgroundColor = c),
+      (this.textColor = O),
+      (this.closeButtonColor = L),
+      (this.animateIn = _),
       (this.animateOut = N),
-      (this.header = S),
-      (this.headerAlignment = R),
+      (this.header = R),
+      (this.headerAlignment = S),
       (this.headerTextColor = M),
       (this.frameColor = D),
       (this.buttons = C),
@@ -3813,30 +4042,32 @@ class InAppMessage {
       (this.htmlId = b),
       (this.css = P),
       (this.messageExtras = p),
+      (this.language = f),
+      (this.altImageText = G),
       (this.message = t),
       (this.messageAlignment = s || InAppMessage.TextAlignment.CENTER),
-      (this.duration = l || 5e3),
+      (this.duration = r || 5e3),
       (this.slideFrom = i || InAppMessage.SlideFrom.BOTTOM),
       (this.extras = h || {}),
       (this.triggerId = e),
       (this.clickAction = E || InAppMessage.ClickAction.NONE),
       (this.uri = n),
-      (this.openTarget = o || InAppMessage.OpenTarget.NONE),
-      (this.dismissType = r || InAppMessage.DismissType.AUTO_DISMISS),
-      (this.icon = u),
-      (this.imageUrl = a),
-      (this.imageStyle = I || InAppMessage.ImageStyle.TOP),
-      (this.iconColor = c || InAppMessage.th.ih),
-      (this.iconBackgroundColor = A || InAppMessage.th.sh),
-      (this.backgroundColor = O || InAppMessage.th.ih),
-      (this.textColor = _ || InAppMessage.th.hh),
-      (this.closeButtonColor = m || InAppMessage.th.eh),
-      (this.animateIn = L),
+      (this.openTarget = T || InAppMessage.OpenTarget.NONE),
+      (this.dismissType = o || InAppMessage.DismissType.AUTO_DISMISS),
+      (this.icon = l),
+      (this.imageUrl = u),
+      (this.imageStyle = a || InAppMessage.ImageStyle.TOP),
+      (this.iconColor = A || InAppMessage.th.ih),
+      (this.iconBackgroundColor = I || InAppMessage.th.sh),
+      (this.backgroundColor = c || InAppMessage.th.ih),
+      (this.textColor = O || InAppMessage.th.hh),
+      (this.closeButtonColor = L || InAppMessage.th.eh),
+      (this.animateIn = _),
       null == this.animateIn && (this.animateIn = !0),
       (this.animateOut = N),
       null == this.animateOut && (this.animateOut = !0),
-      (this.header = S),
-      (this.headerAlignment = R || InAppMessage.TextAlignment.CENTER),
+      (this.header = R),
+      (this.headerAlignment = S || InAppMessage.TextAlignment.CENTER),
       (this.headerTextColor = M || InAppMessage.th.hh),
       (this.frameColor = D || InAppMessage.th.Eh),
       (this.buttons = C || []),
@@ -3846,74 +4077,76 @@ class InAppMessage {
       (this.css = P),
       (this.isControl = !1),
       (this.messageExtras = p),
+      (this.language = f),
+      (this.altImageText = G),
       (this.nh = !1),
+      (this.Gt = !1),
+      (this.dd = !1),
       (this.Th = !1),
-      (this.vo = !1),
-      (this.oh = !1),
-      (this.Re = null),
-      (this.ke = null),
-      (this.Et = new T()),
-      (this.rh = new T()),
-      (this.qe = InAppMessage.TextAlignment.CENTER);
+      (this.qo = null),
+      (this.$o = null),
+      (this.ti = new m()),
+      (this.oh = new m()),
+      (this.Io = InAppMessage.TextAlignment.CENTER);
   }
   subscribeToClickedEvent(t) {
-    return this.Et.Nt(t);
+    return this.ti.Rt(t);
   }
   subscribeToDismissedEvent(t) {
-    return this.rh.Nt(t);
+    return this.oh.Rt(t);
   }
   removeSubscription(t) {
-    this.Et.removeSubscription(t), this.rh.removeSubscription(t);
+    this.ti.removeSubscription(t), this.oh.removeSubscription(t);
   }
   removeAllSubscriptions() {
-    this.Et.removeAllSubscriptions(), this.rh.removeAllSubscriptions();
+    this.ti.removeAllSubscriptions(), this.oh.removeAllSubscriptions();
   }
   closeMessage() {
-    this.Cr(this.Re);
+    this.ll(this.qo);
   }
-  $e() {
+  zo() {
     return !0;
   }
-  do() {
-    return this.$e();
+  od() {
+    return this.zo();
   }
-  Ce() {
+  _o() {
     return null != this.htmlId && this.htmlId.length > 4;
   }
-  ve() {
-    return this.Ce() && null != this.css && this.css.length > 0;
+  Mo() {
+    return this._o() && null != this.css && this.css.length > 0;
   }
-  we() {
-    if (this.Ce() && this.ve()) return this.htmlId + "-css";
+  Oo() {
+    if (this._o() && this.Mo()) return this.htmlId + "-css";
   }
-  K() {
-    return !this.Th && ((this.Th = !0), !0);
+  Wt() {
+    return !this.Gt && ((this.Gt = !0), !0);
   }
-  Wr() {
-    return this.Th;
+  sm() {
+    return this.Gt;
   }
-  p(t) {
-    return !this.vo && ((this.vo = !0), this.Et.Rt(), !0);
+  $t(t) {
+    return !this.dd && ((this.dd = !0), this.ti.L(), !0);
   }
-  N() {
-    return !this.oh && ((this.oh = !0), this.rh.Rt(), !0);
+  Ot() {
+    return !this.Th && ((this.Th = !0), this.oh.L(), !0);
   }
   hide(t) {
     if (t && t.parentNode) {
       let s = t.closest(".ab-iam-root");
-      if ((null == s && (s = t), this.$e() && null != s.parentNode)) {
+      if ((null == s && (s = t), this.zo() && null != s.parentNode)) {
         const t = s.parentNode.classList;
-        t && t.contains(InAppMessage.lh) && t.remove(InAppMessage.lh),
-          document.body.removeEventListener("touchmove", InAppMessage.uh);
+        t && t.contains(IamStrings.eS) && t.remove(IamStrings.eS),
+          document.body.removeEventListener("touchmove", InAppMessage.rh);
       }
-      s.className = s.className.replace(InAppMessage.ah, InAppMessage.Ih);
+      s.className = s.className.replace(InAppMessage.lh, InAppMessage.uh);
     }
     return this.animateOut || !1;
   }
-  Cr(t, s) {
+  ll(t, s) {
     if (null == t) return;
     let i;
-    (this.Re = null),
+    (this.qo = null),
       (i =
         -1 === t.className.indexOf("ab-in-app-message")
           ? t.getElementsByClassName("ab-in-app-message")[0]
@@ -3928,52 +4161,50 @@ class InAppMessage {
         let s = t.closest(".ab-iam-root");
         null == s && (s = t), s.parentNode && s.parentNode.removeChild(s);
       }
-      const i = this.we();
+      const i = this.Oo();
       if (null != i) {
         const t = document.getElementById(i);
         t && t.parentNode && t.parentNode.removeChild(t);
       }
-      null != e && "Safari" === X.browser && (e.scrollTop = E),
-        s ? s() : this.N();
+      null != e && "Safari" === ro.browser && (e.scrollTop = E),
+        s ? s() : this.Ot();
     };
-    h ? setTimeout(n, InAppMessage.Ah) : n(), this.ke && this.ke.focus();
+    h ? setTimeout(n, InAppMessage.hr) : n(), this.$o && this.$o.focus();
   }
-  Ge() {
+  No() {
     return document.createTextNode(this.message || "");
   }
-  Ae(t) {
-    let s = "";
-    this.message || this.header || !this.$e() || (s = "Modal Image"),
-      t.setAttribute("alt", s);
+  Jo(t) {
+    t.setAttribute("alt", this.altImageText || "");
   }
-  static uh(t) {
+  static rh(t) {
     if (t.targetTouches && t.targetTouches.length > 1) return;
     const s = t.target;
     (s &&
       s.classList &&
       s.classList.contains("ab-message-text") &&
       s.scrollHeight > s.clientHeight) ||
-      (document.querySelector(`.${InAppMessage.lh}`) &&
+      (document.querySelector(`.${IamStrings.eS}`) &&
         t.cancelable &&
         t.preventDefault());
   }
-  Oh(t) {
+  ah(t) {
     const s = t.parentNode;
-    this.$e() &&
+    this.zo() &&
       null != s &&
       this.orientation !== InAppMessage.Orientation.LANDSCAPE &&
-      (null != s.classList && s.classList.add(InAppMessage.lh),
+      (null != s.classList && s.classList.add(IamStrings.eS),
       document.body.addEventListener(
         "touchmove",
-        InAppMessage.uh,
+        InAppMessage.rh,
         !!supportsPassive() && { passive: !1 },
       )),
-      (t.className += " " + InAppMessage.ah);
+      (t.className += " " + InAppMessage.lh);
   }
-  static _h(t) {
+  static Ah(t) {
     if (
-      t.keyCode === KeyCodes.mh &&
-      !e.nn(L.Lh) &&
+      t.keyCode === KeyCodes.Ih &&
+      !r.re(D.Oh) &&
       document.querySelectorAll(".ab-modal-interactions").length > 0
     ) {
       const t = document.getElementsByClassName("ab-html-message");
@@ -3995,49 +4226,51 @@ class InAppMessage {
       }
     }
   }
-  Nh() {
+  Lh() {
     this.nh ||
-      e.nn(L.Lh) ||
-      (document.addEventListener("keydown", InAppMessage._h, !1),
-      e.Sh(() => {
-        document.removeEventListener("keydown", InAppMessage._h);
+      r.re(D.Oh) ||
+      (document.addEventListener("keydown", InAppMessage.Ah, !1),
+      r.mh(() => {
+        document.removeEventListener("keydown", InAppMessage.Ah);
       }),
       (this.nh = !0));
   }
-  Y(t) {
+  gt(t) {
     const s = {};
     return t
-      ? ((s[InAppMessage.tt.Yr] = this.message),
-        (s[InAppMessage.tt.Zr] = this.messageAlignment),
-        (s[InAppMessage.tt.Rh] = this.slideFrom),
-        (s[InAppMessage.tt.bt] = this.extras),
-        (s[InAppMessage.tt.ea] = this.triggerId),
-        (s[InAppMessage.tt.ra] = this.clickAction),
-        (s[InAppMessage.tt.URI] = this.uri),
-        (s[InAppMessage.tt.sa] = this.openTarget),
-        (s[InAppMessage.tt.ta] = this.dismissType),
-        (s[InAppMessage.tt.ia] = this.duration),
-        (s[InAppMessage.tt.aa] = this.icon),
-        (s[InAppMessage.tt.ot] = this.imageUrl),
-        (s[InAppMessage.tt.oa] = this.imageStyle),
-        (s[InAppMessage.tt.pa] = this.iconColor),
-        (s[InAppMessage.tt.ma] = this.iconBackgroundColor),
-        (s[InAppMessage.tt.na] = this.backgroundColor),
-        (s[InAppMessage.tt.ua] = this.textColor),
-        (s[InAppMessage.tt.ca] = this.closeButtonColor),
-        (s[InAppMessage.tt.fa] = this.animateIn),
-        (s[InAppMessage.tt.da] = this.animateOut),
-        (s[InAppMessage.tt.la] = this.header),
-        (s[InAppMessage.tt.ga] = this.headerAlignment),
-        (s[InAppMessage.tt.ja] = this.headerTextColor),
-        (s[InAppMessage.tt.xa] = this.frameColor),
-        (s[InAppMessage.tt.za] = this.buttons),
-        (s[InAppMessage.tt.ha] = this.cropType),
-        (s[InAppMessage.tt.va] = this.orientation),
-        (s[InAppMessage.tt.wa] = this.htmlId),
-        (s[InAppMessage.tt.CSS] = this.css),
-        (s[InAppMessage.tt.Z] = t),
-        (s[InAppMessage.tt.ya] = this.messageExtras),
+      ? ((s[InAppMessage.ss.pa] = this.message),
+        (s[InAppMessage.ss.ma] = this.messageAlignment),
+        (s[InAppMessage.ss._h] = this.slideFrom),
+        (s[InAppMessage.ss.xs] = this.extras),
+        (s[InAppMessage.ss.ua] = this.triggerId),
+        (s[InAppMessage.ss.ca] = this.clickAction),
+        (s[InAppMessage.ss.URI] = this.uri),
+        (s[InAppMessage.ss.fa] = this.openTarget),
+        (s[InAppMessage.ss.da] = this.dismissType),
+        (s[InAppMessage.ss.la] = this.duration),
+        (s[InAppMessage.ss.ga] = this.icon),
+        (s[InAppMessage.ss.ns] = this.imageUrl),
+        (s[InAppMessage.ss.ja] = this.imageStyle),
+        (s[InAppMessage.ss.xa] = this.iconColor),
+        (s[InAppMessage.ss.za] = this.iconBackgroundColor),
+        (s[InAppMessage.ss.ha] = this.backgroundColor),
+        (s[InAppMessage.ss.va] = this.textColor),
+        (s[InAppMessage.ss.wa] = this.closeButtonColor),
+        (s[InAppMessage.ss.ya] = this.animateIn),
+        (s[InAppMessage.ss.Sa] = this.animateOut),
+        (s[InAppMessage.ss.ba] = this.header),
+        (s[InAppMessage.ss.ka] = this.headerAlignment),
+        (s[InAppMessage.ss.qa] = this.headerTextColor),
+        (s[InAppMessage.ss.Aa] = this.frameColor),
+        (s[InAppMessage.ss.Ba] = this.buttons),
+        (s[InAppMessage.ss.Ca] = this.cropType),
+        (s[InAppMessage.ss.Da] = this.orientation),
+        (s[InAppMessage.ss.Ea] = this.htmlId),
+        (s[InAppMessage.ss.CSS] = this.css),
+        (s[InAppMessage.ss.ts] = t),
+        (s[InAppMessage.ss.Fa] = this.messageExtras),
+        (s[InAppMessage.ss.LANGUAGE] = this.language),
+        (s[InAppMessage.ss.ks] = this.altImageText),
         s)
       : s;
   }
@@ -4046,26 +4279,22 @@ class InAppMessage {
   hh: 4281545523,
   ih: 4294967295,
   sh: 4278219733,
-  Mh: 4293914607,
-  Dh: 4283782485,
+  Nh: 4293914607,
+  Rh: 4283782485,
   Eh: 3224580915,
   eh: 4288387995,
 }),
-  (InAppMessage.Le = {
-    Ch: "hd",
-    ze: "ias",
-    dh: "of",
-    Uh: "do",
-    bh: "umt",
-    Ph: "tf",
-    ph: "te",
+  (InAppMessage.Ao = {
+    Sh: "hd",
+    Lo: "ias",
+    Mh: "of",
+    Dh: "do",
+    Ch: "umt",
+    dh: "tf",
+    Uh: "te",
   }),
   (InAppMessage.SlideFrom = { TOP: "TOP", BOTTOM: "BOTTOM" }),
-  (InAppMessage.ClickAction = {
-    NEWS_FEED: "NEWS_FEED",
-    URI: "URI",
-    NONE: "NONE",
-  }),
+  (InAppMessage.ClickAction = { URI: "URI", NONE: "NONE" }),
   (InAppMessage.DismissType = {
     AUTO_DISMISS: "AUTO_DISMISS",
     MANUAL: "SWIPE",
@@ -4082,68 +4311,69 @@ class InAppMessage {
     CENTER_CROP: "CENTER_CROP",
     FIT_CENTER: "FIT_CENTER",
   }),
-  (InAppMessage.Be = {
-    Qr: "SLIDEUP",
-    Lr: "MODAL",
-    Ue: "MODAL_STYLED",
-    Hr: "FULL",
-    Kr: "WEB_HTML",
-    Me: "HTML",
-    Ve: "HTML_FULL",
+  (InAppMessage.Eo = {
+    ia: "SLIDEUP",
+    ta: "MODAL",
+    Xo: "MODAL_STYLED",
+    Yn: "FULL",
+    Zo: "WEB_HTML",
+    Bo: "HTML",
+    Yo: "HTML_FULL",
   }),
-  (InAppMessage.Ah = 500),
-  (InAppMessage.fh = 200),
-  (InAppMessage.ah = "ab-show"),
-  (InAppMessage.Ih = "ab-hide"),
-  (InAppMessage.lh = "ab-pause-scrolling"),
-  (InAppMessage.tt = {
-    Yr: "m",
-    Zr: "ma",
-    Rh: "sf",
-    bt: "e",
-    ea: "ti",
-    ra: "ca",
+  (InAppMessage.hr = 500),
+  (InAppMessage.bh = 200),
+  (InAppMessage.lh = "ab-show"),
+  (InAppMessage.uh = "ab-hide"),
+  (InAppMessage.ss = {
+    pa: "m",
+    ma: "ma",
+    _h: "sf",
+    xs: "e",
+    ua: "ti",
+    ca: "ca",
     URI: "u",
-    sa: "oa",
-    ta: "dt",
-    ia: "d",
-    aa: "i",
-    ot: "iu",
-    oa: "is",
-    pa: "ic",
-    ma: "ibc",
-    na: "bc",
-    ua: "tc",
-    ca: "cbc",
-    fa: "ai",
-    da: "ao",
-    la: "h",
-    ga: "ha",
-    ja: "htc",
-    xa: "fc",
-    za: "b",
-    ha: "ct",
-    va: "o",
-    wa: "hi",
+    fa: "oa",
+    da: "dt",
+    la: "d",
+    ga: "i",
+    ns: "iu",
+    ja: "is",
+    xa: "ic",
+    za: "ibc",
+    ha: "bc",
+    va: "tc",
+    wa: "cbc",
+    ya: "ai",
+    Sa: "ao",
+    ba: "h",
+    ka: "ha",
+    qa: "htc",
+    Aa: "fc",
+    Ba: "b",
+    Ca: "ct",
+    Da: "o",
+    Ea: "hi",
     CSS: "css",
-    Z: "type",
-    uo: "messageFields",
-    ya: "me",
+    ts: "type",
+    ed: "messageFields",
+    Fa: "me",
+    LANGUAGE: "l",
+    ks: "ia",
   });
 
 class HtmlMessage extends InAppMessage {
-  constructor(i, o, e, r, d, t, s, v, n, u, a, c) {
+  constructor(i, o, d, e, r, t, s, v, n, u, a, c) {
     super(
       i,
       void 0,
       void 0,
       o,
-      e,
-      void 0,
-      void 0,
-      void 0,
-      (r = r || InAppMessage.DismissType.MANUAL),
       d,
+      void 0,
+      void 0,
+      void 0,
+      (e = e || InAppMessage.DismissType.MANUAL),
+      r,
       void 0,
       void 0,
       void 0,
@@ -4164,42 +4394,44 @@ class HtmlMessage extends InAppMessage {
       n,
       u,
       c,
+      void 0,
+      void 0,
     ),
       (this.messageFields = a),
       (this.messageFields = a);
   }
-  do() {
+  od() {
     return !1;
   }
-  p(i) {
-    if (this.xe === InAppMessage.Be.Kr) {
-      if (this.vo) return !1;
-      this.vo = !0;
+  $t(i) {
+    if (this.ko === InAppMessage.Eo.Zo) {
+      if (this.dd) return !1;
+      this.dd = !0;
     }
-    return this.Et.Rt(i), !0;
+    return this.ti.L(i), !0;
   }
-  Y() {
-    const i = super.Y(HtmlMessage.it);
-    return (i[InAppMessage.tt.uo] = this.messageFields), i;
+  gt() {
+    const i = super.gt(HtmlMessage.es);
+    return (i[InAppMessage.ss.ed] = this.messageFields), i;
   }
-  static Jr(i) {
+  static Zn(i) {
     return new HtmlMessage(
-      i[InAppMessage.tt.Yr],
-      i[InAppMessage.tt.bt],
-      i[InAppMessage.tt.ea],
-      i[InAppMessage.tt.ta],
-      i[InAppMessage.tt.ia],
-      i[InAppMessage.tt.fa],
-      i[InAppMessage.tt.da],
-      i[InAppMessage.tt.xa],
-      i[InAppMessage.tt.wa],
-      i[InAppMessage.tt.CSS],
-      i[InAppMessage.tt.uo],
-      i[InAppMessage.tt.ya],
+      i[InAppMessage.ss.pa],
+      i[InAppMessage.ss.xs],
+      i[InAppMessage.ss.ua],
+      i[InAppMessage.ss.da],
+      i[InAppMessage.ss.la],
+      i[InAppMessage.ss.ya],
+      i[InAppMessage.ss.Sa],
+      i[InAppMessage.ss.Aa],
+      i[InAppMessage.ss.Ea],
+      i[InAppMessage.ss.CSS],
+      i[InAppMessage.ss.ed],
+      i[InAppMessage.ss.Fa],
     );
   }
 }
-HtmlMessage.it = InAppMessage.Be.Kr;
+HtmlMessage.es = InAppMessage.Eo.Zo;
 
 class InAppMessageButton {
   constructor(s, t, i, r, h, e, n) {
@@ -4216,22 +4448,22 @@ class InAppMessageButton {
       (this.borderColor = r || this.backgroundColor),
       (this.clickAction = h || InAppMessage.ClickAction.NONE),
       (this.uri = e),
-      null == n && (n = InAppMessageButton.Ki),
+      null == n && (n = InAppMessageButton._n),
       (this.id = n),
-      (this.vo = !1),
-      (this.Et = new T());
+      (this.dd = !1),
+      (this.ti = new m());
   }
   subscribeToClickedEvent(s) {
-    return this.Et.Nt(s);
+    return this.ti.Rt(s);
   }
   removeSubscription(s) {
-    this.Et.removeSubscription(s);
+    this.ti.removeSubscription(s);
   }
   removeAllSubscriptions() {
-    this.Et.removeAllSubscriptions();
+    this.ti.removeAllSubscriptions();
   }
-  p() {
-    return !this.vo && ((this.vo = !0), this.Et.Rt(), !0);
+  $t() {
+    return !this.dd && ((this.dd = !0), this.ti.L(), !0);
   }
   static fromJson(s) {
     return new InAppMessageButton(
@@ -4245,7 +4477,7 @@ class InAppMessageButton {
     );
   }
 }
-InAppMessageButton.Ki = -1;
+InAppMessageButton._n = -1;
 
 class FullScreenMessage extends InAppMessage {
   constructor(
@@ -4278,6 +4510,8 @@ class FullScreenMessage extends InAppMessage {
     q,
     A,
     B,
+    C,
+    D,
   ) {
     (p = p || InAppMessage.DismissType.MANUAL),
       (k = k || InAppMessage.Orientation.PORTRAIT),
@@ -4312,47 +4546,51 @@ class FullScreenMessage extends InAppMessage {
         q,
         A,
         B,
+        C,
+        D,
       ),
-      (this.qe = InAppMessage.TextAlignment.CENTER);
+      (this.Io = InAppMessage.TextAlignment.CENTER);
   }
-  Y() {
-    return super.Y(FullScreenMessage.it);
+  gt() {
+    return super.gt(FullScreenMessage.es);
   }
-  static Jr(e) {
+  static Zn(e) {
     return new FullScreenMessage(
-      e[InAppMessage.tt.Yr],
-      e[InAppMessage.tt.Zr],
-      e[InAppMessage.tt.bt],
-      e[InAppMessage.tt.ea],
-      e[InAppMessage.tt.ra],
-      e[InAppMessage.tt.URI],
-      e[InAppMessage.tt.sa],
-      e[InAppMessage.tt.ta],
-      e[InAppMessage.tt.ia],
-      e[InAppMessage.tt.aa],
-      e[InAppMessage.tt.ot],
-      e[InAppMessage.tt.oa],
-      e[InAppMessage.tt.pa],
-      e[InAppMessage.tt.ma],
-      e[InAppMessage.tt.na],
-      e[InAppMessage.tt.ua],
-      e[InAppMessage.tt.ca],
-      e[InAppMessage.tt.fa],
-      e[InAppMessage.tt.da],
-      e[InAppMessage.tt.la],
-      e[InAppMessage.tt.ga],
-      e[InAppMessage.tt.ja],
-      e[InAppMessage.tt.xa],
-      buttonsFromSerializedInAppMessage(e[InAppMessage.tt.za]),
-      e[InAppMessage.tt.ha],
-      e[InAppMessage.tt.va],
-      e[InAppMessage.tt.wa],
-      e[InAppMessage.tt.CSS],
-      e[InAppMessage.tt.ya],
+      e[InAppMessage.ss.pa],
+      e[InAppMessage.ss.ma],
+      e[InAppMessage.ss.xs],
+      e[InAppMessage.ss.ua],
+      e[InAppMessage.ss.ca],
+      e[InAppMessage.ss.URI],
+      e[InAppMessage.ss.fa],
+      e[InAppMessage.ss.da],
+      e[InAppMessage.ss.la],
+      e[InAppMessage.ss.ga],
+      e[InAppMessage.ss.ns],
+      e[InAppMessage.ss.ja],
+      e[InAppMessage.ss.xa],
+      e[InAppMessage.ss.za],
+      e[InAppMessage.ss.ha],
+      e[InAppMessage.ss.va],
+      e[InAppMessage.ss.wa],
+      e[InAppMessage.ss.ya],
+      e[InAppMessage.ss.Sa],
+      e[InAppMessage.ss.ba],
+      e[InAppMessage.ss.ka],
+      e[InAppMessage.ss.qa],
+      e[InAppMessage.ss.Aa],
+      buttonsFromSerializedInAppMessage(e[InAppMessage.ss.Ba]),
+      e[InAppMessage.ss.Ca],
+      e[InAppMessage.ss.Da],
+      e[InAppMessage.ss.Ea],
+      e[InAppMessage.ss.CSS],
+      e[InAppMessage.ss.Fa],
+      e[InAppMessage.ss.LANGUAGE],
+      e[InAppMessage.ss.ks],
     );
   }
 }
-FullScreenMessage.it = InAppMessage.Be.Hr;
+FullScreenMessage.es = InAppMessage.Eo.Yn;
 
 class ModalMessage extends InAppMessage {
   constructor(
@@ -4384,6 +4622,8 @@ class ModalMessage extends InAppMessage {
     k,
     q,
     A,
+    B,
+    C,
   ) {
     super(
       e,
@@ -4416,46 +4656,50 @@ class ModalMessage extends InAppMessage {
       k,
       q,
       A,
+      B,
+      C,
     ),
-      (this.qe = InAppMessage.TextAlignment.CENTER);
+      (this.Io = InAppMessage.TextAlignment.CENTER);
   }
-  Y() {
-    return super.Y(ModalMessage.it);
+  gt() {
+    return super.gt(ModalMessage.es);
   }
-  static Jr(e) {
+  static Zn(e) {
     return new ModalMessage(
-      e[InAppMessage.tt.Yr],
-      e[InAppMessage.tt.Zr],
-      e[InAppMessage.tt.bt],
-      e[InAppMessage.tt.ea],
-      e[InAppMessage.tt.ra],
-      e[InAppMessage.tt.URI],
-      e[InAppMessage.tt.sa],
-      e[InAppMessage.tt.ta],
-      e[InAppMessage.tt.ia],
-      e[InAppMessage.tt.aa],
-      e[InAppMessage.tt.ot],
-      e[InAppMessage.tt.oa],
-      e[InAppMessage.tt.pa],
-      e[InAppMessage.tt.ma],
-      e[InAppMessage.tt.na],
-      e[InAppMessage.tt.ua],
-      e[InAppMessage.tt.ca],
-      e[InAppMessage.tt.fa],
-      e[InAppMessage.tt.da],
-      e[InAppMessage.tt.la],
-      e[InAppMessage.tt.ga],
-      e[InAppMessage.tt.ja],
-      e[InAppMessage.tt.xa],
-      buttonsFromSerializedInAppMessage(e[InAppMessage.tt.za]),
-      e[InAppMessage.tt.ha],
-      e[InAppMessage.tt.wa],
-      e[InAppMessage.tt.CSS],
-      e[InAppMessage.tt.ya],
+      e[InAppMessage.ss.pa],
+      e[InAppMessage.ss.ma],
+      e[InAppMessage.ss.xs],
+      e[InAppMessage.ss.ua],
+      e[InAppMessage.ss.ca],
+      e[InAppMessage.ss.URI],
+      e[InAppMessage.ss.fa],
+      e[InAppMessage.ss.da],
+      e[InAppMessage.ss.la],
+      e[InAppMessage.ss.ga],
+      e[InAppMessage.ss.ns],
+      e[InAppMessage.ss.ja],
+      e[InAppMessage.ss.xa],
+      e[InAppMessage.ss.za],
+      e[InAppMessage.ss.ha],
+      e[InAppMessage.ss.va],
+      e[InAppMessage.ss.wa],
+      e[InAppMessage.ss.ya],
+      e[InAppMessage.ss.Sa],
+      e[InAppMessage.ss.ba],
+      e[InAppMessage.ss.ka],
+      e[InAppMessage.ss.qa],
+      e[InAppMessage.ss.Aa],
+      buttonsFromSerializedInAppMessage(e[InAppMessage.ss.Ba]),
+      e[InAppMessage.ss.Ca],
+      e[InAppMessage.ss.Ea],
+      e[InAppMessage.ss.CSS],
+      e[InAppMessage.ss.Fa],
+      e[InAppMessage.ss.LANGUAGE],
+      e[InAppMessage.ss.ks],
     );
   }
 }
-ModalMessage.it = InAppMessage.Be.Lr;
+ModalMessage.es = InAppMessage.Eo.ta;
 
 class SlideUpMessage extends InAppMessage {
   constructor(
@@ -4481,9 +4725,11 @@ class SlideUpMessage extends InAppMessage {
     I,
     M,
     b,
+    j,
+    z,
   ) {
-    (x = x || InAppMessage.th.Dh),
-      (v = v || InAppMessage.th.Mh),
+    (x = x || InAppMessage.th.Rh),
+      (v = v || InAppMessage.th.Nh),
       super(
         e,
         (t = t || InAppMessage.TextAlignment.START),
@@ -4515,55 +4761,59 @@ class SlideUpMessage extends InAppMessage {
         I,
         M,
         b,
+        j,
+        z,
       ),
-      (this.qe = InAppMessage.TextAlignment.START);
+      (this.Io = InAppMessage.TextAlignment.START);
   }
-  $e() {
+  zo() {
     return !1;
   }
-  Ge() {
+  No() {
     const e = document.createElement("span");
     return e.appendChild(document.createTextNode(this.message || "")), e;
   }
-  Oh(e) {
+  ah(e) {
     const t = e.getElementsByClassName("ab-in-app-message")[0];
-    DOMUtils.po(t, !0, !0) ||
+    DOMUtils.td(t, !0, !0) ||
       (this.slideFrom === InAppMessage.SlideFrom.TOP
         ? (t.style.top = "0px")
         : (t.style.bottom = "0px")),
-      super.Oh(e);
+      super.ah(e);
   }
-  Y() {
-    return super.Y(SlideUpMessage.it);
+  gt() {
+    return super.gt(SlideUpMessage.es);
   }
-  static Jr(e) {
+  static Zn(e) {
     return new SlideUpMessage(
-      e[InAppMessage.tt.Yr],
-      e[InAppMessage.tt.Zr],
-      e[InAppMessage.tt.Rh],
-      e[InAppMessage.tt.bt],
-      e[InAppMessage.tt.ea],
-      e[InAppMessage.tt.ra],
-      e[InAppMessage.tt.URI],
-      e[InAppMessage.tt.sa],
-      e[InAppMessage.tt.ta],
-      e[InAppMessage.tt.ia],
-      e[InAppMessage.tt.aa],
-      e[InAppMessage.tt.ot],
-      e[InAppMessage.tt.pa],
-      e[InAppMessage.tt.ma],
-      e[InAppMessage.tt.na],
-      e[InAppMessage.tt.ua],
-      e[InAppMessage.tt.ca],
-      e[InAppMessage.tt.fa],
-      e[InAppMessage.tt.da],
-      e[InAppMessage.tt.wa],
-      e[InAppMessage.tt.CSS],
-      e[InAppMessage.tt.ya],
+      e[InAppMessage.ss.pa],
+      e[InAppMessage.ss.ma],
+      e[InAppMessage.ss._h],
+      e[InAppMessage.ss.xs],
+      e[InAppMessage.ss.ua],
+      e[InAppMessage.ss.ca],
+      e[InAppMessage.ss.URI],
+      e[InAppMessage.ss.fa],
+      e[InAppMessage.ss.da],
+      e[InAppMessage.ss.la],
+      e[InAppMessage.ss.ga],
+      e[InAppMessage.ss.ns],
+      e[InAppMessage.ss.xa],
+      e[InAppMessage.ss.za],
+      e[InAppMessage.ss.ha],
+      e[InAppMessage.ss.va],
+      e[InAppMessage.ss.wa],
+      e[InAppMessage.ss.ya],
+      e[InAppMessage.ss.Sa],
+      e[InAppMessage.ss.Ea],
+      e[InAppMessage.ss.CSS],
+      e[InAppMessage.ss.Fa],
+      e[InAppMessage.ss.LANGUAGE],
+      e[InAppMessage.ss.ks],
     );
   }
 }
-SlideUpMessage.it = InAppMessage.Be.Qr;
+SlideUpMessage.es = InAppMessage.Eo.ia;
 
 function newInAppMessageFromJson(e) {
   if (!e) return null;
@@ -4572,105 +4822,44 @@ function newInAppMessageFromJson(e) {
   null != o && (o = o.toUpperCase());
   const s = e.message,
     n = e.text_align_message,
-    t = e.slide_from,
-    m = e.extras,
-    l = e.trigger_id,
-    i = e.click_action,
-    f = e.uri,
-    p = e.open_target,
-    u = e.message_close,
-    a = e.duration,
-    d = e.icon,
-    g = e.image_url,
-    c = e.image_style,
-    j = e.icon_color,
-    w = e.icon_bg_color,
-    b = e.bg_color,
-    h = e.text_color,
-    v = e.close_btn_color,
-    x = e.header,
-    I = e.text_align_header,
-    A = e.header_text_color,
-    F = e.frame_color,
-    M = [];
-  let k = e.btns;
-  null == k && (k = []);
-  for (let e = 0; e < k.length; e++) M.push(InAppMessageButton.fromJson(k[e]));
-  const y = e.crop_type,
-    z = e.orientation,
-    J = e.animate_in,
-    S = e.animate_out;
-  let q = e.html_id,
-    B = e.css;
-  (null != q && "" !== q && null != B && "" !== B) ||
-    ((q = void 0), (B = void 0));
-  const C = e.message_extras;
-  let D;
-  if (o === ModalMessage.it || o === InAppMessage.Be.Ue)
-    D = new ModalMessage(
-      s,
-      n,
-      m,
-      l,
-      i,
-      f,
-      p,
-      u,
-      a,
-      d,
-      g,
-      c,
-      j,
-      w,
-      b,
-      h,
-      v,
-      J,
-      S,
-      x,
-      I,
-      A,
-      F,
-      M,
-      y,
-      q,
-      B,
-      C,
-    );
-  else if (o === FullScreenMessage.it)
-    D = new FullScreenMessage(
-      s,
-      n,
-      m,
-      l,
-      i,
-      f,
-      p,
-      u,
-      a,
-      d,
-      g,
-      c,
-      j,
-      w,
-      b,
-      h,
-      v,
-      J,
-      S,
-      x,
-      I,
-      A,
-      F,
-      M,
-      y,
-      z,
-      q,
-      B,
-      C,
-    );
-  else if (o === SlideUpMessage.it)
-    D = new SlideUpMessage(
+    r = e.slide_from,
+    t = e.extras,
+    m = e.trigger_id,
+    l = e.click_action,
+    i = e.uri,
+    f = e.open_target,
+    p = e.message_close,
+    u = e.duration,
+    a = e.icon,
+    d = e.image_url,
+    g = e.image_style,
+    c = e.icon_color,
+    j = e.icon_bg_color,
+    w = e.bg_color,
+    b = e.text_color,
+    h = e.close_btn_color,
+    v = e.header,
+    x = e.text_align_header,
+    I = e.header_text_color,
+    A = e.frame_color,
+    F = [];
+  let M = e.btns;
+  null == M && (M = []);
+  for (let e = 0; e < M.length; e++) F.push(InAppMessageButton.fromJson(M[e]));
+  const k = e.crop_type,
+    y = e.orientation,
+    z = e.animate_in,
+    J = e.animate_out;
+  let S = e.html_id,
+    q = e.css;
+  (null != S && "" !== S && null != q && "" !== q) ||
+    ((S = void 0), (q = void 0));
+  const B = e.message_extras,
+    C = e.language,
+    D = e.image_alt;
+  let G;
+  if (o === ModalMessage.es || o === InAppMessage.Eo.Xo)
+    G = new ModalMessage(
       s,
       n,
       t,
@@ -4683,31 +4872,100 @@ function newInAppMessageFromJson(e) {
       a,
       d,
       g,
+      c,
       j,
       w,
       b,
       h,
+      z,
+      J,
       v,
+      x,
+      I,
+      A,
+      F,
+      k,
+      S,
+      q,
+      B,
+      C,
+      D,
+    );
+  else if (o === FullScreenMessage.es)
+    G = new FullScreenMessage(
+      s,
+      n,
+      t,
+      m,
+      l,
+      i,
+      f,
+      p,
+      u,
+      a,
+      d,
+      g,
+      c,
+      j,
+      w,
+      b,
+      h,
+      z,
+      J,
+      v,
+      x,
+      I,
+      A,
+      F,
+      k,
+      y,
+      S,
+      q,
+      B,
+      C,
+      D,
+    );
+  else if (o === SlideUpMessage.es)
+    G = new SlideUpMessage(
+      s,
+      n,
+      r,
+      t,
+      m,
+      l,
+      i,
+      f,
+      p,
+      u,
+      a,
+      d,
+      c,
+      j,
+      w,
+      b,
+      h,
+      z,
       J,
       S,
       q,
       B,
       C,
+      D,
     );
   else {
     if (
-      o !== HtmlMessage.it &&
-      o !== InAppMessage.Be.Me &&
-      o !== InAppMessage.Be.Ve
+      o !== HtmlMessage.es &&
+      o !== InAppMessage.Eo.Bo &&
+      o !== InAppMessage.Eo.Yo
     )
-      return void r$1.error("Ignoring message with unknown type " + o);
+      return void E$1.error("Ignoring message with unknown type " + o);
     {
       const o = e.message_fields;
-      (D = new HtmlMessage(s, m, l, u, a, J, S, F, q, B, o, C)),
-        (D.trusted = e.trusted || !1);
+      (G = new HtmlMessage(s, t, m, p, u, z, J, A, S, q, o, B)),
+        (G.trusted = e.trusted || !1);
     }
   }
-  return (D.xe = o), D;
+  return (G.ko = o), G;
 }
 function buttonsFromSerializedInAppMessage(e) {
   const o = [];
@@ -4726,128 +4984,128 @@ function buttonsFromSerializedInAppMessage(e) {
   return o;
 }
 
-class ts {
+class rs {
   constructor(t) {
-    (this.Bl = t), (this.Bl = t);
+    (this.tf = t), (this.tf = t);
   }
-  Jl(t) {
-    return null == this.Bl || this.Bl === t[0];
+  sf(t) {
+    return null == this.tf || this.tf === t[0];
   }
   static fromJson(t) {
-    return new ts(t ? t.event_name : null);
+    return new rs(t ? t.event_name : null);
   }
-  Y() {
-    return this.Bl;
+  gt() {
+    return this.tf;
   }
 }
 
-class lr {
+class cr {
   constructor(t, s, e, i) {
-    (this.Tl = t),
-      (this._l = s),
+    (this.yE = t),
+      (this.HE = s),
       (this.comparator = e),
-      (this.Ll = i),
-      (this.Tl = t),
-      (this._l = s),
+      (this.LE = i),
+      (this.yE = t),
+      (this.HE = s),
       (this.comparator = e),
-      (this.Ll = i),
-      this._l === lr.Ol.Il &&
-        this.comparator !== lr.Ql.Ul &&
-        this.comparator !== lr.Ql.Xl &&
-        this.comparator !== lr.Ql.Fl &&
-        this.comparator !== lr.Ql.Kl &&
-        (this.Ll = dateFromUnixTimestamp(this.Ll));
+      (this.LE = i),
+      this.HE === cr.XE.QE &&
+        this.comparator !== cr.BE.wE &&
+        this.comparator !== cr.BE.jE &&
+        this.comparator !== cr.BE.zE &&
+        this.comparator !== cr.BE.FE &&
+        (this.LE = dateFromUnixTimestamp(this.LE));
   }
-  Jl(t) {
+  sf(t) {
     let s = null;
-    switch ((null != t && (s = t[this.Tl]), this.comparator)) {
-      case lr.Ql.Pl:
-        return null != s && s.valueOf() === this.Ll.valueOf();
-      case lr.Ql.Yl:
-        return null == s || s.valueOf() !== this.Ll.valueOf();
-      case lr.Ql.Zl:
-        return null != s && typeof s == typeof this.Ll && s > this.Ll;
-      case lr.Ql.Ul:
-        return this._l === lr.Ol.Il
-          ? null != s && isDate(s) && secondsAgo(s) <= this.Ll.valueOf()
-          : null != s && typeof s == typeof this.Ll && s >= this.Ll;
-      case lr.Ql.$l:
-        return null != s && typeof s == typeof this.Ll && s < this.Ll;
-      case lr.Ql.Xl:
-        return this._l === lr.Ol.Il
-          ? null != s && isDate(s) && secondsAgo(s) >= this.Ll.valueOf()
-          : null != s && typeof s == typeof this.Ll && s <= this.Ll;
-      case lr.Ql.Qu:
+    switch ((null != t && (s = t[this.yE]), this.comparator)) {
+      case cr.BE.kE:
+        return null != s && s.valueOf() === this.LE.valueOf();
+      case cr.BE.xE:
+        return null == s || s.valueOf() !== this.LE.valueOf();
+      case cr.BE.JE:
+        return null != s && typeof s == typeof this.LE && s > this.LE;
+      case cr.BE.wE:
+        return this.HE === cr.XE.QE
+          ? null != s && isDate(s) && secondsAgo(s) <= this.LE.valueOf()
+          : null != s && typeof s == typeof this.LE && s >= this.LE;
+      case cr.BE.VE:
+        return null != s && typeof s == typeof this.LE && s < this.LE;
+      case cr.BE.jE:
+        return this.HE === cr.XE.QE
+          ? null != s && isDate(s) && secondsAgo(s) >= this.LE.valueOf()
+          : null != s && typeof s == typeof this.LE && s <= this.LE;
+      case cr.BE.qE:
         return (
           null != s &&
           "string" == typeof s &&
-          typeof s == typeof this.Ll &&
-          null != s.match(this.Ll)
+          typeof s == typeof this.LE &&
+          null != s.match(this.LE)
         );
-      case lr.Ql.Vu:
+      case cr.BE.PE:
         return null != s;
-      case lr.Ql.Yu:
+      case cr.BE.WE:
         return null == s;
-      case lr.Ql.Fl:
-        return null != s && isDate(s) && secondsInTheFuture(s) < this.Ll;
-      case lr.Ql.Kl:
-        return null != s && isDate(s) && secondsInTheFuture(s) > this.Ll;
-      case lr.Ql.Zu:
+      case cr.BE.zE:
+        return null != s && isDate(s) && secondsInTheFuture(s) < this.LE;
+      case cr.BE.FE:
+        return null != s && isDate(s) && secondsInTheFuture(s) > this.LE;
+      case cr.BE.ZE:
         return (
           null == s ||
-          typeof s != typeof this.Ll ||
+          typeof s != typeof this.LE ||
           "string" != typeof s ||
-          null == s.match(this.Ll)
+          null == s.match(this.LE)
         );
     }
     return !1;
   }
   static fromJson(t) {
-    return new lr(
+    return new cr(
       t.property_key,
       t.property_type,
       t.comparator,
       t.property_value,
     );
   }
-  Y() {
-    let t = this.Ll;
+  gt() {
+    let t = this.LE;
     return (
-      isDate(this.Ll) && (t = convertMsToSeconds(t.valueOf())),
-      { k: this.Tl, t: this._l, c: this.comparator, v: t }
+      isDate(this.LE) && (t = convertMsToSeconds(t.valueOf())),
+      { k: this.yE, t: this.HE, c: this.comparator, v: t }
     );
   }
-  static qn(t) {
-    return new lr(t.k, t.t, t.c, t.v);
+  static _u(t) {
+    return new cr(t.k, t.t, t.c, t.v);
   }
 }
-(lr.Ol = { yE: "boolean", HE: "number", LE: "string", Il: "date" }),
-  (lr.Ql = {
-    Pl: 1,
-    Yl: 2,
-    Zl: 3,
-    Ul: 4,
-    $l: 5,
-    Xl: 6,
-    Qu: 10,
-    Vu: 11,
-    Yu: 12,
-    Fl: 15,
-    Kl: 16,
-    Zu: 17,
+(cr.XE = { $E: "boolean", tT: "number", sT: "string", QE: "date" }),
+  (cr.BE = {
+    kE: 1,
+    xE: 2,
+    JE: 3,
+    wE: 4,
+    VE: 5,
+    jE: 6,
+    qE: 10,
+    PE: 11,
+    WE: 12,
+    zE: 15,
+    FE: 16,
+    ZE: 17,
   });
 
 class is {
   constructor(t) {
     (this.filters = t), (this.filters = t);
   }
-  Jl(t) {
+  sf(t) {
     let r = !0;
     for (let e = 0; e < this.filters.length; e++) {
       const o = this.filters[e];
       let s = !1;
       for (let r = 0; r < o.length; r++)
-        if (o[r].Jl(t)) {
+        if (o[r].sf(t)) {
           s = !0;
           break;
         }
@@ -4864,76 +5122,76 @@ class is {
     for (let e = 0; e < t.length; e++) {
       const o = [],
         s = t[e];
-      for (let t = 0; t < s.length; t++) o.push(lr.fromJson(s[t]));
+      for (let t = 0; t < s.length; t++) o.push(cr.fromJson(s[t]));
       r.push(o);
     }
     return new is(r);
   }
-  Y() {
+  gt() {
     const t = [];
     for (let r = 0; r < this.filters.length; r++) {
       const e = this.filters[r],
         o = [];
-      for (let t = 0; t < e.length; t++) o.push(e[t].Y());
+      for (let t = 0; t < e.length; t++) o.push(e[t].gt());
       t.push(o);
     }
     return t;
   }
-  static qn(t) {
+  static _u(t) {
     const r = [];
     for (let e = 0; e < t.length; e++) {
       const o = [],
         s = t[e];
-      for (let t = 0; t < s.length; t++) o.push(lr.qn(s[t]));
+      for (let t = 0; t < s.length; t++) o.push(cr._u(s[t]));
       r.push(o);
     }
     return new is(r);
   }
 }
 
-class rs {
+class ls {
   constructor(t, s) {
-    (this.Bl = t), (this.Ml = s), (this.Bl = t), (this.Ml = s);
+    (this.tf = t), (this.if = s), (this.tf = t), (this.if = s);
   }
-  Jl(t) {
-    if (null == this.Bl || null == this.Ml) return !1;
+  sf(t) {
+    if (null == this.tf || null == this.if) return !1;
     const s = t[0],
       i = t[1];
-    return s === this.Bl && this.Ml.Jl(i);
+    return s === this.tf && this.if.sf(i);
   }
   static fromJson(t) {
-    return new rs(
+    return new ls(
       t ? t.event_name : null,
       t ? is.fromJson(t.property_filters) : null,
     );
   }
-  Y() {
-    return { e: this.Bl, pf: this.Ml ? this.Ml.Y() : null };
+  gt() {
+    return { e: this.tf, pf: this.if ? this.if.gt() : null };
   }
 }
 
-class ni {
+class mi {
   constructor(t, i) {
-    (this.tf = t), (this.if = i), (this.tf = t), (this.if = i);
+    (this.rf = t), (this.nf = i), (this.rf = t), (this.nf = i);
   }
-  Jl(t) {
-    if (null == this.tf) return !1;
-    const i = ri.rf(t[0], this.tf);
+  sf(t) {
+    if (null == this.rf) return !1;
+    const i = fi.ef(t[0], this.rf);
     if (!i) return !1;
-    let r = null == this.if || 0 === this.if.length;
-    if (null != this.if)
-      for (let i = 0; i < this.if.length; i++)
-        if (this.if[i] === t[1]) {
+    let r = null == this.nf || 0 === this.nf.length;
+    if (null != this.nf)
+      for (let i = 0; i < this.nf.length; i++)
+        if (this.nf[i] === t[1]) {
           r = !0;
           break;
         }
     return i && r;
   }
   static fromJson(t) {
-    return new ni(t ? t.id : null, t ? t.buttons : null);
+    return new mi(t ? t.id : null, t ? t.buttons : null);
   }
-  Y() {
-    return this.tf;
+  gt() {
+    return this.rf;
   }
 }
 
@@ -4941,205 +5199,205 @@ class ns {
   constructor(t) {
     (this.productId = t), (this.productId = t);
   }
-  Jl(t) {
+  sf(t) {
     return null == this.productId || t[0] === this.productId;
   }
   static fromJson(t) {
     return new ns(t ? t.product_id : null);
   }
-  Y() {
+  gt() {
     return this.productId;
   }
 }
 
-class hs {
+class us {
   constructor(t, s) {
-    (this.productId = t), (this.Ml = s), (this.productId = t), (this.Ml = s);
+    (this.productId = t), (this.if = s), (this.productId = t), (this.if = s);
   }
-  Jl(t) {
-    if (null == this.productId || null == this.Ml) return !1;
+  sf(t) {
+    if (null == this.productId || null == this.if) return !1;
     const s = t[0],
       i = t[1];
-    return s === this.productId && this.Ml.Jl(i);
+    return s === this.productId && this.if.sf(i);
   }
   static fromJson(t) {
-    return new hs(
+    return new us(
       t ? t.product_id : null,
       t ? is.fromJson(t.property_filters) : null,
     );
   }
-  Y() {
-    return { id: this.productId, pf: this.Ml ? this.Ml.Y() : null };
+  gt() {
+    return { id: this.productId, pf: this.if ? this.if.gt() : null };
   }
 }
 
 class ur {
   constructor(t) {
-    (this.tf = t), (this.tf = t);
+    (this.rf = t), (this.rf = t);
   }
-  Jl(t) {
-    return null == this.tf || ri.rf(t[0], this.tf);
+  sf(t) {
+    return null == this.rf || fi.ef(t[0], this.rf);
   }
   static fromJson(t) {
     return new ur(t ? t.campaign_id : null);
   }
-  Y() {
-    return this.tf;
+  gt() {
+    return this.rf;
   }
 }
 
-var tt = {
+var ot = {
   OPEN: "open",
   Rr: "purchase",
-  vr: "push_click",
-  ue: "custom_event",
-  Vr: "iam_click",
-  kt: "test",
+  wr: "push_click",
+  xe: "custom_event",
+  rm: "iam_click",
+  qs: "test",
 };
 
-class ri {
+class fi {
   constructor(e, t) {
     (this.type = e), (this.data = t), (this.type = e), (this.data = t);
   }
-  sc(e, t) {
-    return ri.cc[this.type] === e && (null == this.data || this.data.Jl(t));
+  km(e, t) {
+    return fi._m[this.type] === e && (null == this.data || this.data.sf(t));
   }
-  static rf(e, t) {
-    let s = null;
+  static ef(e, t) {
+    let r = null;
     try {
-      s = window.atob(e);
+      r = window.atob(e);
     } catch (t) {
-      return r$1.info("Failed to unencode analytics id " + e + ": " + getErrorMessage(t)), !1;
+      return E$1.info("Failed to unencode analytics id " + e + ": " + getErrorMessage(t)), !1;
     }
-    return t === s.split("_")[0];
+    return t === r.split("_")[0];
   }
   static fromJson(e) {
     const t = e.type;
     let r = null;
     switch (t) {
-      case ri.Er.OPEN:
-      case ri.Er.kt:
+      case fi.Ln.OPEN:
+      case fi.Ln.qs:
         break;
-      case ri.Er.Rr:
+      case fi.Ln.Rr:
         r = ns.fromJson(e.data);
         break;
-      case ri.Er.nc:
-        r = hs.fromJson(e.data);
+      case fi.Ln.bm:
+        r = us.fromJson(e.data);
         break;
-      case ri.Er.vr:
+      case fi.Ln.wr:
         r = ur.fromJson(e.data);
         break;
-      case ri.Er.ue:
-        r = ts.fromJson(e.data);
-        break;
-      case ri.Er.lc:
+      case fi.Ln.xe:
         r = rs.fromJson(e.data);
         break;
-      case ri.Er.Vr:
-        r = ni.fromJson(e.data);
+      case fi.Ln.Em:
+        r = ls.fromJson(e.data);
+        break;
+      case fi.Ln.rm:
+        r = mi.fromJson(e.data);
     }
-    return new ri(t, r);
+    return new fi(t, r);
   }
-  Y() {
-    return { t: this.type, d: this.data ? this.data.Y() : null };
+  gt() {
+    return { t: this.type, d: this.data ? this.data.gt() : null };
   }
-  static qn(e) {
+  static _u(e) {
     let t,
       r = null;
     switch (e.t) {
-      case ri.Er.OPEN:
-      case ri.Er.kt:
+      case fi.Ln.OPEN:
+      case fi.Ln.qs:
         break;
-      case ri.Er.Rr:
+      case fi.Ln.Rr:
         r = new ns(e.d);
         break;
-      case ri.Er.nc:
-        (t = e.d || {}), (r = new hs(t.id, is.qn(t.pf || [])));
+      case fi.Ln.bm:
+        (t = e.d || {}), (r = new us(t.id, is._u(t.pf || [])));
         break;
-      case ri.Er.vr:
+      case fi.Ln.wr:
         r = new ur(e.d);
         break;
-      case ri.Er.ue:
-        r = new ts(e.d);
+      case fi.Ln.xe:
+        r = new rs(e.d);
         break;
-      case ri.Er.lc:
-        (t = e.d || {}), (r = new rs(t.e, is.qn(t.pf || [])));
+      case fi.Ln.Em:
+        (t = e.d || {}), (r = new ls(t.e, is._u(t.pf || [])));
         break;
-      case ri.Er.Vr:
-        r = new ni(e.d);
+      case fi.Ln.rm:
+        r = new mi(e.d);
     }
-    return new ri(e.t, r);
+    return new fi(e.t, r);
   }
 }
-(ri.Er = {
+(fi.Ln = {
   OPEN: "open",
   Rr: "purchase",
-  nc: "purchase_property",
-  vr: "push_click",
-  ue: "custom_event",
-  lc: "custom_event_property",
-  Vr: "iam_click",
-  kt: "test",
+  bm: "purchase_property",
+  wr: "push_click",
+  xe: "custom_event",
+  Em: "custom_event_property",
+  rm: "iam_click",
+  qs: "test",
 }),
-  (ri.cc = {}),
-  (ri.cc[ri.Er.OPEN] = tt.OPEN),
-  (ri.cc[ri.Er.Rr] = tt.Rr),
-  (ri.cc[ri.Er.nc] = tt.Rr),
-  (ri.cc[ri.Er.vr] = tt.vr),
-  (ri.cc[ri.Er.ue] = tt.ue),
-  (ri.cc[ri.Er.lc] = tt.ue),
-  (ri.cc[ri.Er.Vr] = tt.Vr),
-  (ri.cc[ri.Er.kt] = tt.kt);
+  (fi._m = {}),
+  (fi._m[fi.Ln.OPEN] = ot.OPEN),
+  (fi._m[fi.Ln.Rr] = ot.Rr),
+  (fi._m[fi.Ln.bm] = ot.Rr),
+  (fi._m[fi.Ln.wr] = ot.wr),
+  (fi._m[fi.Ln.xe] = ot.xe),
+  (fi._m[fi.Ln.Em] = ot.xe),
+  (fi._m[fi.Ln.rm] = ot.rm),
+  (fi._m[fi.Ln.qs] = ot.qs);
 
-class gt {
-  constructor(t, i = [], s, e, r = 0, h, l, o = 0, n = gt.td, a, u, d) {
+class pt {
+  constructor(t, i = [], s, e, r = 0, h, l, o = 0, n = pt.Td, a, u, d) {
     (this.id = t),
-      (this.sd = i),
+      (this.Pd = i),
       (this.startTime = s),
       (this.endTime = e),
       (this.priority = r),
       (this.type = h),
       (this.data = l),
-      (this.ed = o),
-      (this.rd = n),
-      (this.Or = a),
-      (this.hd = u),
-      (this.od = d),
+      (this.Ed = o),
+      (this.Nd = n),
+      (this.Vn = a),
+      (this._d = u),
+      (this.Id = d),
       (this.id = t),
-      (this.sd = i || []),
+      (this.Pd = i || []),
       void 0 === s && (s = null),
       (this.startTime = s),
       void 0 === e && (e = null),
       (this.endTime = e),
       (this.priority = r || 0),
       (this.type = h),
-      (this.ed = o || 0),
-      null == a && (a = 1e3 * (this.ed + 30)),
-      (this.Or = a),
+      (this.Ed = o || 0),
+      null == a && (a = 1e3 * (this.Ed + 30)),
+      (this.Vn = a),
       (this.data = l),
-      null != n && (this.rd = n),
-      (this.hd = u),
-      (this.od = d || null);
+      null != n && (this.Nd = n),
+      (this._d = u),
+      (this.Id = d || null);
   }
-  nd(t) {
+  xd(t) {
     return (
-      null == this.od || (this.rd !== gt.td && t - this.od >= 1e3 * this.rd)
+      null == this.Id || (this.Nd !== pt.Td && t - this.Id >= 1e3 * this.Nd)
     );
   }
-  ad(t) {
-    this.od = t;
+  zd(t) {
+    this.Id = t;
   }
-  ud(t) {
-    const i = t + 1e3 * this.ed;
+  Md(t) {
+    const i = t + 1e3 * this.Ed;
     return Math.max(i - new Date().valueOf(), 0);
   }
-  dd(t) {
+  Bd(t) {
     const i = new Date().valueOf() - t,
-      s = null == t || isNaN(i) || null == this.Or || i < this.Or;
+      s = null == t || isNaN(i) || null == this.Vn || i < this.Vn;
     return (
       s ||
-        r$1.info(
-          `Trigger action ${this.type} is no longer eligible for display - fired ${i}ms ago and has a timeout of ${this.Or}ms.`,
+        E$1.info(
+          `Trigger action ${this.type} is no longer eligible for display - fired ${i}ms ago and has a timeout of ${this.Vn}ms.`,
         ),
       !s
     );
@@ -5148,28 +5406,28 @@ class gt {
     const i = t.id,
       s = [];
     for (let i = 0; i < t.trigger_condition.length; i++)
-      s.push(ri.fromJson(t.trigger_condition[i]));
+      s.push(fi.fromJson(t.trigger_condition[i]));
     const e = dateFromUnixTimestamp(t.start_time),
       r = dateFromUnixTimestamp(t.end_time),
       h = t.priority,
-      o = t.type,
-      n = t.delay,
-      a = t.re_eligibility,
-      u = t.timeout,
-      d = t.data,
-      m = t.min_seconds_since_last_trigger;
+      l = t.type,
+      o = t.delay,
+      n = t.re_eligibility,
+      a = t.timeout,
+      u = t.data,
+      d = t.min_seconds_since_last_trigger;
     return validateValueIsFromEnum(
-      gt.Er,
-      o,
+      pt.Ln,
+      l,
       "Could not construct Trigger from server data",
       "Trigger.Types",
     )
-      ? new gt(i, s, e, r, h, o, d, n, a, u, m)
+      ? new pt(i, s, e, r, h, l, u, o, n, a, d)
       : null;
   }
-  Y() {
+  gt() {
     const t = [];
-    for (let i = 0; i < this.sd.length; i++) t.push(this.sd[i].Y());
+    for (let i = 0; i < this.Pd.length; i++) t.push(this.Pd[i].gt());
     return {
       i: this.id,
       c: t,
@@ -5178,18 +5436,18 @@ class gt {
       p: this.priority,
       t: this.type,
       da: this.data,
-      d: this.ed,
-      r: this.rd,
-      tm: this.Or,
-      ss: this.hd,
-      ld: this.od,
+      d: this.Ed,
+      r: this.Nd,
+      tm: this.Vn,
+      ss: this._d,
+      ld: this.Id,
     };
   }
-  static qn(t) {
+  static _u(t) {
     const i = [],
       s = t.c || [];
-    for (let t = 0; t < s.length; t++) i.push(ri.qn(s[t]));
-    return new gt(
+    for (let t = 0; t < s.length; t++) i.push(fi._u(s[t]));
+    return new pt(
       t.i,
       i,
       rehydrateDateAfterJsonization(t.s),
@@ -5205,31 +5463,31 @@ class gt {
     );
   }
 }
-(gt.Er = { _r: "inapp", md: "templated_iam" }), (gt.td = -1);
+(pt.Ln = { Kn: "inapp", Cd: "templated_iam" }), (pt.Td = -1);
 
 function attachCSS(n, t, o) {
   const c = n || document.querySelector("head"),
-    s = `ab-${t}-css-definitions-${"5.5.0".replace(/\./g, "-")}`;
+    e = `ab-${t}-css-definitions-${"6.5.0".replace(/\./g, "-")}`;
   if (!c) return;
-  const a = c.ownerDocument || document;
-  if (null == a.getElementById(s)) {
-    const n = a.createElement("style");
-    (n.innerHTML = o || ""), (n.id = s);
-    const t = e.nn(L.bo);
+  const s = c.ownerDocument || document;
+  if (null == s.getElementById(e)) {
+    const n = s.createElement("style");
+    (n.innerHTML = o || ""), (n.id = e);
+    const t = r.re(D.er);
     null != t && n.setAttribute("nonce", t), c.appendChild(n);
   }
 }
 
 function loadFontAwesome() {
-  if (e.nn(L.Mo)) return;
-  const t = "https://use.fontawesome.com/7f85a56ba4.css";
+  if (r.re(D.Za)) return;
+  const e = "https://use.fontawesome.com/7f85a56ba4.css";
   if (
-    !(null !== document.querySelector('link[rel=stylesheet][href="' + t + '"]'))
+    !(null !== document.querySelector('link[rel=stylesheet][href="' + e + '"]'))
   ) {
-    const e = document.createElement("link");
-    e.setAttribute("rel", "stylesheet"),
-      e.setAttribute("href", t),
-      document.getElementsByTagName("head")[0].appendChild(e);
+    const t = document.createElement("link");
+    t.setAttribute("rel", "stylesheet"),
+      t.setAttribute("href", e),
+      document.getElementsByTagName("head")[0].appendChild(t);
   }
 }
 
@@ -5248,14 +5506,25 @@ function attachInAppMessageCSS(t) {
   attachCSS(
     t,
     "iam",
-    ".ab-pause-scrolling,body.ab-pause-scrolling,html.ab-pause-scrolling{overflow:hidden;touch-action:none}.ab-iam-root.v3{position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:9011;-webkit-tap-highlight-color:transparent}.ab-iam-root.v3:focus{outline:0}.ab-iam-root.v3.ab-effect-fullscreen,.ab-iam-root.v3.ab-effect-html,.ab-iam-root.v3.ab-effect-modal{opacity:0}.ab-iam-root.v3.ab-effect-fullscreen.ab-show,.ab-iam-root.v3.ab-effect-html.ab-show,.ab-iam-root.v3.ab-effect-modal.ab-show{opacity:1}.ab-iam-root.v3.ab-effect-fullscreen.ab-show.ab-animate-in,.ab-iam-root.v3.ab-effect-html.ab-show.ab-animate-in,.ab-iam-root.v3.ab-effect-modal.ab-show.ab-animate-in{-webkit-transition:opacity .5s;-moz-transition:opacity .5s;-o-transition:opacity .5s;transition:opacity .5s}.ab-iam-root.v3.ab-effect-fullscreen.ab-hide,.ab-iam-root.v3.ab-effect-html.ab-hide,.ab-iam-root.v3.ab-effect-modal.ab-hide{opacity:0}.ab-iam-root.v3.ab-effect-fullscreen.ab-hide.ab-animate-out,.ab-iam-root.v3.ab-effect-html.ab-hide.ab-animate-out,.ab-iam-root.v3.ab-effect-modal.ab-hide.ab-animate-out{-webkit-transition:opacity .5s;-moz-transition:opacity .5s;-o-transition:opacity .5s;transition:opacity .5s}.ab-iam-root.v3.ab-effect-slide .ab-in-app-message{-webkit-transform:translateX(535px);-moz-transform:translateX(535px);-ms-transform:translateX(535px);transform:translateX(535px)}.ab-iam-root.v3.ab-effect-slide.ab-show .ab-in-app-message{-webkit-transform:translateX(0);-moz-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}.ab-iam-root.v3.ab-effect-slide.ab-show.ab-animate-in .ab-in-app-message{-webkit-transition:transform .5s ease-in-out;-moz-transition:transform .5s ease-in-out;-o-transition:transform .5s ease-in-out;transition:transform .5s ease-in-out}.ab-iam-root.v3.ab-effect-slide.ab-hide .ab-in-app-message{-webkit-transform:translateX(535px);-moz-transform:translateX(535px);-ms-transform:translateX(535px);transform:translateX(535px)}.ab-iam-root.v3.ab-effect-slide.ab-hide .ab-in-app-message.ab-swiped-left{-webkit-transform:translateX(-535px);-moz-transform:translateX(-535px);-ms-transform:translateX(-535px);transform:translateX(-535px)}.ab-iam-root.v3.ab-effect-slide.ab-hide .ab-in-app-message.ab-swiped-up{-webkit-transform:translateY(-535px);-moz-transform:translateY(-535px);-ms-transform:translateY(-535px);transform:translateY(-535px)}.ab-iam-root.v3.ab-effect-slide.ab-hide .ab-in-app-message.ab-swiped-down{-webkit-transform:translateY(535px);-moz-transform:translateY(535px);-ms-transform:translateY(535px);transform:translateY(535px)}.ab-iam-root.v3.ab-effect-slide.ab-hide.ab-animate-out .ab-in-app-message{-webkit-transition:transform .5s ease-in-out;-moz-transition:transform .5s ease-in-out;-o-transition:transform .5s ease-in-out;transition:transform .5s ease-in-out}.ab-iam-root.v3 .ab-ios-scroll-wrapper{position:fixed;top:0;right:0;bottom:0;left:0;overflow:auto;pointer-events:all;touch-action:auto;-webkit-overflow-scrolling:touch}.ab-iam-root.v3 .ab-in-app-message{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;position:fixed;text-align:center;-webkit-box-shadow:0 0 4px rgba(0,0,0,.3);-moz-box-shadow:0 0 4px rgba(0,0,0,.3);box-shadow:0 0 4px rgba(0,0,0,.3);line-height:normal;letter-spacing:normal;font-family:'Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif;z-index:9011;max-width:100%;overflow:hidden;display:inline-block;pointer-events:all;color:#333;color-scheme:normal}.ab-iam-root.v3 .ab-in-app-message.ab-no-shadow{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none}.ab-iam-root.v3 .ab-in-app-message :focus,.ab-iam-root.v3 .ab-in-app-message:focus{outline:0}.ab-iam-root.v3 .ab-in-app-message.ab-clickable{cursor:pointer}.ab-iam-root.v3 .ab-in-app-message.ab-background{background-color:#fff}.ab-iam-root.v3 .ab-in-app-message .ab-close-button{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;background-color:transparent;background-size:15px;border:none;width:15px;min-width:15px;height:15px;cursor:pointer;display:block;font-size:15px;line-height:0;padding-top:15px;padding-right:15px;padding-left:15px;padding-bottom:15px;position:absolute;top:0;z-index:9021}.ab-iam-root.v3 .ab-in-app-message .ab-close-button[dir=rtl]{left:0}.ab-iam-root.v3 .ab-in-app-message .ab-close-button[dir=ltr]{right:0}.ab-iam-root.v3 .ab-in-app-message .ab-close-button svg{-webkit-transition:.2s ease;-moz-transition:.2s ease;-o-transition:.2s ease;transition:.2s ease;fill:#9b9b9b;height:auto;width:100%}.ab-iam-root.v3 .ab-in-app-message .ab-close-button svg.ab-chevron{display:none}.ab-iam-root.v3 .ab-in-app-message .ab-close-button:active{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-close-button:focus{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-close-button:hover{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-close-button:hover svg{fill-opacity:.8}.ab-iam-root.v3 .ab-in-app-message .ab-message-text{float:none;line-height:1.5;margin:20px 25px;max-width:100%;overflow:hidden;overflow-y:auto;vertical-align:text-bottom;word-wrap:break-word;white-space:pre-wrap;font-family:'Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif}.ab-iam-root.v3 .ab-in-app-message .ab-message-text.start-aligned{text-align:start}.ab-iam-root.v3 .ab-in-app-message .ab-message-text.end-aligned{text-align:end}.ab-iam-root.v3 .ab-in-app-message .ab-message-text.center-aligned{text-align:center}.ab-iam-root.v3 .ab-in-app-message .ab-message-text::-webkit-scrollbar{-webkit-appearance:none;width:14px}.ab-iam-root.v3 .ab-in-app-message .ab-message-text::-webkit-scrollbar-thumb{-webkit-appearance:none;border:4px solid transparent;background-clip:padding-box;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;background-color:rgba(0,0,0,.2)}.ab-iam-root.v3 .ab-in-app-message .ab-message-text::-webkit-scrollbar-button{width:0;height:0;display:none}.ab-iam-root.v3 .ab-in-app-message .ab-message-text::-webkit-scrollbar-corner{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-message-header{float:none;letter-spacing:0;margin:0;font-weight:700;font-family:'Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif;display:block;font-size:20px;margin-bottom:10px;line-height:1.3}.ab-iam-root.v3 .ab-in-app-message .ab-message-header.start-aligned{text-align:start}.ab-iam-root.v3 .ab-in-app-message .ab-message-header.end-aligned{text-align:end}.ab-iam-root.v3 .ab-in-app-message .ab-message-header.center-aligned{text-align:center}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen,.ab-iam-root.v3 .ab-in-app-message.ab-modal,.ab-iam-root.v3 .ab-in-app-message.ab-slideup{-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;cursor:pointer;overflow:hidden;word-wrap:break-word;text-overflow:ellipsis;font-size:14px;font-weight:700;margin:20px;margin-top:calc(constant(safe-area-inset-top,0) + 20px);margin-right:calc(constant(safe-area-inset-right,0) + 20px);margin-bottom:calc(constant(safe-area-inset-bottom,0) + 20px);margin-left:calc(constant(safe-area-inset-left,0) + 20px);margin-top:calc(env(safe-area-inset-top,0) + 20px);margin-right:calc(env(safe-area-inset-right,0) + 20px);margin-bottom:calc(env(safe-area-inset-bottom,0) + 20px);margin-left:calc(env(safe-area-inset-left,0) + 20px);max-height:150px;padding:10px;right:0;background-color:#efefef}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone{max-height:66px;margin:10px;margin-top:calc(constant(safe-area-inset-top,0) + 10px);margin-right:calc(constant(safe-area-inset-right,0) + 10px);margin-bottom:calc(constant(safe-area-inset-bottom,0) + 10px);margin-left:calc(constant(safe-area-inset-left,0) + 10px);margin-top:calc(env(safe-area-inset-top,0) + 10px);margin-right:calc(env(safe-area-inset-right,0) + 10px);margin-bottom:calc(env(safe-area-inset-bottom,0) + 10px);margin-left:calc(env(safe-area-inset-left,0) + 10px);max-width:90%;max-width:calc(100% - 40px);min-width:90%;min-width:calc(100% - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-close-button{display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-close-button svg:not(.ab-chevron){display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone.ab-clickable .ab-close-button{display:block;height:20px;padding:0 20px 0 18px;pointer-events:none;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%);width:12px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone.ab-clickable .ab-close-button svg.ab-chevron{display:inline}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone.ab-clickable .ab-message-text{border-right-width:40px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-message-text{max-width:100%;border-right-width:10px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-message-text span{max-height:66px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-message-text.ab-with-icon,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-message-text.ab-with-image{max-width:80%;max-width:calc(100% - 50px - 5px - 10px - 25px)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-image-area{width:50px;height:50px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-image-area img{max-width:100%;max-height:100%;width:auto;height:auto}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:active .ab-message-text,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:focus .ab-message-text,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:hover .ab-message-text{opacity:.8}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:active .ab-close-button svg.ab-chevron,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:focus .ab-close-button svg.ab-chevron,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:hover .ab-close-button svg.ab-chevron{fill-opacity:.8}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;display:table-cell;border-color:transparent;border-style:solid;border-width:5px 25px 5px 10px;max-width:430px;vertical-align:middle;margin:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text[dir=rtl]{border-width:5px 10px 5px 25px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text span{display:block;max-height:150px;overflow:auto}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text.ab-with-icon,.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text.ab-with-image{max-width:365px;border-top:0;border-bottom:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;background-color:transparent;background-size:15px;border:none;width:15px;min-width:15px;height:15px;cursor:pointer;display:block;font-size:15px;line-height:0;padding-top:15px;padding-right:15px;padding-left:15px;padding-bottom:15px;position:absolute;top:0;z-index:9021}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button[dir=rtl]{left:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button[dir=ltr]{right:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button svg{-webkit-transition:.2s ease;-moz-transition:.2s ease;-o-transition:.2s ease;transition:.2s ease;fill:#9b9b9b;height:auto;width:100%}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button svg.ab-chevron{display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button:active{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button:focus{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button:hover{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button:hover svg{fill-opacity:.8}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area{float:none;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;display:table-cell;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;vertical-align:top;width:60px;margin:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area.ab-icon-area{width:auto}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area img{float:none;width:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen,.ab-iam-root.v3 .ab-in-app-message.ab-modal{font-size:14px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area{float:none;position:relative;display:block;overflow:hidden}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area .ab-center-cropped-img,.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area .ab-center-cropped-img{background-size:cover;background-repeat:no-repeat;background-position:50% 50%;position:absolute;top:0;right:0;bottom:0;left:0}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-icon,.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-icon{margin-top:20px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic{padding:0}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-message-text,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-message-text{display:none}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-message-buttons,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-message-buttons{bottom:0;left:0}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-image-area{float:none;height:auto;margin:0}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-image-area img,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-image-area img{display:block;top:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none}.ab-iam-root.v3 .ab-in-app-message.ab-modal{padding-top:20px;width:450px;max-width:450px;max-height:720px}.ab-iam-root.v3 .ab-in-app-message.ab-modal.simulate-phone{max-width:91%;max-width:calc(100% - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal.simulate-phone.graphic .ab-image-area img{max-width:91vw;max-width:calc(100vw - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text{max-height:660px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-image{max-height:524.82758621px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-icon{max-height:610px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-buttons{margin-bottom:93px;max-height:587px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-buttons.ab-with-image{max-height:451.82758621px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-buttons.ab-with-icon{max-height:537px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area{margin-top:-20px;max-height:155.17241379px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area img{max-width:100%;max-height:155.17241379px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area.ab-icon-area{height:auto}.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic{width:auto;overflow:hidden}.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-image-area{display:inline}.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-image-area img{width:auto;max-height:720px;max-width:450px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen{width:450px;max-height:720px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape{width:720px;max-height:450px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape .ab-image-area{height:225px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape.graphic .ab-image-area{height:450px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape .ab-message-text{max-height:112px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-message-text{max-height:247px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-message-text.ab-with-buttons{margin-bottom:93px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area{height:360px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-image-area{height:720px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone{-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone:not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone:not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.graphic{display:block}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-html-message{background-color:transparent;border:none;height:100%;overflow:auto;position:relative;touch-action:auto;width:100%}.ab-iam-root.v3 .ab-in-app-message .ab-message-buttons{position:absolute;bottom:0;width:100%;padding:17px 25px 30px 25px;z-index:inherit;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.ab-iam-root.v3 .ab-in-app-message .ab-message-button{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;cursor:pointer;display:inline-block;font-size:14px;font-weight:700;font-family:'Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif;height:44px;line-height:normal;letter-spacing:normal;margin:0;max-width:100%;min-width:80px;padding:0 12px;position:relative;text-transform:none;width:48%;width:calc(50% - 5px);border:1px solid #1b78cf;-webkit-transition:.2s ease;-moz-transition:.2s ease;-o-transition:.2s ease;transition:.2s ease;overflow:hidden;word-wrap:break-word;text-overflow:ellipsis;word-wrap:normal;white-space:nowrap}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:first-of-type{float:left;background-color:#fff;color:#1b78cf}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:last-of-type{float:right;background-color:#1b78cf;color:#fff}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:first-of-type:last-of-type{float:none;width:auto}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:after{-webkit-transition:.2s ease;-moz-transition:.2s ease;-o-transition:.2s ease;transition:.2s ease}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:hover{opacity:.8}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:active:after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.08)}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:focus:after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.15)}.ab-iam-root.v3 .ab-in-app-message .ab-message-button a{color:inherit;text-decoration:inherit}.ab-iam-root.v3 .ab-in-app-message img{float:none;display:inline-block}.ab-iam-root.v3 .ab-in-app-message .ab-icon{float:none;display:inline-block;padding:10px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px}.ab-iam-root.v3 .ab-in-app-message .ab-icon .fa{float:none;font-size:30px;width:30px}.ab-iam-root.v3 .ab-start-hidden{visibility:hidden}.ab-iam-root.v3 .ab-centered{margin:auto;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.ab-iam-root.v3{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}.ab-iam-root.v3 .ab-page-blocker{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9001;pointer-events:all;background-color:rgba(51,51,51,.75)}@media (max-width:600px){.ab-iam-root.v3 .ab-in-app-message.ab-slideup{max-height:66px;margin:10px;margin-top:calc(constant(safe-area-inset-top,0) + 10px);margin-right:calc(constant(safe-area-inset-right,0) + 10px);margin-bottom:calc(constant(safe-area-inset-bottom,0) + 10px);margin-left:calc(constant(safe-area-inset-left,0) + 10px);margin-top:calc(env(safe-area-inset-top,0) + 10px);margin-right:calc(env(safe-area-inset-right,0) + 10px);margin-bottom:calc(env(safe-area-inset-bottom,0) + 10px);margin-left:calc(env(safe-area-inset-left,0) + 10px);max-width:90%;max-width:calc(100% - 40px);min-width:90%;min-width:calc(100% - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button{display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button svg:not(.ab-chevron){display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable .ab-close-button{display:block;height:20px;padding:0 20px 0 18px;pointer-events:none;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%);width:12px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable .ab-close-button svg.ab-chevron{display:inline}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable .ab-message-text{border-right-width:40px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text{max-width:100%;border-right-width:10px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text span{max-height:66px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text.ab-with-icon,.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text.ab-with-image{max-width:80%;max-width:calc(100% - 50px - 5px - 10px - 25px)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area{width:50px;height:50px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area img{max-width:100%;max-height:100%;width:auto;height:auto}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape{-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-close-button,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen .ab-image-area,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-image-area,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen .ab-message-text,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen .ab-message-text.ab-with-buttons,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-message-text.ab-with-buttons,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape:not(.graphic),.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen:not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape:not(.graphic) .ab-message-buttons,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen:not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.graphic,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.graphic{display:block}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.graphic .ab-image-area,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.graphic .ab-message-button,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}}@media (max-width:480px){.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop){max-width:91%;max-width:calc(100% - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop).graphic .ab-image-area img{max-width:91vw;max-width:calc(100vw - 30px)}}@media (max-height:750px){.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop){max-height:91%;max-height:calc(100% - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop).graphic .ab-image-area img{max-height:91vh;max-height:calc(100vh - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text{max-height:65vh;max-height:calc(100vh - 30px - 60px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-image{max-height:45vh;max-height:calc(100vh - 30px - 155.17241379310346px - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-icon{max-height:45vh;max-height:calc(100vh - 30px - 70px - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-buttons{max-height:50vh;max-height:calc(100vh - 30px - 93px - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-buttons.ab-with-image{max-height:30vh;max-height:calc(100vh - 30px - 155.17241379310346px - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-buttons.ab-with-icon{max-height:30vh;max-height:calc(100vh - 30px - 70px - 93px - 20px)}}@media (min-width:601px){.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area img{max-height:100%;max-width:100%}}@media (max-height:750px) and (min-width:601px){.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop){-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important;width:450px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop) .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop) .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop) .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop):not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop):not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).graphic{display:block}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}}@media (max-height:480px){.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop){-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop):not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop):not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic{display:block}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}}@media (max-width:750px){.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop){-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop):not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop):not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic{display:block}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}}",
+    ".ab-pause-scrolling,body.ab-pause-scrolling,html.ab-pause-scrolling{overflow:hidden;touch-action:none}.ab-iam-root.v3{position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:9011;-webkit-tap-highlight-color:transparent}.ab-iam-root.v3:focus{outline:0}.ab-iam-root.v3.ab-effect-fullscreen,.ab-iam-root.v3.ab-effect-html,.ab-iam-root.v3.ab-effect-modal{opacity:0}.ab-iam-root.v3.ab-effect-fullscreen.ab-show,.ab-iam-root.v3.ab-effect-html.ab-show,.ab-iam-root.v3.ab-effect-modal.ab-show{opacity:1}.ab-iam-root.v3.ab-effect-fullscreen.ab-show.ab-animate-in,.ab-iam-root.v3.ab-effect-html.ab-show.ab-animate-in,.ab-iam-root.v3.ab-effect-modal.ab-show.ab-animate-in{-webkit-transition:opacity .5s;-moz-transition:opacity .5s;-o-transition:opacity .5s;transition:opacity .5s}.ab-iam-root.v3.ab-effect-fullscreen.ab-hide,.ab-iam-root.v3.ab-effect-html.ab-hide,.ab-iam-root.v3.ab-effect-modal.ab-hide{opacity:0}.ab-iam-root.v3.ab-effect-fullscreen.ab-hide.ab-animate-out,.ab-iam-root.v3.ab-effect-html.ab-hide.ab-animate-out,.ab-iam-root.v3.ab-effect-modal.ab-hide.ab-animate-out{-webkit-transition:opacity .5s;-moz-transition:opacity .5s;-o-transition:opacity .5s;transition:opacity .5s}.ab-iam-root.v3.ab-effect-slide .ab-in-app-message{-webkit-transform:translateX(535px);-moz-transform:translateX(535px);-ms-transform:translateX(535px);transform:translateX(535px)}.ab-iam-root.v3.ab-effect-slide.ab-show .ab-in-app-message{-webkit-transform:translateX(0);-moz-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}.ab-iam-root.v3.ab-effect-slide.ab-show.ab-animate-in .ab-in-app-message{-webkit-transition:transform .5s ease-in-out;-moz-transition:transform .5s ease-in-out;-o-transition:transform .5s ease-in-out;transition:transform .5s ease-in-out}.ab-iam-root.v3.ab-effect-slide.ab-hide .ab-in-app-message{-webkit-transform:translateX(535px);-moz-transform:translateX(535px);-ms-transform:translateX(535px);transform:translateX(535px)}.ab-iam-root.v3.ab-effect-slide.ab-hide .ab-in-app-message.ab-swiped-left{-webkit-transform:translateX(-535px);-moz-transform:translateX(-535px);-ms-transform:translateX(-535px);transform:translateX(-535px)}.ab-iam-root.v3.ab-effect-slide.ab-hide .ab-in-app-message.ab-swiped-up{-webkit-transform:translateY(-535px);-moz-transform:translateY(-535px);-ms-transform:translateY(-535px);transform:translateY(-535px)}.ab-iam-root.v3.ab-effect-slide.ab-hide .ab-in-app-message.ab-swiped-down{-webkit-transform:translateY(535px);-moz-transform:translateY(535px);-ms-transform:translateY(535px);transform:translateY(535px)}.ab-iam-root.v3.ab-effect-slide.ab-hide.ab-animate-out .ab-in-app-message{-webkit-transition:transform .5s ease-in-out;-moz-transition:transform .5s ease-in-out;-o-transition:transform .5s ease-in-out;transition:transform .5s ease-in-out}.ab-iam-root.v3 .ab-ios-scroll-wrapper{position:fixed;top:0;right:0;bottom:0;left:0;overflow:auto;pointer-events:all;touch-action:auto;-webkit-overflow-scrolling:touch}.ab-iam-root.v3 .ab-in-app-message{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;position:fixed;text-align:center;-webkit-box-shadow:0 0 4px rgba(0,0,0,.3);-moz-box-shadow:0 0 4px rgba(0,0,0,.3);box-shadow:0 0 4px rgba(0,0,0,.3);line-height:normal;letter-spacing:normal;font-family:'Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif;z-index:9011;max-width:100%;overflow:hidden;display:inline-block;pointer-events:all;color:#333;color-scheme:normal}.ab-iam-root.v3 .ab-in-app-message.ab-no-shadow{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none}.ab-iam-root.v3 .ab-in-app-message :focus,.ab-iam-root.v3 .ab-in-app-message:focus{outline:0}.ab-iam-root.v3 .ab-in-app-message.ab-clickable{cursor:pointer}.ab-iam-root.v3 .ab-in-app-message.ab-background{background-color:#fff}.ab-iam-root.v3 .ab-in-app-message .ab-close-button{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;background-color:transparent;background-size:15px;border:none;width:15px;min-width:15px;height:15px;cursor:pointer;display:block;font-size:15px;line-height:0;padding-top:15px;padding-right:15px;padding-left:15px;padding-bottom:15px;position:absolute;top:0;z-index:9021}.ab-iam-root.v3 .ab-in-app-message .ab-close-button[dir=rtl]{left:0}.ab-iam-root.v3 .ab-in-app-message .ab-close-button[dir=ltr]{right:0}.ab-iam-root.v3 .ab-in-app-message .ab-close-button svg{-webkit-transition:.2s ease;-moz-transition:.2s ease;-o-transition:.2s ease;transition:.2s ease;fill:#9b9b9b;height:auto;width:100%}.ab-iam-root.v3 .ab-in-app-message .ab-close-button svg.ab-chevron{display:none}.ab-iam-root.v3 .ab-in-app-message .ab-close-button:active{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-close-button:focus{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-close-button:hover{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-close-button:hover svg{fill-opacity:.8}.ab-iam-root.v3 .ab-in-app-message .ab-message-text{float:none;line-height:1.5;margin:20px 25px;max-width:100%;overflow:hidden;overflow-y:auto;vertical-align:text-bottom;word-wrap:break-word;white-space:pre-wrap;font-family:'Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif}.ab-iam-root.v3 .ab-in-app-message .ab-message-text.start-aligned{text-align:start}.ab-iam-root.v3 .ab-in-app-message .ab-message-text.end-aligned{text-align:end}.ab-iam-root.v3 .ab-in-app-message .ab-message-text.center-aligned{text-align:center}.ab-iam-root.v3 .ab-in-app-message .ab-message-text::-webkit-scrollbar{-webkit-appearance:none;width:14px}.ab-iam-root.v3 .ab-in-app-message .ab-message-text::-webkit-scrollbar-thumb{-webkit-appearance:none;border:4px solid transparent;background-clip:padding-box;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;background-color:rgba(0,0,0,.2)}.ab-iam-root.v3 .ab-in-app-message .ab-message-text::-webkit-scrollbar-button{width:0;height:0;display:none}.ab-iam-root.v3 .ab-in-app-message .ab-message-text::-webkit-scrollbar-corner{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-message-header{float:none;letter-spacing:0;margin:0;font-weight:700;font-family:'Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif;display:block;font-size:20px;margin-bottom:10px;line-height:1.3}.ab-iam-root.v3 .ab-in-app-message .ab-message-header.start-aligned{text-align:start}.ab-iam-root.v3 .ab-in-app-message .ab-message-header.end-aligned{text-align:end}.ab-iam-root.v3 .ab-in-app-message .ab-message-header.center-aligned{text-align:center}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen,.ab-iam-root.v3 .ab-in-app-message.ab-modal,.ab-iam-root.v3 .ab-in-app-message.ab-slideup{-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;cursor:pointer;overflow:hidden;word-wrap:break-word;text-overflow:ellipsis;font-size:14px;font-weight:700;margin:20px;margin-top:calc(constant(safe-area-inset-top,0) + 20px);margin-right:calc(constant(safe-area-inset-right,0) + 20px);margin-bottom:calc(constant(safe-area-inset-bottom,0) + 20px);margin-left:calc(constant(safe-area-inset-left,0) + 20px);margin-top:calc(env(safe-area-inset-top,0) + 20px);margin-right:calc(env(safe-area-inset-right,0) + 20px);margin-bottom:calc(env(safe-area-inset-bottom,0) + 20px);margin-left:calc(env(safe-area-inset-left,0) + 20px);max-height:150px;padding:10px;right:0;background-color:#efefef}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone{max-height:66px;margin:10px;margin-top:calc(constant(safe-area-inset-top,0) + 10px);margin-right:calc(constant(safe-area-inset-right,0) + 10px);margin-bottom:calc(constant(safe-area-inset-bottom,0) + 10px);margin-left:calc(constant(safe-area-inset-left,0) + 10px);margin-top:calc(env(safe-area-inset-top,0) + 10px);margin-right:calc(env(safe-area-inset-right,0) + 10px);margin-bottom:calc(env(safe-area-inset-bottom,0) + 10px);margin-left:calc(env(safe-area-inset-left,0) + 10px);max-width:90%;max-width:calc(100% - 40px);min-width:90%;min-width:calc(100% - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-close-button{display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-close-button svg:not(.ab-chevron){display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone.ab-clickable .ab-close-button{display:block;height:20px;padding:0 20px 0 18px;pointer-events:none;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%);width:12px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone.ab-clickable .ab-close-button svg.ab-chevron{display:inline}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone.ab-clickable .ab-close-button svg.ab-chevron.rtl{-webkit-transform:scaleX(-1);-moz-transform:scaleX(-1);-ms-transform:scaleX(-1);transform:scaleX(-1)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone.ab-clickable .ab-message-text{border-right-width:40px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-message-text{max-width:100%;border-right-width:10px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-message-text span{max-height:66px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-message-text.ab-with-icon,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-message-text.ab-with-image{max-width:80%;max-width:calc(100% - 50px - 5px - 10px - 25px)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-image-area{width:50px;height:50px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.simulate-phone .ab-image-area img{max-width:100%;max-height:100%;width:auto;height:auto}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:active .ab-message-text,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:focus .ab-message-text,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:hover .ab-message-text{opacity:.8}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:active .ab-close-button svg.ab-chevron,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:focus .ab-close-button svg.ab-chevron,.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable:hover .ab-close-button svg.ab-chevron{fill-opacity:.8}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;display:table-cell;border-color:transparent;border-style:solid;border-width:5px 25px 5px 10px;max-width:430px;vertical-align:middle;margin:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text[dir=rtl]{border-width:5px 10px 5px 25px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text span{display:block;max-height:150px;overflow:auto}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text.ab-with-icon,.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text.ab-with-image{max-width:365px;border-top:0;border-bottom:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;background-color:transparent;background-size:15px;border:none;width:15px;min-width:15px;height:15px;cursor:pointer;display:block;font-size:15px;line-height:0;padding-top:15px;padding-right:15px;padding-left:15px;padding-bottom:15px;position:absolute;top:0;z-index:9021}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button[dir=rtl]{left:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button[dir=ltr]{right:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button svg{-webkit-transition:.2s ease;-moz-transition:.2s ease;-o-transition:.2s ease;transition:.2s ease;fill:#9b9b9b;height:auto;width:100%}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button svg.ab-chevron{display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button:active{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button:focus{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button:hover{background-color:transparent}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button:hover svg{fill-opacity:.8}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area{float:none;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;display:table-cell;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;vertical-align:top;width:60px;margin:0}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area.ab-icon-area{width:auto}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area img{float:none;width:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen,.ab-iam-root.v3 .ab-in-app-message.ab-modal{font-size:14px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area{float:none;position:relative;display:block;overflow:hidden}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area .ab-center-cropped-img,.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area .ab-center-cropped-img{position:absolute;top:0;right:0;bottom:0;left:0}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area .ab-center-cropped-img img,.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area .ab-center-cropped-img img{width:100%;height:100%;object-fit:cover;object-position:center}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-icon,.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-icon{margin-top:20px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic{padding:0}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-message-text,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-message-text{display:none}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-message-buttons,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-message-buttons{bottom:0;left:0}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-image-area{float:none;height:auto;margin:0}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-image-area img,.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-image-area img{display:block;top:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none}.ab-iam-root.v3 .ab-in-app-message.ab-modal{padding-top:20px;width:450px;max-width:450px;max-height:720px}.ab-iam-root.v3 .ab-in-app-message.ab-modal.simulate-phone{max-width:91%;max-width:calc(100% - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal.simulate-phone.graphic .ab-image-area img{max-width:91vw;max-width:calc(100vw - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text{max-height:660px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-image{max-height:524.82758621px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-icon{max-height:610px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-buttons{margin-bottom:93px;max-height:587px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-buttons.ab-with-image{max-height:451.82758621px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-message-text.ab-with-buttons.ab-with-icon{max-height:537px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area{margin-top:-20px;max-height:155.17241379px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area img{max-width:100%;max-height:155.17241379px}.ab-iam-root.v3 .ab-in-app-message.ab-modal .ab-image-area.ab-icon-area{height:auto}.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic{width:auto;overflow:hidden}.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-image-area{display:inline}.ab-iam-root.v3 .ab-in-app-message.ab-modal.graphic .ab-image-area img{width:auto;max-height:720px;max-width:450px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen{width:450px;max-height:720px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape{width:720px;max-height:450px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape .ab-image-area{height:225px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape.graphic .ab-image-area{height:450px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape .ab-message-text{max-height:112px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-message-text{max-height:247px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-message-text.ab-with-buttons{margin-bottom:93px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area{height:360px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.graphic .ab-image-area{height:720px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone{-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone:not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone:not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.graphic{display:block}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.simulate-phone.graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-html-message{background-color:transparent;border:none;height:100%;overflow:auto;position:relative;touch-action:auto;width:100%}.ab-iam-root.v3 .ab-in-app-message .ab-message-buttons{position:absolute;bottom:0;width:100%;padding:17px 25px 30px 25px;z-index:inherit;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.ab-iam-root.v3 .ab-in-app-message .ab-message-button{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;cursor:pointer;display:inline-block;font-size:14px;font-weight:700;font-family:'Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif;height:44px;line-height:normal;letter-spacing:normal;margin:0;max-width:100%;min-width:80px;padding:0 12px;position:relative;text-transform:none;width:48%;width:calc(50% - 5px);border:1px solid #1b78cf;-webkit-transition:.2s ease;-moz-transition:.2s ease;-o-transition:.2s ease;transition:.2s ease;overflow:hidden;word-wrap:break-word;text-overflow:ellipsis;word-wrap:normal;white-space:nowrap}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:first-of-type{float:left;background-color:#fff;color:#1b78cf}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:last-of-type{float:right;background-color:#1b78cf;color:#fff}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:first-of-type:last-of-type{float:none;width:auto}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background-color:transparent}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:after{-webkit-transition:.2s ease;-moz-transition:.2s ease;-o-transition:.2s ease;transition:.2s ease}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:hover{opacity:.8}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:active:after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.08)}.ab-iam-root.v3 .ab-in-app-message .ab-message-button:focus:after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.15)}.ab-iam-root.v3 .ab-in-app-message .ab-message-button a{color:inherit;text-decoration:inherit}.ab-iam-root.v3 .ab-in-app-message img{float:none;display:inline-block}.ab-iam-root.v3 .ab-in-app-message .ab-icon{float:none;display:inline-block;padding:10px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px}.ab-iam-root.v3 .ab-in-app-message .ab-icon .fa{float:none;font-size:30px;width:30px}.ab-iam-root.v3 .ab-start-hidden{visibility:hidden}.ab-iam-root.v3 .ab-centered{margin:auto;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.ab-iam-root.v3{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}.ab-iam-root.v3 .ab-page-blocker{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9001;pointer-events:all;background-color:rgba(51,51,51,.75)}@media (max-width:600px){.ab-iam-root.v3 .ab-in-app-message.ab-slideup{max-height:66px;margin:10px;margin-top:calc(constant(safe-area-inset-top,0) + 10px);margin-right:calc(constant(safe-area-inset-right,0) + 10px);margin-bottom:calc(constant(safe-area-inset-bottom,0) + 10px);margin-left:calc(constant(safe-area-inset-left,0) + 10px);margin-top:calc(env(safe-area-inset-top,0) + 10px);margin-right:calc(env(safe-area-inset-right,0) + 10px);margin-bottom:calc(env(safe-area-inset-bottom,0) + 10px);margin-left:calc(env(safe-area-inset-left,0) + 10px);max-width:90%;max-width:calc(100% - 40px);min-width:90%;min-width:calc(100% - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button{display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-close-button svg:not(.ab-chevron){display:none}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable .ab-close-button{display:block;height:20px;padding:0 20px 0 18px;pointer-events:none;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%);width:12px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable .ab-close-button svg.ab-chevron{display:inline}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable .ab-close-button svg.ab-chevron.rtl{-webkit-transform:scaleX(-1);-moz-transform:scaleX(-1);-ms-transform:scaleX(-1);transform:scaleX(-1)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup.ab-clickable .ab-message-text{border-right-width:40px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text{max-width:100%;border-right-width:10px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text span{max-height:66px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text.ab-with-icon,.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-message-text.ab-with-image{max-width:80%;max-width:calc(100% - 50px - 5px - 10px - 25px)}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area{width:50px;height:50px}.ab-iam-root.v3 .ab-in-app-message.ab-slideup .ab-image-area img{max-width:100%;max-height:100%;width:auto;height:auto}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape{-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-close-button,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen .ab-image-area,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-image-area,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen .ab-message-text,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen .ab-message-text.ab-with-buttons,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape .ab-message-text.ab-with-buttons,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape:not(.graphic),.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen:not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape:not(.graphic) .ab-message-buttons,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen:not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.graphic,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.graphic{display:block}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.graphic .ab-image-area,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.graphic .ab-message-button,.ab-iam-root.v3 .ab-in-app-message:not(.force-desktop).ab-fullscreen.landscape.graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}}@media (max-width:480px){.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop){max-width:91%;max-width:calc(100% - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop).graphic .ab-image-area img{max-width:91vw;max-width:calc(100vw - 30px)}}@media (max-height:750px){.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop){max-height:91%;max-height:calc(100% - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop).graphic .ab-image-area img{max-height:91vh;max-height:calc(100vh - 30px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text{max-height:65vh;max-height:calc(100vh - 30px - 60px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-image{max-height:45vh;max-height:calc(100vh - 30px - 155.17241379310346px - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-icon{max-height:45vh;max-height:calc(100vh - 30px - 70px - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-buttons{max-height:50vh;max-height:calc(100vh - 30px - 93px - 40px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-buttons.ab-with-image{max-height:30vh;max-height:calc(100vh - 30px - 155.17241379310346px - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-modal:not(.force-desktop) .ab-message-text.ab-with-buttons.ab-with-icon{max-height:30vh;max-height:calc(100vh - 30px - 70px - 93px - 20px)}}@media (min-width:601px){.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen .ab-image-area img{max-height:100%;max-width:100%}}@media (max-height:750px) and (min-width:601px){.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop){-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important;width:450px}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop) .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop) .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop) .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop):not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop):not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).graphic{display:block}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen:not(.landscape):not(.force-desktop).graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}}@media (max-height:480px){.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop){-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop):not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop):not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic{display:block}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}}@media (max-width:750px){.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop){-webkit-transition:top none;-moz-transition:top none;-o-transition:top none;transition:top none;top:0;right:0;bottom:0;left:0;height:100%;width:100%;max-height:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;height:auto!important}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-close-button{margin-right:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-right:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0));margin-left:calc(constant(safe-area-inset-bottom,0) + constant(safe-area-inset-top,0));margin-left:calc(env(safe-area-inset-bottom,0) + env(safe-area-inset-top,0))}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-image-area,.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-image-area{height:50%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-message-text{max-height:48%;max-height:calc(50% - 20px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop) .ab-message-text.ab-with-buttons{margin-bottom:20px;max-height:30%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).landscape .ab-message-text.ab-with-buttons{max-height:20%;max-height:calc(50% - 93px - 20px)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop):not(.graphic){padding-bottom:0;padding-bottom:constant(safe-area-inset-bottom,0);padding-bottom:env(safe-area-inset-bottom,0)}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop):not(.graphic) .ab-message-buttons{padding-top:0;position:relative}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic{display:block}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic .ab-image-area{height:100%}.ab-iam-root.v3 .ab-in-app-message.ab-fullscreen.landscape:not(.force-desktop).graphic .ab-message-button{margin-bottom:0;margin-bottom:constant(safe-area-inset-bottom,0);margin-bottom:env(safe-area-inset-bottom,0)}}",
   );
 }
 function setupInAppMessageUI() {
   attachInAppMessageCSS(), loadFontAwesome();
 }
 
-function me(e) {
+function attachBannerCSS(n) {
+  attachCSS(
+    n,
+    "banner",
+    ".ab-html-banner{width:100%;height:100%;border:none;display:block}.ab-html-control-banner{width:0;height:0;margin:0;border:none}",
+  );
+}
+function setupBannerUI() {
+  attachBannerCSS();
+}
+
+function be(e) {
   let s = "";
   return (
     e.animateIn && (s += " ab-animate-in"),
@@ -5271,29 +5540,29 @@ function me(e) {
   );
 }
 
-function createCloseButton(t, o, e, n = "ltr") {
-  const r = document.createElement("button");
-  r.setAttribute("aria-label", t),
-    r.setAttribute("tabindex", "0"),
-    r.setAttribute("role", "button"),
-    (r.dir = n),
-    addPassiveEventListener(r, "touchstart"),
-    (r.className = "ab-close-button");
+function createCloseButton(t, o, e, r = "ltr") {
+  const n = document.createElement("button");
+  n.setAttribute("aria-label", t),
+    n.setAttribute("role", "button"),
+    (n.dir = r),
+    addPassiveEventListener(n, "touchstart"),
+    (n.className = "ab-close-button");
   const l = buildSvg(
     "0 0 15 15",
     "M15 1.5L13.5 0l-6 6-6-6L0 1.5l6 6-6 6L1.5 15l6-6 6 6 1.5-1.5-6-6 6-6z",
     o,
   );
   return (
-    r.appendChild(l),
-    r.addEventListener("keydown", (t) => {
-      (t.keyCode !== KeyCodes.Fo && t.keyCode !== KeyCodes.To) ||
+    n.appendChild(l),
+    l.setAttribute("aria-hidden", "true"),
+    n.addEventListener("keydown", (t) => {
+      (t.keyCode !== KeyCodes.Ho && t.keyCode !== KeyCodes.Go) ||
         (e(), t.stopPropagation());
     }),
-    (r.onclick = (t) => {
+    (n.onclick = (t) => {
       e(), t.stopPropagation();
     }),
-    r
+    n
   );
 }
 
@@ -5319,24 +5588,24 @@ function toRgba(r, n) {
   );
 }
 
-function logInAppMessageImpression(o) {
-  if (!e.X()) return !1;
-  if (!(o instanceof InAppMessage || o instanceof ControlMessage))
-    return r$1.error(MUST_BE_IN_APP_MESSAGE_WARNING), !1;
-  const s = o instanceof ControlMessage ? i.mo : i.Xi;
-  return se$1.m().q(o, s).L;
+function logInAppMessageImpression(s) {
+  if (!r.rr()) return !1;
+  if (!(s instanceof InAppMessage || s instanceof ControlMessage))
+    return E$1.error(IamStrings.sS), !1;
+  const o = s instanceof ControlMessage ? f.om : f.wn;
+  return je$1.ra().lt(s, o).W;
 }
 
-function logInAppMessageClick(o) {
-  if (!e.X()) return !1;
-  if (!(o instanceof InAppMessage)) return r$1.error(MUST_BE_IN_APP_MESSAGE_WARNING), !1;
-  const s = se$1.m().q(o, i.$i);
-  if (s) {
-    o.Wr() || logInAppMessageImpression(o);
-    for (let r = 0; r < s.ge.length; r++)
-      TriggersProviderFactory.rr().fe(tt.Vr, [o.triggerId], s.ge[r]);
+function logInAppMessageClick(s) {
+  if (!r.rr()) return !1;
+  if (!(s instanceof InAppMessage)) return E$1.error(IamStrings.sS), !1;
+  const e = je$1.ra().lt(s, f.zn);
+  if (e) {
+    s.sm() || logInAppMessageImpression(s);
+    for (let r = 0; r < e.Ee.length; r++)
+      TriggersProviderFactory.o().he(ot.rm, [s.triggerId], e.Ee[r]);
   }
-  return s.L;
+  return e.W;
 }
 
 const ORIENTATION = { PORTRAIT: 0, LANDSCAPE: 1 };
@@ -5369,58 +5638,58 @@ function _getCurrentUrl() {
 }
 const WindowUtils = {
   openUri: _openUri,
-  fo: _isPhone,
-  co: _getOrientation,
-  Zo: _getCurrentUrl,
+  Ua: _isPhone,
+  Ma: _getOrientation,
+  gl: _getCurrentUrl,
 };
 
 function getUser() {
-  if (e.X()) return e.pr();
+  if (r.rr()) return r.br();
 }
 
-function _handleBrazeAction(o, s, t) {
-  if (e.X())
+function _handleBrazeAction(o, e, s) {
+  if (r.rr())
     if (BRAZE_ACTION_URI_REGEX.test(o)) {
-      const s = getDecodedBrazeAction(o);
-      if (!s) return;
-      const t = (o) => {
+      const e = getDecodedBrazeAction(o);
+      if (!e) return;
+      const s = (o) => {
         if (!isValidBrazeActionJson(o))
-          return void r$1.error(
+          return void E$1.error(
             `Decoded Braze Action json is invalid: ${JSON.stringify(
               o,
               null,
               2,
             )}`,
           );
-        const s = BRAZE_ACTIONS.properties.type,
-          i = BRAZE_ACTIONS.properties.oo,
-          n = BRAZE_ACTIONS.properties.eo,
-          a = o[s];
-        if (a === BRAZE_ACTIONS.types.ro) {
-          const e = o[i];
-          for (const o of e) t(o);
+        const e = BRAZE_ACTIONS.properties.type,
+          t = BRAZE_ACTIONS.properties.eo,
+          i = BRAZE_ACTIONS.properties.so,
+          n = o[e];
+        if (n === BRAZE_ACTIONS.types.io) {
+          const e = o[t];
+          for (const o of e) s(o);
         } else {
-          const s = o[n];
-          let t, i;
-          switch (a) {
+          const e = o[i];
+          let s, t;
+          switch (n) {
             case BRAZE_ACTIONS.types.logCustomEvent:
               Promise.resolve().then(function () { return logCustomEvent$1; }).then(
                 ({ logCustomEvent: logCustomEvent }) => {
-                  e.so()
-                    ? ((i = Array.prototype.slice.call(s)),
-                      logCustomEvent(...i))
-                    : r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
+                  r.ao()
+                    ? ((t = Array.prototype.slice.call(e)),
+                      logCustomEvent(...t))
+                    : E$1.error(CoreStrings.ee);
                 },
               );
               break;
             case BRAZE_ACTIONS.types.requestPushPermission:
               Promise.resolve().then(function () { return requestPushPermission$1; }).then(
                 ({ requestPushPermission: requestPushPermission }) => {
-                  e.so()
-                    ? "Safari" === X.browser && X.OS === OperatingSystems.io
+                  r.ao()
+                    ? "Safari" === ro.browser && ro.OS === OperatingSystems.co
                       ? window.navigator.standalone && requestPushPermission()
                       : requestPushPermission()
-                    : r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
+                    : E$1.error(CoreStrings.ee);
                 },
               );
               break;
@@ -5431,21 +5700,21 @@ function _handleBrazeAction(o, s, t) {
             case BRAZE_ACTIONS.types.removeFromSubscriptionGroup:
             case BRAZE_ACTIONS.types.addToCustomAttributeArray:
             case BRAZE_ACTIONS.types.removeFromCustomAttributeArray:
-              if (((t = getUser()), t)) {
-                t[a](...Array.prototype.slice.call(s));
+              if (((s = getUser()), s)) {
+                s[n](...Array.prototype.slice.call(e));
               }
               break;
-            case BRAZE_ACTIONS.types.no:
-            case BRAZE_ACTIONS.types.ao:
-              (i = Array.prototype.slice.call(s)), WindowUtils.openUri(...i);
+            case BRAZE_ACTIONS.types.mo:
+            case BRAZE_ACTIONS.types.uo:
+              (t = Array.prototype.slice.call(e)), WindowUtils.openUri(...t);
               break;
             default:
-              r$1.info(`Ignoring unknown Braze Action: ${a}`);
+              E$1.info(`Ignoring unknown Braze Action: ${n}`);
           }
         }
       };
-      t(s);
-    } else WindowUtils.openUri(o, s, t);
+      s(e);
+    } else WindowUtils.openUri(o, e, s);
 }
 function handleBrazeAction(o, e) {
   _handleBrazeAction(o, e);
@@ -5472,86 +5741,67 @@ function isURIJavascriptOrData(t) {
   );
 }
 
-function logInAppMessageHtmlClick(t, s, o) {
-  if (!e.X()) return !1;
-  if (!(t instanceof HtmlMessage))
+function logInAppMessageHtmlClick(e, t, s) {
+  if (!r.rr()) return !1;
+  if (!(e instanceof HtmlMessage))
     return (
-      r$1.error(
+      E$1.error(
         "inAppMessage argument to logInAppMessageHtmlClick must be an HtmlMessage object.",
       ),
       !1
     );
-  let m = i.$i;
-  null != s && (m = i.Oi);
-  const n = se$1.m().q(t, m, s, o);
-  if (n.L)
-    for (let e = 0; e < n.ge.length; e++)
-      TriggersProviderFactory.rr().fe(tt.Vr, [t.triggerId, s], n.ge[e]);
-  return n.L;
+  let o = f.zn;
+  null != t && (o = f.Sn);
+  const m = je$1.ra().lt(e, o, t, s);
+  if (m.W)
+    for (let r = 0; r < m.Ee.length; r++)
+      TriggersProviderFactory.o().he(ot.rm, [e.triggerId, t], m.Ee[r]);
+  return m.W;
 }
 
-const buildHtmlClickHandler = (t, r, e, o) => {
-  const s = e.getAttribute("href"),
-    n = e.onclick;
-  return (i) => {
-    if (null != n && "function" == typeof n && !1 === n.bind(e)(i)) return;
-    let u = parseQueryStringKeyValues(s).abButtonId;
+const buildHtmlClickHandler = (l, t, i, o) => {
+  const r = i.getAttribute("href"),
+    e = i.onclick;
+  return (n) => {
+    if (null != e && "function" == typeof e && !1 === e.bind(i)(n)) return;
+    let s = parseQueryStringKeyValues(r).abButtonId;
     if (
-      ((null != u && "" !== u) || (u = e.getAttribute("id") || void 0),
-      null != s && "" !== s && 0 !== s.indexOf("#"))
+      ((null != s && "" !== s) || (s = i.getAttribute("id") || void 0),
+      null != r && "" !== r && 0 !== r.indexOf("#"))
     ) {
-      const n =
+      const e =
           "blank" ===
-          (e.getAttribute("target") || "").toLowerCase().replace("_", ""),
-        c = o || t.openTarget === InAppMessage.OpenTarget.BLANK || n,
-        a = () => {
-          logInAppMessageHtmlClick(t, u, s), WindowUtils.openUri(s, c, i);
+          (i.getAttribute("target") || "").toLowerCase().replace("_", ""),
+        m = o || l.openTarget === InAppMessage.OpenTarget.BLANK || e,
+        u = () => {
+          logInAppMessageHtmlClick(l, s, r), WindowUtils.openUri(r, m, n);
         };
-      c ? a() : t.Cr(r, a);
-    } else logInAppMessageHtmlClick(t, u, s || void 0);
-    return i.stopPropagation(), !1;
+      m ? u() : l.ll(t, u);
+    } else logInAppMessageHtmlClick(l, s, r || void 0);
+    return n.stopPropagation(), !1;
   };
 };
-const applyNonceToDynamicallyCreatedTags = (t, r, e) => {
-  const o = `([\\w]+)\\s*=\\s*document.createElement\\(['"]${e}['"]\\)`,
-    s = t.match(new RegExp(o));
-  if (s) {
-    const e = `${s[1]}.setAttribute("nonce", "${r}")`;
-    return `${t.slice(0, s.index + s[0].length)};${e};${t.slice(
-      s.index + s[0].length,
-    )}`;
-  }
-  return null;
-};
-const buildBrazeBridge = (t, o, s) => {
-  const n = {
-      closeMessage: function () {
-        t.Cr(o);
-      },
-      logClick: function () {
-        logInAppMessageHtmlClick(t, ...arguments);
-      },
-      display: {},
-      web: {},
-    },
+
+const buildBrazeBridge = (t, e) => {
+  const o = { display: {}, web: {} },
     requestPushPermission = function () {
       return function () {
         const t = arguments;
-        Promise.resolve().then(function () { return requestPushPermission$1; }).then((o) => {
-          e.so()
-            ? o.requestPushPermission(...Array.prototype.slice.call(t))
-            : r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
+        Promise.resolve().then(function () { return requestPushPermission$1; }).then((e) => {
+          r.ao()
+            ? e.requestPushPermission(...Array.prototype.slice.call(t))
+            : E$1.error(CoreStrings.ee);
         });
       };
     },
-    i = {
+    n = {
       requestImmediateDataFlush: function () {
         const t = arguments;
         Promise.resolve().then(function () { return requestImmediateDataFlush$1; }).then(
           ({ requestImmediateDataFlush: requestImmediateDataFlush }) => {
-            e.so()
+            r.ao()
               ? requestImmediateDataFlush(...Array.prototype.slice.call(t))
-              : r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
+              : E$1.error(CoreStrings.ee);
           },
         );
       },
@@ -5559,7 +5809,7 @@ const buildBrazeBridge = (t, o, s) => {
         const t = arguments;
         Promise.resolve().then(function () { return logCustomEvent$1; }).then(
           ({ logCustomEvent: logCustomEvent }) => {
-            if (!e.so()) return void r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
+            if (!r.ao()) return void E$1.error(CoreStrings.ee);
             logCustomEvent(...Array.prototype.slice.call(t));
           },
         );
@@ -5568,7 +5818,7 @@ const buildBrazeBridge = (t, o, s) => {
         const t = arguments;
         Promise.resolve().then(function () { return logPurchase$1; }).then(
           ({ logPurchase: logPurchase }) => {
-            if (!e.so()) return void r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
+            if (!r.ao()) return void E$1.error(CoreStrings.ee);
             logPurchase(...Array.prototype.slice.call(t));
           },
         );
@@ -5577,30 +5827,28 @@ const buildBrazeBridge = (t, o, s) => {
         const t = arguments;
         Promise.resolve().then(function () { return unregisterPush$1; }).then(
           ({ unregisterPush: unregisterPush }) => {
-            e.so()
+            r.ao()
               ? unregisterPush(...Array.prototype.slice.call(t))
-              : r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
+              : E$1.error(CoreStrings.ee);
           },
         );
       },
       requestPushPermission: requestPushPermission(),
       changeUser: function () {
         const t = arguments;
-        Promise.resolve().then(function () { return changeUser$1; }).then(
-          ({ changeUser: changeUser }) => {
-            if (!e.so()) return void r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
-            changeUser(...Array.prototype.slice.call(t));
-          },
-        );
+        Promise.resolve().then(function () { return changeUser$1; }).then(({ changeUser: changeUser }) => {
+          if (!r.ao()) return void E$1.error(CoreStrings.ee);
+          changeUser(...Array.prototype.slice.call(t));
+        });
       },
     },
-    u = function (t) {
+    s = function (t) {
       return function () {
-        i[t](...Array.prototype.slice.call(arguments));
+        n[t](...Array.prototype.slice.call(arguments));
       };
     };
-  for (const t of keys(i)) n[t] = u(t);
-  const c = [
+  for (const t of keys(n)) o[t] = s(t);
+  const i = [
       "setFirstName",
       "setLastName",
       "setEmail",
@@ -5620,139 +5868,169 @@ const buildBrazeBridge = (t, o, s) => {
       "setCustomLocationAttribute",
       "addToSubscriptionGroup",
       "removeFromSubscriptionGroup",
+      "setLineId",
     ],
-    a = function (t) {
+    u = function (t) {
       return function () {
-        const r = getUser();
-        r && r[t](...Array.prototype.slice.call(arguments));
+        const e = getUser();
+        e && e[t](...Array.prototype.slice.call(arguments));
       };
     },
-    m = {};
-  for (let t = 0; t < c.length; t++) m[c[t]] = a(c[t]);
-  n.getUser = function () {
-    return m;
+    c = {};
+  for (let t = 0; t < i.length; t++) c[i[t]] = u(i[t]);
+  o.getUser = function () {
+    return c;
   };
-  const l = { showFeed: s },
-    f = function (r) {
+  const a = {},
+    m = function (r) {
       return function () {
-        const e = arguments;
-        t.Cr(o, function () {
-          l[r](...Array.prototype.slice.call(e));
-        });
+        const o = arguments;
+        "function" != typeof e
+          ? a[r](...Array.prototype.slice.call(o))
+          : e(t, function () {
+              a[r](...Array.prototype.slice.call(o));
+            });
       };
     },
-    p = n.display;
-  for (const t of keys(l)) p[t] = f(t);
-  const d = { registerAppboyPushMessages: requestPushPermission() },
-    g = function (t) {
+    f = o.display;
+  for (const t of keys(a)) f[t] = m(t);
+  const l = { registerAppboyPushMessages: requestPushPermission() },
+    p = function (t) {
       return function () {
-        d[t](...Array.prototype.slice.call(arguments));
+        l[t](...Array.prototype.slice.call(arguments));
       };
     },
-    h = n.web;
-  for (const t of keys(d)) h[t] = g(t);
-  return n;
+    y = o.web;
+  for (const t of keys(l)) y[t] = p(t);
+  return (
+    (o.NotificationSubscriptionTypes = User.NotificationSubscriptionTypes), o
+  );
 };
-
-function dt(t, e, n, o, s, l) {
-  const c = document.createElement("iframe");
-  c.setAttribute("title", "Modal Message"),
-    s && (c.style.zIndex = (s + 1).toString());
-  let r = null;
-  if (null != l) {
-    (r = document.createElement("html")), (r.innerHTML = t.message || "");
-    const e = r.getElementsByTagName("style");
-    for (let t = 0; t < e.length; t++) e[t].setAttribute("nonce", l);
-    const n = r.getElementsByTagName("script");
+const applyNonceToDynamicallyCreatedTags = (t, e, r) => {
+  const o = `([\\w]+)\\s*=\\s*document.createElement\\(['"]${r}['"]\\)`,
+    n = t.match(new RegExp(o));
+  if (n) {
+    const r = `${n[1]}.setAttribute("nonce", "${e}")`;
+    return `${t.slice(0, n.index + n[0].length)};${r};${t.slice(
+      n.index + n[0].length,
+    )}`;
+  }
+  return null;
+};
+const attachHtmlToIframeWithNonce = (t, e, r) => {
+  let o = null;
+  if (null != r) {
+    (o = document.createElement("html")), (o.innerHTML = e || "");
+    const t = o.getElementsByTagName("style");
+    for (let e = 0; e < t.length; e++) t[e].setAttribute("nonce", r);
+    const n = o.getElementsByTagName("script");
     for (let t = 0; t < n.length; t++) {
-      n[t].setAttribute("nonce", l),
+      n[t].setAttribute("nonce", r),
         (n[t].innerHTML = n[t].innerHTML.replace(
           /<style>/g,
-          `<style nonce='${l}'>`,
+          `<style nonce='${r}'>`,
         ));
-      const e = applyNonceToDynamicallyCreatedTags(n[t].innerHTML, l, "script");
+      const e = applyNonceToDynamicallyCreatedTags(n[t].innerHTML, r, "script");
       e && (n[t].innerHTML = e);
-      const o = applyNonceToDynamicallyCreatedTags(n[t].innerHTML, l, "style");
+      const o = applyNonceToDynamicallyCreatedTags(n[t].innerHTML, r, "style");
       o && (n[t].innerHTML = o);
     }
   }
+  t.srcdoc = o ? o.innerHTML : e || "";
+};
+
+function ct(t, e, o, s, n) {
+  const i = document.createElement("iframe");
+  i.setAttribute("title", "Modal Message"),
+    s && (i.style.zIndex = (s + 1).toString());
   if (
-    ((c.srcdoc = r ? r.innerHTML : t.message || ""),
-    (c.onload = () => {
-      const s = c.contentWindow;
+    (attachHtmlToIframeWithNonce(i, t.message, n),
+    (i.onload = () => {
+      const s = i.contentWindow;
       s.focus();
-      const r = s.document.getElementsByTagName("head")[0];
-      if (null != r) {
-        if (t.ve()) {
+      const l = s.document.getElementsByTagName("head")[0];
+      if (null != l) {
+        if (t.Mo()) {
           const e = document.createElement("style");
           (e.innerHTML = t.css || ""),
-            (e.id = t.we() || ""),
-            null != l && e.setAttribute("nonce", l),
-            r.appendChild(e);
+            (e.id = t.Oo() || ""),
+            null != n && e.setAttribute("nonce", n),
+            l.appendChild(e);
         }
         const e = s.document.createElement("base");
-        null != e && (e.setAttribute("target", "_parent"), r.appendChild(e));
+        null != e && (e.setAttribute("target", "_parent"), l.appendChild(e));
       }
-      const i = s.document.getElementsByTagName("title");
-      i && i.length > 0 && c.setAttribute("title", i[0].textContent || "");
-      const a = buildBrazeBridge(t, c, e);
+      const a = s.document.getElementsByTagName("title");
+      a && a.length > 0 && i.setAttribute("title", a[0].textContent || "");
+      const r = Object.assign(
+        Object.assign(
+          {},
+          buildBrazeBridge(i, (e, o) => t.ll(e, o)),
+        ),
+        {
+          closeMessage: function () {
+            t.ll(i);
+          },
+          logClick: function () {
+            logInAppMessageHtmlClick(t, ...arguments);
+          },
+        },
+      );
       if (
-        ((s.appboyBridge = a), (s.brazeBridge = a), t.xe !== InAppMessage.Be.Me)
+        ((s.appboyBridge = r), (s.brazeBridge = r), t.ko !== InAppMessage.Eo.Bo)
       ) {
         const e = s.document.getElementsByTagName("a");
-        for (let n = 0; n < e.length; n++) e[n].onclick = buildHtmlClickHandler(t, c, e[n], o);
+        for (let s = 0; s < e.length; s++) e[s].onclick = buildHtmlClickHandler(t, i, e[s], o);
         const n = s.document.getElementsByTagName("button");
-        for (let e = 0; e < n.length; e++) n[e].onclick = buildHtmlClickHandler(t, c, n[e], o);
+        for (let e = 0; e < n.length; e++) n[e].onclick = buildHtmlClickHandler(t, i, n[e], o);
       }
-      const d = s.document.body;
-      if (null != d) {
-        t.Ce() && (d.id = t.htmlId || "");
+      const c = s.document.body;
+      if (null != c) {
+        t._o() && (c.id = t.htmlId || "");
         const e = document.createElement("hidden");
-        (e.onclick = a.closeMessage),
+        (e.onclick = r.closeMessage),
           (e.className = "ab-programmatic-close-button"),
-          d.appendChild(e);
+          c.appendChild(e);
       }
       s.dispatchEvent(new CustomEvent("ab.BridgeReady")),
-        -1 !== c.className.indexOf("ab-start-hidden") &&
-          ((c.className = c.className.replace("ab-start-hidden", "")), n(c));
+        -1 !== i.className.indexOf("ab-start-hidden") &&
+          ((i.className = i.className.replace("ab-start-hidden", "")), e(i));
     }),
-    (c.className =
+    (i.className =
       "ab-in-app-message ab-start-hidden ab-html-message ab-modal-interactions"),
-    X.OS === OperatingSystems.io)
+    ro.OS === OperatingSystems.co)
   ) {
     const e = document.createElement("div");
     return (
-      (e.className = "ab-ios-scroll-wrapper"), e.appendChild(c), (t.Re = e), e
+      (e.className = "ab-ios-scroll-wrapper"), e.appendChild(i), (t.qo = e), e
     );
   }
-  return (t.Re = c), c;
+  return (t.qo = i), i;
 }
 
-function logInAppMessageButtonClick(o, t) {
-  var s;
-  if (!e.X()) return !1;
-  if (!(o instanceof InAppMessageButton))
-    return r$1.error("button must be an InAppMessageButton object"), !1;
-  if (!(t instanceof InAppMessage)) return r$1.error(MUST_BE_IN_APP_MESSAGE_WARNING), !1;
-  const n = se$1.m().Ji(o, t);
-  if (n.L)
-    for (let r = 0; r < n.ge.length; r++)
-      TriggersProviderFactory.rr().fe(
-        tt.Vr,
+function logInAppMessageButtonClick(t, o) {
+  var e;
+  if (!r.rr()) return !1;
+  if (!(t instanceof InAppMessageButton))
+    return E$1.error("button must be an InAppMessageButton object"), !1;
+  if (!(o instanceof InAppMessage)) return E$1.error(IamStrings.sS), !1;
+  const s = je$1.ra().Rn(t, o);
+  if (s.W)
+    for (let r = 0; r < s.Ee.length; r++)
+      TriggersProviderFactory.o().he(
+        ot.rm,
         [
-          t.triggerId,
-          null === (s = o.id) || void 0 === s ? void 0 : s.toString(),
+          o.triggerId,
+          null === (e = t.id) || void 0 === e ? void 0 : e.toString(),
         ],
-        n.ge[r],
+        s.Ee[r],
       );
-  return n.L;
+  return s.W;
 }
 
-const le = {
-  Je: (t) => {
-    const o = t.querySelectorAll(
-      ".ab-close-button, .ab-message-text, .ab-message-button",
-    );
+const xe = {
+  Qo: (t) => {
+    const o = t.querySelectorAll(".ab-close-button, .ab-message-button");
     let e;
     for (let t = 0; t < o.length; t++) (e = o[t]), (e.tabIndex = 0);
     if (o.length > 0) {
@@ -5760,7 +6038,7 @@ const le = {
         s = o[o.length - 1];
       t.addEventListener("keydown", (o) => {
         const a = document.activeElement;
-        o.keyCode === KeyCodes.lo &&
+        o.keyCode === KeyCodes.Wo &&
           (o.shiftKey || (a !== s && a !== t)
             ? !o.shiftKey ||
               (a !== e && a !== t) ||
@@ -5769,226 +6047,231 @@ const le = {
       });
     }
   },
-  Ke: (t, o) => {
+  So: (t, o) => {
     o.setAttribute("role", "dialog"),
       o.setAttribute("aria-modal", "true"),
-      o.setAttribute("aria-label", "Modal Message"),
-      t && o.setAttribute("aria-labelledby", t);
+      t
+        ? o.setAttribute("aria-labelledby", t)
+        : o.setAttribute("aria-label", "Modal Message");
   },
-  He: (t, o, e, s) => {
+  Po: (t, o, e) => {
     if (t.buttons && t.buttons.length > 0) {
-      const a = document.createElement("div");
-      (a.className = "ab-message-buttons"), e.appendChild(a);
-      const l = e.getElementsByClassName("ab-message-text")[0];
-      null != l && (l.className += " ab-with-buttons");
-      const n = (a) => (l) => (
-        t.Cr(e, () => {
-          logInAppMessageButtonClick(a, t),
-            a.clickAction === InAppMessage.ClickAction.URI
-              ? _handleBrazeAction(
-                  a.uri || "",
-                  s || t.openTarget === InAppMessage.OpenTarget.BLANK,
-                  l,
-                )
-              : a.clickAction === InAppMessage.ClickAction.NEWS_FEED && o();
+      const s = document.createElement("div");
+      (s.className = "ab-message-buttons"), o.appendChild(s);
+      const a = o.getElementsByClassName("ab-message-text")[0];
+      null != a && (a.className += " ab-with-buttons");
+      const l = (s) => (a) => (
+        t.ll(o, () => {
+          logInAppMessageButtonClick(s, t),
+            s.clickAction === InAppMessage.ClickAction.URI &&
+              _handleBrazeAction(
+                s.uri || "",
+                e || t.openTarget === InAppMessage.OpenTarget.BLANK,
+                a,
+              );
         }),
-        l.stopPropagation(),
+        a.stopPropagation(),
         !1
       );
       for (let o = 0; o < t.buttons.length; o++) {
         const e = t.buttons[o],
-          s = document.createElement("button");
-        (s.className = "ab-message-button"),
-          s.setAttribute("type", "button"),
-          addPassiveEventListener(s, "touchstart");
-        let l = e.text;
-        "" === e.text && (l = " "),
-          s.appendChild(document.createTextNode(l)),
-          t.ve() ||
-            ((s.style.backgroundColor = toRgba(e.backgroundColor)),
-            (s.style.color = toRgba(e.textColor)),
-            (s.style.borderColor = toRgba(e.borderColor))),
-          (s.onclick = n(e)),
-          a.appendChild(s);
+          a = document.createElement("button");
+        (a.className = "ab-message-button"),
+          a.setAttribute("type", "button"),
+          addPassiveEventListener(a, "touchstart");
+        let n = e.text;
+        "" === e.text && (n = " "),
+          a.appendChild(document.createTextNode(n)),
+          t.Mo() ||
+            ((a.style.backgroundColor = toRgba(e.backgroundColor)),
+            (a.style.color = toRgba(e.textColor)),
+            (a.style.borderColor = toRgba(e.borderColor))),
+          (a.onclick = l(e)),
+          s.appendChild(a);
       }
     }
   },
 };
 
-function ce(e, o, a, t, n, s, i, l = document.body, b = "ltr") {
-  if (((e.ke = document.activeElement), e instanceof HtmlMessage))
-    return dt(e, o, a, n, s, i);
-  const g = (function (e, o, a, t, n, s, i = document.body, m = "ltr") {
-    let l = null;
-    const c = document.createElement("div");
-    (c.dir = m),
-      (c.className = "ab-in-app-message ab-start-hidden ab-background"),
-      s && (c.style.zIndex = (s + 1).toString()),
-      e.$e() &&
-        ((c.className += " ab-modal-interactions"),
-        c.setAttribute("tabindex", "-1")),
-      e.ve() ||
-        ((c.style.color = toRgba(e.textColor)),
-        (c.style.backgroundColor = toRgba(e.backgroundColor)),
-        isTransparent(e.backgroundColor) && (c.className += " ab-no-shadow"));
-    const b = () => {
-        -1 !== c.className.indexOf("ab-start-hidden") &&
-          ((c.className = c.className.replace("ab-start-hidden", "")),
+function $e(e, o, t, a, n, i, s = document.body, m = "ltr") {
+  if (((e.$o = document.activeElement), e instanceof HtmlMessage))
+    return ct(e, o, a, n, i);
+  const l = (function (e, o, t, a, n, i = document.body, s = "ltr") {
+    let m = null;
+    const l = document.createElement("div");
+    (l.dir = s),
+      (l.className = "ab-in-app-message ab-start-hidden ab-background"),
+      n && (l.style.zIndex = (n + 1).toString()),
+      e.zo() &&
+        ((l.className += " ab-modal-interactions"),
+        l.setAttribute("tabindex", "-1")),
+      e.Mo() ||
+        ((l.style.color = toRgba(e.textColor)),
+        (l.style.backgroundColor = toRgba(e.backgroundColor)),
+        isTransparent(e.backgroundColor) && (l.className += " ab-no-shadow"));
+    const c = () => {
+        -1 !== l.className.indexOf("ab-start-hidden") &&
+          ((l.className = l.className.replace("ab-start-hidden", "")),
           document.querySelectorAll(".ab-iam-img-loading").length > 0
             ? t(
                 `Cannot show in-app message ${e.message} because another message is being shown.`,
-                InAppMessage.Le.ze,
+                InAppMessage.Ao.Lo,
               )
-            : a(c));
+            : o(l));
       },
-      g = (o = !0) => {
-        let a = document.querySelectorAll(".ab-iam-root");
-        (a && 0 !== a.length) || (a = i.querySelectorAll(".ab-iam-root")),
-          a &&
-            a.length > 0 &&
-            (a[0].classList.remove("ab-iam-img-loading"),
-            l && (clearTimeout(l), (l = null)),
+      r = (o = !0) => {
+        let t = document.querySelectorAll(".ab-iam-root");
+        (t && 0 !== t.length) || (t = i.querySelectorAll(".ab-iam-root")),
+          t &&
+            t.length > 0 &&
+            (t[0].classList.remove("ab-iam-img-loading"),
+            m && (clearTimeout(m), (m = null)),
             o
-              ? b()
-              : r$1.error(
+              ? c()
+              : E$1.error(
                   `Cannot show in-app message ${e.message} because the image failed to load.`,
                 ));
       };
-    e.imageStyle === InAppMessage.ImageStyle.GRAPHIC &&
-      (c.className += " graphic"),
+    if (
+      (e.imageStyle === InAppMessage.ImageStyle.GRAPHIC &&
+        (l.className += " graphic"),
       e.orientation === InAppMessage.Orientation.LANDSCAPE &&
-        (c.className += " landscape"),
-      null != e.buttons &&
-        0 === e.buttons.length &&
-        (e.clickAction !== InAppMessage.ClickAction.NONE &&
-          (c.className += " ab-clickable"),
-        (c.onclick = (a) => (
-          e.Cr(c, () => {
-            logInAppMessageClick(e),
-              e.clickAction === InAppMessage.ClickAction.URI
-                ? _handleBrazeAction(
-                    e.uri || "",
-                    n || e.openTarget === InAppMessage.OpenTarget.BLANK,
-                    a,
-                  )
-                : e.clickAction === InAppMessage.ClickAction.NEWS_FEED && o();
-          }),
-          a.stopPropagation(),
-          !1
-        )));
-    const f = createCloseButton(
+        (l.className += " landscape"),
+      null != e.buttons && 0 === e.buttons.length)
+    ) {
+      e.clickAction !== InAppMessage.ClickAction.NONE &&
+        (l.className += " ab-clickable");
+      const o = (o) => (
+        e.ll(l, () => {
+          logInAppMessageClick(e),
+            e.clickAction === InAppMessage.ClickAction.URI &&
+              _handleBrazeAction(
+                e.uri || "",
+                a || e.openTarget === InAppMessage.OpenTarget.BLANK,
+                o,
+              );
+        }),
+        o.stopPropagation(),
+        !1
+      );
+      (l.onclick = o),
+        l.addEventListener("keydown", (e) => {
+          if (e.keyCode === KeyCodes.Go || e.keyCode === KeyCodes.Ho) return o(e);
+        });
+    }
+    const d = createCloseButton(
       "Close Message",
-      e.ve() ? void 0 : toRgba(e.closeButtonColor),
+      e.Mo() ? void 0 : toRgba(e.closeButtonColor),
       () => {
-        e.Cr(c);
+        e.ll(l);
       },
-      m,
+      s,
     );
-    c.appendChild(f), s && (f.style.zIndex = (s + 2).toString());
-    const h = document.createElement("div");
-    (h.className = "ab-message-text"), (h.dir = m);
-    const j = (e.messageAlignment || e.qe).toLowerCase();
-    h.className += " " + j + "-aligned";
-    let w = !1;
-    const v = document.createElement("div");
-    if (((v.className = "ab-image-area"), e.imageUrl)) {
-      if (e.cropType === InAppMessage.CropType.CENTER_CROP) {
-        const o = document.createElement("span");
-        (o.className = "ab-center-cropped-img"),
-          (o.style.backgroundImage = "url(" + e.imageUrl + ")"),
-          o.setAttribute("role", "img"),
-          o.setAttribute("aria-label", "Modal Image"),
-          e.Ae(o),
-          v.appendChild(o);
-      } else {
-        const o = document.createElement("img");
-        if (
-          (o.setAttribute("src", e.imageUrl),
-          e.Ae(o),
-          0 === document.querySelectorAll(".ab-iam-img-loading").length)
-        ) {
-          w = !0;
-          const e = document.querySelectorAll(".ab-iam-root");
-          e && e.length > 0 && e[0].classList.add("ab-iam-img-loading"),
-            (l = window.setTimeout(() => {
-              g(!1);
-            }, 6e4)),
-            (o.onload = () => {
-              g();
-            }),
-            (o.onerror = () => {
-              g(!1);
-            });
-        }
-        v.appendChild(o);
+    l.appendChild(d), n && (d.style.zIndex = (n + 2).toString());
+    const u = document.createElement("div");
+    (u.className = "ab-message-text"),
+      (u.dir = s),
+      u.setAttribute("role", "article");
+    const b = (e.messageAlignment || e.Io).toLowerCase();
+    u.className += " " + b + "-aligned";
+    let f = !1;
+    const p = document.createElement("div");
+    if (((p.className = "ab-image-area"), e.imageUrl)) {
+      const o = document.createElement("img");
+      if (
+        (o.setAttribute("src", e.imageUrl),
+        e.Jo(o),
+        0 === document.querySelectorAll(".ab-iam-img-loading").length)
+      ) {
+        f = !0;
+        const e = document.querySelectorAll(".ab-iam-root");
+        e && e.length > 0 && e[0].classList.add("ab-iam-img-loading"),
+          (m = window.setTimeout(() => {
+            r(!1);
+          }, 6e4)),
+          (o.onload = () => {
+            r();
+          }),
+          (o.onerror = () => {
+            r(!1);
+          });
       }
-      c.appendChild(v), (h.className += " ab-with-image");
+      if (e.cropType === InAppMessage.CropType.CENTER_CROP) {
+        const e = document.createElement("div");
+        (e.className = "ab-center-cropped-img"),
+          e.appendChild(o),
+          p.appendChild(e);
+      } else p.appendChild(o);
+      l.appendChild(p), (u.className += " ab-with-image");
     } else if (e.icon) {
-      v.className += " ab-icon-area";
+      p.className += " ab-icon-area";
       const o = document.createElement("span");
       (o.className = "ab-icon"),
-        e.ve() ||
+        e.Mo() ||
           ((o.style.backgroundColor = toRgba(e.iconBackgroundColor)),
           (o.style.color = toRgba(e.iconColor)));
-      const a = document.createElement("i");
-      (a.className = "fa"),
-        a.appendChild(document.createTextNode(e.icon)),
-        a.setAttribute("aria-hidden", "true"),
-        o.appendChild(a),
-        v.appendChild(o),
-        c.appendChild(v),
-        (h.className += " ab-with-icon");
+      const t = document.createElement("i");
+      (t.className = "fa"),
+        t.appendChild(document.createTextNode(e.icon)),
+        t.setAttribute("aria-hidden", "true"),
+        o.appendChild(t),
+        p.appendChild(o),
+        l.appendChild(p),
+        (u.className += " ab-with-icon");
     }
-    if ((addPassiveEventListener(h, "touchstart"), e.header && e.header.length > 0)) {
+    if ((addPassiveEventListener(u, "touchstart"), e.header && e.header.length > 0)) {
       const o = document.createElement("h1");
-      (o.className = "ab-message-header"), (e.De = p$1.W()), (o.id = e.De);
-      const a = (
+      (o.className = "ab-message-header"), (e.Ko = P$1.se()), (o.id = e.Ko);
+      const t = (
         e.headerAlignment || InAppMessage.TextAlignment.CENTER
       ).toLowerCase();
-      (o.className += " " + a + "-aligned"),
-        e.ve() || (o.style.color = toRgba(e.headerTextColor)),
+      (o.className += " " + t + "-aligned"),
+        e.Mo() || (o.style.color = toRgba(e.headerTextColor)),
         o.appendChild(document.createTextNode(e.header)),
-        h.appendChild(o);
+        u.appendChild(o);
     }
-    return h.appendChild(e.Ge()), c.appendChild(h), w || b(), (e.Re = c), c;
-  })(e, o, a, t, n, s, l, b);
+    const g = e.No();
+    return u.appendChild(g), l.appendChild(u), f || c(), (e.qo = l), l;
+  })(e, o, t, a, n, s, m);
   if (e instanceof FullScreenMessage || e instanceof ModalMessage) {
-    const a = e instanceof FullScreenMessage ? "ab-fullscreen" : "ab-modal";
-    (g.className += ` ${a} ab-centered`),
-      le.He(e, o, g, n),
-      le.Je(g),
-      le.Ke(e.De, g);
+    const o = e instanceof FullScreenMessage ? "ab-fullscreen" : "ab-modal";
+    (l.className += ` ${o} ab-centered`),
+      xe.Po(e, l, a),
+      xe.Qo(l),
+      xe.So(e.Ko, l);
   } else if (e instanceof SlideUpMessage) {
-    g.className += " ab-slideup";
-    const o = g.getElementsByClassName("ab-close-button")[0];
+    (l.className += " ab-slideup"),
+      l.setAttribute("tabindex", "0"),
+      l.setAttribute("role", "alert");
+    const o = l.getElementsByClassName("ab-close-button")[0];
     if (null != o) {
-      const a = buildSvg(
+      const t = buildSvg(
         "0 0 11.38 19.44",
         "M11.38 9.72l-9.33 9.72L0 17.3l7.27-7.58L0 2.14 2.05 0l9.33 9.72z",
-        e.ve() ? void 0 : toRgba(e.closeButtonColor),
+        e.Mo() ? void 0 : toRgba(e.closeButtonColor),
       );
-      a.setAttribute("class", "ab-chevron"), o.appendChild(a);
+      t.setAttribute("class", `ab-chevron ${m}`), o.appendChild(t);
     }
-    let a, t;
-    detectSwipe(g, DIRECTIONS.U, (e) => {
-      (g.className += " ab-swiped-left"),
+    let t, a;
+    detectSwipe(l, DIRECTIONS.de, (e) => {
+      (l.className += " ab-swiped-left"),
         null != o && null != o.onclick && o.onclick(e);
     }),
-      detectSwipe(g, DIRECTIONS.V, (e) => {
-        (g.className += " ab-swiped-right"),
+      detectSwipe(l, DIRECTIONS.ce, (e) => {
+        (l.className += " ab-swiped-right"),
           null != o && null != o.onclick && o.onclick(e);
       }),
       e.slideFrom === InAppMessage.SlideFrom.TOP
-        ? ((a = DIRECTIONS.Oe), (t = " ab-swiped-up"))
-        : ((a = DIRECTIONS.Qe), (t = " ab-swiped-down")),
-      detectSwipe(g, a, (e) => {
-        (g.className += t), null != o && null != o.onclick && o.onclick(e);
+        ? ((t = DIRECTIONS.Uo), (a = " ab-swiped-up"))
+        : ((t = DIRECTIONS.Vo), (a = " ab-swiped-down")),
+      detectSwipe(l, t, (e) => {
+        (l.className += a), null != o && null != o.onclick && o.onclick(e);
       });
   }
-  return g;
+  return l;
 }
 
-var xt = {
+var zt = {
   en: {
     NO_CARDS_MESSAGE:
       "We have no updates for you at this time.<br/>Please check again later.",
@@ -6137,29 +6420,29 @@ var xt = {
   },
 };
 
-class nr {
+class mr {
   constructor(t, e = !1) {
     if (
       ((this.language = t),
       null != t && (t = t.toLowerCase()),
-      null != t && null == xt[t])
+      null != t && null == zt[t])
     ) {
       const e = t.indexOf("-");
       e > 0 && (t = t.substring(0, e));
     }
-    if (null == xt[t]) {
+    if (null == zt[t]) {
       const a =
         "Braze does not yet have a localization for language " +
         t +
         ", defaulting to English. Please contact us if you are willing and able to help us translate our SDK into this language.";
-      e ? r$1.error(a) : r$1.info(a), (t = "en");
+      e ? E$1.error(a) : E$1.info(a), (t = "en");
     }
     this.language = t;
   }
   get(t) {
-    return xt[this.language][t];
+    return zt[this.language][t];
   }
-  wo() {
+  Ta() {
     switch (this.language) {
       case "ar":
       case "he":
@@ -6171,310 +6454,311 @@ class nr {
   }
 }
 
-const ue = {
-  t: !1,
-  i: null,
-  m: () => {
-    if ((ue.o(), !ue.i)) {
-      let r = X.language,
+const Me = {
+  i: !1,
+  na: null,
+  ra: () => {
+    if ((Me.t(), !Me.na)) {
+      let e = ro.language,
         t = !1;
-      e.nn(L.zn) && ((r = e.nn(L.zn)), (t = !0)), (ue.i = new nr(r, t));
+      r.re(D.Wa) && ((e = r.re(D.Wa)), (t = !0)), (Me.na = new mr(e, t));
     }
-    return ue.i;
+    return Me.na;
   },
-  o: () => {
-    ue.t || (e.g(ue), (ue.t = !0));
+  t: () => {
+    Me.i || (r.g(Me), (Me.i = !0));
   },
   destroy: () => {
-    (ue.i = null), (ue.t = !1);
+    (Me.na = null), (Me.i = !1);
   },
 };
 
-function showInAppMessage(t, o, s) {
-  if (!e.X()) return;
-  if ((setupInAppMessageUI(), null == t)) return !1;
-  if (t instanceof ControlMessage)
+function showInAppMessage(e, t, s) {
+  if (!r.rr()) return;
+  if ((setupInAppMessageUI(), null == e)) return !1;
+  if (e instanceof ControlMessage)
     return (
-      r$1.info(
+      E$1.info(
         "User received control for a multivariate test, logging to Braze servers.",
       ),
-      logInAppMessageImpression(t),
+      logInAppMessageImpression(e),
       !0
     );
-  if (!(t instanceof InAppMessage)) return !1;
-  if (t.constructor === InAppMessage) return !1;
-  t.Nh();
-  const i = t instanceof HtmlMessage;
-  if (i && !t.trusted && !e.tr())
+  if (!(e instanceof InAppMessage)) return !1;
+  if (e.constructor === InAppMessage) return !1;
+  e.Lh();
+  const o = e instanceof HtmlMessage;
+  if (o && !e.trusted && !r.nr())
     return (
-      r$1.error(
+      E$1.error(
         'HTML in-app messages are disabled. Use the "allowUserSuppliedJavascript" option for braze.initialize to enable these messages.',
       ),
       !1
     );
-  if ((null == o && (o = document.body), t.$e())) {
-    if (o.querySelectorAll(".ab-modal-interactions").length > 0)
+  if ((null == t && (t = document.body), e.zo())) {
+    if (t.querySelectorAll(".ab-modal-interactions").length > 0)
       return (
-        r$1.info(
-          `Cannot show in-app message ${t.message} because another message is being shown.`,
+        E$1.info(
+          `Cannot show in-app message ${e.message} because another message is being shown.`,
         ),
         !1
       );
   }
-  if (WindowUtils.fo()) {
-    const e = WindowUtils.co();
+  if (WindowUtils.Ua()) {
+    const t = WindowUtils.Ma();
     if (
-      (e === ORIENTATION.PORTRAIT &&
-        t.orientation === InAppMessage.Orientation.LANDSCAPE) ||
-      (e === ORIENTATION.LANDSCAPE &&
-        t.orientation === InAppMessage.Orientation.PORTRAIT)
+      (t === ORIENTATION.PORTRAIT &&
+        e.orientation === InAppMessage.Orientation.LANDSCAPE) ||
+      (t === ORIENTATION.LANDSCAPE &&
+        e.orientation === InAppMessage.Orientation.PORTRAIT)
     ) {
-      const o = e === ORIENTATION.PORTRAIT ? "portrait" : "landscape",
-        s =
-          t.orientation === InAppMessage.Orientation.PORTRAIT
+      const s = t === ORIENTATION.PORTRAIT ? "portrait" : "landscape",
+        o =
+          e.orientation === InAppMessage.Orientation.PORTRAIT
             ? "portrait"
             : "landscape";
       return (
-        r$1.info(
-          `Not showing ${s} in-app message ${t.message} because the screen is currently ${o}`,
+        E$1.info(
+          `Not showing ${o} in-app message ${e.message} because the screen is currently ${s}`,
         ),
         !1
       );
     }
   }
-  if (!e.tr()) {
-    let e = !1;
-    if (t.buttons && t.buttons.length > 0) {
-      const o = t.buttons;
-      for (let t = 0; t < o.length; t++)
-        if (o[t].clickAction === InAppMessage.ClickAction.URI) {
-          const s = o[t].uri;
-          e = isURIJavascriptOrData(s);
+  if (!r.nr()) {
+    let t = !1;
+    if (e.buttons && e.buttons.length > 0) {
+      const s = e.buttons;
+      for (let e = 0; e < s.length; e++)
+        if (s[e].clickAction === InAppMessage.ClickAction.URI) {
+          const o = s[e].uri;
+          t = isURIJavascriptOrData(o);
         }
-    } else t.clickAction === InAppMessage.ClickAction.URI && (e = isURIJavascriptOrData(t.uri));
-    if (e)
+    } else e.clickAction === InAppMessage.ClickAction.URI && (t = isURIJavascriptOrData(e.uri));
+    if (t)
       return (
-        r$1.error(
+        E$1.error(
           'Javascript click actions are disabled. Use the "allowUserSuppliedJavascript" option for braze.initialize to enable these actions.',
         ),
         !1
       );
   }
-  const n = document.createElement("div");
+  const i = document.createElement("div");
   if (
-    ((n.className = "ab-iam-root v3"),
-    (n.className += me(t)),
-    n.setAttribute("role", "complementary"),
-    t.Ce() && (n.id = t.htmlId),
-    e.nn(L.jo) && (n.style.zIndex = (e.nn(L.jo) + 1).toString()),
-    o.appendChild(n),
-    t.ve())
+    ((i.className = "ab-iam-root v3"),
+    (i.className += be(e)),
+    e.language && !o && (i.lang = e.language),
+    e._o() && (i.id = e.htmlId),
+    r.re(D.$a) && (i.style.zIndex = (r.re(D.$a) + 1).toString()),
+    t.appendChild(i),
+    e.Mo())
   ) {
-    const o = document.createElement("style");
-    (o.innerHTML = t.css),
-      (o.id = t.we()),
-      null != e.nn(L.bo) && o.setAttribute("nonce", e.nn(L.bo)),
-      document.getElementsByTagName("head")[0].appendChild(o);
+    const t = document.createElement("style");
+    (t.innerHTML = e.css),
+      (t.id = e.Oo()),
+      null != r.re(D.er) && t.setAttribute("nonce", r.re(D.er)),
+      document.getElementsByTagName("head")[0].appendChild(t);
   }
-  const a = t instanceof SlideUpMessage,
-    l = ce(
-      t,
-      () => {
-        Promise.resolve().then(function () { return showFeed$1; }).then((t) => {
-          e.so() ? t.showFeed() : r$1.error(BRAZE_MUST_BE_INITIALIZED_ERROR);
-        });
-      },
-      (o) => {
-        if (t.$e() && t.do()) {
+  const n = e instanceof SlideUpMessage,
+    a = $e(
+      e,
+      (t) => {
+        if (e.zo() && e.od()) {
           const s = document.createElement("div");
           if (
             ((s.className = "ab-page-blocker"),
-            t.ve() || (s.style.backgroundColor = toRgba(t.frameColor)),
-            e.nn(L.jo) && (s.style.zIndex = e.nn(L.jo).toString()),
-            n.appendChild(s),
-            !e.nn(L.Lh))
+            e.Mo() || (s.style.backgroundColor = toRgba(e.frameColor)),
+            r.re(D.$a) && (s.style.zIndex = r.re(D.$a).toString()),
+            i.appendChild(s),
+            !r.re(D.Oh))
           ) {
-            const e = new Date().valueOf();
+            const o = new Date().valueOf();
             s.onclick = (s) => {
-              new Date().valueOf() - e > InAppMessage.fh &&
-                (t.Cr(o), s.stopPropagation());
+              new Date().valueOf() - o > InAppMessage.bh &&
+                (e.ll(t), s.stopPropagation());
             };
           }
-          n.appendChild(o), o.focus(), t.Oh(n);
-        } else if (a) {
-          const e = document.querySelectorAll(".ab-slideup");
-          let s = null;
-          for (let t = e.length - 1; t >= 0; t--)
-            if (e[t] !== o) {
-              s = e[t];
+          i.appendChild(t), t.focus(), e.ah(i);
+        } else if (n) {
+          const s = document.querySelectorAll(".ab-slideup");
+          let o = null;
+          for (let e = s.length - 1; e >= 0; e--)
+            if (s[e] !== t) {
+              o = s[e];
               break;
             }
-          if (t.slideFrom === InAppMessage.SlideFrom.TOP) {
+          if (e.slideFrom === InAppMessage.SlideFrom.TOP) {
             let e = 0;
-            null != s && (e = s.offsetTop + s.offsetHeight),
-              (o.style.top = Math.max(e, 0) + "px");
+            null != o && (e = o.offsetTop + o.offsetHeight),
+              (t.style.top = Math.max(e, 0) + "px");
           } else {
             let e = 0;
-            null != s &&
+            null != o &&
               (e =
                 (window.innerHeight || document.documentElement.clientHeight) -
-                s.offsetTop),
-              (o.style.bottom = Math.max(e, 0) + "px");
+                o.offsetTop),
+              (t.style.bottom = Math.max(e, 0) + "px");
           }
-        } else if (i && !e.nn(L.Lh)) {
-          const e = t;
-          isIFrame(o) &&
-            o.contentWindow &&
-            o.contentWindow.addEventListener("keydown", function (t) {
-              t.keyCode === KeyCodes.mh && e.closeMessage();
+        } else if (o && !r.re(D.Oh)) {
+          const s = e;
+          isIFrame(t) &&
+            t.contentWindow &&
+            t.contentWindow.addEventListener("keydown", function (e) {
+              e.keyCode === KeyCodes.Ih && s.closeMessage();
             });
         }
-        logInAppMessageImpression(t),
-          t.dismissType === InAppMessage.DismissType.AUTO_DISMISS &&
+        logInAppMessageImpression(e),
+          e.dismissType === InAppMessage.DismissType.AUTO_DISMISS &&
             setTimeout(() => {
-              n.contains(o) && t.Cr(o);
-            }, t.duration),
+              i.contains(t) && e.ll(t);
+            }, e.duration),
           "function" == typeof s && s();
       },
       (e) => {
-        r$1.info(e);
+        E$1.info(e);
       },
-      e.nn(L.ho),
-      e.nn(L.jo),
-      e.nn(L.bo),
-      o,
-      ue.m().wo(),
+      r.re(D.Ja),
+      r.re(D.$a),
+      r.re(D.er),
+      t,
+      Me.ra().Ta(),
     );
-  return (i || a) && (n.appendChild(l), t.Oh(n)), !0;
+  return (o || n) && (i.appendChild(a), e.ah(i)), !0;
 }
 
 function subscribeToInAppMessage(n) {
-  if (e.X())
+  if (r.rr())
     return "function" != typeof n
       ? null
-      : se$1.m().Mi(function (r) {
+      : je$1.ra().Tn(function (r) {
           return n(r[0]), r.slice(1);
         });
 }
 
 function automaticallyShowInAppMessages() {
-  if (!e.X()) return;
+  if (!r.rr()) return;
   setupInAppMessageUI();
-  const s = se$1.m();
-  if (null == s._i()) {
+  const s = je$1.ra();
+  if (null == s.kn()) {
     const r = subscribeToInAppMessage((s) => showInAppMessage(s));
-    s.Pi(r);
+    s.Dn(r);
   }
-  return s._i();
+  return s.kn();
 }
 
-function deferInAppMessage(s) {
-  if (e.X())
-    return s instanceof ControlMessage
-      ? (r$1.info("Not deferring since this is a ControlMessage."), !1)
-      : s instanceof InAppMessage
-      ? se$1.m().je(s)
-      : (r$1.info("Not an instance of InAppMessage, ignoring."), !1);
+function deferInAppMessage(e) {
+  if (r.rr())
+    return e instanceof ControlMessage
+      ? (E$1.info("Not deferring since this is a ControlMessage."), !1)
+      : e instanceof InAppMessage
+      ? je$1.ra().fn(e)
+      : (E$1.info("Not an instance of InAppMessage, ignoring."), !1);
 }
 
 function getDeferredInAppMessage() {
-  if (e.X()) return se$1.m().Se();
+  if (r.rr()) return je$1.ra().sa();
 }
 
-class aa {
-  constructor(t, s, i, r) {
-    (this.$t = t),
-      (this.oi = s),
-      (this.u = i),
-      (this.yt = r),
-      (this.$t = t),
-      (this.oi = s),
-      (this.u = i),
-      (this.yt = r),
-      (this._e = new T()),
-      e.Ht(this._e),
-      (this.Xe = 1e3),
-      (this.We = 6e4),
-      (this.Ye = null);
+class ea {
+  constructor(t, e, s, i) {
+    (this.j = t),
+      (this.C = e),
+      (this.B = s),
+      (this.vs = i),
+      (this.j = t),
+      (this.C = e),
+      (this.B = s),
+      (this.vs = i),
+      (this.jn = new m()),
+      r.q(this.jn),
+      (this.vn = 1e3),
+      (this.yn = 6e4),
+      (this.bn = null),
+      (this.In = null),
+      (this.Mn = null);
   }
-  Ze() {
-    return this._e;
+  An() {
+    return this.jn;
   }
-  Mi(t) {
-    return this._e.Nt(t);
+  Tn(t) {
+    return this.jn.Rt(t);
   }
-  _i() {
-    return this.Ye;
+  kn() {
+    return this.bn;
   }
-  Pi(t) {
-    this.Ye = t;
+  Dn(t) {
+    this.bn = t;
   }
-  q(e, n, o, a) {
-    const l = new s();
-    let u;
-    if (e instanceof ControlMessage) u = { trigger_ids: [e.triggerId] };
-    else {
-      if (n === i.$i || (e instanceof HtmlMessage && n === i.Oi)) {
-        if (!e.p(a))
-          return (
-            r$1.info(
-              "This in-app message has already received a click. Ignoring analytics event.",
-            ),
-            l
-          );
-      } else if (n === i.Xi) {
-        if (!e.K())
-          return (
-            r$1.info(
-              "This in-app message has already received an impression. Ignoring analytics event.",
-            ),
-            l
-          );
-      }
-      u = this.Hi(e);
+  lt(t, e, s, i) {
+    const r = new H();
+    let n;
+    if (e === f.wn || t instanceof ControlMessage) {
+      if (!t.Wt())
+        return (
+          E$1.info(
+            "This in-app message has already received an impression. Ignoring analytics event.",
+          ),
+          r
+        );
+    } else if (e === f.zn || (t instanceof HtmlMessage && e === f.Sn)) {
+      if (!t.$t(i))
+        return (
+          E$1.info(
+            "This in-app message has already received a click. Ignoring analytics event.",
+          ),
+          r
+        );
     }
-    return null == u
-      ? l
-      : (e.messageExtras && (u.message_extras = e.messageExtras),
-        null != o && (u.bid = o),
-        t$1.q(n, u));
+    return (
+      (n =
+        t instanceof ControlMessage
+          ? { trigger_ids: [t.triggerId] }
+          : this.Bn(t)),
+      null == n
+        ? r
+        : (t.messageExtras && (n.message_extras = t.messageExtras),
+          null != s && (n.bid = s),
+          v$1.lt(e, n))
+    );
   }
-  Ji(e, n) {
-    const o = new s();
-    if (!e.p())
+  Rn(t, e) {
+    const s = new H();
+    if (!t.$t())
       return (
-        r$1.info(
+        E$1.info(
           "This in-app message button has already received a click. Ignoring analytics event.",
         ),
-        o
+        s
       );
-    const a = this.Hi(n);
-    return null == a
-      ? o
-      : e.id === InAppMessageButton.Ki
-      ? (r$1.info(
+    const i = this.Bn(e);
+    return null == i
+      ? s
+      : t.id === InAppMessageButton._n
+      ? (E$1.info(
           "This in-app message button does not have a tracking id. Not logging event to Braze servers.",
         ),
-        o)
-      : (null != e.id && (a.bid = e.id), t$1.q(i.Oi, a));
+        s)
+      : (null != t.id && (i.bid = t.id), v$1.lt(f.Sn, i));
   }
-  Li(t) {
+  qn(t) {
     const e = t.messageFields;
     return (null != e && e.is_push_primer) || !1;
   }
-  Qi(t) {
+  xn(t) {
     if (!(t instanceof InAppMessage)) return;
     const e = (t) => {
       if (!t) return;
       const e = getDecodedBrazeAction(t);
-      return containsUnknownBrazeAction(e)
-        ? ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Vi, "In-App Message")
-        : containsPushPrimerBrazeAction(e) && !yt$1.Wi()
-        ? ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Yi, "In-App Message")
-        : void 0;
+      if (containsUnknownBrazeAction(e)) return ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Pn, "In-App Message");
+      if (containsPushPrimerBrazeAction(e)) {
+        const t = vt$1.En();
+        if (!t.Gn) return vt$1.Nn(t.reason, "In-App Message");
+      }
     };
-    if (this.Li(t) && !yt$1.Wi())
-      return "In-App Message contains a push prompt, but is not eligible for a push prompt. Ignoring.";
+    if (this.qn(t)) {
+      const t = vt$1.En();
+      if (!t.Gn) return vt$1.Nn(t.reason, "In-App Message");
+    }
     const s = t.buttons || [];
     let i;
     for (const t of s)
@@ -6491,63 +6775,85 @@ class aa {
       ? e(t.uri)
       : void 0;
   }
-  Zi(t, e, s, i) {
-    const n = this.$t;
-    if (!n) return;
-    const o = n.Ir(!1, !1),
-      a = n.$s(o);
-    (a.template = { trigger_id: t.triggerId, trigger_event_type: e }),
-      null != s && (a.template.data = s.Mr());
-    const l = n.Ps(a, D._s.Tr);
-    n.Gs(
-      a,
-      (n = -1) => {
-        if (!this.$t) return;
-        const o = new Date().valueOf();
-        D.Hs(this.u, D._s.Tr, o),
-          -1 !== n && l.push(["X-Braze-Req-Tokens-Remaining", n.toString()]),
-          C.Ks({
-            url: `${this.$t.Os()}/template/`,
-            data: a,
-            headers: l,
-            L: (e) => {
-              if ((D.Ws(this.u, D._s.Tr, 1), !this.$t.Qs(a, e, l)))
-                return void ("function" == typeof t.Br && t.Br());
-              if ((this.$t.Vs(), null == e || null == e.templated_message))
-                return;
-              const s = e.templated_message;
-              if (s.type !== gt.Er._r) return;
-              const i = newInAppMessageFromJson(s.data);
-              if (null == i) return;
-              const n = this.Qi(i);
-              if (n)
-                return r$1.error(n), void ("function" == typeof t.Br && t.Br());
-              "function" == typeof t.Gr && t.Gr(i);
-            },
-            error: (r) => {
-              let n = `getting user personalization for message ${t.triggerId}`;
-              if (new Date().valueOf() - t.Nr < t.Or) {
-                D.ti(this.u, D._s.Tr);
-                const r = Math.min(t.Or, this.We),
-                  o = this.Xe;
-                null == i && (i = o);
-                const a = Math.min(r, randomInclusive(o, 3 * i));
-                (n += `. Retrying in ${a} ms`),
-                  setTimeout(() => {
-                    this.Zi(t, e, s, a);
-                  }, a);
+  $n(t, e) {
+    e !== this.Mn && this.Cn(), (this.In = t), (this.Mn = e);
+  }
+  Cn() {
+    null != this.In &&
+      (clearTimeout(this.In), (this.In = null), (this.Mn = null));
+  }
+  Fn(t, e, s, i) {
+    const r = this.j;
+    if (!r) return;
+    this.Mn && t.triggerId !== this.Mn && (this.Cn(), h.fi(this.B, h.H.On));
+    const n = r.Xn(!1),
+      o = r.$(n);
+    (o.template = { trigger_id: t.triggerId, trigger_event_type: e }),
+      null != s && (o.template.data = s.Hn());
+    const u = r.A(o, h.H.On);
+    r.J(
+      o,
+      (r = -1) => {
+        const n = this.j;
+        if (!n) return;
+        const m = new Date().valueOf();
+        h.K(this.B, h.H.On, m),
+          -1 !== r && u.push(["X-Braze-Req-Tokens-Remaining", r.toString()]);
+        let c,
+          p,
+          f = !1;
+        l.O({
+          url: `${n.V()}/template/`,
+          data: o,
+          headers: u,
+          W: (e) => {
+            if (!n.Y(o, e, u))
+              return void ("function" == typeof t.Jn && t.Jn());
+            if ((n.Z(), null == e || null == e.templated_message)) return;
+            const s = e.templated_message;
+            if (s.type !== pt.Ln.Kn) return;
+            const i = newInAppMessageFromJson(s.data);
+            if (null == i) return;
+            const r = this.xn(i);
+            if (r)
+              return E$1.error(r), void ("function" == typeof t.Jn && t.Jn());
+            "function" == typeof t.Qn && t.Qn(i);
+          },
+          error: (e) => {
+            (f = !0),
+              (c = e),
+              (p = `getting user personalization for message ${t.triggerId}.`);
+          },
+          tt: (r, o) => {
+            if (new Date().valueOf() - t.Un < t.Vn) {
+              let r = 0;
+              if (f) {
+                const e = Math.min(t.Vn, this.yn),
+                  s = this.vn;
+                null == i && (i = s), (r = Math.min(e, randomInclusive(s, 3 * i)));
               }
-              this.$t.Ys(r, n);
-            },
-          });
+              n.et(
+                o,
+                () => {
+                  this.Fn(t, e, s, r);
+                },
+                h.H.On,
+                (e) => this.$n(e, t.triggerId),
+                () => this.Cn(),
+                r,
+              );
+            }
+            f && n._(c, p);
+          },
+        });
       },
-      D._s.Tr,
+      h.H.On,
     );
   }
-  Hi(t) {
+  Bn(t) {
     if (null == t.triggerId)
       return (
-        r$1.info(
+        E$1.info(
           "The in-app message has no analytics id. Not logging event to Braze servers.",
         ),
         null
@@ -6555,71 +6861,71 @@ class aa {
     const e = {};
     return null != t.triggerId && (e.trigger_ids = [t.triggerId]), e;
   }
-  je(t) {
+  fn(t) {
     return (
-      !!this.u &&
+      !!this.B &&
       !(
         !(t && t instanceof InAppMessage && t.constructor !== InAppMessage) ||
         t instanceof ControlMessage
       ) &&
-      this.u.I(STORAGE_KEYS.C.Xr, t.Y())
+      this.B.bt(STORAGE_KEYS.ft.Wn, t.gt())
     );
   }
-  Se() {
-    if (!this.u) return null;
-    const t = this.u.j(STORAGE_KEYS.C.Xr);
+  sa() {
+    if (!this.B) return null;
+    const t = this.B.dt(STORAGE_KEYS.ft.Wn);
     if (!t) return null;
     let e;
     switch (t.type) {
-      case InAppMessage.Be.Hr:
-        e = FullScreenMessage.Jr(t);
+      case InAppMessage.Eo.Yn:
+        e = FullScreenMessage.Zn(t);
         break;
-      case InAppMessage.Be.Kr:
-      case InAppMessage.Be.Me:
-      case InAppMessage.Be.Ve:
-        e = HtmlMessage.Jr(t);
+      case InAppMessage.Eo.Zo:
+      case InAppMessage.Eo.Bo:
+      case InAppMessage.Eo.Yo:
+        e = HtmlMessage.Zn(t);
         break;
-      case InAppMessage.Be.Lr:
-      case InAppMessage.Be.Ue:
-        e = ModalMessage.Jr(t);
+      case InAppMessage.Eo.ta:
+      case InAppMessage.Eo.Xo:
+        e = ModalMessage.Zn(t);
         break;
-      case InAppMessage.Be.Qr:
-        e = SlideUpMessage.Jr(t);
+      case InAppMessage.Eo.ia:
+        e = SlideUpMessage.Zn(t);
     }
-    return e && this.Ur(), e;
+    return e && this.oa(), e;
   }
-  Ur() {
-    this.u && this.u.ii(STORAGE_KEYS.C.Xr);
+  oa() {
+    this.B && this.B.zt(STORAGE_KEYS.ft.Wn);
   }
 }
 
-const se = {
-  i: null,
-  t: !1,
-  m: () => (
-    se.o(), se.i || (se.i = new aa(e.nr(), e.zr(), e.l(), e.er())), se.i
+const je = {
+  na: null,
+  i: !1,
+  ra: () => (
+    je.t(), je.na || (je.na = new ea(r.m(), r.u(), r.p(), r.ir())), je.na
   ),
-  o: () => {
-    se.t || (e.g(se), (se.t = !0));
+  t: () => {
+    je.i || (r.g(je), (je.i = !0));
   },
   destroy: () => {
-    (se.i = null), (se.t = !1);
+    (je.na = null), (je.i = !1);
   },
 };
-var se$1 = se;
+var je$1 = je;
 
 class wt {
   constructor(t, s, i, h, l) {
     (this.triggerId = t),
-      (this.Gr = s),
-      (this.Br = i),
-      (this.Nr = h),
-      (this.Or = l),
+      (this.Qn = s),
+      (this.Jn = i),
+      (this.Un = h),
+      (this.Vn = l),
       (this.triggerId = t),
-      (this.Gr = s),
-      (this.Br = i),
-      (this.Nr = h),
-      (this.Or = l);
+      (this.Qn = s),
+      (this.Jn = i),
+      (this.Un = h),
+      (this.Vn = l);
   }
   static fromJson(t, s, i, h, l) {
     return null == t || null == t.trigger_id
@@ -6628,18 +6934,18 @@ class wt {
   }
 }
 
-class gr extends y {
+class gr extends t {
   constructor(t, i, s, e, r) {
     super(),
       (this.tg = t),
-      (this.Bt = i),
-      (this.u = s),
-      (this.Ui = e),
+      (this.ws = i),
+      (this.B = s),
+      (this.Ru = e),
       (this.ig = r),
       (this.tg = t),
-      (this.Bt = i),
-      (this.u = s),
-      (this.Ui = e),
+      (this.ws = i),
+      (this.B = s),
+      (this.Ru = e),
       (this.ig = r),
       (this.sg = []),
       (this.eg = []),
@@ -6652,22 +6958,22 @@ class gr extends y {
       this.gg();
   }
   fg() {
-    if (this.u) {
-      (this.hg = this.u.j(STORAGE_KEYS.C.iE) || this.hg),
-        (this.ng = this.u.j(STORAGE_KEYS.C.EE) || this.ng),
-        (this.og = this.u.j(STORAGE_KEYS.C.aE) || this.og);
+    if (this.B) {
+      (this.hg = this.B.dt(STORAGE_KEYS.ft.iE) || this.hg),
+        (this.ng = this.B.dt(STORAGE_KEYS.ft.EE) || this.ng),
+        (this.og = this.B.dt(STORAGE_KEYS.ft.aE) || this.og);
       for (let t = 0; t < this.triggers.length; t++) {
         const i = this.triggers[t];
-        i.id && null != this.og[i.id] && i.ad(this.og[i.id]);
+        i.id && null != this.og[i.id] && i.zd(this.og[i.id]);
       }
     }
   }
   ag() {
-    if (!this.u) return;
-    this.lg = this.u.j(STORAGE_KEYS.C.oE) || 0;
-    const t = this.u.j(STORAGE_KEYS.C.rE) || [],
+    if (!this.B) return;
+    this.lg = this.B.dt(STORAGE_KEYS.ft.nE) || 0;
+    const t = this.B.dt(STORAGE_KEYS.ft.oE) || [],
       i = [];
-    for (let s = 0; s < t.length; s++) i.push(gt.qn(t[s]));
+    for (let s = 0; s < t.length; s++) i.push(pt._u(t[s]));
     (this.triggers = i), this.fg();
   }
   gg() {
@@ -6677,218 +6983,220 @@ class gr extends y {
           t.cg(i, s, e, r, h);
         };
       },
-      s = {};
-    for (const t of this.triggers) t.id && (s[t.id] = t);
-    let e = !1;
+      e = {};
+    for (const t of this.triggers) t.id && (e[t.id] = t);
+    let r = !1;
     for (let t = 0; t < this.triggers.length; t++) {
-      const r = this.triggers[t];
-      if (r.id && null != this.ng[r.id]) {
-        const t = this.ng[r.id],
+      const s = this.triggers[t];
+      if (s.id && null != this.ng[s.id]) {
+        const t = this.ng[s.id],
           h = [];
-        for (let e = 0; e < t.length; e++) {
-          const n = t[e],
-            o = r.ud(n.Nr || 0);
+        for (let r = 0; r < t.length; r++) {
+          const n = t[r],
+            o = s.Md(n.Un || 0);
           if (o > 0) {
-            let t, e;
+            let t, r;
             h.push(n),
               null != n.ug && (t = n.ug),
-              null != n.dg && ve.RE(n.dg) && (e = ve.qn(n.dg));
+              null != n.dg && De.gE(n.dg) && (r = De._u(n.dg));
             const l = [];
             if (n.pg && isArray(n.pg))
               for (let t = 0; t < n.pg.length; t++) {
-                const i = s[n.pg[t]];
+                const i = e[n.pg[t]];
                 null != i && l.push(i);
               }
-            this.eg.push(window.setTimeout(i(r, n.Nr || 0, t, e, l), o));
+            this.eg.push(window.setTimeout(i(s, n.Un || 0, t, r, l), o));
           }
         }
-        this.ng[r.id].length > h.length &&
-          ((this.ng[r.id] = h),
-          (e = !0),
-          0 === this.ng[r.id].length && delete this.ng[r.id]);
+        this.ng[s.id].length > h.length &&
+          ((this.ng[s.id] = h),
+          (r = !0),
+          0 === this.ng[s.id].length && delete this.ng[s.id]);
       }
     }
-    e && this.u && this.u.I(STORAGE_KEYS.C.EE, this.ng);
+    r && this.B && this.B.bt(STORAGE_KEYS.ft.EE, this.ng);
   }
   mg() {
-    if (!this.u) return;
+    if (!this.B) return;
     const t = [];
-    for (let i = 0; i < this.triggers.length; i++) t.push(this.triggers[i].Y());
+    for (let i = 0; i < this.triggers.length; i++)
+      t.push(this.triggers[i].gt());
     (this.lg = new Date().valueOf()),
-      this.u.I(STORAGE_KEYS.C.rE, t),
-      this.u.I(STORAGE_KEYS.C.oE, this.lg);
+      this.B.bt(STORAGE_KEYS.ft.oE, t),
+      this.B.bt(STORAGE_KEYS.ft.nE, this.lg);
   }
   bg() {
-    if (!this.u) return;
-    (this.u.j(STORAGE_KEYS.C.oE) || 0) > this.lg ? this.ag() : this.fg();
+    if (!this.B) return;
+    (this.B.dt(STORAGE_KEYS.ft.nE) || 0) > this.lg ? this.ag() : this.fg();
   }
-  Ss(t) {
+  N(t) {
     let i = !1;
     if (null != t && t.triggers) {
-      this.ig.Ur(), this.fg();
-      const s = {},
-        e = {};
+      this.ig.oa(), this.fg();
+      const e = {},
+        r = {};
       this.triggers = [];
-      for (let r = 0; r < t.triggers.length; r++) {
-        const h = gt.fromJson(t.triggers[r]);
+      for (let s = 0; s < t.triggers.length; s++) {
+        const h = pt.fromJson(t.triggers[s]);
         if (h) {
           h.id &&
             null != this.og[h.id] &&
-            (h.ad(this.og[h.id]), (s[h.id] = this.og[h.id])),
-            h.id && null != this.ng[h.id] && (e[h.id] = this.ng[h.id]);
-          for (let t = 0; t < h.sd.length; t++)
-            if (h.sd[t].sc(tt.kt, null)) {
+            (h.zd(this.og[h.id]), (e[h.id] = this.og[h.id])),
+            h.id && null != this.ng[h.id] && (r[h.id] = this.ng[h.id]);
+          for (let t = 0; t < h.Pd.length; t++)
+            if (h.Pd[t].km(ot.qs, null)) {
               i = !0;
               break;
             }
           this.triggers.push(h);
         }
       }
-      isEqual(this.og, s) || ((this.og = s), this.u && this.u.I(STORAGE_KEYS.C.aE, this.og)),
-        isEqual(this.ng, e) || ((this.ng = e), this.u && this.u.I(STORAGE_KEYS.C.EE, this.ng)),
+      isEqual(this.og, e) || ((this.og = e), this.B && this.B.bt(STORAGE_KEYS.ft.aE, this.og)),
+        isEqual(this.ng, r) ||
+          ((this.ng = r), this.B && this.B.bt(STORAGE_KEYS.ft.EE, this.ng)),
         this.mg(),
         i &&
-          (r$1.info("Trigger with test condition found, firing test."),
-          this.fe(tt.kt)),
-        this.fe(tt.OPEN);
+          (E$1.info("Trigger with test condition found, firing test."),
+          this.he(ot.qs)),
+        this.he(ot.OPEN);
       const h = this.sg;
       let n;
       this.sg = [];
       for (let t = 0; t < h.length; t++)
-        (n = Array.prototype.slice.call(h[t])), this.fe(...n);
+        (n = Array.prototype.slice.call(h[t])), this.he(...n);
     }
   }
-  cg(t, i, s, e, h) {
-    const n = (e) => {
+  cg(t, i, s, e, r) {
+    const h = (e) => {
         this.fg();
-        const h = new Date().valueOf();
-        t.dd(i) ||
-          (!1 === navigator.onLine && t.type === gt.Er._r && e.imageUrl
-            ? r$1.info(
+        const r = new Date().valueOf();
+        t.Bd(i) ||
+          (!1 === navigator.onLine && t.type === pt.Ln.Kn && e.imageUrl
+            ? E$1.info(
                 `Not showing ${t.type} trigger action ${t.id} due to offline state.`,
               )
-            : t.nd(h) && this.wg(t, h, s)
-            ? 0 === this.Bt.ic()
-              ? r$1.info(
+            : t.xd(r) && this.wg(t, r, s)
+            ? 0 === this.ws.De()
+              ? E$1.info(
                   `Not displaying trigger ${t.id} because neither automaticallyShowInAppMessages() nor subscribeToInAppMessage() were called.`,
                 )
-              : (this.Bt.Rt([e]), this.yg(t, h))
-            : r$1.info(
+              : (this.ws.L([e]), this.yg(t, r))
+            : E$1.info(
                 `Not displaying trigger ${t.id} because display time fell outside of the acceptable time window.`,
               ));
       },
-      o = () => {
+      n = () => {
         this.fg();
-        const n = h.pop();
-        if (null != n)
-          if ((this.Tg(n, i, s, e, h), n.dd(i))) {
-            let t = `Server aborted in-app message display, but the timeout on fallback trigger ${n.id} has already elapsed.`;
-            h.length > 0 && (t += " Continuing to fall back."), r$1.info(t), o();
+        const h = r.pop();
+        if (null != h)
+          if ((this.Tg(h, i, s, e, r), h.Bd(i))) {
+            let t = `Server aborted in-app message display, but the timeout on fallback trigger ${h.id} has already elapsed.`;
+            r.length > 0 && (t += " Continuing to fall back."), E$1.info(t), n();
           } else {
-            r$1.info(
-              `Server aborted in-app message display. Falling back to lower priority ${n.type} trigger action ${t.id}.`,
+            E$1.info(
+              `Server aborted in-app message display. Falling back to lower priority ${h.type} trigger action ${t.id}.`,
             );
-            const o = 1e3 * n.ed - (new Date().valueOf() - i);
-            o > 0
+            const n = 1e3 * h.Ed - (new Date().valueOf() - i);
+            n > 0
               ? this.eg.push(
                   window.setTimeout(() => {
-                    this.cg(n, i, s, e, h);
-                  }, o),
+                    this.cg(h, i, s, e, r);
+                  }, n),
                 )
-              : this.cg(n, i, s, e, h);
+              : this.cg(h, i, s, e, r);
           }
       };
-    let l, a, g;
+    let o, l, a;
     switch (t.type) {
-      case gt.Er._r:
-        if (((l = newInAppMessageFromJson(t.data)), null == l)) {
-          r$1.error(
+      case pt.Ln.Kn:
+        if (((o = newInAppMessageFromJson(t.data)), null == o)) {
+          E$1.error(
             `Could not parse trigger data for trigger ${t.id}, ignoring.`,
           );
           break;
         }
-        if (((a = this.ig.Qi(l)), a)) {
-          r$1.error(a), o();
+        if (((l = this.ig.xn(o)), l)) {
+          E$1.error(l), n();
           break;
         }
-        n(l);
+        h(o);
         break;
-      case gt.Er.md:
-        if (((g = wt.fromJson(t.data, n, o, i, t.Or || 0)), null == g)) {
-          r$1.error(
+      case pt.Ln.Cd:
+        if (((a = wt.fromJson(t.data, h, n, i, t.Vn || 0)), null == a)) {
+          E$1.error(
             `Could not parse trigger data for trigger ${t.id}, ignoring.`,
           );
           break;
         }
-        this.ig.Zi(g, s, e);
+        this.ig.Fn(a, s, e);
         break;
       default:
-        r$1.error(`Trigger ${t.id} was of unexpected type ${t.type}, ignoring.`);
+        E$1.error(`Trigger ${t.id} was of unexpected type ${t.type}, ignoring.`);
     }
   }
-  fe(t, i = null, s) {
-    if (!validateValueIsFromEnum(tt, t, "Cannot fire trigger action.", "TriggerEvents")) return;
-    if (this.Ui && this.Ui.Uu())
+  he(t, i = null, s) {
+    if (!validateValueIsFromEnum(ot, t, "Cannot fire trigger action.", "TriggerEvents")) return;
+    if (this.Ru && this.Ru.vd())
       return (
-        r$1.info(
+        E$1.info(
           "Trigger sync is currently in progress, awaiting sync completion before firing trigger event.",
         ),
         void this.sg.push(arguments)
       );
     this.bg();
     const e = new Date().valueOf(),
-      h = e - (this.hg || 0);
-    let n = !0,
-      o = !0;
-    const l = [];
+      r = e - (this.hg || 0);
+    let h = !0,
+      n = !0;
+    const o = [];
     for (let s = 0; s < this.triggers.length; s++) {
       const r = this.triggers[s],
-        h = e + 1e3 * r.ed;
+        l = e + 1e3 * r.Ed;
       if (
-        r.nd(h) &&
+        r.xd(l) &&
         (null == r.startTime || r.startTime.valueOf() <= e) &&
         (null == r.endTime || r.endTime.valueOf() >= e)
       ) {
         let s = !1;
-        for (let e = 0; e < r.sd.length; e++)
-          if (r.sd[e].sc(t, i)) {
+        for (let e = 0; e < r.Pd.length; e++)
+          if (r.Pd[e].km(t, i)) {
             s = !0;
             break;
           }
-        s && ((n = !1), this.wg(r, h, t) && ((o = !1), l.push(r)));
+        s && ((h = !1), this.wg(r, l, t) && ((n = !1), o.push(r)));
       }
     }
-    if (n)
-      return void r$1.info(
+    if (h)
+      return void E$1.info(
         `Trigger event ${t} did not match any trigger conditions.`,
       );
-    if (o)
-      return void r$1.info(
+    if (n)
+      return void E$1.info(
         `Ignoring ${t} trigger event because a trigger was displayed ${
-          h / 1e3
+          r / 1e3
         }s ago.`,
       );
-    l.sort((t, i) => t.priority - i.priority);
-    const a = l.pop();
-    null != a &&
-      (r$1.info(
-        `Firing ${a.type} trigger action ${a.id} from trigger event ${t}.`,
+    o.sort((t, i) => t.priority - i.priority);
+    const l = o.pop();
+    null != l &&
+      (E$1.info(
+        `Firing ${l.type} trigger action ${l.id} from trigger event ${t}.`,
       ),
-      this.Tg(a, e, t, s, l),
-      0 === a.ed
-        ? this.cg(a, e, t, s, l)
+      this.Tg(l, e, t, s, o),
+      0 === l.Ed
+        ? this.cg(l, e, t, s, o)
         : this.eg.push(
             window.setTimeout(() => {
-              this.cg(a, e, t, s, l);
-            }, 1e3 * a.ed),
+              this.cg(l, e, t, s, o);
+            }, 1e3 * l.Ed),
           ));
   }
   changeUser(t = !1) {
-    if (((this.triggers = []), this.u && this.u.ii(STORAGE_KEYS.C.rE), !t)) {
+    if (((this.triggers = []), this.B && this.B.zt(STORAGE_KEYS.ft.oE), !t)) {
       (this.sg = []), (this.hg = null), (this.og = {}), (this.ng = {});
       for (let t = 0; t < this.eg.length; t++) clearTimeout(this.eg[t]);
       (this.eg = []),
-        this.u && (this.u.ii(STORAGE_KEYS.C.iE), this.u.ii(STORAGE_KEYS.C.aE), this.u.ii(STORAGE_KEYS.C.EE));
+        this.B && (this.B.zt(STORAGE_KEYS.ft.iE), this.B.zt(STORAGE_KEYS.ft.aE), this.B.zt(STORAGE_KEYS.ft.EE));
     }
   }
   clearData() {
@@ -6898,562 +7206,1260 @@ class gr extends y {
   }
   wg(t, i, s) {
     if (null == this.hg) return !0;
-    if (s === tt.kt)
+    if (s === ot.qs)
       return (
-        r$1.info(
+        E$1.info(
           "Ignoring minimum interval between trigger because it is a test type.",
         ),
         !0
       );
-    let e = t.hd;
+    let e = t._d;
     return null == e && (e = this.tg), i - this.hg >= 1e3 * e;
   }
-  Tg(t, i, s, e, r) {
+  Tg(t, i, e, r, h) {
     this.fg(), t.id && (this.ng[t.id] = this.ng[t.id] || []);
-    const h = {};
-    let n;
-    (h.Nr = i), (h.ug = s), null != e && (n = e.Y()), (h.dg = n);
+    const n = {};
+    let o;
+    (n.Un = i), (n.ug = e), null != r && (o = r.gt()), (n.dg = o);
     const l = [];
-    for (const t of r) t.id && l.push(t.id);
-    (h.pg = l),
-      t.id && this.ng[t.id].push(h),
-      this.u && this.u.I(STORAGE_KEYS.C.EE, this.ng);
+    for (const t of h) t.id && l.push(t.id);
+    (n.pg = l),
+      t.id && this.ng[t.id].push(n),
+      this.B && this.B.bt(STORAGE_KEYS.ft.EE, this.ng);
   }
   yg(t, i) {
     this.fg(),
-      t.ad(i),
+      t.zd(i),
       (this.hg = i),
       t.id && (this.og[t.id] = i),
-      this.u && (this.u.I(STORAGE_KEYS.C.iE, i), this.u.I(STORAGE_KEYS.C.aE, this.og));
+      this.B && (this.B.bt(STORAGE_KEYS.ft.iE, i), this.B.bt(STORAGE_KEYS.ft.aE, this.og));
   }
 }
 
 const TriggersProviderFactory = {
-  t: !1,
+  i: !1,
   provider: null,
-  rr: () => (
-    TriggersProviderFactory.o(),
+  o: () => (
+    TriggersProviderFactory.t(),
     TriggersProviderFactory.provider || TriggersProviderFactory.rg(),
     TriggersProviderFactory.provider
   ),
   rg: () => {
     if (!TriggersProviderFactory.provider) {
-      const r = e.nn(L.Oo);
+      const i = r.re(D.Xh);
       (TriggersProviderFactory.provider = new gr(
-        null != r ? r : 30,
-        se$1.m().Ze(),
-        e.l(),
-        e.cr(),
-        se$1.m(),
+        null != i ? i : 30,
+        je$1.ra().An(),
+        r.p(),
+        r.nn(),
+        je$1.ra(),
       )),
-        e.ar(TriggersProviderFactory.provider);
+        r.v(TriggersProviderFactory.provider);
     }
   },
-  o: () => {
-    TriggersProviderFactory.t ||
+  t: () => {
+    TriggersProviderFactory.i ||
       (TriggersProviderFactory.rg(),
-      e.g(TriggersProviderFactory),
-      (TriggersProviderFactory.t = !0));
+      r.g(TriggersProviderFactory),
+      (TriggersProviderFactory.i = !0));
   },
   destroy: () => {
-    (TriggersProviderFactory.provider = null), (TriggersProviderFactory.t = !1);
+    (TriggersProviderFactory.provider = null), (TriggersProviderFactory.i = !1);
   },
 };
 
-class ti {
-  constructor(t, i, s, l, h) {
-    (this.endpoint = t),
-      (this.Vn = i),
-      (this.publicKey = s),
-      (this.Vl = l),
-      (this.cl = h),
-      (this.endpoint = t || null),
-      (this.Vn = i || null),
-      (this.publicKey = s || null),
-      (this.Vl = l || null),
-      (this.cl = h || null);
+const MAX_RETRIES = 5;
+function buildSseUrl(t, e, n, o, r) {
+  const c = /^https?:\/\//i.test(t) ? t : `https://${t}`;
+  let p = `mite=${encodeURIComponent(e)}&attempts=${n}`;
+  return (
+    o && (p += `&auth=${encodeURIComponent(o)}`),
+    r && (p += `&rcs=${encodeURIComponent(r)}`),
+    `${c}/sse?${p}`
+  );
+}
+
+const DUST_SHARED_WORKER_CODE =
+  '\n"use strict";\nconst workerSelf = self;\nlet eventSource = null;\nlet currentConfig = null;\nlet retryCount = 0;\nlet retryTimeoutId = null;\nlet connectionInProgress = false;\nconst maxRetries = 5;\nconst connectedPorts = new Map();\nlet lastSleepMs = null;\nlet currentRcs = null;\nlet ttlTimeoutId = null;\nlet leaderPortId = null;\nlet ddrTimeoutId = null;\nconst fn = {\n    startConnection: null,\n    handleMessage: null,\n};\nfunction broadcast(message) {\n    connectedPorts.forEach((portInfo, portId) => {\n        try {\n            portInfo.port.postMessage(message);\n        }\n        catch (_a) {\n            connectedPorts.delete(portId);\n        }\n    });\n}\nfunction randomInclusive(min, max) {\n    return Math.floor(Math.random() * (max - min + 1)) + min;\n}\nfunction electLeader() {\n    if (leaderPortId && connectedPorts.has(leaderPortId)) {\n        return;\n    }\n    const firstPortId = connectedPorts.keys().next().value;\n    leaderPortId = firstPortId || null;\n    if (leaderPortId) {\n        console.log("[Braze Real-Time] Elected leader port:", leaderPortId);\n    }\n}\nfunction promoteToLeader(portId) {\n    if (connectedPorts.has(portId) && leaderPortId !== portId) {\n        leaderPortId = portId;\n        console.log("[Braze Real-Time] Promoted to leader (tab became active):", portId);\n    }\n}\nfunction sendToLeader(message) {\n    electLeader();\n    if (!leaderPortId) {\n        console.warn("[Braze Real-Time] No leader to send message to");\n        return;\n    }\n    const leader = connectedPorts.get(leaderPortId);\n    if (leader) {\n        try {\n            leader.port.postMessage(message);\n        }\n        catch (_a) {\n            connectedPorts.delete(leaderPortId);\n            leaderPortId = null;\n            sendToLeader(message);\n        }\n    }\n}\nfunction closeConnection() {\n    connectionInProgress = false;\n    if (retryTimeoutId !== null) {\n        clearTimeout(retryTimeoutId);\n        retryTimeoutId = null;\n    }\n    if (ttlTimeoutId !== null) {\n        clearTimeout(ttlTimeoutId);\n        ttlTimeoutId = null;\n    }\n    if (ddrTimeoutId !== null) {\n        clearTimeout(ddrTimeoutId);\n        ddrTimeoutId = null;\n    }\n    if (eventSource) {\n        eventSource.close();\n        eventSource = null;\n        broadcast({ type: "disconnected" });\n    }\n}\nfunction retryWithBackoff() {\n    if (!currentConfig) {\n        return;\n    }\n    retryCount++;\n    const { minSleepMs, maxSleepMs, scaleFactor } = currentConfig.backoff;\n    let previousSleepMs = lastSleepMs;\n    if (previousSleepMs == null || previousSleepMs < minSleepMs) {\n        previousSleepMs = minSleepMs;\n    }\n    const backoffMs = Math.min(maxSleepMs, randomInclusive(minSleepMs, previousSleepMs * scaleFactor));\n    lastSleepMs = backoffMs;\n    console.log("[Braze Real-Time] Retrying in " + backoffMs + "ms (attempt " + retryCount + "/" + maxRetries + ")");\n    retryTimeoutId = setTimeout(function () {\n        retryTimeoutId = null;\n        fn.startConnection();\n    }, backoffMs);\n}\nfunction startConnection(oldEventSourceToClose) {\n    if (!currentConfig) {\n        return;\n    }\n    if (eventSource && !oldEventSourceToClose) {\n        console.warn("[Braze Real-Time] Connection already exists");\n        return;\n    }\n    if (connectionInProgress && !oldEventSourceToClose) {\n        console.warn("[Braze Real-Time] Connection attempt already in progress");\n        return;\n    }\n    connectionInProgress = true;\n    const { dustHost, mite, auth } = currentConfig;\n    const dustHostWithScheme = /^https?:\\/\\//i.test(dustHost) ? dustHost : "https://" + dustHost;\n    let queryString = "mite=" + encodeURIComponent(mite) + "&attempts=" + retryCount;\n    if (auth) {\n        queryString += "&auth=" + encodeURIComponent(auth);\n    }\n    if (currentRcs) {\n        queryString += "&rcs=" + encodeURIComponent(currentRcs);\n    }\n    const subscribeUrl = dustHostWithScheme + "/sse?" + queryString;\n    try {\n        const newEventSource = new EventSource(subscribeUrl);\n        newEventSource.onopen = function () {\n            if (oldEventSourceToClose) {\n                console.log("[Braze Real-Time] Gapless reconnection: new connection established, closing old connection");\n                oldEventSourceToClose.close();\n            }\n            else {\n                console.log("[Braze Real-Time] Connection established");\n            }\n            eventSource = newEventSource;\n            connectionInProgress = false;\n            retryCount = 0;\n            lastSleepMs = null;\n            broadcast({ type: "connected" });\n        };\n        newEventSource.addEventListener("msg", function (event) {\n            fn.handleMessage(event.data);\n        });\n        newEventSource.onerror = function () {\n            const readyState = newEventSource ? newEventSource.readyState : -1;\n            if (readyState === 0) {\n                console.log("[Braze Real-Time] Failed to connect");\n            }\n            else {\n                console.log("[Braze Real-Time] Connection lost");\n            }\n            if (oldEventSourceToClose && eventSource !== newEventSource) {\n                console.log("[Braze Real-Time] Gapless reconnection failed, keeping old connection");\n                newEventSource.close();\n                connectionInProgress = false;\n                if (retryCount < maxRetries) {\n                    retryWithBackoff();\n                }\n                return;\n            }\n            closeConnection();\n            if (retryCount < maxRetries) {\n                retryWithBackoff();\n            }\n            else {\n                console.error("[Braze Real-Time] Max retries reached");\n                broadcast({ type: "error", error: "Max retry attempts reached" });\n            }\n        };\n    }\n    catch (error) {\n        connectionInProgress = false;\n        console.error("[Braze Real-Time] Failed to create EventSource:", error);\n        broadcast({ type: "error", error: String(error) });\n    }\n}\nfunction handleTtlMessage(tMs, rcs) {\n    if (typeof tMs !== "number") {\n        return;\n    }\n    if (typeof rcs === "string") {\n        currentRcs = rcs;\n    }\n    console.log("[Braze Real-Time] TTL set to " + tMs + "ms, will perform gapless reconnection when expired");\n    if (ttlTimeoutId !== null) {\n        clearTimeout(ttlTimeoutId);\n    }\n    ttlTimeoutId = setTimeout(function () {\n        ttlTimeoutId = null;\n        console.log("[Braze Real-Time] TTL expired, performing gapless reconnection");\n        startConnection(eventSource || undefined);\n    }, tMs);\n}\nfunction handleDdrMessage(rMs, reason) {\n    if (typeof rMs !== "number") {\n        return;\n    }\n    const jitter = Math.random() * rMs * 0.3;\n    const waitMs = Math.round(rMs + jitter);\n    const reasonStr = reason ? " (" + reason + ")" : "";\n    console.log("[Braze Real-Time] Admin requested disconnect" + reasonStr + ", reconnecting in " + waitMs + "ms");\n    if (ddrTimeoutId !== null) {\n        clearTimeout(ddrTimeoutId);\n    }\n    closeConnection();\n    ddrTimeoutId = setTimeout(function () {\n        ddrTimeoutId = null;\n        fn.startConnection();\n    }, waitMs);\n}\nfunction handleMessage(data) {\n    try {\n        const message = JSON.parse(data);\n        if (!message.type) {\n            console.warn("[Braze Real-Time] Message without type:", message);\n            return;\n        }\n        if (message.type === "ttl" && message.body) {\n            handleTtlMessage(message.body.t_ms, message.body.rcs);\n            return;\n        }\n        if (message.type === "ddr" && message.body) {\n            handleDdrMessage(message.body.r_ms, message.body.e);\n            return;\n        }\n        console.log("[Braze Real-Time] Routing \'" + message.type + "\' message to leader");\n        sendToLeader({ type: "message", data: message });\n    }\n    catch (error) {\n        console.warn("[Braze Real-Time] Failed to parse message:", error);\n    }\n}\nfn.startConnection = startConnection;\nfn.handleMessage = handleMessage;\nfunction handlePortMessage(port, portId, message) {\n    switch (message.type) {\n        case "connect":\n            if (currentConfig &&\n                (currentConfig.mite !== message.config.mite || currentConfig.dustHost !== message.config.dustHost)) {\n                console.log("[Braze Real-Time] Config changed, reconnecting");\n                closeConnection();\n                retryCount = 0;\n                lastSleepMs = null;\n                currentRcs = null;\n            }\n            currentConfig = message.config;\n            electLeader();\n            if (!eventSource && !connectionInProgress) {\n                startConnection();\n            }\n            else if (eventSource) {\n                port.postMessage({ type: "connected" });\n            }\n            break;\n        case "disconnect":\n            connectedPorts.delete(portId);\n            if (portId === leaderPortId) {\n                leaderPortId = null;\n                electLeader();\n            }\n            if (connectedPorts.size === 0) {\n                console.log("[Braze Real-Time] No more ports, closing connection");\n                closeConnection();\n                currentConfig = null;\n                currentRcs = null;\n                leaderPortId = null;\n            }\n            break;\n        case "tab_active":\n            promoteToLeader(portId);\n            break;\n        case "ping":\n            port.postMessage({ type: "pong" });\n            break;\n        default:\n            console.warn("[Braze Real-Time] Unknown message type:", message.type);\n    }\n}\nworkerSelf.onconnect = function (event) {\n    const port = event.ports[0];\n    const portId = "port-" + Date.now() + "-" + Math.random().toString(36).substr(2, 9);\n    connectedPorts.set(portId, { port: port });\n    port.onmessage = function (messageEvent) {\n        try {\n            handlePortMessage(port, portId, messageEvent.data);\n        }\n        catch (error) {\n            console.error("[Braze Real-Time] Error handling message:", error);\n        }\n    };\n    port.onmessageerror = function () {\n        console.warn("[Braze Real-Time] Message error from port:", portId);\n        connectedPorts.delete(portId);\n    };\n    port.start();\n};\n';
+
+function isSharedWorkerSupported() {
+  return "undefined" != typeof SharedWorker;
+}
+class DustWorkerBridge {
+  constructor(i) {
+    (this.Wr = null),
+      (this.Lr = null),
+      (this.isConnected = !1),
+      (this.Ir = null),
+      (this.Mr = null),
+      (this.we = i.we),
+      (this.ke = i.ke),
+      (this.Re = i.Re),
+      (this.Me = i.Me);
   }
-  Y() {
-    return {
-      e: this.endpoint,
-      c: this.Vn,
-      p: this.publicKey,
-      u: this.Vl,
-      v: this.cl,
-    };
+  initialize() {
+    if (!isSharedWorkerSupported())
+      return (
+        E$1.info("SharedWorker not supported, will use direct connection"), !1
+      );
+    try {
+      const i = new Blob([DUST_SHARED_WORKER_CODE], { type: "application/javascript" });
+      return (
+        (this.Lr = URL.createObjectURL(i)),
+        (this.Wr = new SharedWorker(this.Lr, { name: "braze-dust-worker" })),
+        (this.Wr.port.onmessage = (i) => {
+          this.Br(i.data);
+        }),
+        (this.Wr.port.onmessageerror = () => {
+          E$1.warn("Message error from real-time messaging worker");
+        }),
+        (this.Wr.onerror = (i) => {
+          var e;
+          E$1.error(
+            `Real-time messaging worker error: ${i.message || "unknown error"}`,
+          ),
+            null === (e = this.Me) ||
+              void 0 === e ||
+              e.call(this, "SharedWorker error");
+        }),
+        this.Wr.port.start(),
+        this.Ur(),
+        this.Vr(),
+        E$1.info("Real-time messaging worker initialized"),
+        !0
+      );
+    } catch (i) {
+      return (
+        E$1.error(
+          `Failed to create real-time messaging worker: ${
+            i instanceof Error ? i.message : String(i)
+          }`,
+        ),
+        this.Er(),
+        !1
+      );
+    }
   }
-  static qn(t) {
-    return new ti(t.e, rehydrateDateAfterJsonization(t.c), t.p, t.u, t.v);
+  Br(i) {
+    var e, t, s;
+    switch (i.type) {
+      case "connected":
+        E$1.info("Real-time messaging connection established via SharedWorker"),
+          (this.isConnected = !0),
+          null === (e = this.ke) || void 0 === e || e.call(this);
+        break;
+      case "disconnected":
+        E$1.info("Real-time messaging connection closed via SharedWorker"),
+          (this.isConnected = !1),
+          null === (t = this.Re) || void 0 === t || t.call(this);
+        break;
+      case "message":
+        this.we(i.data);
+        break;
+      case "error":
+        E$1.error(`Real-time messaging error: ${i.error}`),
+          null === (s = this.Me) || void 0 === s || s.call(this, i.error);
+    }
+  }
+  Ur() {
+    this.Ir = window.setInterval(() => {
+      this.Wr && this._r({ type: "ping" });
+    }, 3e4);
+  }
+  qr() {
+    null !== this.Ir && (window.clearInterval(this.Ir), (this.Ir = null));
+  }
+  Vr() {
+    (this.Mr = () => {
+      "visible" === document.visibilityState &&
+        this.Wr &&
+        this._r({ type: "tab_active" });
+    }),
+      document.addEventListener("visibilitychange", this.Mr);
+  }
+  Ar() {
+    this.Mr &&
+      (document.removeEventListener("visibilitychange", this.Mr),
+      (this.Mr = null));
+  }
+  _r(i) {
+    this.Wr && this.Wr.port.postMessage(i);
+  }
+  connect(i) {
+    this.Wr
+      ? (this._r({ type: "connect", pn: i }),
+        E$1.info("Connecting to real-time messaging"))
+      : E$1.error("Cannot connect: real-time messaging worker not initialized");
+  }
+  disconnect() {
+    this.Wr &&
+      (this._r({ type: "disconnect" }),
+      (this.isConnected = !1),
+      E$1.info("Disconnecting from real-time messaging"));
+  }
+  Ie() {
+    return this.isConnected;
+  }
+  isInitialized() {
+    return null !== this.Wr;
+  }
+  Er() {
+    this.qr(),
+      this.Ar(),
+      this.Wr && (this.Wr.port.close(), (this.Wr = null)),
+      this.Lr && (URL.revokeObjectURL(this.Lr), (this.Lr = null)),
+      (this.isConnected = !1);
+  }
+  destroy() {
+    this.disconnect(),
+      this.Er(),
+      E$1.info("Real-time messaging worker destroyed");
   }
 }
 
-class kt {
+class tr extends t {
+  constructor(i, t, s, e, n = !0) {
+    super(),
+      (this.j = i),
+      (this.B = t),
+      (this.h = s),
+      (this.j = i),
+      (this.B = t),
+      (this.h = s),
+      (this.mite = null),
+      (this.ki = null),
+      (this.yi = null),
+      (this.$i = null),
+      (this.Ri = e || null),
+      (this.Mi = null),
+      (this.xi = null),
+      (this.D = null),
+      (this.ji = 0),
+      (this.Wi = MAX_RETRIES),
+      (this.Fi = null),
+      (this.Ui = null),
+      (this.zi = !0),
+      (this.Bi = null),
+      (this.Gi = null),
+      (this.Pi = null),
+      (this.qi = null),
+      (this.Hi = !1),
+      (this.Ji = new Map()),
+      (this.Li = null),
+      (this.Oi = null),
+      (this.Ki = null),
+      (this.Qi = this.Vi(n)),
+      (this.Xi = !1),
+      (this.Yi = 0),
+      this.Zi();
+  }
+  Vi(i) {
+    return i
+      ? isSharedWorkerSupported()
+        ? "sharedworker"
+        : (E$1.info(
+            "SharedWorker not supported, using direct EventSource (multi-tab will gracefully degrade)",
+          ),
+          "direct")
+      : (E$1.info("Shared connection disabled, using direct EventSource"),
+        "direct");
+  }
+  _i() {
+    this.Ki = new DustWorkerBridge({
+      we: (i) => {
+        this.Se(i);
+      },
+      ke: () => {
+        this.ye();
+      },
+      Re: () => {},
+      Me: (i) => {
+        E$1.error(`Real-time messaging SharedWorker error: ${i}`);
+      },
+    });
+    this.Ki.initialize() ||
+      (E$1.info(
+        "SharedWorker initialization failed, falling back to direct EventSource",
+      ),
+      (this.Qi = "direct"),
+      (this.Ki = null));
+  }
+  ye() {
+    (this.ji = 0),
+      (this.Bi = null),
+      (this.zi = !0),
+      (this.Xi = !1),
+      (this.Yi = 0);
+  }
+  Se(i) {
+    if (!i.type)
+      return void E$1.warn(
+        `Received real-time message without type: ${JSON.stringify(i)}`,
+      );
+    const t = "sharedworker" === this.Qi ? "SharedWorker" : "Direct";
+    E$1.info(`Received real-time message of type '${i.type}' via ${t}`);
+    const s = this.Ji.get(i.type);
+    if (s && s.De() > 0)
+      try {
+        s.L(i);
+      } catch (t) {
+        E$1.error(
+          `Error invoking subscription for message type '${i.type}': ${t}`,
+        );
+      }
+    else E$1.info(`No subscribers for real-time message type '${i.type}'`);
+  }
+  We() {
+    return "sharedworker" === this.Qi;
+  }
+  Fe() {
+    return this.Qi;
+  }
+  Zi() {
+    if (this.B) {
+      const i = this.B.dt(STORAGE_KEYS.ft.Ue),
+        t = this.B.dt(STORAGE_KEYS.ft.Ne),
+        e = this.B.dt(STORAGE_KEYS.ft.Te),
+        n = this.B.dt(STORAGE_KEYS.ft.ze);
+      i && t
+        ? ((this.mite = i),
+          (this.ki = t),
+          (this.yi = e),
+          (this.$i = n),
+          E$1.info("Restored real-time messaging configuration from storage"))
+        : (i || t) &&
+          (E$1.warn(
+            "Incomplete real-time messaging configuration in storage, clearing",
+          ),
+          this.Ae());
+    }
+  }
+  Hr() {
+    this.Li ||
+      this.Oi ||
+      ((this.Li = this.Be("ddr", (i) => {
+        if (!i.body || "number" != typeof i.body.Ge) return;
+        const t = Math.random() * i.body.Ge * 0.3,
+          s = Math.round(i.body.Ge + t),
+          e = i.body.e ? ` (${i.body.e})` : "";
+        E$1.info(`Admin requested disconnect${e}, reconnecting in ${s}ms`),
+          this.Pe(),
+          setTimeout(() => this.qe(), s);
+      })),
+      (this.Oi = this.Be("ttl", (i) => {
+        if (!i.body || "number" != typeof i.body.He) return;
+        const t = i.body.He;
+        E$1.info(`Time to live set to ${t}ms, will reconnect when expired`),
+          "sharedworker" !== this.Qi &&
+            ("string" == typeof i.body.Je && (this.Mi = i.body.Je),
+            null !== this.Ui && window.clearTimeout(this.Ui),
+            (this.Ui = window.setTimeout(() => {
+              (this.Ui = null),
+                E$1.info("Time to live expired, performing gapless reconnection"),
+                this.Le();
+            }, t)));
+      })));
+  }
+  Oe() {
+    this.Gi ||
+      this.Pi ||
+      ((this.qi = () => {
+        (this.Hi = !0), (this.zi = !1);
+      }),
+      window.addEventListener("beforeunload", this.qi),
+      (this.Gi = () => {
+        var i;
+        this.Hi = !0;
+        (this.xi ||
+          (null === (i = this.Ki) || void 0 === i ? void 0 : i.Ie())) &&
+          (E$1.info("Page unloading, closing real-time connection gracefully"),
+          (this.zi = !1),
+          this.Pe());
+      }),
+      window.addEventListener("pagehide", this.Gi),
+      (this.Pi = (i) => {
+        var t;
+        const s =
+          this.xi || (null === (t = this.Ki) || void 0 === t ? void 0 : t.Ie());
+        i.persisted &&
+          this.Ke() &&
+          !s &&
+          (E$1.info("Page restored from bfcache, reconnecting"),
+          (this.Hi = !1),
+          this.ye(),
+          this.qe());
+      }),
+      window.addEventListener("pageshow", this.Pi));
+  }
+  St() {
+    return this.D;
+  }
+  wt(i) {
+    this.D = i;
+  }
+  Be(i, t) {
+    if ("function" != typeof t) return null;
+    let s = this.Ji.get(i);
+    return s || ((s = new m()), this.Ji.set(i, s), r.q(s)), s.Rt(t);
+  }
+  Qe(i, t) {
+    const s = this.Ji.get(i);
+    s && s.removeSubscription(t);
+  }
+  Ke() {
+    return Boolean(this.mite && this.ki);
+  }
+  Ve() {
+    if (!this.$i) return !1;
+    return Math.floor(new Date().valueOf() / 1e3) >= this.$i;
+  }
+  Ae() {
+    (this.mite = null),
+      (this.ki = null),
+      (this.yi = null),
+      (this.$i = null),
+      (this.Mi = null),
+      this.B &&
+        (this.B.zt(STORAGE_KEYS.ft.Ue),
+        this.B.zt(STORAGE_KEYS.ft.Ne),
+        this.B.zt(STORAGE_KEYS.ft.Te),
+        this.B.zt(STORAGE_KEYS.ft.ze));
+  }
+  Xe(i, t) {
+    const e = () => {
+        "function" == typeof t && t();
+      },
+      n = this.j,
+      r = this.B;
+    if (!n || !r)
+      return (
+        E$1.error("NetworkManager or StorageManager not available"), void e()
+      );
+    if (!this.h || !this.h.Ye())
+      return (
+        E$1.info("Real-time messaging is not enabled, skipping refresh"), void e()
+      );
+    this.Ke()
+      ? E$1.info("Refreshing real-time messaging configuration")
+      : E$1.info("Fetching initial real-time messaging configuration");
+    const o = n.$({}, !0),
+      a = n.A(o, h.H.Ze, !1),
+      c = new Date().valueOf();
+    h.K(r, h.H.Ze, c),
+      l.O({
+        url: `${n.V()}/dust/config`,
+        headers: a,
+        data: o,
+        W: (t) => {
+          if (!n.Y(o, t, a))
+            return (
+              E$1.error(
+                "Failed to validate server response for real-time messaging configuration",
+              ),
+              void e()
+            );
+          n.Z(),
+            t.mite && t.host
+              ? ((this.mite = t.mite),
+                (this.ki = t.host),
+                (this.yi = t.auth || null),
+                (this.$i = t.expiration || null),
+                E$1.info(
+                  "Received real-time messaging configuration from server",
+                ),
+                r.bt(STORAGE_KEYS.ft.Ue, t.mite),
+                r.bt(STORAGE_KEYS.ft.Ne, t.host),
+                t.auth ? r.bt(STORAGE_KEYS.ft.Te, t.auth) : r.zt(STORAGE_KEYS.ft.Te),
+                t.expiration ? r.bt(STORAGE_KEYS.ft.ze, t.expiration) : r.zt(STORAGE_KEYS.ft.ze),
+                this.qe(),
+                "function" == typeof i && i())
+              : (E$1.info(
+                  "Real-time messaging configuration not available - this SDK version may not be supported",
+                ),
+                this.Ae(),
+                e());
+        },
+        error: (i) => {
+          n._(i, "retrieving DUST config"), e();
+        },
+      });
+  }
+  qe() {
+    if (!this.h || !this.h.Ye()) return;
+    if (!this.Ke())
+      return void E$1.error(
+        "Cannot start real-time subscription without configuration",
+      );
+    if (this.Ve())
+      return (
+        E$1.info(
+          "Real-time messaging auth token has expired, refreshing configuration",
+        ),
+        void this.Xe(
+          () => {
+            this.qe();
+          },
+          () => {
+            E$1.error(
+              "Failed to refresh expired real-time messaging configuration",
+            );
+          },
+        )
+      );
+    const i = this.mite,
+      t = this.Ri || this.ki;
+    if (i && t)
+      switch (this.Qi) {
+        case "sharedworker":
+          this._e(i, t);
+          break;
+        case "direct":
+          this.xi &&
+            (E$1.info(
+              "Real-time connection already exists, closing before starting new subscription",
+            ),
+            this.Pe()),
+            this.sn();
+      }
+  }
+  en() {
+    const i = this.mite,
+      t = this.Ri || this.ki;
+    return i && t
+      ? buildSseUrl(t, i, this.ji, this.yi || void 0, this.Mi || void 0)
+      : null;
+  }
+  _e(i, t) {
+    var s, e, n;
+    if ((this.Ki || this._i(), !this.Ki))
+      return (
+        E$1.info(
+          "SharedWorker initialization failed, falling back to direct EventSource",
+        ),
+        (this.Qi = "direct"),
+        void this.on()
+      );
+    this.Ri && E$1.info(`Using custom real-time messaging host: ${this.Ri}`),
+      E$1.info("Starting real-time subscription via SharedWorker");
+    const r = (null === (s = this.h) || void 0 === s ? void 0 : s.st()) || REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
+      o = (null === (e = this.h) || void 0 === e ? void 0 : e.nt()) || REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT,
+      h = (null === (n = this.h) || void 0 === n ? void 0 : n.it()) || REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT;
+    this.Ki.connect({
+      mite: i,
+      ki: t,
+      auth: this.yi || void 0,
+      hn: { an: r, ln: o, cn: h },
+    });
+  }
+  on() {
+    this.xi &&
+      (E$1.info(
+        "Real-time connection already exists, closing before starting new subscription",
+      ),
+      this.un()),
+      this.sn();
+  }
+  sn(i) {
+    const t = this.en();
+    if (t) {
+      this.Ri && E$1.info(`Using custom real-time messaging host: ${this.Ri}`);
+      try {
+        const s = new EventSource(t);
+        (s.onopen = () => {
+          i
+            ? (E$1.info(
+                "Gapless reconnection: new connection established, closing old connection",
+              ),
+              i.close())
+            : E$1.info("Real-time messaging connection established"),
+            (this.xi = s),
+            (this.ji = 0),
+            (this.Bi = null),
+            (this.zi = !0),
+            (this.Xi = !0);
+        }),
+          s.addEventListener("msg", (i) => {
+            this.dn(i.data);
+          }),
+          (s.onerror = () => {
+            const t = s.readyState;
+            return (
+              this.Hi ||
+                (0 === t
+                  ? E$1.info("Real-time messaging failed to connect")
+                  : E$1.info("Real-time messaging connection lost")),
+              i && this.xi !== s
+                ? (E$1.info(
+                    "Gapless reconnection failed, keeping old connection",
+                  ),
+                  s.close(),
+                  void (this.zi && this.ji < this.Wi && this.gn()))
+                : (this.un(),
+                  this.Xi && (this.Yi++, this.Yi > 1)
+                    ? (E$1.info(
+                        "Real-time messaging connection lost twice after successful connect (likely multi-tab conflict), yielding to other tab",
+                      ),
+                      void (this.zi = !1))
+                    : void (this.zi && this.ji < this.Wi
+                        ? this.gn()
+                        : (this.ji >= this.Wi &&
+                            E$1.error(
+                              `Max retry attempts (${this.Wi}) reached for real-time messaging, giving up for current session`,
+                            ),
+                          (this.zi = !1))))
+            );
+          });
+      } catch (i) {
+        E$1.error(
+          `Failed to create real-time messaging connection: ${
+            i instanceof Error ? i.message : String(i)
+          }`,
+        );
+      }
+    }
+  }
+  gn() {
+    var i, t, s;
+    this.ji++;
+    const e = (null === (i = this.h) || void 0 === i ? void 0 : i.st()) || REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
+      n = (null === (t = this.h) || void 0 === t ? void 0 : t.it()) || REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
+      r = (null === (s = this.h) || void 0 === s ? void 0 : s.nt()) || REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
+    let o = this.Bi;
+    (null == o || o < e) && (o = e);
+    const h = Math.min(r, randomInclusive(e, o * n));
+    (this.Bi = h),
+      E$1.info(
+        `Retrying real-time messaging connection in ${h}ms (attempt ${this.ji}/${this.Wi})`,
+      ),
+      (this.Fi = window.setTimeout(() => {
+        (this.Fi = null), this.qe();
+      }, h));
+  }
+  Le() {
+    if (this.Ke()) {
+      if (this.Ve())
+        return (
+          E$1.info(
+            "Auth token expired during gapless reconnection, falling back to regular reconnection",
+          ),
+          this.Pe(),
+          void this.qe()
+        );
+      null !== this.Ui && (window.clearTimeout(this.Ui), (this.Ui = null)),
+        this.sn(this.xi || void 0);
+    } else E$1.error("Cannot perform gapless reconnection without configuration");
+  }
+  Pe() {
+    var i;
+    switch (this.Qi) {
+      case "sharedworker":
+        null === (i = this.Ki) || void 0 === i || i.disconnect();
+        break;
+      case "direct":
+        this.un();
+    }
+  }
+  un() {
+    null !== this.Fi && (window.clearTimeout(this.Fi), (this.Fi = null)),
+      null !== this.Ui && (window.clearTimeout(this.Ui), (this.Ui = null)),
+      this.xi &&
+        (this.xi.close(),
+        (this.xi = null),
+        E$1.info("Real-time messaging connection closed"));
+  }
+  dn(i) {
+    try {
+      const t = JSON.parse(i);
+      this.Se(t);
+    } catch (i) {
+      E$1.warn(
+        `Failed to parse real-time message: ${
+          i instanceof Error ? i.message : String(i)
+        }`,
+      );
+    }
+  }
+  changeUser(i = !1) {
+    this.Pe(),
+      i ||
+        (this.Ke() &&
+          E$1.info(
+            "Clearing cached real-time messaging configuration for user change",
+          ),
+        this.Ae()),
+      this.ye();
+  }
+  clearData(i = !1) {
+    (this.zi = !1),
+      this.Pe(),
+      i &&
+        (this.Ke() &&
+          E$1.info(
+            "Clearing cached real-time messaging configuration (wipeData)",
+          ),
+        this.Ae()),
+      this.ye();
+  }
+  destroy() {
+    (this.zi = !1),
+      this.Pe(),
+      this.Ae(),
+      this.Ki && (this.Ki.destroy(), (this.Ki = null)),
+      this.Li && (this.Qe("ddr", this.Li), (this.Li = null)),
+      this.Oi && (this.Qe("ttl", this.Oi), (this.Oi = null)),
+      this.qi &&
+        (window.removeEventListener("beforeunload", this.qi), (this.qi = null)),
+      this.Gi &&
+        (window.removeEventListener("pagehide", this.Gi), (this.Gi = null)),
+      this.Pi &&
+        (window.removeEventListener("pageshow", this.Pi), (this.Pi = null)),
+      this.D && (r.removeSubscription(this.D), (this.D = null));
+  }
+}
+
+const nr = {
+  i: !1,
+  provider: null,
+  o: () => {
+    if ((nr.t(), !nr.provider)) {
+      const t = r.re("dustHost");
+      (nr.provider = new tr(r.m(), r.p(), r.l(), t)),
+        r.v(nr.provider),
+        nr.provider.Hr();
+    }
+    return nr.provider;
+  },
+  t: () => {
+    nr.i || (r.g(nr), (nr.i = !0));
+  },
+  destroy: () => {
+    nr.provider && nr.provider.destroy(), (nr.provider = null), (nr.i = !1);
+  },
+};
+
+function subscribeToDust() {
+  const t = r.l(),
+    n = r.nn();
+  if (!t || !n) return null;
+  const o = nr.o(),
+    s = () => {
+      if (!o.St()) {
+        o.Oe();
+        const r = n.rn(() => {
+          t.Ye() && o.Xe();
+        });
+        return r && o.wt(r), o.Ke() && o.qe(), r;
+      }
+      return o.St();
+    };
+  return (
+    t.Tr(() => {
+      r.ao() && (t.Ye() ? (o.Xe(), s()) : (o.Pe(), o.Ke() && o.Ae()));
+    }),
+    t.Ye() ? s() : null
+  );
+}
+
+class oi {
+  constructor(t, i, s, l, h) {
+    (this.endpoint = t),
+      (this.Wu = i),
+      (this.publicKey = s),
+      (this.Yc = l),
+      (this.xc = h),
+      (this.endpoint = t || null),
+      (this.Wu = i || null),
+      (this.publicKey = s || null),
+      (this.Yc = l || null),
+      (this.xc = h || null);
+  }
+  gt() {
+    return {
+      e: this.endpoint,
+      c: this.Wu,
+      p: this.publicKey,
+      u: this.Yc,
+      v: this.xc,
+    };
+  }
+  static _u(t) {
+    return new oi(t.e, rehydrateDateAfterJsonization(t.c), t.p, t.u, t.v);
+  }
+}
+
+class bt {
   constructor(t, s) {
-    (this.qt = t), (this.u = s), (this.qt = t), (this.u = s);
+    (this.h = t), (this.B = s), (this.h = t), (this.B = s);
   }
   getUserId() {
-    const t = this.u.tu(STORAGE_KEYS.iu.su);
+    const t = this.B.$u(STORAGE_KEYS.Ou.Cu);
     if (null == t) return null;
-    let s = t.eu,
-      i = getByteLength(s);
-    if (i > User.lr) {
-      for (; i > User.lr; ) (s = s.slice(0, s.length - 1)), (i = getByteLength(s));
-      (t.eu = s), this.u.uu(STORAGE_KEYS.iu.su, t);
+    let i = t.Tu,
+      e = getByteLength(i);
+    if (e > User.mr) {
+      for (; e > User.mr; ) (i = i.slice(0, i.length - 1)), (e = getByteLength(i));
+      (t.Tu = i), this.B.Iu(STORAGE_KEYS.Ou.Cu, t);
     }
-    return s;
+    return i;
   }
-  ou(t) {
-    const s = null == this.getUserId();
-    this.u.uu(STORAGE_KEYS.iu.su, new _t(t)), s && this.u.ru(t);
+  Ju(t) {
+    const i = null == this.getUserId();
+    this.B.Iu(STORAGE_KEYS.Ou.Cu, new _t(t)), i && this.B.Lu(t);
   }
   setCustomUserAttribute(t, s) {
-    if (this.qt.hu(t))
+    if (this.h.qu(t))
       return (
-        r$1.info('Custom Attribute "' + t + '" is blocklisted, ignoring.'), !1
+        E$1.info('Custom Attribute "' + t + '" is blocklisted, ignoring.'), !1
       );
     const i = {};
-    return (i[t] = s), this.nu(User.lu, i, !0);
+    return (i[t] = s), this.zu(User.Bu, i, !0);
   }
-  nu(t, s, i = !1, e = !1) {
-    const u = this.u.mu(this.getUserId(), t, s);
+  zu(t, s, i = !1, e = !1) {
+    const u = this.B.Eu(this.getUserId(), t, s);
     let o = "",
-      h = t,
-      n = s;
+      r = t,
+      h = s;
     return (
       i &&
         ((o = " custom"),
         "object" == typeof s &&
-          ((h = Object.keys(s)[0]),
-          (n = s[h]),
-          "object" == typeof n && (n = JSON.stringify(n, null, 2)))),
-      !e && u && r$1.info(`Logged${o} attribute ${h} with value ${n}`),
+          ((r = Object.keys(s)[0]),
+          (h = s[r]),
+          "object" == typeof h && (h = JSON.stringify(h, null, 2)))),
+      !e && u && E$1.info(`Logged${o} attribute ${r} with value ${h}`),
       u
     );
   }
-  Pn(t, s, i, e, u) {
-    this.nu("push_token", t, !1, !0),
-      this.nu("custom_push_public_key", i, !1, !0),
-      this.nu("custom_push_user_auth", e, !1, !0),
-      this.nu("custom_push_vapid_public_key", u, !1, !0);
-    const h = A.ts.Zt,
-      n = new A(h, r$1),
-      l = new ti(t, s, i, e, u);
-    this.u.I(STORAGE_KEYS.C.In, l.Y()), n.setItem(h.hs.cu, h.ie, !0);
+  gu(t, i, e, u, o) {
+    this.zu("push_token", t, !1, !0),
+      this.zu("custom_push_public_key", e, !1, !0),
+      this.zu("custom_push_user_auth", u, !1, !0),
+      this.zu("custom_push_vapid_public_key", o, !1, !0);
+    const r = et.Us.Rs,
+      h = new et(r, E$1),
+      n = new oi(t, i, e, u, o);
+    this.B.bt(STORAGE_KEYS.ft.Uu, n.gt()), h.setItem(r.Fs.Fu, r.fe, !0);
   }
-  Sn(t) {
+  wu(t) {
     if (
-      (this.nu("push_token", null, !1, !0),
-      this.nu("custom_push_public_key", null, !1, !0),
-      this.nu("custom_push_user_auth", null, !1, !0),
-      this.nu("custom_push_vapid_public_key", null, !1, !0),
+      (this.zu("push_token", null, !1, !0),
+      this.zu("custom_push_public_key", null, !1, !0),
+      this.zu("custom_push_user_auth", null, !1, !0),
+      this.zu("custom_push_vapid_public_key", null, !1, !0),
       t)
     ) {
-      const t = A.ts.Zt,
-        s = new A(t, r$1);
-      this.u.I(STORAGE_KEYS.C.In, !1), s.setItem(t.hs.cu, t.ie, !1);
+      const t = et.Us.Rs,
+        i = new et(t, E$1);
+      this.B.bt(STORAGE_KEYS.ft.Uu, !1), i.setItem(t.Fs.Fu, t.fe, !1);
     }
   }
 }
 
-const L = {
-  Eo: "allowCrawlerActivity",
-  _o: "baseUrl",
-  Io: "noCookies",
-  So: "devicePropertyAllowlist",
-  Aa: "disablePushTokenMaintenance",
-  Ao: "enableLogging",
-  No: "enableSdkAuthentication",
-  qa: "manageServiceWorkerExternally",
-  Oo: "minimumIntervalBetweenTriggerActionsInSeconds",
-  Ro: "sessionTimeoutInSeconds",
-  Po: "appVersion",
-  Lo: "appVersionNumber",
-  Ma: "serviceWorkerLocation",
-  ka: "safariWebsitePushId",
-  zn: "localization",
-  bo: "contentSecurityNonce",
-  Do: "allowUserSuppliedJavascript",
-  jo: "inAppMessageZIndex",
-  ho: "openInAppMessagesInNewTab",
+const D = {
+  Ph: "allowCrawlerActivity",
+  Wh: "baseUrl",
+  Vh: "noCookies",
+  Kh: "devicePropertyAllowlist",
+  La: "disablePushTokenMaintenance",
+  $h: "enableLogging",
+  Yh: "enableSdkAuthentication",
+  Ka: "manageServiceWorkerExternally",
+  Xh: "minimumIntervalBetweenTriggerActionsInSeconds",
+  Zh: "sessionTimeoutInSeconds",
+  Qh: "appVersion",
+  Xa: "appVersionNumber",
+  Ga: "serviceWorkerLocation",
+  Ia: "safariWebsitePushId",
+  Wa: "localization",
+  er: "contentSecurityNonce",
+  te: "allowUserSuppliedJavascript",
+  $a: "inAppMessageZIndex",
+  Ja: "openInAppMessagesInNewTab",
   tn: "openCardsInNewTab",
-  en: "openNewsFeedCardsInNewTab",
-  Lh: "requireExplicitInAppMessageDismissal",
-  Mo: "doNotLoadFontAwesome",
-  Uo: "deviceId",
-  _a: "serviceWorkerScope",
-  Wo: "sdkFlavor",
+  Oh: "requireExplicitInAppMessageDismissal",
+  Za: "doNotLoadFontAwesome",
+  tl: "deviceId",
+  Ha: "serviceWorkerScope",
+  Ne: "dustHost",
+  il: "sdkFlavor",
 };
-class Vt {
+class qt {
   constructor() {
-    (this.rn = ""),
-      (this.Bo = ""),
-      (this.Vo = void 0),
-      (this.Ko = null),
-      (this.on = null),
-      (this.$t = null),
-      (this.Ui = null),
-      (this.qt = null),
-      (this.oi = null),
-      (this.u = null),
-      (this.yt = null),
-      (this.Go = ""),
+    (this.tu = ""),
+      (this.sl = ""),
+      (this.rl = void 0),
+      (this.hl = null),
+      (this.eu = null),
+      (this.j = null),
+      (this.Ru = null),
+      (this.h = null),
+      (this.C = null),
+      (this.B = null),
+      (this.vs = null),
+      (this.al = ""),
       (this.isInitialized = !1),
-      (this.$o = !1),
-      (this.qo = new T()),
-      (this.Jo = new T()),
+      (this.ul = !1),
+      (this.cl = new m()),
+      (this.fl = new m()),
       (this.options = {}),
-      (this.Yo = []),
-      (this.Ho = []),
-      (this._e = []),
-      (this.Bo = "5.5.0");
+      (this.ml = []),
+      (this.dl = []),
+      (this.jn = []),
+      (this.sl = "6.5.0");
   }
-  Xo(t) {
-    this.qo.Nt(t);
+  El(t) {
+    this.cl.Rt(t);
   }
-  Sh(t) {
-    this.Jo.Nt(t);
+  mh(t) {
+    this.fl.Rt(t);
   }
   initialize(t, i) {
-    if (this.so())
-      return r$1.info("Braze has already been initialized with an API key."), !0;
+    if (this.ao())
+      return E$1.info("Braze has already been initialized with an API key."), !0;
     this.options = i || {};
-    let s = this.nn(L.Ao);
-    const e = parseQueryStringKeyValues(WindowUtils.Zo());
+    let e = this.re(D.$h);
+    const r = parseQueryStringKeyValues(WindowUtils.gl());
     if (
-      (e && "true" === e.brazeLogging && (s = !0),
-      r$1.init(s),
-      r$1.info(
+      (r && "true" === r.brazeLogging && (e = !0),
+      E$1.init(e),
+      E$1.info(
         `Initialization Options: ${JSON.stringify(this.options, null, 2)}`,
       ),
       null == t || "" === t || "string" != typeof t)
     )
-      return r$1.error("Braze requires a valid API key to be initialized."), !1;
-    this.rn = t;
-    let n = this.nn(L._o);
-    if (null == n || "" === n || "string" != typeof n)
-      return r$1.error("Braze requires a valid baseUrl to be initialized."), !1;
-    !1 === /^https?:/.test(n) && (n = `https://${n}`);
-    const h = n;
+      return E$1.error("Braze requires a valid API key to be initialized."), !1;
+    this.tu = t;
+    let o = this.re(D.Wh);
+    if (null == o || "" === o || "string" != typeof o)
+      return E$1.error("Braze requires a valid baseUrl to be initialized."), !1;
+    !1 === /^https?:/.test(o) && (o = `https://${o}`);
+    const n = o;
     if (
-      ((n = document.createElement("a")),
-      (n.href = h),
-      "/" === n.pathname && (n = `${n}api/v3`),
-      (this.Go = n.toString()),
-      X.Qo && !this.nn(L.Eo))
+      ((o = document.createElement("a")),
+      (o.href = n),
+      "/" === o.pathname && (o = `${o}api/v3`),
+      (this.al = o.toString()),
+      ro.Il && !this.re(D.Ph))
     )
       return (
-        r$1.info("Ignoring activity from crawler bot " + navigator.userAgent),
-        (this.$o = !0),
+        E$1.info("Ignoring activity from crawler bot " + navigator.userAgent),
+        (this.ul = !0),
         !1
       );
-    const a = this.nn(L.Io) || !1;
+    const h = this.re(D.Vh) || !1;
     if (
-      ((this.u = Wt.Wh(t, a)), a && this.u.Vh(t), new Q.ee(null, !0).br(STORAGE_KEYS.se))
+      ((this.B = Kt._l(t, h)), h && this.B.Sl(t), new ee.le(null, !0).jr(STORAGE_KEYS.pe))
     )
       return (
-        r$1.info("Ignoring all activity due to previous opt out"),
-        (this.$o = !0),
+        E$1.info("Ignoring all activity due to previous opt out"),
+        (this.ul = !0),
         !1
       );
     for (const t of keys(this.options))
-      -1 === values(zt).indexOf(t) &&
-        r$1.warn(`Ignoring unknown initialization option '${t}'.`);
-    const l = ["mparticle", "wordpress", "tealium"];
-    if (null != this.nn(L.Wo)) {
-      const t = this.nn(L.Wo);
-      -1 !== l.indexOf(t)
-        ? (this.Vo = t)
-        : r$1.error("Invalid sdk flavor passed: " + t);
+      -1 === values($t).indexOf(t) &&
+        E$1.warn(`Ignoring unknown initialization option '${t}'.`);
+    const a = ["mparticle", "wordpress", "tealium"];
+    if (null != this.re(D.il)) {
+      const t = this.re(D.il);
+      -1 !== a.indexOf(t)
+        ? (this.rl = t)
+        : E$1.error("Invalid sdk flavor passed: " + t);
     }
-    let u = this.nn(zt.So);
-    if (null != u)
-      if (isArray(u)) {
+    let l = this.re($t.Kh);
+    if (null != l)
+      if (isArray(l)) {
         const t = [];
-        for (let i = 0; i < u.length; i++)
+        for (let i = 0; i < l.length; i++)
           validateValueIsFromEnum(
             DeviceProperties,
-            u[i],
+            l[i],
             "devicePropertyAllowlist contained an invalid value.",
             "DeviceProperties",
-          ) && t.push(u[i]);
-        u = t;
+          ) && t.push(l[i]);
+        l = t;
       } else
-        r$1.error(
+        E$1.error(
           "devicePropertyAllowlist must be an array. Defaulting to all properties.",
         ),
-          (u = null);
-    const c = this.nn(L.Uo);
-    if (c) {
-      const t = new _t(c);
-      this.u.uu(STORAGE_KEYS.iu.Uo, t);
+          (l = null);
+    const u = this.re(D.tl);
+    if (u) {
+      const t = new _t(u);
+      this.B.Iu(STORAGE_KEYS.Ou.tl, t);
     }
-    (this.on = new Ot(this.u, u)),
-      (this.qt = new Dt(this.u)),
-      (this.yt = new kt(this.qt, this.u)),
-      (this.oi = new Mt(this.u, this.yt, this.qt, this.nn(L.Ro)));
-    const f = new T();
+    (this.eu = new Ot(this.B, l)),
+      (this.h = new Bt(this.B)),
+      (this.vs = new bt(this.h, this.B)),
+      (this.C = new Vt(this.B, this.vs, this.h, this.re(D.Zh)));
+    const c = new m();
     return (
-      (this.Ko = new qt(this.u, this.nn(L.No), f)),
-      this.Ht(f),
-      (this.$t = new Pt(
-        this.on,
-        this.u,
-        this.Ko,
-        this.yt,
-        this.oi,
-        this.qt,
-        this.rn,
-        this.Go,
-        this.Bo,
-        this.Vo || "",
-        this.nn(L.Po),
-        this.nn(L.Lo),
+      (this.hl = new kt(this.B, this.re(D.Yh), c)),
+      this.q(c),
+      (this.j = new Mt(
+        this.eu,
+        this.B,
+        this.hl,
+        this.vs,
+        this.C,
+        this.h,
+        this.tu,
+        this.al,
+        this.sl,
+        this.rl || "",
+        this.re(D.Qh),
+        this.re(D.Xa),
       )),
-      (this.Ui = new Lt(
-        this.rn,
-        this.Go,
-        this.oi,
-        this.on,
-        this.yt,
-        this.qt,
-        this.u,
+      (this.Ru = new Wt(
+        this.tu,
+        this.al,
+        this.C,
+        this.eu,
+        this.vs,
+        this.h,
+        this.B,
         (t) => {
-          if (this.so()) for (const i of this.gr()) i.Ss(t);
+          if (this.ao()) for (const i of this.gr()) i.N(t);
         },
-        this.Ko,
-        this.$t,
+        this.hl,
+        this.j,
       )),
-      this.Ui.initialize(),
-      a || this.u.Kh(),
-      r$1.info(
-        `Initialized for the Braze backend at "${this.nn(
-          L._o,
-        )}" with API key "${this.rn}".`,
+      this.Ru.initialize(),
+      h || this.B.Al(),
+      E$1.info(
+        `Initialized for the Braze backend at "${this.re(
+          D.Wh,
+        )}" with API key "${this.tu}".`,
       ),
-      TriggersProviderFactory.o(),
-      this.qt.bi(() => {
+      TriggersProviderFactory.t(),
+      subscribeToDust(),
+      this.h.jo(() => {
         var t;
         this.isInitialized &&
-          (null === (t = this.qt) || void 0 === t ? void 0 : t.mi()) &&
+          (null === (t = this.h) || void 0 === t ? void 0 : t.Yr()) &&
           Promise.resolve().then(function () { return refreshFeatureFlags$1; }).then((t) => {
             if (!this.isInitialized) return;
             (0, t.default)();
           });
       }),
-      this.Ui.mr(() => {
+      this.Ru.rn(() => {
         var t;
         this.isInitialized &&
-          (null === (t = this.qt) || void 0 === t ? void 0 : t.mi()) &&
+          (null === (t = this.h) || void 0 === t ? void 0 : t.Yr()) &&
           Promise.resolve().then(function () { return refreshFeatureFlags$1; }).then((t) => {
             if (!this.isInitialized) return;
             (0, t.default)(void 0, void 0, !0);
           });
       }),
-      this.qo.Rt(this.options),
+      this.cl.L(this.options),
       (this.isInitialized = !0),
       window.dispatchEvent(new CustomEvent("braze.initialized")),
       !0
     );
   }
   destroy(t) {
-    if ((r$1.destroy(), this.so())) {
-      this.Jo.Rt(), this.Jo.removeAllSubscriptions();
-      for (const t of this.Yo) t.destroy();
-      this.Yo = [];
-      for (const t of this.Ho) t.clearData(!1);
-      (this.Ho = []),
+    if ((E$1.destroy(), this.ao())) {
+      this.fl.L(), this.fl.removeAllSubscriptions();
+      for (const t of this.ml) t.destroy();
+      this.ml = [];
+      for (const t of this.dl) t.clearData(!1);
+      this.j && this.j.fo(),
+        (this.dl = []),
         this.removeAllSubscriptions(),
-        (this._e = []),
-        null != this.Ui && this.Ui.destroy(),
-        (this.Ui = null),
-        (this.Ko = null),
-        (this.on = null),
-        (this.$t = null),
-        (this.qt = null),
-        (this.oi = null),
-        (this.yt = null),
+        (this.jn = []),
+        null != this.Ru && this.Ru.destroy(),
+        (this.Ru = null),
+        (this.hl = null),
+        (this.eu = null),
+        (this.j = null),
+        (this.h = null),
+        (this.C = null),
+        (this.vs = null),
         (this.options = {}),
-        (this.Vo = void 0),
+        (this.rl = void 0),
         (this.isInitialized = !1),
-        (this.$o = !1),
-        t && (this.u = null);
+        (this.ul = !1),
+        t && (this.B = null);
     }
   }
-  X() {
-    return !this.$h() && (!!this.so() || (console.warn(BRAZE_MUST_BE_INITIALIZED_ERROR), !1));
+  rr() {
+    return !this.Nl() && (!!this.ao() || (console.warn(CoreStrings.ee), !1));
   }
-  ba() {
-    return this.rn;
+  _a() {
+    return this.tu;
   }
   Sr() {
-    return this.Ko;
+    return this.hl;
   }
-  Os() {
-    return this.Go;
+  V() {
+    return this.al;
   }
-  te() {
-    return this.on;
+  ue() {
+    return this.eu;
   }
-  nr() {
-    return this.$t;
+  m() {
+    return this.j;
   }
-  nn(t) {
+  re(t) {
     return this.options[t];
   }
   gr() {
-    return this.Ho;
+    return this.dl;
   }
-  cr() {
-    return this.Ui;
-  }
-  ir() {
-    return this.qt;
-  }
-  zr() {
-    return this.oi;
+  nn() {
+    return this.Ru;
   }
   l() {
-    return this.u;
+    return this.h;
   }
-  pr() {
-    if (this.yt && this.Ui) return new User(this.yt, this.Ui);
+  u() {
+    return this.C;
   }
-  er() {
-    return this.yt;
+  p() {
+    return this.B;
   }
-  tr() {
-    return !0 === this.nn(L.Do);
+  br() {
+    if (this.vs && this.Ru) return new User(this.vs, this.Ru);
+  }
+  ir() {
+    return this.vs;
+  }
+  nr() {
+    return !0 === this.re(D.te);
   }
   g(t) {
     let i = !1;
-    for (const s of this.Yo) s === t && (i = !0);
-    i || this.Yo.push(t);
+    for (const s of this.ml) s === t && (i = !0);
+    i || this.ml.push(t);
   }
-  ar(t) {
-    let i = !1;
-    for (const s of this.Ho) s.constructor === t.constructor && (i = !0);
-    t instanceof y && !i && this.Ho.push(t);
+  v(i) {
+    let s = !1;
+    for (const t of this.dl) t.constructor === i.constructor && (s = !0);
+    i instanceof t && !s && this.dl.push(i);
   }
-  Ht(t) {
-    t instanceof T && this._e.push(t);
+  q(t) {
+    t instanceof m && this.jn.push(t);
   }
   removeAllSubscriptions() {
-    if (this.X()) for (const t of this._e) t.removeAllSubscriptions();
+    if (this.rr()) for (const t of this.jn) t.removeAllSubscriptions();
   }
   removeSubscription(t) {
-    if (this.X()) for (const i of this._e) i.removeSubscription(t);
+    if (this.rr()) for (const i of this.jn) i.removeSubscription(t);
   }
-  oe(t) {
-    this.$o = t;
+  ge(t) {
+    this.ul = t;
   }
-  so() {
+  ao() {
     return this.isInitialized;
   }
-  $h() {
-    return this.$o;
+  Nl() {
+    return this.ul;
   }
-  ks() {
-    return this.Bo;
+  tr(t, i) {
+    if (!this.rr()) return null;
+    return nr.o().Be(t, i);
+  }
+  Vs() {
+    return this.sl;
   }
 }
-const e = new Vt();
+const r = new qt();
 
-const t = {
-  q: (o, t, n) => {
-    var i, l;
-    const d = new s(),
-      m = e.zr();
-    if (!m)
+const v = {
+  lt: (e, o, t) => {
+    var n, s;
+    const i = new H(),
+      l = r.u();
+    if (!l)
       return (
-        r$1.info(
-          `Not logging event with type "${o}" because the current session ID could not be found.`,
+        E$1.info(
+          `Not logging event with type "${e}" because the current session ID could not be found.`,
         ),
-        d
+        i
       );
-    const u = m.xo();
+    const d = l.el();
     return (
-      d.ge.push(
-        new ve(
-          n || (null === (i = e.er()) || void 0 === i ? void 0 : i.getUserId()),
-          o,
+      i.Ee.push(
+        new De(
+          t || (null === (n = r.ir()) || void 0 === n ? void 0 : n.getUserId()),
+          e,
           new Date().valueOf(),
-          u,
-          t,
+          d,
+          o,
         ),
       ),
-      (d.L =
-        (null === (l = e.l()) || void 0 === l ? void 0 : l.zo(d.ge)) || !1),
-      d
+      (i.W =
+        (null === (s = r.p()) || void 0 === s ? void 0 : s.ol(i.Ee)) || !1),
+      i
     );
   },
 };
-var t$1 = t;
+var v$1 = v;
 
-class a {
+class M {
   constructor(t) {
-    (this.u = t), (this.u = t);
+    (this.B = t), (this.B = t);
   }
-  h(n, e) {
-    const l = new s();
-    if ((n.p(), null == n.url || "" === n.url))
+  logClick(t) {
+    const n = new H();
+    if ((t.$t(), null == t.url || "" === t.url))
       return (
-        r$1.info(`Card ${n.id} has no url. Not logging click to Braze servers.`),
-        l
+        E$1.info(`Card ${t.id} has no url. Not logging click to Braze servers.`),
+        n
       );
-    if (e && n.id && this.u) {
-      const t = this.u.j(STORAGE_KEYS.C.v) || {};
-      (t[n.id] = !0), this.u.I(STORAGE_KEYS.C.v, t);
+    if (t.id && this.B) {
+      const n = this.B.dt(STORAGE_KEYS.ft.Jt) || {};
+      (n[t.id] = !0), this.B.bt(STORAGE_KEYS.ft.Jt, n);
     }
-    const a = this.$([n]);
-    if (null == a) return l;
-    const u = e ? i.k : i.D;
-    return t$1.q(u, a);
+    const r = this.Kt([t]);
+    if (null == r) return n;
+    const i = f.Lt;
+    return v$1.lt(i, r);
   }
-  B(n) {
-    const e = new s();
-    if (!n.N())
+  Mt(t) {
+    const n = new H();
+    if (!t.Ot())
       return (
-        r$1.info(
-          `Card ${n.id} refused this dismissal. Ignoring analytics event.`,
+        E$1.info(
+          `Card ${t.id} refused this dismissal. Ignoring analytics event.`,
         ),
-        e
+        n
       );
-    if (n.id && this.u) {
-      const t = this.u.j(STORAGE_KEYS.C.A) || {};
-      (t[n.id] = !0), this.u.I(STORAGE_KEYS.C.A, t);
+    if (t.id && this.B) {
+      const n = this.B.dt(STORAGE_KEYS.ft.Pt) || {};
+      (n[t.id] = !0), this.B.bt(STORAGE_KEYS.ft.Pt, n);
     }
-    const l = this.$([n]);
-    return null == l ? e : t$1.q(i.F, l);
+    const r = this.Kt([t]);
+    return null == r ? n : v$1.lt(f.Qt, r);
   }
-  G(n, e) {
-    const l = new s(!0),
-      a = [],
-      u = [];
-    let c = {};
-    this.u && (c = e ? this.u.j(STORAGE_KEYS.C.H) || {} : this.u.j(STORAGE_KEYS.C.J) || {});
-    for (const t of n) {
-      t.K()
-        ? (t instanceof ControlCard ? u.push(t) : a.push(t),
-          t.id && (c[t.id] = !0))
-        : r$1.info(
-            `Card ${t.id} logged an impression too recently. Ignoring analytics event.`,
+  Ut(t) {
+    const n = new H(!0),
+      r = [],
+      i = [];
+    let o = {};
+    this.B && (o = this.B.dt(STORAGE_KEYS.ft.Vt) || {});
+    for (const s of t) {
+      s.Wt()
+        ? (s instanceof ControlCard ? i.push(s) : r.push(s),
+          s.id && (o[s.id] = !0))
+        : E$1.info(
+            `Card ${s.id} logged an impression too recently. Ignoring analytics event.`,
           );
     }
-    const h = this.$(a),
-      m = this.$(u);
-    if (null == h && null == m) return (l.L = !1), l;
-    if ((this.u && (e ? this.u.I(STORAGE_KEYS.C.H, c) : this.u.I(STORAGE_KEYS.C.J, c)), null != h)) {
-      const s = e ? i.M : i.O,
-        n = t$1.q(s, h);
-      l.P(n);
+    const e = this.Kt(r),
+      l = this.Kt(i);
+    if (null == e && null == l) return (n.W = !1), n;
+    if ((this.B && this.B.bt(STORAGE_KEYS.ft.Vt, o), null != e)) {
+      const t = f.Xt,
+        s = v$1.lt(t, e);
+      n.Yt(s);
     }
-    if (null != m && e) {
-      const s = t$1.q(i.R, m);
-      l.P(s);
+    if (null != l) {
+      const t = v$1.lt(f.Zt, l);
+      n.Yt(t);
     }
-    return l;
+    return n;
   }
-  $(t) {
+  Kt(t) {
     let s,
       n = null;
     for (let r = 0; r < t.length; r++)
@@ -7465,303 +8471,222 @@ class a {
   }
 }
 
-const n = {
-  t: !1,
-  i: null,
-  m: () => (n.o(), n.i || (n.i = new a(e.l())), n.i),
-  o: () => {
-    n.t || (e.g(n), (n.t = !0));
+const _ = {
+  i: !1,
+  na: null,
+  ra: () => (_.t(), _.na || (_.na = new M(r.p())), _.na),
+  t: () => {
+    _.i || (r.g(_), (_.i = !0));
   },
   destroy: () => {
-    (n.i = null), (n.t = !1);
+    (_.na = null), (_.i = !1);
   },
 };
-var n$1 = n;
+var _$1 = _;
 
-function logCardClick(o, m) {
-  return (
-    !!e.X() &&
-    (o instanceof Card ? n$1.m().h(o, m).L : (r$1.error("card " + MUST_BE_CARD_WARNING_SUFFIX), !1))
-  );
-}
+const CardStrings = { _t: "must be a Card object" };
 
 function logCardDismissal(o) {
   return (
-    !!e.X() && (o instanceof Card ? n$1.m().B(o).L : (r$1.error("card " + MUST_BE_CARD_WARNING_SUFFIX), !1))
+    !!r.rr() &&
+    (o instanceof Card ? _$1.ra().Mt(o).W : (E$1.error("card " + CardStrings._t), !1))
   );
-}
-
-function logCardImpressions(o, s) {
-  if (!e.X()) return !1;
-  if (!isArray(o)) return r$1.error("cards must be an array"), !1;
-  for (const n of o)
-    if (!(n instanceof Card)) return r$1.error(`Each card in cards ${MUST_BE_CARD_WARNING_SUFFIX}`), !1;
-  return n$1.m().G(o, s).L;
 }
 
 function logContentCardImpressions(o) {
-  return logCardImpressions(o, !0);
+  if (!r.rr()) return !1;
+  if (!isArray(o)) return E$1.error("cards must be an array"), !1;
+  for (const r of o)
+    if (!(r instanceof Card)) return E$1.error(`Each card in cards ${CardStrings._t}`), !1;
+  return _$1.ra().Ut(o).W;
 }
 
 function logContentCardClick(o) {
-  return logCardClick(o, !0);
+  return (
+    !!r.rr() &&
+    (o instanceof Card ? _$1.ra().logClick(o).W : (E$1.error("card " + CardStrings._t), !1))
+  );
 }
 
-class x {
-  constructor(s, e) {
-    (this.cards = s),
-      (this.lastUpdated = e),
-      (this.cards = s),
-      (this.lastUpdated = e);
-  }
-  getUnreadCardCount() {
-    let s = 0;
-    for (const e of this.cards) e.viewed || e instanceof ControlCard || s++;
-    return s;
-  }
-  dr() {
-    r$1.error("Must be implemented in a subclass");
-  }
-  logCardImpressions(s) {
-    r$1.error("Must be implemented in a subclass");
-  }
-  logCardClick(s) {
-    r$1.error("Must be implemented in a subclass");
-  }
-  sr() {
-    r$1.error("Must be implemented in a subclass");
-  }
-}
-(x.ur = 6e4), (x.Ah = 500), (x.Co = 1e4);
-
-function newCard(n, e, t, o, i, l, u, d, a, w, f, s, m, C, p, c, x, F) {
+function newCard(e, n, r, t, i, o, l, u, d, a, f, s, w, m, p, C, c, x) {
   let j;
-  if (e === Card.it.Pt || e === Card.it.Ut)
-    j = new ClassicCard(n, t, o, i, l, u, d, a, w, f, s, m, C, p, c, x);
-  else if (e === Card.it.st)
-    j = new CaptionedImage(n, t, o, i, l, u, d, a, w, f, s, m, C, p, c, x);
-  else if (e === Card.it.Gt)
-    j = new ImageOnly(n, t, i, u, d, a, w, f, s, m, C, p, c, x);
+  if (n === Card.es.oi || n === Card.es.ai)
+    j = new ClassicCard(e, r, t, i, o, l, u, d, a, f, s, w, m, p, c, x);
+  else if (n === Card.es.hs)
+    j = new CaptionedImage(e, r, t, i, o, l, u, d, a, f, s, w, m, p, c, x);
+  else if (n === Card.es.Ii)
+    j = new ImageOnly(e, r, i, l, u, d, f, s, w, m, p, c, x);
   else {
-    if (e !== Card.it.Xt)
-      return r$1.error("Ignoring card with unknown type " + e), null;
-    j = new ControlCard(n, t, d, w, C, p);
+    if (n !== Card.es.Ni)
+      return E$1.error("Ignoring card with unknown type " + n), null;
+    j = new ControlCard(e, r, l, u, s, w);
   }
-  return F && (j.test = F), j;
+  return C && (j.test = C), j;
 }
-function newCardFromContentCardsJson(n) {
-  if (n[Card._t.Ot]) return null;
-  const e = n[Card._t.ht],
-    r = n[Card._t.Z],
-    t = n[Card._t.et],
-    o = n[Card._t.rt],
-    i = n[Card._t.ot],
-    u = n[Card._t.ct],
-    d = dateFromUnixTimestamp(n[Card._t.nt]),
-    a = d;
-  let w;
-  w = n[Card._t.lt] === Card.Mt ? null : dateFromUnixTimestamp(n[Card._t.lt]);
+function newCardFromContentCardsJson(e) {
+  if (e[Card.ui.Ei]) return null;
+  const n = e[Card.ui.rs],
+    r = e[Card.ui.ts],
+    t = e[Card.ui.os],
+    i = e[Card.ui.cs],
+    o = e[Card.ui.ns],
+    l = e[Card.ui.ds],
+    u = dateFromUnixTimestamp(e[Card.ui.ps]);
+  let d;
+  d = e[Card.ui.us] === Card.Ti ? null : dateFromUnixTimestamp(e[Card.ui.us]);
   return newCard(
-    e,
+    n,
     r,
     t,
-    o,
     i,
+    o,
+    l,
     u,
-    a,
     d,
-    null,
-    w,
-    n[Card._t.URL],
-    n[Card._t.ft],
-    n[Card._t.xt],
-    n[Card._t.bt],
-    n[Card._t.gt],
-    n[Card._t.jt],
-    n[Card._t.zt],
-    n[Card._t.kt] || !1,
+    e[Card.ui.URL],
+    e[Card.ui.ls],
+    e[Card.ui.fs],
+    e[Card.ui.xs],
+    e[Card.ui.bs],
+    e[Card.ui.gs],
+    e[Card.ui.js],
+    e[Card.ui.qs] || !1,
+    e[Card.ui.zs],
+    e[Card.ui.ks],
   );
 }
-function newCardFromFeedJson(n) {
-  return newCard(
-    n.id,
-    n.type,
-    n.viewed,
-    n.title,
-    n.image,
-    n.description,
-    dateFromUnixTimestamp(n.created),
-    dateFromUnixTimestamp(n.updated),
-    n.categories,
-    dateFromUnixTimestamp(n.expires_at),
-    n.url,
-    n.domain,
-    n.aspect_ratio,
-    n.extras,
-    !1,
-    !1,
-  );
-}
-function newCardFromSerializedValue(n) {
+function newCardFromSerializedValue(e) {
   return (
     newCard(
-      n[Card.tt.ht],
-      n[Card.tt.Z],
-      n[Card.tt.et],
-      n[Card.tt.rt],
-      n[Card.tt.ot],
-      n[Card.tt.ct],
-      rehydrateDateAfterJsonization(n[Card.tt.dt]),
-      rehydrateDateAfterJsonization(n[Card.tt.nt]),
-      n[Card.tt.ut],
-      rehydrateDateAfterJsonization(n[Card.tt.lt]),
-      n[Card.tt.URL],
-      n[Card.tt.ft],
-      n[Card.tt.xt],
-      n[Card.tt.bt],
-      n[Card.tt.gt],
-      n[Card.tt.jt],
-      n[Card.tt.zt],
-      n[Card.tt.kt] || !1,
+      e[Card.ss.rs],
+      e[Card.ss.ts],
+      e[Card.ss.os],
+      e[Card.ss.cs],
+      e[Card.ss.ns],
+      e[Card.ss.ds],
+      rehydrateDateAfterJsonization(e[Card.ss.ps]),
+      rehydrateDateAfterJsonization(e[Card.ss.us]),
+      e[Card.ss.URL],
+      e[Card.ss.ls],
+      e[Card.ss.fs],
+      e[Card.ss.xs],
+      e[Card.ss.bs],
+      e[Card.ss.gs],
+      e[Card.ss.js],
+      e[Card.ss.qs] || !1,
+      e[Card.ss.zs],
+      e[Card.ss.ks],
     ) || void 0
   );
 }
 
-class v extends y {
-  constructor(t, s, i, h, n) {
+class Z extends t {
+  constructor(t, s, i, e, h) {
     super(),
-      (this.yt = t),
-      (this.u = s),
-      (this.qt = i),
-      (this.Jt = h),
-      (this.$t = n),
-      (this.yt = t),
-      (this.u = s),
-      (this.qt = i),
-      (this.Jt = h),
-      (this.$t = n),
-      (this.Bt = new T()),
-      e.Ht(this.Bt),
-      (this.Kt = 0),
-      (this.Qt = 0),
+      (this.vs = t),
+      (this.B = s),
+      (this.h = i),
+      (this.Cs = e),
+      (this.j = h),
+      (this.vs = t),
+      (this.B = s),
+      (this.h = i),
+      (this.Cs = e),
+      (this.j = h),
+      (this.ws = new m()),
+      r.q(this.ws),
+      (this.ys = 0),
+      (this.Ss = 0),
       (this.cards = []),
-      this.Yt();
-    const o = A.ts.Zt;
-    new A(o, r$1).ss(o.hs.es, (t) => {
-      this.rs(t);
+      this.Ts();
+    const n = et.Us.Rs;
+    new et(n, E$1).Ds(n.Fs.As, (t) => {
+      this.Ls(t);
     }),
-      (this.ns = null),
-      (this.os = null),
-      (this.ls = null),
-      (this.us = null),
-      (this.cs = null),
-      (this.fs = 10),
-      (this.ds = 0);
+      (this.Ns = null),
+      (this.D = null),
+      (this.Js = null),
+      (this.Ms = null),
+      (this.$s = 10);
   }
-  ps() {
-    return this.ns;
+  Bs() {
+    return this.Ns;
   }
-  vs(t) {
-    this.ns = t;
+  Es(t) {
+    this.Ns = t;
   }
-  ws() {
-    return this.os;
+  St() {
+    return this.D;
   }
-  Cs(t) {
-    this.os = t;
+  wt(t) {
+    this.D = t;
   }
-  Yt() {
-    if (!this.u) return;
-    const t = this.u.j(STORAGE_KEYS.C.bs) || [],
-      s = [];
-    for (let i = 0; i < t.length; i++) {
-      const e = newCardFromSerializedValue(t[i]);
-      null != e && s.push(e);
+  Ts() {
+    if (!this.B) return;
+    const t = this.B.dt(STORAGE_KEYS.ft.Ps) || [],
+      i = [];
+    for (let s = 0; s < t.length; s++) {
+      const e = newCardFromSerializedValue(t[s]);
+      null != e && i.push(e);
     }
-    (this.cards = this.gs(this.ys(s, !1))),
-      (this.Kt = this.u.j(STORAGE_KEYS.C.js) || this.Kt),
-      (this.Qt = this.u.j(STORAGE_KEYS.C.Rs) || this.Qt);
+    (this.cards = this.Xs(this._s(i, !1))),
+      (this.ys = this.B.dt(STORAGE_KEYS.ft.Gs) || this.ys),
+      (this.Ss = this.B.dt(STORAGE_KEYS.ft.Hs) || this.Ss);
   }
-  Ns(t, s = !1, i = 0, e = 0) {
-    let h;
-    if (s) {
-      h = [];
-      for (const t of this.cards) t.test && h.push(t);
-    } else h = this.cards.slice();
-    for (let i = 0; i < t.length; i++) {
-      const e = t[i];
-      let r = null;
+  Is(t, i = !1, e = 0, h = 0) {
+    let r;
+    if (i) {
+      r = [];
+      for (const t of this.cards) t.test && r.push(t);
+    } else r = this.cards.slice();
+    for (let s = 0; s < t.length; s++) {
+      const e = t[s];
+      let h = null;
       for (let t = 0; t < this.cards.length; t++)
         if (e.id === this.cards[t].id) {
-          r = this.cards[t];
+          h = this.cards[t];
           break;
         }
-      if (s) {
+      if (i) {
         const t = newCardFromContentCardsJson(e);
-        null != r && r.viewed && t && (t.viewed = !0), null != t && h.push(t);
-      } else if (null == r) {
+        null != h && h.viewed && t && (t.viewed = !0), null != t && r.push(t);
+      } else if (null == h) {
         const t = newCardFromContentCardsJson(e);
-        null != t && h.push(t);
+        null != t && r.push(t);
       } else {
-        if (!r.Lt(e))
-          for (let t = 0; t < h.length; t++)
-            if (e.id === h[t].id) {
-              h.splice(t, 1);
+        if (!h.ri(e))
+          for (let t = 0; t < r.length; t++)
+            if (e.id === r[t].id) {
+              r.splice(t, 1);
               break;
             }
       }
     }
-    (this.cards = this.gs(this.ys(h, s))),
-      this.Ts(),
-      (this.Kt = i),
-      (this.Qt = e),
-      this.u && (this.u.I(STORAGE_KEYS.C.js, this.Kt), this.u.I(STORAGE_KEYS.C.Rs, this.Qt));
+    (this.cards = this.Xs(this._s(r, i))),
+      this.Ks(),
+      (this.ys = e),
+      (this.Ss = h),
+      this.B && (this.B.bt(STORAGE_KEYS.ft.Gs, this.ys), this.B.bt(STORAGE_KEYS.ft.Hs, this.Ss));
   }
-  Ss(t) {
-    if (this.Ds() && null != t && t.cards) {
-      this.u && this.u.I(STORAGE_KEYS.C.Us, e.ks());
-      const s = t.full_sync;
-      s || this.Yt(),
-        this.Ns(t.cards, s, t.last_full_sync_at, t.last_card_updated_at),
-        this.Bt.Rt(this.As(!0));
+  N(t) {
+    if (this.Os() && null != t && t.cards) {
+      this.B && this.B.bt(STORAGE_KEYS.ft.Qs, r.Vs());
+      const i = t.full_sync;
+      i || this.Ts(),
+        this.Is(t.cards, i, t.last_full_sync_at, t.last_card_updated_at),
+        this.ws.L(this.Ws(!0));
     }
   }
-  Fs(t) {
-    this.u && this.u.I(STORAGE_KEYS.C.xs, t);
+  Ys(t) {
+    this.Zs(), (this.Js = t);
   }
-  zs(s, e, h) {
-    const r = () => {
-        this.qs(e, h, !0);
-      },
-      n = s ? readResponseHeaders(s) : null;
-    let l;
-    if ((this.Es(), !n || !n["retry-after"])) return void this.Fs(0);
-    const a = n["retry-after"];
-    if (isNaN(a) && !isNaN(Date.parse(a)))
-      (l = Date.parse(a) - new Date().getTime()), l < 0 && r();
-    else {
-      if (isNaN(parseFloat(a.toString()))) {
-        const s =
-          "Received unexpected value for retry-after header in /sync response";
-        return t$1.q(i.Ls, { e: s + ": " + a }), void this.Fs(0);
-      }
-      l = 1e3 * parseFloat(a.toString());
-    }
-    this.ls = window.setTimeout(() => {
-      r();
-    }, l);
-    let u = 0;
-    this.u && (u = this.u.j(STORAGE_KEYS.C.xs)),
-      (null == u || isNaN(parseInt(u.toString()))) && (u = 0),
-      this.Fs(parseInt(u.toString()) + 1);
-  }
-  rs(t) {
+  Ls(t) {
     var s;
-    if (!this.Ds()) return;
-    this.Yt();
+    if (!this.Os()) return;
+    this.Ts();
     const i = this.cards.slice();
     let e = null;
-    e = null === (s = this.yt) || void 0 === s ? void 0 : s.getUserId();
+    e = null === (s = this.vs) || void 0 === s ? void 0 : s.getUserId();
     for (let s = 0; s < t.length; s++)
       if (e === t[s].userId || (null == e && null == t[s].userId)) {
         const e = t[s].card;
@@ -7775,7 +8700,7 @@ class v extends y {
           const t = newCardFromContentCardsJson(e);
           null != t && i.push(t);
         } else {
-          if (!h.Lt(e))
+          if (!h.ri(e))
             for (let t = 0; t < i.length; t++)
               if (e.id === i[t].id) {
                 i.splice(t, 1);
@@ -7783,143 +8708,145 @@ class v extends y {
               }
         }
       }
-    (this.cards = this.gs(this.ys(i, !1))), this.Ts(), this.Bt.Rt(this.As(!0));
+    (this.cards = this.Xs(this._s(i, !1))), this.Ks(), this.ws.L(this.Ws(!0));
   }
-  ys(t, s) {
-    let i = {},
-      e = {},
-      h = {};
-    this.u &&
-      ((i = this.u.j(STORAGE_KEYS.C.v) || {}),
-      (e = this.u.j(STORAGE_KEYS.C.H) || {}),
-      (h = this.u.j(STORAGE_KEYS.C.A) || {}));
-    const r = {},
-      n = {},
+  _s(t, i) {
+    let e = {},
+      h = {},
+      r = {};
+    this.B &&
+      ((e = this.B.dt(STORAGE_KEYS.ft.Jt) || {}),
+      (h = this.B.dt(STORAGE_KEYS.ft.Vt) || {}),
+      (r = this.B.dt(STORAGE_KEYS.ft.Pt) || {}));
+    const n = {},
+      o = {},
       l = {};
     for (let s = 0; s < t.length; s++) {
-      const o = t[s].id;
-      o &&
-        (i[o] && ((t[s].clicked = !0), (r[o] = !0)),
-        e[o] && ((t[s].viewed = !0), (n[o] = !0)),
-        h[o] && ((t[s].dismissed = !0), (l[o] = !0)));
+      const i = t[s].id;
+      i &&
+        (e[i] && ((t[s].clicked = !0), (n[i] = !0)),
+        h[i] && ((t[s].viewed = !0), (o[i] = !0)),
+        r[i] && ((t[s].dismissed = !0), (l[i] = !0)));
     }
     return (
-      s &&
-        this.u &&
-        (this.u.I(STORAGE_KEYS.C.v, r), this.u.I(STORAGE_KEYS.C.H, n), this.u.I(STORAGE_KEYS.C.A, l)),
+      i &&
+        this.B &&
+        (this.B.bt(STORAGE_KEYS.ft.Jt, n), this.B.bt(STORAGE_KEYS.ft.Vt, o), this.B.bt(STORAGE_KEYS.ft.Pt, l)),
       t
     );
   }
-  gs(t) {
-    const s = [],
-      i = new Date();
-    let e = {};
-    this.u && (e = this.u.j(STORAGE_KEYS.C.A) || {});
-    let h = !1;
-    for (let n = 0; n < t.length; n++) {
-      const o = t[n].url;
-      if (!this.Jt && o && isURIJavascriptOrData(o)) {
-        r$1.error(
-          `Card with url ${o} will not be displayed because Javascript URLs are disabled. Use the "allowUserSuppliedJavascript" option for braze.initialize to enable this card.`,
+  Xs(t) {
+    const i = [],
+      e = new Date();
+    let h = {};
+    this.B && (h = this.B.dt(STORAGE_KEYS.ft.Pt) || {});
+    let r = !1;
+    for (let s = 0; s < t.length; s++) {
+      const n = t[s].url;
+      if (!this.Cs && n && isURIJavascriptOrData(n)) {
+        E$1.error(
+          `Card with url ${n} will not be displayed because Javascript URLs are disabled. Use the "allowUserSuppliedJavascript" option for braze.initialize to enable this card.`,
         );
         continue;
       }
-      const l = t[n].expiresAt;
-      let a = !0;
-      if ((null != l && (a = l >= i), (a = a && !t[n].dismissed), a))
-        s.push(t[n]);
+      const o = t[s].expiresAt;
+      let l = !0;
+      if ((null != o && (l = o >= e), (l = l && !t[s].dismissed), l))
+        i.push(t[s]);
       else {
-        const s = t[n].id;
-        s && (e[s] = !0), (h = !0);
+        const i = t[s].id;
+        i && (h[i] = !0), (r = !0);
       }
     }
-    return h && this.u && this.u.I(STORAGE_KEYS.C.A, e), s;
+    return r && this.B && this.B.bt(STORAGE_KEYS.ft.Pt, h), i;
   }
-  Ts() {
+  Ks() {
     var t;
-    const s = [];
-    for (let t = 0; t < this.cards.length; t++) s.push(this.cards[t].Y());
-    null === (t = this.u) || void 0 === t || t.I(STORAGE_KEYS.C.bs, s);
+    const i = [];
+    for (let t = 0; t < this.cards.length; t++) i.push(this.cards[t].gt());
+    null === (t = this.B) || void 0 === t || t.bt(STORAGE_KEYS.ft.Ps, i);
   }
-  Es() {
-    this.ls && (clearTimeout(this.ls), (this.ls = null));
+  Zs() {
+    this.Js && (clearTimeout(this.Js), (this.Js = null));
   }
-  Is() {
-    null != this.us && (clearTimeout(this.us), (this.us = null));
-  }
-  Js(t = 1e3 * this.fs, s, i) {
-    this.Is(),
-      (this.us = window.setTimeout(() => {
-        this.qs(s, i, !0);
-      }, t)),
-      (this.cs = t);
-  }
-  qs(t, s, i = !1, h = !0) {
-    var r;
-    const n = this.$t,
-      l = this.u;
-    if (!n || !l) return void ("function" == typeof s && s());
-    if ((!i && (this.Es(), this.Fs(0)), !this.Ds()))
+  ar(t, i, e = !1) {
+    var n;
+    const o = this.j,
+      f = this.B;
+    if (!o || !f) return void ("function" == typeof i && i());
+    if ((e && (h.fi(f, h.H.vi), this.Zs()), !this.Os()))
       return void (
-        null === (r = this.qt) ||
-        void 0 === r ||
-        r.Ms(() => {
-          this.qs(t, s);
+        null === (n = this.h) ||
+        void 0 === n ||
+        n.Ci(() => {
+          this.ar(t, i, !0);
         })
       );
-    h && this.Is();
-    const a = n.$s({}, !0);
-    l.j(STORAGE_KEYS.C.Us) !== e.ks() && this.Bs(),
-      (a.last_full_sync_at = this.Kt),
-      (a.last_card_updated_at = this.Qt);
-    const u = n.Ps(a, D._s.Xs, i);
-    let c = !1;
-    n.Gs(
-      a,
-      (i = -1) => {
-        if (this.u) {
+    const m = o.$({}, !0);
+    f.dt(STORAGE_KEYS.ft.Qs) !== r.Vs() && this.bi(),
+      (m.last_full_sync_at = this.ys),
+      (m.last_card_updated_at = this.Ss);
+    const p = o.A(m, h.H.vi, e);
+    let v = !1;
+    o.J(
+      m,
+      (s = -1) => {
+        if (this.B) {
           const t = new Date().valueOf();
-          D.Hs(this.u, D._s.Xs, t);
+          h.K(this.B, h.H.vi, t);
         }
-        -1 !== i && u.push(["X-Braze-Req-Tokens-Remaining", i.toString()]),
-          C.Ks({
-            url: `${n.Os()}/content_cards/sync`,
-            data: a,
-            headers: u,
-            L: (i, e) => {
-              if (!n.Qs(a, i, u))
-                return (c = !0), void ("function" == typeof s && s());
-              n.Vs(),
-                this.zs(e, t, s),
-                this.Ss(i),
-                (c = !1),
-                D.Ws(this.u, D._s.Xs, 1),
-                "function" == typeof t && t();
+        -1 !== s && p.push(["X-Braze-Req-Tokens-Remaining", s.toString()]),
+          l.O({
+            url: `${o.V()}/content_cards/sync`,
+            data: m,
+            headers: p,
+            W: (s) => {
+              if (!o.Y(m, s, p))
+                return (v = !0), void ("function" == typeof i && i());
+              o.Z(), this.N(s), (v = !1), "function" == typeof t && t();
             },
             error: (t) => {
-              n.Ys(t, "retrieving content cards"),
-                (c = !0),
-                "function" == typeof s && s();
+              o._(t, "retrieving content cards"),
+                (v = !0),
+                "function" == typeof i && i();
             },
-            Zs: () => {
-              if (c && h && !this.us && this.ds + 1 < MAX_ERROR_RETRIES_CONTENT_CARDS) {
-                D.ti(this.u, D._s.Xs);
-                let i = this.cs;
-                (null == i || i < 1e3 * this.fs) && (i = 1e3 * this.fs),
-                  this.Js(Math.min(3e5, randomInclusive(1e3 * this.fs, 3 * i)), t, s),
-                  (this.ds = this.ds + 1);
+            tt: (s, e) => {
+              var r, n, l;
+              let f;
+              if (v) {
+                const t =
+                    (null === (r = this.h) || void 0 === r ? void 0 : r.st()) ||
+                    REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
+                  s =
+                    (null === (n = this.h) || void 0 === n ? void 0 : n.it()) ||
+                    REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
+                  i =
+                    (null === (l = this.h) || void 0 === l ? void 0 : l.nt()) ||
+                    REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
+                let e = this.Ms;
+                (null == e || e < t) && (e = t), (f = Math.min(i, randomInclusive(t, e * s)));
               }
+              o.et(
+                e,
+                () => {
+                  this.ar(t, i, !1);
+                },
+                h.H.vi,
+                (t) => this.Ys(t),
+                () => this.Zs(),
+                f,
+              );
             },
           });
       },
-      D._s.Xs,
-      s,
+      h.H.vi,
+      i,
     );
   }
-  As(t) {
-    t || this.Yt();
-    const s = this.gs(this.cards);
-    s.sort((t, s) =>
+  Ws(t) {
+    t || this.Ts();
+    const i = this.Xs(this.cards);
+    i.sort((t, s) =>
       t.pinned && !s.pinned
         ? -1
         : s.pinned && !t.pinned
@@ -7930,461 +8857,480 @@ class v extends y {
         ? 1
         : 0,
     );
-    let i = Math.max(this.Qt || 0, this.Kt || 0);
+    let e = Math.max(this.Ss || 0, this.ys || 0);
     return (
-      0 === i && (i = void 0),
-      this.u && this.u.j(STORAGE_KEYS.C.Rs) === this.Qt && void 0 === i && (i = this.Qt),
-      new ContentCards(s, dateFromUnixTimestamp(i))
+      0 === e && (e = void 0),
+      this.B && this.B.dt(STORAGE_KEYS.ft.Hs) === this.Ss && void 0 === e && (e = this.Ss),
+      new ContentCards(i, dateFromUnixTimestamp(e))
     );
   }
-  si(t) {
-    return this.Bt.Nt(t);
+  It(t) {
+    return this.ws.Rt(t);
   }
-  Bs() {
-    (this.Kt = 0),
-      (this.Qt = 0),
-      this.u && (this.u.ii(STORAGE_KEYS.C.js), this.u.ii(STORAGE_KEYS.C.Rs));
+  bi() {
+    (this.ys = 0),
+      (this.Ss = 0),
+      this.B && (this.B.zt(STORAGE_KEYS.ft.Gs), this.B.zt(STORAGE_KEYS.ft.Hs));
   }
   changeUser(t) {
     t ||
       ((this.cards = []),
-      this.Bt.Rt(new ContentCards(this.cards.slice(), null)),
-      this.u &&
-        (this.u.ii(STORAGE_KEYS.C.bs),
-        this.u.ii(STORAGE_KEYS.C.v),
-        this.u.ii(STORAGE_KEYS.C.H),
-        this.u.ii(STORAGE_KEYS.C.A))),
-      this.Bs();
+      this.ws.L(new ContentCards(this.cards.slice(), null)),
+      this.B &&
+        (this.B.zt(STORAGE_KEYS.ft.Ps),
+        this.B.zt(STORAGE_KEYS.ft.Jt),
+        this.B.zt(STORAGE_KEYS.ft.Vt),
+        this.B.zt(STORAGE_KEYS.ft.Pt))),
+      this.Zs(),
+      this.bi();
   }
   clearData(t) {
-    (this.Kt = 0),
-      (this.Qt = 0),
+    (this.ys = 0),
+      (this.Ss = 0),
       (this.cards = []),
-      this.Bt.Rt(new ContentCards(this.cards.slice(), null)),
+      this.ws.L(new ContentCards(this.cards.slice(), null)),
       t &&
-        this.u &&
-        (this.u.ii(STORAGE_KEYS.C.bs),
-        this.u.ii(STORAGE_KEYS.C.v),
-        this.u.ii(STORAGE_KEYS.C.H),
-        this.u.ii(STORAGE_KEYS.C.A),
-        this.u.ii(STORAGE_KEYS.C.js),
-        this.u.ii(STORAGE_KEYS.C.Rs));
+        this.B &&
+        (this.B.zt(STORAGE_KEYS.ft.Ps),
+        this.B.zt(STORAGE_KEYS.ft.Jt),
+        this.B.zt(STORAGE_KEYS.ft.Vt),
+        this.B.zt(STORAGE_KEYS.ft.Pt),
+        this.B.zt(STORAGE_KEYS.ft.Gs),
+        this.B.zt(STORAGE_KEYS.ft.Hs)),
+      this.Zs();
   }
-  Ds() {
-    return (
-      !!this.qt && (!!this.qt.ei() || (0 !== this.qt.hi() && this.ri(), !1))
-    );
+  Os() {
+    return !!this.h && (!!this.h.wi() || (0 !== this.h.xt() && this.gi(), !1));
   }
-  ri() {
-    this.Bt.Rt(new ContentCards([], new Date())), this.u && this.u.ii(STORAGE_KEYS.C.bs);
+  gi() {
+    this.ws.L(new ContentCards([], new Date())), this.B && this.B.zt(STORAGE_KEYS.ft.Ps);
   }
 }
 
-const g = {
-  t: !1,
+const rr = {
+  i: !1,
   provider: null,
-  rr: () => (
-    g.o(),
-    g.provider ||
-      ((g.provider = new v(e.er(), e.l(), e.ir(), e.tr(), e.nr())),
-      e.ar(g.provider)),
-    g.provider
+  o: () => (
+    rr.t(),
+    rr.provider ||
+      ((rr.provider = new Z(r.ir(), r.p(), r.l(), r.nr(), r.m())),
+      r.v(rr.provider),
+      r.tr("ccr", () => {
+        var r;
+        null === (r = rr.provider) || void 0 === r || r.ar();
+      })),
+    rr.provider
   ),
-  o: () => {
-    g.t || (e.g(g), (g.t = !0));
+  t: () => {
+    rr.i || (r.g(rr), (rr.i = !0));
   },
   destroy: () => {
-    (g.provider = null), (g.t = !1);
+    (rr.provider = null), (rr.i = !1);
   },
 };
-var g$1 = g;
+var rr$1 = rr;
 
-function requestContentCardsRefresh(r, t) {
-  if (e.X()) return g$1.rr().qs(r, t);
+function requestContentCardsRefresh(e, t) {
+  if (r.rr()) return rr$1.o().ar(e, t, !0);
 }
 
-class ContentCards extends x {
-  constructor(r, e) {
-    super(r, e);
+class ContentCards {
+  constructor(r, t) {
+    (this.cards = r),
+      (this.lastUpdated = t),
+      (this.cards = r),
+      (this.lastUpdated = t);
   }
   getUnviewedCardCount() {
-    return super.getUnreadCardCount();
+    let r = 0;
+    for (const t of this.cards) t.viewed || t instanceof ControlCard || r++;
+    return r;
   }
-  logCardImpressions(r) {
-    logCardImpressions(r, !0);
+  sr(r) {
+    logContentCardImpressions(r);
   }
-  logCardClick(r) {
-    return logCardClick(r, !0);
+  dr(r) {
+    return logContentCardClick(r);
   }
-  sr() {
+  ur() {
     requestContentCardsRefresh();
   }
-  dr() {
+  cr() {
     return !0;
   }
 }
-ContentCards.ur = 6e4;
+(ContentCards.Cr = 6e4), (ContentCards.hr = 500), (ContentCards.lr = 1e4);
 
 function getCachedContentCards() {
-  if (e.X()) return g$1.rr().As(!1);
+  if (r.rr()) return rr$1.o().Ws(!1);
 }
 
-function topHadImpression(t) {
-  return null != t && !!t.getAttribute("data-ab-had-top-impression");
-}
-function impressOnTop(t) {
-  null != t && t.setAttribute("data-ab-had-top-impression", "true");
-}
-function bottomHadImpression(t) {
-  return null != t && !!t.getAttribute("data-ab-had-bottom-impression");
-}
-function impressOnBottom(t) {
-  null != t && t.setAttribute("data-ab-had-bottom-impression", "true");
-}
 function markCardAsRead(t) {
   if (null != t) {
-    const o = t.querySelectorAll(".ab-unread-indicator")[0];
-    null != o && (o.className += " read");
+    const e = t.querySelectorAll(".ab-unread-indicator")[0];
+    null == e || e.classList.contains("read") || (e.className += " read");
   }
 }
 function getCardId(t) {
   return t.getAttribute("data-ab-card-id");
 }
-function _setImageAltText(t, o) {
-  let e = "";
-  t.title || t.description || (e = "Feed Image"), o.setAttribute("alt", e);
+function _setImageAltText(t, e) {
+  e.setAttribute("alt", t.altImageText || "");
 }
-function setCardHeight(t, o) {
-  const e = o.querySelectorAll(".ab-image-area");
-  let a,
-    n = 0;
-  e.length > 0 && (n = e[0].offsetWidth);
-  for (const o of t)
-    if (((a = o.T), a && o.imageUrl && "number" == typeof o.aspectRatio)) {
-      const t = n / o.aspectRatio;
-      t && (a.style.height = `${t}px`);
+function setCardHeight(t, e) {
+  const a = e.querySelectorAll(".ab-image-area");
+  let o,
+    i = 0;
+  a.length > 0 && (i = a[0].offsetWidth);
+  for (const e of t)
+    if (((o = e.ae), o && e.imageUrl && "number" == typeof e.aspectRatio)) {
+      const t = i / e.aspectRatio;
+      t && (o.style.height = `${t}px`);
     }
 }
-function cardToHtml(t, logCardClick, o, e = "ltr") {
-  const a = document.createElement("div");
-  (a.dir = e),
-    (a.className = "ab-card ab-effect-card " + t._),
+function cardToHtml(t, e, a, o = "ltr") {
+  const i = document.createElement("div");
+  (i.dir = o),
+    t.language && (i.lang = t.language),
+    (i.className = "ab-card ab-effect-card " + t.ie),
     t.id &&
-      (a.setAttribute("data-ab-card-id", t.id), a.setAttribute("id", t.id)),
-    a.setAttribute("role", "article"),
-    a.setAttribute("tabindex", "0");
+      (i.setAttribute("data-ab-card-id", t.id), i.setAttribute("id", t.id)),
+    i.setAttribute("role", "article");
   let n = "",
-    i = !1;
-  t.url && "" !== t.url && ((n = t.url), (i = !0));
-  const r = (e) => (markCardAsRead(a), i && (logCardClick(t), _handleBrazeAction(n, o, e)), !1);
+    d = !1;
+  t.url && "" !== t.url && ((n = t.url), (d = !0));
+  const r = (o) => (markCardAsRead(i), d && (e(t), _handleBrazeAction(n, a, o)), !1);
   if (t.pinned) {
     const t = document.createElement("div");
     t.className = "ab-pinned-indicator";
-    const o = document.createElement("i");
-    (o.className = "fa fa-star"), t.appendChild(o), a.appendChild(t);
+    const e = document.createElement("i");
+    (e.className = "fa fa-star"), t.appendChild(e), i.appendChild(t);
   }
   if (t.imageUrl && "" !== t.imageUrl) {
-    const o = document.createElement("div");
-    (o.dir = e), (o.className = "ab-image-area");
-    const d = document.createElement("img");
+    const e = document.createElement("div");
+    (e.dir = o), (e.className = "ab-image-area");
+    const a = document.createElement("img");
     if (
-      (d.setAttribute("src", t.imageUrl),
-      (d.onload = () => {
-        a.style.height = "auto";
+      (a.setAttribute("src", t.imageUrl),
+      (a.onload = () => {
+        i.style.height = "auto";
       }),
-      _setImageAltText(t, d),
-      o.appendChild(d),
-      (a.className += " with-image"),
-      i && !t.S)
+      _setImageAltText(t, a),
+      e.appendChild(a),
+      (i.className += " with-image"),
+      d && !t.ne)
     ) {
-      const t = document.createElement("a");
-      t.setAttribute("href", n),
-        (t.onclick = r),
-        t.appendChild(o),
-        a.appendChild(t);
-    } else a.appendChild(o);
+      const a = document.createElement("a");
+      a.setAttribute("href", n),
+        (a.onclick = r),
+        t.altImageText ||
+          (t.title
+            ? a.setAttribute("aria-label", t.title)
+            : a.setAttribute("aria-label", "Feed Image")),
+        a.appendChild(e),
+        i.appendChild(a);
+    } else i.appendChild(e);
   }
-  const s = document.createElement("div");
-  if (((s.className = "ab-card-body"), (s.dir = e), t.dismissible)) {
+  const c = document.createElement("div");
+  if (((c.className = "ab-card-body"), (c.dir = o), t.dismissible)) {
     t.logCardDismissal = () => logCardDismissal(t);
-    const o = createCloseButton("Dismiss Card", void 0, t.dismissCard.bind(t), e);
-    a.appendChild(o),
-      detectSwipe(s, DIRECTIONS.U, (t) => {
-        (a.className += " ab-swiped-left"), o.onclick(t);
+    const e = createCloseButton("Dismiss Card", void 0, t.dismissCard.bind(t), o);
+    i.appendChild(e),
+      detectSwipe(c, DIRECTIONS.de, (t) => {
+        (i.className += " ab-swiped-left"), e.onclick(t);
       }),
-      detectSwipe(s, DIRECTIONS.V, (t) => {
-        (a.className += " ab-swiped-right"), o.onclick(t);
+      detectSwipe(c, DIRECTIONS.ce, (t) => {
+        (i.className += " ab-swiped-right"), e.onclick(t);
       });
   }
-  let l = "",
-    b = !1;
-  if ((t.title && "" !== t.title && ((l = t.title), (b = !0)), b)) {
+  let s = "",
+    m = !1;
+  if ((t.title && "" !== t.title && ((s = t.title), (m = !0)), m)) {
     const t = document.createElement("h1");
     if (
       ((t.className = "ab-title"),
-      (t.id = p$1.W()),
-      a.setAttribute("aria-labelledby", t.id),
-      i)
+      (t.id = P$1.se()),
+      i.setAttribute("aria-labelledby", t.id),
+      d)
     ) {
-      const o = document.createElement("a");
-      o.setAttribute("href", n),
-        (o.onclick = r),
-        o.appendChild(document.createTextNode(l)),
-        t.appendChild(o);
-    } else t.appendChild(document.createTextNode(l));
-    s.appendChild(t);
+      const e = document.createElement("a");
+      e.setAttribute("href", n),
+        (e.onclick = r),
+        e.appendChild(document.createTextNode(s)),
+        t.appendChild(e);
+    } else t.appendChild(document.createTextNode(s));
+    c.appendChild(t);
   }
-  const f = document.createElement("div");
+  const u = document.createElement("div");
   if (
-    ((f.className = b ? "ab-description" : "ab-description ab-no-title"),
-    (f.id = p$1.W()),
-    a.setAttribute("aria-describedby", f.id),
-    t.description && f.appendChild(document.createTextNode(t.description)),
-    i)
+    ((u.className = m ? "ab-description" : "ab-description ab-no-title"),
+    t.language && (u.lang = t.language),
+    t.description && u.appendChild(document.createTextNode(t.description)),
+    d)
   ) {
-    const o = document.createElement("div");
-    o.className = "ab-url-area";
-    const e = document.createElement("a");
-    e.setAttribute("href", n),
-      t.linkText && e.appendChild(document.createTextNode(t.linkText)),
-      (e.onclick = r),
-      o.appendChild(e),
-      f.appendChild(o);
+    const e = document.createElement("div");
+    e.className = "ab-url-area";
+    const a = document.createElement("a");
+    a.setAttribute("href", n),
+      t.linkText && a.appendChild(document.createTextNode(t.linkText)),
+      (a.onclick = r),
+      e.appendChild(a),
+      u.appendChild(e);
   }
-  s.appendChild(f), a.appendChild(s);
-  const x = document.createElement("div");
+  c.appendChild(u), i.appendChild(c);
+  const l = document.createElement("div");
   return (
-    (x.className = "ab-unread-indicator"),
-    t.viewed && (x.className += " read"),
-    a.appendChild(x),
-    (t.T = a),
-    a
+    (l.className = "ab-unread-indicator"),
+    t.viewed && (l.className += " read"),
+    i.appendChild(l),
+    (t.ae = i),
+    i
   );
 }
 
-function removeSubscription(r) {
-  e.X() && e.removeSubscription(r);
+function removeSubscription(e) {
+  r.rr() && r.removeSubscription(e);
 }
+
+function topHadImpression(o) {
+  return null != o && !!o.getAttribute("data-ab-had-top-impression");
+}
+function impressOnTop(o) {
+  null != o && o.setAttribute("data-ab-had-top-impression", "true");
+}
+function bottomHadImpression(o) {
+  return null != o && !!o.getAttribute("data-ab-had-bottom-impression");
+}
+function impressOnBottom(o) {
+  null != o && o.setAttribute("data-ab-had-bottom-impression", "true");
+}
+const detectImpression = {
+  oo: topHadImpression,
+  no: bottomHadImpression,
+};
+
+const BannerStrings = {
+  aa: "Banners are disabled. Make sure you have at least one campaign and relaunch the app.",
+  ea: "data-update-subscription-id",
+};
 
 const LAST_REQUESTED_REFRESH_DATA_ATTRIBUTE =
   "data-last-requested-refresh";
 const scrollListeners = {};
-function destroyFeedHtml(e) {
-  e &&
-    ((e.className = e.className.replace("ab-show", "ab-hide")),
+function destroyContentCardsHtml(t) {
+  t &&
+    ((t.className = t.className.replace("ab-show", "ab-hide")),
     setTimeout(() => {
-      e && e.parentNode && e.parentNode.removeChild(e);
-    }, x.Ah));
-  const t = e.getAttribute("data-update-subscription-id");
-  null != t && removeSubscription(t);
-  const o = e.getAttribute("data-listener-id");
-  null != o &&
-    (window.removeEventListener("scroll", scrollListeners[o]),
-    delete scrollListeners[o]);
+      t && t.parentNode && t.parentNode.removeChild(t);
+    }, ContentCards.hr));
+  const e = t.getAttribute(BannerStrings.ea);
+  null != e && removeSubscription(e);
+  const n = t.getAttribute("data-listener-id");
+  null != n &&
+    (window.removeEventListener("scroll", scrollListeners[n]),
+    delete scrollListeners[n]);
 }
-function generateFeedBody(e, t) {
-  const o = ue.m(),
-    s = document.createElement("div");
+function generateContentCardsUI(t, e) {
+  const n = Me.ra(),
+    o = document.createElement("div");
   if (
-    ((s.className = "ab-feed-body"),
-    s.setAttribute("aria-label", "Feed"),
-    s.setAttribute("role", "feed"),
-    null == e.lastUpdated)
+    ((o.className = "ab-feed-body"),
+    o.setAttribute("aria-label", "Feed"),
+    o.setAttribute("role", "feed"),
+    null == t.lastUpdated)
   ) {
-    const e = document.createElement("div");
-    e.className = "ab-no-cards-message";
-    const t = document.createElement("i");
-    (t.className = "fa fa-spinner fa-spin fa-4x ab-initial-spinner"),
-      e.appendChild(t),
-      s.appendChild(e);
+    const t = document.createElement("div");
+    t.className = "ab-no-cards-message";
+    const e = document.createElement("i");
+    (e.className = "fa fa-spinner fa-spin fa-4x ab-initial-spinner"),
+      t.appendChild(e),
+      o.appendChild(t);
   } else {
-    let n = !1;
-    const logCardClick = (t) => e.logCardClick(t);
-    for (const i of e.cards) {
-      const a = i instanceof ControlCard;
-      !a || e.dr()
-        ? (s.appendChild(cardToHtml(i, logCardClick, t, o.wo())), (n = n || !a))
-        : r$1.error(
+    let s = !1;
+    const r = (e) => t.dr(e);
+    for (const a of t.cards) {
+      const i = a instanceof ControlCard;
+      !i || t.cr()
+        ? (o.appendChild(cardToHtml(a, r, e, n.Ta())), (s = s || !i))
+        : E$1.error(
             "Received a control card for a legacy news feed. Control cards are only supported with content cards.",
           );
     }
-    if (!n) {
-      const e = document.createElement("div");
-      (e.className = "ab-no-cards-message"),
-        (e.innerHTML = o.get("NO_CARDS_MESSAGE") || ""),
-        e.setAttribute("role", "article"),
-        s.appendChild(e);
+    if (!s) {
+      const t = document.createElement("div");
+      (t.className = "ab-no-cards-message"),
+        (t.innerHTML = n.get("NO_CARDS_MESSAGE") || ""),
+        t.setAttribute("role", "article"),
+        o.appendChild(t);
     }
   }
-  return s;
+  return o;
 }
-function detectFeedImpressions(e, t) {
-  if (null != e && null != t) {
-    const o = [],
-      s = t.querySelectorAll(".ab-card");
-    e.yo || (e.yo = {});
-    for (let t = 0; t < s.length; t++) {
-      const n = getCardId(s[t]),
-        r = topIsInView(s[t]),
-        i = bottomIsInView(s[t]);
-      if (e.yo[n]) {
-        r || i || markCardAsRead(s[t]);
+function detectContentCardsImpressions(t, e) {
+  if (null != t && null != e) {
+    const n = [],
+      o = e.querySelectorAll(".ab-card");
+    t.Qa || (t.Qa = {});
+    for (let e = 0; e < o.length; e++) {
+      const s = getCardId(o[e]),
+        r = topIsInView(o[e]),
+        a = bottomIsInView(o[e]);
+      if (t.Qa[s]) {
+        r || a || markCardAsRead(o[e]);
         continue;
       }
-      let a = topHadImpression(s[t]),
-        d = bottomHadImpression(s[t]);
-      const l = a,
-        c = d;
+      let i = topHadImpression(o[e]),
+        l = bottomHadImpression(o[e]);
+      const d = i,
+        c = l;
       if (
-        (!a && r && ((a = !0), impressOnTop(s[t])),
-        !d && i && ((d = !0), impressOnBottom(s[t])),
-        a && d)
+        (!i && r && ((i = !0), impressOnTop(o[e])), !l && a && ((l = !0), impressOnBottom(o[e])), i && l)
       ) {
-        if (l && c) continue;
-        for (const t of e.cards)
-          if (t.id === n) {
-            (e.yo[t.id] = !0), o.push(t);
+        if (d && c) continue;
+        for (const e of t.cards)
+          if (e.id === s) {
+            (t.Qa[e.id] = !0), n.push(e);
             break;
           }
       }
     }
-    o.length > 0 && e.logCardImpressions(o);
+    n.length > 0 && t.sr(n);
   }
 }
-function refreshFeed(e, t) {
-  if (null == e || null == t) return;
-  t.setAttribute("aria-busy", "true");
-  const o = t.querySelectorAll(".ab-refresh-button")[0];
-  null != o && (o.className += " fa-spin");
-  const s = new Date().valueOf().toString();
-  t.setAttribute("data-last-requested-refresh", s),
+function refreshContentCardsUI(t, e) {
+  if (null == t || null == e) return;
+  e.setAttribute("aria-busy", "true");
+  const n = e.querySelectorAll(".ab-refresh-button")[0];
+  null != n && (n.className += " fa-spin");
+  const o = new Date().valueOf().toString();
+  e.setAttribute("data-last-requested-refresh", o),
     setTimeout(() => {
-      if (t.getAttribute("data-last-requested-refresh") === s) {
-        const e = t.querySelectorAll(".fa-spin");
-        for (let t = 0; t < e.length; t++)
-          e[t].className = e[t].className.replace(/fa-spin/g, "");
-        const o = t.querySelectorAll(".ab-initial-spinner")[0];
-        if (null != o) {
-          const e = document.createElement("span");
-          (e.innerHTML = ue.m().get("FEED_TIMEOUT_MESSAGE") || ""),
-            null != o.parentNode &&
-              (o.parentNode.appendChild(e), o.parentNode.removeChild(o));
+      if (e.getAttribute("data-last-requested-refresh") === o) {
+        const t = e.querySelectorAll(".fa-spin");
+        for (let e = 0; e < t.length; e++)
+          t[e].className = t[e].className.replace(/fa-spin/g, "");
+        const n = e.querySelectorAll(".ab-initial-spinner")[0];
+        if (null != n) {
+          const t = document.createElement("span");
+          (t.innerHTML = Me.ra().get("FEED_TIMEOUT_MESSAGE") || ""),
+            null != n.parentNode &&
+              (n.parentNode.appendChild(t), n.parentNode.removeChild(n));
         }
-        "true" === t.getAttribute("aria-busy") &&
-          t.setAttribute("aria-busy", "false");
+        "true" === e.getAttribute("aria-busy") &&
+          e.setAttribute("aria-busy", "false");
       }
-    }, x.Co),
-    e.sr();
+    }, ContentCards.lr),
+    t.ur();
 }
-function feedToHtml(e, t, o) {
+function contentCardsToHtml(t, e, n) {
+  const o = document.createElement("div");
+  (o.className = "ab-feed ab-hide ab-effect-slide"),
+    o.setAttribute("role", "dialog"),
+    o.setAttribute("aria-label", "Feed"),
+    o.setAttribute("tabindex", "-1");
   const s = document.createElement("div");
-  (s.className = "ab-feed ab-hide ab-effect-slide"),
-    s.setAttribute("role", "dialog"),
-    s.setAttribute("aria-label", "Feed"),
-    s.setAttribute("tabindex", "-1");
-  const n = document.createElement("div");
-  (n.className = "ab-feed-buttons-wrapper"),
-    n.setAttribute("role", "group"),
-    s.appendChild(n);
+  (s.className = "ab-feed-buttons-wrapper"),
+    s.setAttribute("role", "group"),
+    o.appendChild(s);
   const r = document.createElement("i");
   (r.className = "fa fa-times ab-close-button"),
     r.setAttribute("aria-label", "Close Feed"),
     r.setAttribute("tabindex", "0"),
     r.setAttribute("role", "button");
-  const i = (e) => {
-    destroyFeedHtml(s), e.stopPropagation();
+  const a = (t) => {
+    destroyContentCardsHtml(o), t.stopPropagation();
   };
-  r.addEventListener("keydown", (e) => {
-    (e.keyCode !== KeyCodes.Fo && e.keyCode !== KeyCodes.To) || i(e);
+  r.addEventListener("keydown", (t) => {
+    (t.keyCode !== KeyCodes.Ho && t.keyCode !== KeyCodes.Go) || a(t);
   }),
-    (r.onclick = i);
-  const a = document.createElement("i");
-  (a.className = "fa fa-refresh ab-refresh-button"),
-    e && null == e.lastUpdated && (a.className += " fa-spin"),
-    a.setAttribute("aria-label", "Refresh Feed"),
-    a.setAttribute("tabindex", "0"),
-    a.setAttribute("role", "button");
-  const d = (t) => {
-    refreshFeed(e, s), t.stopPropagation();
+    (r.onclick = a);
+  const i = document.createElement("i");
+  (i.className = "fa fa-refresh ab-refresh-button"),
+    t && null == t.lastUpdated && (i.className += " fa-spin"),
+    i.setAttribute("aria-label", "Refresh Feed"),
+    i.setAttribute("tabindex", "0"),
+    i.setAttribute("role", "button");
+  const l = (e) => {
+    refreshContentCardsUI(t, o), e.stopPropagation();
   };
-  a.addEventListener("keydown", (e) => {
-    (e.keyCode !== KeyCodes.Fo && e.keyCode !== KeyCodes.To) || d(e);
+  i.addEventListener("keydown", (t) => {
+    (t.keyCode !== KeyCodes.Ho && t.keyCode !== KeyCodes.Go) || l(t);
   }),
-    (a.onclick = d),
-    n.appendChild(a),
-    n.appendChild(r),
-    s.appendChild(generateFeedBody(e, t));
-  const l = () => detectFeedImpressions(e, s);
-  if ((s.addEventListener("scroll", l), !o)) {
-    window.addEventListener("scroll", l);
-    const e = p$1.W();
-    (scrollListeners[e] = l), s.setAttribute("data-listener-id", e);
+    (i.onclick = l),
+    s.appendChild(i),
+    s.appendChild(r),
+    o.appendChild(generateContentCardsUI(t, e));
+  const d = () => detectContentCardsImpressions(t, o);
+  if ((o.addEventListener("scroll", d), !n)) {
+    window.addEventListener("scroll", d);
+    const t = P$1.se();
+    (scrollListeners[t] = d), o.setAttribute("data-listener-id", t);
   }
-  return s;
+  return o;
 }
-function updateFeedCards(e, t, o, s, n) {
-  if (!isArray(t)) return;
-  const i = [];
-  for (const e of t)
-    if (e instanceof Card) {
-      if (e.url && BRAZE_ACTION_URI_REGEX.test(e.url)) {
-        const t = getDecodedBrazeAction(e.url);
-        if (containsUnknownBrazeAction(t)) {
-          r$1.error(ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Vi, "Content Card"));
+function updateContentCards(t, e, n, o, s) {
+  if (!isArray(e)) return;
+  const r = [];
+  for (const t of e)
+    if (t instanceof Card) {
+      if (t.url && BRAZE_ACTION_URI_REGEX.test(t.url)) {
+        const e = getDecodedBrazeAction(t.url);
+        if (containsUnknownBrazeAction(e)) {
+          E$1.error(ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Pn, "Content Card"));
           continue;
         }
       }
-      i.push(e);
+      r.push(t);
     }
-  if (((e.cards = i), (e.lastUpdated = o), null != s))
-    if ((s.setAttribute("aria-busy", "false"), null == e.lastUpdated))
-      destroyFeedHtml(s);
+  if (((t.cards = r), (t.lastUpdated = n), null != o))
+    if ((o.setAttribute("aria-busy", "false"), null == t.lastUpdated))
+      destroyContentCardsHtml(o);
     else {
-      const t = s.querySelectorAll(".ab-feed-body")[0];
-      if (null != t) {
-        const o = generateFeedBody(e, n);
-        t.parentNode && t.parentNode.replaceChild(o, t),
-          detectFeedImpressions(e, o.parentNode);
+      const e = o.querySelectorAll(".ab-feed-body")[0];
+      if (null != e) {
+        const n = generateContentCardsUI(t, s);
+        e.parentNode && e.parentNode.replaceChild(n, e),
+          detectContentCardsImpressions(t, n.parentNode);
       }
     }
 }
-function registerFeedSubscriptionId(e, t) {
-  e && t.setAttribute("data-update-subscription-id", e);
+function registerContentCardsSubscriptionId(t, e) {
+  t && e.setAttribute(BannerStrings.ea, t);
 }
 
 function hideContentCards(n) {
-  if (!e.X()) return;
+  if (!r.rr()) return;
   const o = document.querySelectorAll(".ab-feed");
-  for (let e = 0; e < o.length; e++)
-    (null == n || (null != n && o[e].parentNode === n)) && destroyFeedHtml(o[e]);
+  for (let t = 0; t < o.length; t++)
+    (null == n || (null != n && o[t].parentNode === n)) && destroyContentCardsHtml(o[t]);
 }
 
 function showContentCards(n, t) {
-  if (!e.X()) return;
+  if (!r.rr()) return;
   setupFeedUI();
-  let o = !1;
-  null == n && ((n = document.body), (o = !0));
-  const i = e.nn(L.tn) || e.nn(L.en) || !1,
-    a = g$1.rr().As(!1);
-  "function" == typeof t && updateFeedCards(a, t(a.cards.slice()), a.lastUpdated, null, i);
-  const s = feedToHtml(a, i, o),
-    f = g$1.rr(),
-    l = f.ps();
-  (null == a.lastUpdated ||
-    new Date().valueOf() - a.lastUpdated.valueOf() > ContentCards.ur) &&
-    (null == l || new Date().valueOf() - l > ContentCards.ur) &&
-    (r$1.info(
-      `Cached content cards were older than max TTL of ${ContentCards.ur} ms, requesting an update from the server.`,
+  let e = !1;
+  null == n && ((n = document.body), (e = !0));
+  const o = r.re(D.tn) || !1,
+    s = rr$1.o().Ws(!1);
+  "function" == typeof t && updateContentCards(s, t(s.cards.slice()), s.lastUpdated, null, o);
+  const a = contentCardsToHtml(s, o, e),
+    i = rr$1.o(),
+    c = i.Bs();
+  (null == s.lastUpdated ||
+    new Date().valueOf() - s.lastUpdated.valueOf() > ContentCards.Cr) &&
+    (null == c || new Date().valueOf() - c > ContentCards.Cr) &&
+    (E$1.info(
+      `Cached content cards were older than max TTL of ${ContentCards.Cr} ms, requesting an update from the server.`,
     ),
-    refreshFeed(a, s),
-    f.vs(new Date().valueOf()));
-  const c = new Date().valueOf(),
-    u = subscribeToContentCardsUpdates(function (n) {
-      const e = s.querySelectorAll(".ab-refresh-button")[0];
+    refreshContentCardsUI(s, a),
+    i.Es(new Date().valueOf()));
+  const f = new Date().valueOf(),
+    l = subscribeToContentCardsUpdates(function (n) {
+      const e = a.querySelectorAll(".ab-refresh-button")[0];
       if (null != e) {
         let n = 500,
-          t = (n -= new Date().valueOf() - c);
-        const o = s.getAttribute(LAST_REQUESTED_REFRESH_DATA_ATTRIBUTE);
+          t = (n -= new Date().valueOf() - f);
+        const o = a.getAttribute(LAST_REQUESTED_REFRESH_DATA_ATTRIBUTE);
         o && ((t = parseInt(o)), isNaN(t) || (n -= new Date().valueOf() - t)),
           setTimeout(
             function () {
@@ -8393,56 +9339,56 @@ function showContentCards(n, t) {
             Math.max(n, 0),
           );
       }
-      let o = n.cards;
-      "function" == typeof t && (o = t(o.slice())),
-        updateFeedCards(a, o, n.lastUpdated, s, i);
+      let r = n.cards;
+      "function" == typeof t && (r = t(r.slice())),
+        updateContentCards(s, r, n.lastUpdated, a, o);
     });
-  registerFeedSubscriptionId(u, s);
-  const d = function (n) {
+  registerContentCardsSubscriptionId(l, a);
+  const u = function (n) {
     const t = n.querySelectorAll(".ab-feed");
-    let e = null;
-    for (let o = 0; o < t.length; o++) t[o].parentNode === n && (e = t[o]);
-    null != e
-      ? (destroyFeedHtml(e), null != e.parentNode && e.parentNode.replaceChild(s, e))
-      : n.appendChild(s),
+    let o = null;
+    for (let e = 0; e < t.length; e++) t[e].parentNode === n && (o = t[e]);
+    null != o
+      ? (destroyContentCardsHtml(o), null != o.parentNode && o.parentNode.replaceChild(a, o))
+      : n.appendChild(a),
       setTimeout(function () {
-        s.className = s.className.replace("ab-hide", "ab-show");
+        a.className = a.className.replace("ab-hide", "ab-show");
       }, 0),
-      o && s.focus(),
-      detectFeedImpressions(a, s),
-      setCardHeight(a.cards, n);
+      e && a.focus(),
+      detectContentCardsImpressions(s, a),
+      setCardHeight(s.cards, n);
   };
-  var m;
+  var d;
   null != n
-    ? d(n)
+    ? u(n)
     : (window.onload =
-        ((m = window.onload),
+        ((d = window.onload),
         function () {
-          "function" == typeof m && m(new Event("oldLoad")), d(document.body);
+          "function" == typeof d && d(new Event("oldLoad")), u(document.body);
         }));
 }
 
-function subscribeToContentCardsUpdates(r) {
-  if (!e.X()) return;
-  const t = g$1.rr(),
-    n = t.si(r);
-  if (!t.ws()) {
-    const r = e.cr();
-    if (r) {
-      const n = r.mr(() => {
-        t.qs();
+function subscribeToContentCardsUpdates(o) {
+  if (!r.rr()) return;
+  const t = rr$1.o(),
+    n = t.It(o);
+  if (!t.St()) {
+    const o = r.nn();
+    if (o) {
+      const r = o.rn(() => {
+        t.ar(void 0, void 0, !0);
       });
-      n && t.Cs(n);
+      r && t.wt(r);
     }
   }
   return n;
 }
 
-function toggleContentCards(n, o) {
-  e.X() &&
+function toggleContentCards(e, n) {
+  r.rr() &&
     (document.querySelectorAll(".ab-feed").length > 0
       ? hideContentCards()
-      : showContentCards(n, o));
+      : showContentCards(e, n));
 }
 
 var BrazeSdkMetadata = {
@@ -8457,12 +9403,12 @@ var BrazeSdkMetadata = {
 };
 
 function addSdkMetadata(a) {
-  if (!e.X()) return;
-  const t = e.nr();
+  if (!r.rr()) return;
+  const t = r.m();
   if (t) {
     if (!isArray(a))
       return (
-        r$1.error("Cannot set SDK metadata because metadata is not an array."), !1
+        E$1.error("Cannot set SDK metadata because metadata is not an array."), !1
       );
     for (const t of a)
       if (
@@ -8478,17 +9424,17 @@ function addSdkMetadata(a) {
   }
 }
 
-function changeUser(i, t) {
-  if (!e.X()) return;
-  if (null == i || 0 === i.length || i != i)
-    return void r$1.error("changeUser requires a non-empty userId.");
-  if (getByteLength(i) > User.lr)
-    return void r$1.error(
-      `Rejected user id "${i}" because it is longer than ${User.lr} bytes.`,
+function changeUser(e, i) {
+  if (!r.rr()) return;
+  if (null == e || 0 === e.length || e != e)
+    return void E$1.error("changeUser requires a non-empty userId.");
+  if (getByteLength(e) > User.mr)
+    return void E$1.error(
+      `Rejected user id "${e}" because it is longer than ${User.mr} bytes.`,
     );
-  if (null != t && !validateStandardString(t, "set signature for new user", "signature")) return;
-  const n = e.cr();
-  n && n.changeUser(i.toString(), e.gr(), t);
+  if (null != i && !validateStandardString(i, "set signature for new user", "signature")) return;
+  const t = r.nn();
+  t && t.changeUser(e.toString(), r.gr(), i);
 }
 
 var changeUser$1 = /*#__PURE__*/Object.freeze({
@@ -8497,82 +9443,82 @@ var changeUser$1 = /*#__PURE__*/Object.freeze({
 });
 
 function destroy() {
-  r$1.info("Destroying Braze instance"), e.destroy(!0);
+  E$1.info("Destroying Braze instance"), r.destroy(!0);
 }
 
 function disableSDK() {
-  const n = e.cr();
-  n && n.requestImmediateDataFlush();
-  const s = new Q.ee(null, !0),
-    a = "This-cookie-will-expire-in-" + s.ne();
-  s.store(STORAGE_KEYS.se, a);
-  const i = A.ts.Zt;
-  new A(i, r$1).setItem(i.hs.ae, i.ie, !0),
-    r$1.info("disableSDK was called"),
-    e.destroy(!1),
-    e.oe(!0);
+  const e = r.nn();
+  e && e.requestImmediateDataFlush();
+  const n = new ee.le(null, !0),
+    a = "This-cookie-will-expire-in-" + n.me();
+  n.store(STORAGE_KEYS.pe, a);
+  const i = et.Us.Rs;
+  new et(i, E$1).setItem(i.Fs.be, i.fe, !0),
+    E$1.info("disableSDK was called"),
+    r.destroy(!1),
+    r.ge(!0);
 }
 
 function enableSDK() {
-  new Q.ee(null, !0).remove(STORAGE_KEYS.se);
-  const a = A.ts.Zt;
-  new A(a, r$1).re(a.hs.ae, a.ie),
-    r$1.info("enableSDK was called"),
-    e.destroy(!1),
-    e.oe(!1);
+  new ee.le(null, !0).remove(STORAGE_KEYS.pe);
+  const e = et.Us.Rs;
+  new et(e, E$1).je(e.Fs.be, e.fe),
+    E$1.info("enableSDK was called"),
+    r.destroy(!1),
+    r.ge(!1);
 }
 
-function getDeviceId(t) {
-  if (!e.X()) return;
-  const i = e.te();
-  if (!i) return;
-  const n = i.ce().id;
-  if ("function" != typeof t) return n;
-  r$1.warn(
+function getDeviceId(e) {
+  if (!r.rr()) return;
+  const t = r.ue();
+  if (!t) return;
+  const i = t.ve().id;
+  if ("function" != typeof e) return i;
+  E$1.warn(
     "The callback for getDeviceId is deprecated. You can access its return value directly instead (e.g. `const id = braze.getDeviceId()`)",
   ),
-    t(n);
+    e(i);
 }
 
 function initialize(i, n) {
-  return e.initialize(i, n);
+  return r.initialize(i, n);
 }
 
 function isDisabled() {
-  return !!new Q.ee(null, !0).br(STORAGE_KEYS.se);
+  return !!new ee.le(null, !0).jr(STORAGE_KEYS.pe);
 }
 
 function isInitialized() {
-  return e.so();
+  return r.ao();
 }
 
-function logCustomEvent(o, n) {
-  if (!e.X()) return !1;
-  if (null == o || o.length <= 0)
+function logCustomEvent(t, e) {
+  if (!r.rr()) return !1;
+  if (null == t || t.length <= 0)
     return (
-      r$1.error(
-        `logCustomEvent requires a non-empty eventName, got "${o}". Ignoring event.`,
+      E$1.error(
+        `logCustomEvent requires a non-empty eventName, got "${t}". Ignoring event.`,
       ),
       !1
     );
-  if (!validateCustomString(o, "log custom event", "the event name")) return !1;
-  const [s, m] = validateCustomProperties(
-    n,
-    LOG_CUSTOM_EVENT_STRING,
+  if (!validateCustomString(t, "log custom event", "the event name")) return !1;
+  const [o, n] = validateCustomProperties(
+    e,
+    CoreStrings.$e,
     "eventProperties",
-    `log custom event "${o}"`,
+    `log custom event "${t}"`,
     "event",
   );
-  if (!s) return !1;
-  const g = e.ir();
-  if (g && g.me(o))
-    return r$1.info(`Custom Event "${o}" is blocklisted, ignoring.`), !1;
-  const f = t$1.q(i.CustomEvent, { n: o, p: m });
-  if (f.L) {
-    r$1.info(`Logged custom event "${o}".`);
-    for (const t of f.ge) TriggersProviderFactory.rr().fe(tt.ue, [o, n], t);
+  if (!o) return !1;
+  const i = r.l();
+  if (i && i.Ce(t))
+    return E$1.info(`Custom Event "${t}" is blocklisted, ignoring.`), !1;
+  const s = v$1.lt(f.CustomEvent, { n: t, p: n });
+  if (s.W) {
+    E$1.info(`Logged custom event "${t}".`);
+    for (const o of s.Ee) TriggersProviderFactory.o().he(ot.xe, [t, e], o);
   }
-  return f.L;
+  return s.W;
 }
 
 var logCustomEvent$1 = /*#__PURE__*/Object.freeze({
@@ -8580,37 +9526,37 @@ var logCustomEvent$1 = /*#__PURE__*/Object.freeze({
 	logCustomEvent: logCustomEvent
 });
 
-function logPurchase(o, n, s, D, u) {
-  if (!e.X()) return !1;
+function logPurchase(e, o, i, n, t) {
+  if (!r.rr()) return !1;
   if (
-    (null == s && (s = "USD"), null == D && (D = 1), null == o || o.length <= 0)
+    (null == i && (i = "USD"), null == n && (n = 1), null == e || e.length <= 0)
   )
     return (
-      r$1.error(
-        `logPurchase requires a non-empty productId, got "${o}", ignoring.`,
+      E$1.error(
+        `logPurchase requires a non-empty productId, got "${e}", ignoring.`,
       ),
       !1
     );
-  if (!validateCustomString(o, "log purchase", "the purchase name")) return !1;
-  if (null == n || isNaN(parseFloat(n.toString())))
+  if (!validateCustomString(e, "log purchase", "the purchase name")) return !1;
+  if (null == o || isNaN(parseFloat(o.toString())))
     return (
-      r$1.error(`logPurchase requires a numeric price, got ${n}, ignoring.`), !1
+      E$1.error(`logPurchase requires a numeric price, got ${o}, ignoring.`), !1
     );
-  const a = parseFloat(n.toString()).toFixed(2);
-  if (null == D || isNaN(parseInt(D.toString())))
+  const s = parseFloat(o.toString()).toFixed(2);
+  if (null == n || isNaN(parseInt(n.toString())))
     return (
-      r$1.error(`logPurchase requires an integer quantity, got ${D}, ignoring.`),
+      E$1.error(`logPurchase requires an integer quantity, got ${n}, ignoring.`),
       !1
     );
-  const g = parseInt(D.toString());
-  if (g < 1 || g > MAX_PURCHASE_QUANTITY)
+  const D = parseInt(n.toString());
+  if (D < 1 || D > MAX_PURCHASE_QUANTITY)
     return (
-      r$1.error(
-        `logPurchase requires a quantity >1 and <${MAX_PURCHASE_QUANTITY}, got ${g}, ignoring.`,
+      E$1.error(
+        `logPurchase requires a quantity >1 and <${MAX_PURCHASE_QUANTITY}, got ${D}, ignoring.`,
       ),
       !1
     );
-  s = null != s ? s.toUpperCase() : s;
+  i = null != i ? i.toUpperCase() : i;
   if (
     -1 ===
     [
@@ -8785,29 +9731,29 @@ function logPurchase(o, n, s, D, u) {
       "ZMK",
       "ZMW",
       "ZWL",
-    ].indexOf(s)
+    ].indexOf(i)
   )
     return (
-      r$1.error(`logPurchase requires a valid currencyCode, got ${s}, ignoring.`),
+      E$1.error(`logPurchase requires a valid currencyCode, got ${i}, ignoring.`),
       !1
     );
-  const [P, R] = validateCustomProperties(
-    u,
+  const [u, a] = validateCustomProperties(
+    t,
     "logPurchase",
     "purchaseProperties",
-    `log purchase "${o}"`,
+    `log purchase "${e}"`,
     "purchase",
   );
-  if (!P) return !1;
-  const c = e.ir();
-  if (c && c.Dr(o))
-    return r$1.info(`Purchase "${o}" is blocklisted, ignoring.`), !1;
-  const l = t$1.q(i.Pr, { pid: o, c: s, p: a, q: g, pr: R });
-  if (l.L) {
-    r$1.info(`Logged ${g} purchase${g > 1 ? "s" : ""} of "${o}" for ${s} ${a}.`);
-    for (const r of l.ge) TriggersProviderFactory.rr().fe(tt.Rr, [o, u], r);
+  if (!u) return !1;
+  const g = r.l();
+  if (g && g.Dr(e))
+    return E$1.info(`Purchase "${e}" is blocklisted, ignoring.`), !1;
+  const P = v$1.lt(f.Pr, { pid: e, c: i, p: s, q: D, pr: a });
+  if (P.W) {
+    E$1.info(`Logged ${D} purchase${D > 1 ? "s" : ""} of "${e}" for ${i} ${s}.`);
+    for (const r of P.Ee) TriggersProviderFactory.o().he(ot.Rr, [e, t], r);
   }
-  return l.L;
+  return P.W;
 }
 
 var logPurchase$1 = /*#__PURE__*/Object.freeze({
@@ -8816,35 +9762,35 @@ var logPurchase$1 = /*#__PURE__*/Object.freeze({
 });
 
 function openSession() {
-  if (!e.X()) return;
-  const i = e.cr();
+  if (!r.rr()) return;
+  const i = r.nn();
   if (!i) return;
   i.openSession();
-  const t = A.ts.Zt,
-    o = new A(t, r$1);
-  o.jr(t.hs.hr, (n, e) => {
-    const s = e.lastClick,
-      c = e.trackingString;
-    r$1.info(`Firing push click trigger from ${c} push click at ${s}`);
-    const g = i.kr(s, c),
-      f = function () {
-        TriggersProviderFactory.rr().fe(tt.vr, [c], g);
+  const t = et.Us.Rs,
+    o = new et(t, E$1);
+  o.kr(t.Fs.vr, (r, n) => {
+    const e = n.lastClick,
+      s = n.trackingString;
+    E$1.info(`Firing push click trigger from ${s} push click at ${e}`);
+    const c = i.$r(e, s),
+      g = function () {
+        TriggersProviderFactory.o().he(ot.wr, [s], c);
       };
-    i.$r(f, f), o.re(t.hs.hr, n);
+    i.yr(g, g), o.je(t.Fs.vr, r);
   }),
-    o.ss(t.hs.wr, function (r) {
-      i.yr(r);
+    o.Ds(t.Fs.zr, function (r) {
+      i.Fr(r);
     });
 }
 
 function removeAllSubscriptions() {
-  e.X() && e.removeAllSubscriptions();
+  r.rr() && r.removeAllSubscriptions();
 }
 
-function requestImmediateDataFlush(t) {
-  if (!e.X()) return;
-  const r = e.cr();
-  r && r.requestImmediateDataFlush(t);
+function requestImmediateDataFlush(e) {
+  if (!r.rr()) return;
+  const t = r.nn();
+  t && t.requestImmediateDataFlush(e);
 }
 
 var requestImmediateDataFlush$1 = /*#__PURE__*/Object.freeze({
@@ -8853,355 +9799,124 @@ var requestImmediateDataFlush$1 = /*#__PURE__*/Object.freeze({
 });
 
 function setLogger(e) {
-  r$1.setLogger(e);
+  E$1.setLogger(e);
 }
 
 function setSdkAuthenticationSignature(t) {
-  if (!e.X()) return !1;
+  if (!r.rr()) return !1;
   if ("" === t || !validateStandardString(t, "set signature", "signature", !1)) return !1;
-  const r = e.Sr();
-  return !!r && (r.setSdkAuthenticationSignature(t), !0);
+  const i = r.Sr();
+  return !!i && (i.setSdkAuthenticationSignature(t), !0);
 }
 
 function subscribeToSdkAuthenticationFailures(i) {
-  var r;
-  if (e.X())
-    return null === (r = e.Sr()) || void 0 === r
+  var n;
+  if (r.rr())
+    return null === (n = r.Sr()) || void 0 === n
       ? void 0
-      : r.subscribeToSdkAuthenticationFailures(i);
+      : n.subscribeToSdkAuthenticationFailures(i);
 }
 
 function toggleLogging() {
-  r$1.toggleLogging();
+  E$1.toggleLogging();
 }
 
 function wipeData() {
-  const o = e.l();
-  if (null == o) return void r$1.warn(BRAZE_MUST_BE_INITIALIZED_ERROR);
+  const o = r.p();
+  if (null == o) return void E$1.warn(CoreStrings.ee);
   o.clearData();
-  const t = keys(A.ts);
+  const t = keys(et.Us);
   for (let o = 0; o < t.length; o++) {
     const n = t[o],
-      i = A.ts[n];
-    new A(i, r$1).clearData();
+      r = et.Us[n];
+    new et(r, E$1).clearData();
   }
-  if (e.X()) for (const o of e.gr()) o.clearData(!0);
-}
-
-class ee extends y {
-  constructor(t, s) {
-    super(),
-      (this.u = t),
-      (this.Ui = s),
-      (this.cards = []),
-      (this.ki = null),
-      (this.u = t),
-      (this.Ui = s),
-      (this.Bt = new T()),
-      e.Ht(this.Bt),
-      this.Yt();
-  }
-  Yt() {
-    let t = [];
-    this.u && (t = this.u.j(STORAGE_KEYS.C.Ai) || []);
-    const s = [];
-    for (let i = 0; i < t.length; i++) {
-      const e = newCardFromSerializedValue(t[i]);
-      null != e && s.push(e);
-    }
-    (this.cards = s), this.u && (this.ki = rehydrateDateAfterJsonization(this.u.j(STORAGE_KEYS.C.Bi)));
-  }
-  Ei(t) {
-    const s = [];
-    let i = null,
-      e = {};
-    this.u && (e = this.u.j(STORAGE_KEYS.C.J) || {});
-    const r = {};
-    for (let h = 0; h < t.length; h++) {
-      i = t[h];
-      const o = newCardFromFeedJson(i);
-      if (null != o) {
-        const t = o.id;
-        t && e[t] && ((o.viewed = !0), (r[t] = !0)), s.push(o);
-      }
-    }
-    (this.cards = s),
-      this.Ts(),
-      (this.ki = new Date()),
-      this.u && (this.u.I(STORAGE_KEYS.C.J, r), this.u.I(STORAGE_KEYS.C.Bi, this.ki));
-  }
-  Ts() {
-    var t;
-    const s = [];
-    for (let t = 0; t < this.cards.length; t++) s.push(this.cards[t].Y());
-    null === (t = this.u) || void 0 === t || t.I(STORAGE_KEYS.C.Ai, s);
-  }
-  Ss(t) {
-    null != t &&
-      t.feed &&
-      (this.Yt(),
-      this.Ei(t.feed),
-      this.Bt.Rt(new Feed(this.cards.slice(), this.ki)));
-  }
-  Gi() {
-    this.Yt();
-    const t = [],
-      s = new Date();
-    for (let i = 0; i < this.cards.length; i++) {
-      const e = this.cards[i].expiresAt;
-      let r = !0;
-      null != e && (r = e >= s), r && t.push(this.cards[i]);
-    }
-    return new Feed(t, this.ki);
-  }
-  qs() {
-    this.Ui && this.Ui.requestFeedRefresh();
-  }
-  si(t) {
-    return this.Bt.Nt(t);
-  }
-  clearData(t) {
-    null == t && (t = !1),
-      (this.cards = []),
-      (this.ki = null),
-      t && this.u && (this.u.ii(STORAGE_KEYS.C.Ai), this.u.ii(STORAGE_KEYS.C.Bi)),
-      this.Bt.Rt(new Feed(this.cards.slice(), this.ki));
-  }
-}
-
-const re = {
-  t: !1,
-  provider: null,
-  rr: () => (
-    re.o(),
-    re.provider || ((re.provider = new ee(e.l(), e.cr())), e.ar(re.provider)),
-    re.provider
-  ),
-  o: () => {
-    re.t || (e.g(re), (re.t = !0));
-  },
-  destroy: () => {
-    (re.provider = null), (re.t = !1);
-  },
-};
-var re$1 = re;
-
-function requestFeedRefresh() {
-  if (e.X()) return re$1.rr().qs();
-}
-
-class Feed extends x {
-  constructor(r, e) {
-    super(r, e);
-  }
-  logCardImpressions(r) {
-    logCardImpressions(r, !1);
-  }
-  logCardClick(r) {
-    return logCardClick(r, !1);
-  }
-  sr() {
-    requestFeedRefresh();
-  }
-  dr() {
-    return !1;
-  }
-}
-
-function getCachedFeed() {
-  if (e.X()) return re$1.rr().Gi();
-}
-
-function destroyFeed() {
-  if (!e.X()) return;
-  const o = document.querySelectorAll(".ab-feed");
-  for (let e = 0; e < o.length; e++) destroyFeedHtml(o[e]);
-}
-
-function logFeedDisplayed() {
-  var r;
-  if (e.X())
-    return null === (r = e.nr()) || void 0 === r ? void 0 : r.qr(or.Ar).L;
-}
-
-function showFeed(t, n, o) {
-  if (!e.X()) return;
-  setupFeedUI();
-  const i = (e, t) => {
-      if (null == t) return e;
-      const n = [];
-      for (let e = 0; e < t.length; e++) n.push(t[e].toLowerCase());
-      const o = [];
-      for (let t = 0; t < e.length; t++) {
-        const r = [],
-          i = e[t].categories || [];
-        for (let e = 0; e < i.length; e++) r.push(i[e].toLowerCase());
-        intersection(r, n).length > 0 && o.push(e[t]);
-      }
-      return o;
-    },
-    s = e.nn(L.tn) || e.nn(L.en) || !1;
-  let l = !1;
-  null == t && ((t = document.body), (l = !0));
-  let f,
-    a = !1;
-  null == n
-    ? ((f = re$1.rr().Gi()),
-      updateFeedCards(f, i(f.cards, o), f.lastUpdated, null, s),
-      (a = !0))
-    : (f = new Feed(i(n, o), new Date()));
-  const u = feedToHtml(f, s, l);
-  if (a) {
-    (null == f.lastUpdated ||
-      new Date().valueOf() - f.lastUpdated.valueOf() > Feed.ur) &&
-      (r$1.info(
-        `Cached feed was older than max TTL of ${Feed.ur} ms, requesting an update from the server.`,
-      ),
-      refreshFeed(f, u));
-    const e = new Date().valueOf(),
-      t = subscribeToFeedUpdates(function (t) {
-        const n = u.querySelectorAll(".ab-refresh-button")[0];
-        if (null != n) {
-          let t = 500;
-          t -= new Date().valueOf() - e;
-          const o = u.getAttribute(LAST_REQUESTED_REFRESH_DATA_ATTRIBUTE);
-          if (o) {
-            const e = parseInt(o);
-            isNaN(e) || (t -= new Date().valueOf() - e);
-          }
-          setTimeout(
-            function () {
-              n.className = n.className.replace(/fa-spin/g, "");
-            },
-            Math.max(t, 0),
-          );
-        }
-        updateFeedCards(f, i(t.cards, o), t.lastUpdated, u, s);
-      });
-    registerFeedSubscriptionId(t, u);
-  }
-  const d = (e) => {
-    const t = e.querySelectorAll(".ab-feed");
-    let n = null;
-    for (let o = 0; o < t.length; o++) t[o].parentNode === e && (n = t[o]);
-    null != n
-      ? (destroyFeedHtml(n), n.parentNode && n.parentNode.replaceChild(u, n))
-      : e.appendChild(u),
-      setTimeout(function () {
-        u.className = u.className.replace("ab-hide", "ab-show");
-      }, 0),
-      l && u.focus(),
-      logFeedDisplayed(),
-      detectFeedImpressions(f, u),
-      f && setCardHeight(f.cards, e);
-  };
-  var m;
-  null != t
-    ? d(t)
-    : (window.onload =
-        ((m = window.onload),
-        function () {
-          "function" == typeof m && m(new Event("oldLoad")), d(document.body);
-        }));
-}
-
-var showFeed$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	showFeed: showFeed
-});
-
-function subscribeToFeedUpdates(r) {
-  if (e.X()) return re$1.rr().si(r);
-}
-
-function toggleFeed(o, n, r) {
-  e.X() &&
-    (document.querySelectorAll(".ab-feed").length > 0
-      ? destroyFeed()
-      : showFeed(o, n, r));
+  if (r.rr()) for (const o of r.gr()) o.clearData(!0);
+  const n = r.m();
+  n && n.fo();
 }
 
 function isPushBlocked() {
-  if (e.X()) return yt$1.isPushBlocked();
+  if (r.rr()) return vt$1.isPushBlocked();
 }
 
 function isPushPermissionGranted() {
-  if (e.X()) return yt$1.isPushPermissionGranted();
+  if (r.rr()) return vt$1.isPushPermissionGranted();
 }
 
 function isPushSupported() {
-  if (e.X()) return yt$1.isPushSupported();
+  if (r.rr()) return vt$1.isPushSupported();
 }
 
-class ea {
+class na {
   constructor(i, t, e, s, r, n, o, u, a, h, c) {
-    (this.sn = i),
-      (this.rn = t),
-      (this.on = e),
-      (this.un = r),
-      (this.an = n),
-      (this.hn = o),
-      (this.qt = u),
-      (this.cn = a),
-      (this.fn = h),
-      (this.u = c),
-      (this.sn = i),
-      (this.rn = t),
-      (this.on = e),
-      (this.ln = s + "/safari/" + t),
-      (this.un = r || "/service-worker.js"),
-      (this.hn = o),
-      (this.qt = u),
-      (this.cn = a || !1),
-      (this.fn = h || !1),
-      (this.u = c),
-      (this.dn = yt$1.pn()),
-      (this.bn = yt$1.yn());
+    (this.iu = i),
+      (this.tu = t),
+      (this.eu = e),
+      (this.su = r),
+      (this.ru = n),
+      (this.nu = o),
+      (this.h = u),
+      (this.ou = a),
+      (this.uu = h),
+      (this.B = c),
+      (this.iu = i),
+      (this.tu = t),
+      (this.eu = e),
+      (this.au = s + "/safari/" + t),
+      (this.su = r || "/service-worker.js"),
+      (this.nu = o),
+      (this.h = u),
+      (this.ou = a || !1),
+      (this.uu = h || !1),
+      (this.B = c),
+      (this.hu = vt$1.cu()),
+      (this.fu = vt$1.lu());
   }
-  mn() {
-    return this.fn;
+  du() {
+    return this.uu;
   }
-  gn(i, t, e, s, n) {
+  pu(i, t, e, s, r) {
     i.unsubscribe()
       .then((i) => {
         i
-          ? this.vn(t, e, s, n)
-          : (r$1.error("Failed to unsubscribe device from push."),
-            "function" == typeof n && n(!1));
+          ? this.bu(t, e, s, r)
+          : (E$1.error("Failed to unsubscribe device from push."),
+            "function" == typeof r && r(!1));
       })
       .catch((i) => {
-        r$1.error("Push unsubscription error: " + i),
-          "function" == typeof n && n(!1);
+        E$1.error("Push unsubscription error: " + i),
+          "function" == typeof r && r(!1);
       });
   }
-  wn(i, t, e) {
+  yu(i, t, e) {
     var s;
-    const n = ((i) => {
+    const r = ((i) => {
       if ("string" == typeof i) return i;
       if (0 !== i.endpoint.indexOf("https://android.googleapis.com/gcm/send"))
         return i.endpoint;
       let t = i.endpoint;
       const e = i;
       return (
-        e.kn &&
-          -1 === i.endpoint.indexOf(e.kn) &&
-          (t = i.endpoint + "/" + e.kn),
+        e.mu &&
+          -1 === i.endpoint.indexOf(e.mu) &&
+          (t = i.endpoint + "/" + e.mu),
         t
       );
     })(i);
-    let o = null,
-      u = null;
-    const a = i;
-    if (null != a.getKey)
+    let n = null,
+      o = null;
+    const u = i;
+    if (null != u.getKey)
       try {
-        const i = Array.from(new Uint8Array(a.getKey("p256dh"))),
-          t = Array.from(new Uint8Array(a.getKey("auth")));
-        (o = btoa(String.fromCharCode.apply(null, i))),
-          (u = btoa(String.fromCharCode.apply(null, t)));
+        const i = Array.from(new Uint8Array(u.getKey("p256dh"))),
+          t = Array.from(new Uint8Array(u.getKey("auth")));
+        (n = btoa(String.fromCharCode.apply(null, i))),
+          (o = btoa(String.fromCharCode.apply(null, t)));
       } catch (i) {
-        r$1.error(getErrorMessage(i));
+        E$1.error(getErrorMessage(i));
       }
-    const h = ((i) => {
+    const a = ((i) => {
       let t;
       return i.options &&
         (t = i.options.applicationServerKey) &&
@@ -9211,54 +9926,54 @@ class ea {
             .replace(/\+/g, "-")
             .replace(/\//g, "_")
         : null;
-    })(a);
-    null === (s = this.sn) || void 0 === s || s.Pn(n, t, o, u, h),
-      n && "function" == typeof e && e(n, o, u);
+    })(u);
+    null === (s = this.iu) || void 0 === s || s.gu(r, t, n, o, a),
+      r && "function" == typeof e && e(r, n, o);
   }
-  Dn() {
+  vu() {
     var i;
-    null === (i = this.sn) || void 0 === i || i.Sn(!0);
+    null === (i = this.iu) || void 0 === i || i.wu(!0);
   }
-  An(i, t) {
+  ku(i, t) {
     var e;
-    null === (e = this.sn) || void 0 === e || e.Sn(!1),
-      r$1.info(i),
+    null === (e = this.iu) || void 0 === e || e.wu(!1),
+      E$1.info(i),
       "function" == typeof t && t(!1);
   }
-  jn(i, t, e, s) {
-    var n;
+  Pu(i, t, e, s) {
+    var r;
     if ("default" === t.permission)
       try {
         window.safari.pushNotification.requestPermission(
-          this.ln,
+          this.au,
           i,
           {
-            api_key: this.rn,
+            api_key: this.tu,
             device_id:
-              (null === (n = this.on) || void 0 === n ? void 0 : n.ce().id) ||
+              (null === (r = this.eu) || void 0 === r ? void 0 : r.ve().id) ||
               "",
           },
           (t) => {
             "granted" === t.permission &&
-              this.sn &&
-              this.sn.setPushNotificationSubscriptionType(
+              this.iu &&
+              this.iu.setPushNotificationSubscriptionType(
                 User.NotificationSubscriptionTypes.OPTED_IN,
               ),
-              this.jn(i, t, e, s);
+              this.Pu(i, t, e, s);
           },
         );
       } catch (i) {
-        this.An("Could not request permission for push: " + i, s);
+        this.ku("Could not request permission for push: " + i, s);
       }
     else
       "denied" === t.permission
-        ? this.An(
+        ? this.ku(
             "The user has blocked notifications from this site, or Safari push is not configured in the Braze dashboard.",
             s,
           )
         : "granted" === t.permission &&
-          (r$1.info("Device successfully subscribed to push."),
-          this.wn(t.deviceToken, new Date(), e));
+          (E$1.info("Device successfully subscribed to push."),
+          this.yu(t.deviceToken, new Date(), e));
   }
   requestPermission(i, t, e) {
     const s = (s) => {
@@ -9270,290 +9985,290 @@ class ea {
         case "denied":
           return void ("function" == typeof e && e());
         default:
-          r$1.error("Received unexpected permission result " + s);
+          E$1.error("Received unexpected permission result " + s);
       }
     };
-    let n = !1;
+    let r = !1;
     if ("default" !== window.Notification.permission)
       s(Notification.permission);
     else {
       const i = window.Notification.requestPermission((i) => {
-        n && s(i);
+        r && s(i);
       });
       i
         ? i.then((i) => {
             s(i);
           })
-        : (n = !0);
+        : (r = !0);
     }
   }
-  vn(i, t, e, s) {
-    const n = { userVisibleOnly: !0 };
-    null != t && (n.applicationServerKey = t),
+  bu(i, t, e, s) {
+    const r = { userVisibleOnly: !0 };
+    null != t && (r.applicationServerKey = t),
       i.pushManager
-        .subscribe(n)
+        .subscribe(r)
         .then((i) => {
-          r$1.info("Device successfully subscribed to push."),
-            this.wn(i, new Date(), e);
+          E$1.info("Device successfully subscribed to push."),
+            this.yu(i, new Date(), e);
         })
         .catch((i) => {
-          yt$1.isPushBlocked()
-            ? (r$1.info("Permission for push notifications was denied."),
+          vt$1.isPushBlocked()
+            ? (E$1.info("Permission for push notifications was denied."),
               "function" == typeof s && s(!1))
-            : (r$1.error("Push subscription failed: " + i),
+            : (E$1.error("Push subscription failed: " + i),
               "function" == typeof s && s(!0));
         });
   }
-  xn() {
-    if (this.cn) return navigator.serviceWorker.getRegistration(this.un);
-    const i = this.an ? { scope: this.an } : void 0;
-    return navigator.serviceWorker.register(this.un, i).then(() =>
+  Du() {
+    if (this.ou) return navigator.serviceWorker.getRegistration(this.su);
+    const i = this.ru ? { scope: this.ru } : void 0;
+    return navigator.serviceWorker.register(this.su, i).then(() =>
       navigator.serviceWorker.ready.then(
         (i) => (
           i &&
             "function" == typeof i.update &&
             i.update().catch((i) => {
-              r$1.info("ServiceWorker update failed: " + i);
+              E$1.info("ServiceWorker update failed: " + i);
             }),
           i
         ),
       ),
     );
   }
-  Nn(i) {
-    this.cn ||
-      (i.unregister(), r$1.info("Service worker successfully unregistered."));
+  Su(i) {
+    this.ou ||
+      (i.unregister(), E$1.info("Service worker successfully unregistered."));
   }
   subscribe(i, t) {
-    if (!yt$1.isPushSupported())
-      return r$1.info(ea.Un), void ("function" == typeof t && t(!1));
-    if (this.dn) {
-      if (!this.cn && null != window.location) {
-        let i = this.un;
+    if (!vt$1.isPushSupported())
+      return E$1.info(na.Au), void ("function" == typeof t && t(!1));
+    if (this.hu) {
+      if (!this.ou && null != window.location) {
+        let i = this.su;
         -1 === i.indexOf(window.location.host) &&
           (i = window.location.host + i),
           -1 === i.indexOf(window.location.protocol) &&
             (i = window.location.protocol + "//" + i);
       }
-      if (yt$1.isPushBlocked())
-        return void this.An(
+      if (vt$1.isPushBlocked())
+        return void this.ku(
           "Notifications from this site are blocked. This may be a temporary embargo or a permanent denial.",
           t,
         );
-      if (this.qt && !this.qt.Wn() && 0 === this.qt.hi())
+      if (this.h && !this.h.ju() && 0 === this.h.xt())
         return (
-          r$1.info(
+          E$1.info(
             "Waiting for VAPID key from server config before subscribing to push.",
           ),
-          void this.qt._n(() => {
+          void this.h.xu(() => {
             this.subscribe(i, t);
           })
         );
       const e = () => {
-          r$1.info("Permission for push notifications was denied."),
+          E$1.info("Permission for push notifications was denied."),
             "function" == typeof t && t(!1);
         },
-        s = () => {
+        r = () => {
           let i = "Permission for push notifications was ignored.";
-          yt$1.isPushBlocked() &&
+          vt$1.isPushBlocked() &&
             (i +=
               " The browser has automatically blocked further permission requests for a period (probably 1 week)."),
-            r$1.info(i),
+            E$1.info(i),
             "function" == typeof t && t(!0);
         },
-        n = yt$1.isPushPermissionGranted(),
-        u = () => {
+        n = vt$1.isPushPermissionGranted(),
+        o = () => {
           !n &&
-            this.sn &&
-            this.sn.setPushNotificationSubscriptionType(
+            this.iu &&
+            this.iu.setPushNotificationSubscriptionType(
               User.NotificationSubscriptionTypes.OPTED_IN,
             ),
-            this.xn()
+            this.Du()
               .then((e) => {
                 if (null == e)
                   return (
-                    r$1.error(
+                    E$1.error(
                       "No service worker registration. Set the `manageServiceWorkerExternally` initialization option to false or ensure that your service worker is registered before calling registerPush.",
                     ),
                     void ("function" == typeof t && t(!0))
                   );
                 e.pushManager
                   .getSubscription()
-                  .then((s) => {
+                  .then((r) => {
                     var n;
-                    let u = null;
+                    let o = null;
                     if (
                       (null !=
-                        (null === (n = this.qt) || void 0 === n
+                        (null === (n = this.h) || void 0 === n
                           ? void 0
-                          : n.Wn()) && (u = ei.Tn(this.qt.Wn())),
-                      s)
+                          : n.ju()) && (o = ui.Nu(this.h.ju())),
+                      r)
                     ) {
                       let n,
-                        a = null,
-                        h = null;
-                      if ((this.u && (n = this.u.j(STORAGE_KEYS.C.In)), n && !isArray(n))) {
+                        u = null,
+                        a = null;
+                      if ((this.B && (n = this.B.dt(STORAGE_KEYS.ft.Uu)), n && !isArray(n))) {
                         let i;
                         try {
-                          i = ti.qn(n).Vn;
+                          i = oi._u(n).Wu;
                         } catch (t) {
                           i = null;
                         }
                         null == i ||
                           isNaN(i.getTime()) ||
                           0 === i.getTime() ||
-                          ((a = i),
-                          (h = new Date(a)),
-                          h.setMonth(a.getMonth() + 6));
+                          ((u = i),
+                          (a = new Date(u)),
+                          a.setMonth(u.getMonth() + 6));
                       }
-                      null != u &&
-                      s.options &&
-                      s.options.applicationServerKey &&
-                      s.options.applicationServerKey.byteLength &&
-                      s.options.applicationServerKey.byteLength > 0 &&
-                      !isEqual(u, new Uint8Array(s.options.applicationServerKey))
-                        ? (s.options.applicationServerKey.byteLength > 12
-                            ? r$1.info(
+                      null != o &&
+                      r.options &&
+                      r.options.applicationServerKey &&
+                      r.options.applicationServerKey.byteLength &&
+                      r.options.applicationServerKey.byteLength > 0 &&
+                      !isEqual(o, new Uint8Array(r.options.applicationServerKey))
+                        ? (r.options.applicationServerKey.byteLength > 12
+                            ? E$1.info(
                                 "Device was already subscribed to push using a different VAPID provider, creating new subscription.",
                               )
-                            : r$1.info(
+                            : E$1.info(
                                 "Attempting to upgrade a gcm_sender_id-based push registration to VAPID - depending on the browser this may or may not result in the same gcm_sender_id-based subscription.",
                               ),
-                          this.gn(s, e, u, i, t))
-                        : s.expirationTime &&
-                          new Date(s.expirationTime).valueOf() <=
+                          this.pu(r, e, o, i, t))
+                        : r.expirationTime &&
+                          new Date(r.expirationTime).valueOf() <=
                             new Date().valueOf()
-                        ? (r$1.info(
+                        ? (E$1.info(
                             "Push subscription is expired, creating new subscription.",
                           ),
-                          this.gn(s, e, u, i, t))
+                          this.pu(r, e, o, i, t))
                         : n && isArray(n)
-                        ? this.gn(s, e, u, i, t)
-                        : null == h
-                        ? (r$1.info(
+                        ? this.pu(r, e, o, i, t)
+                        : null == a
+                        ? (E$1.info(
                             "No push subscription creation date found, creating new subscription.",
                           ),
-                          this.gn(s, e, u, i, t))
-                        : h.valueOf() <= new Date().valueOf()
-                        ? (r$1.info(
+                          this.pu(r, e, o, i, t))
+                        : a.valueOf() <= new Date().valueOf()
+                        ? (E$1.info(
                             "Push subscription older than 6 months, creating new subscription.",
                           ),
-                          this.gn(s, e, u, i, t))
-                        : (r$1.info(
+                          this.pu(r, e, o, i, t))
+                        : (E$1.info(
                             "Device already subscribed to push, sending existing subscription to backend.",
                           ),
-                          this.wn(s, a, i));
-                    } else this.vn(e, u, i, t);
+                          this.yu(r, u, i));
+                    } else this.bu(e, o, i, t);
                   })
                   .catch((i) => {
-                    r$1.error("Error checking current push subscriptions: " + i);
+                    E$1.error("Error checking current push subscriptions: " + i);
                   });
               })
               .catch((i) => {
-                r$1.error("ServiceWorker registration failed: " + i);
+                E$1.error("ServiceWorker registration failed: " + i);
               });
         };
-      this.requestPermission(u, s, e);
-    } else if (this.bn) {
-      if (null == this.hn || "" === this.hn)
+      this.requestPermission(o, r, e);
+    } else if (this.fu) {
+      if (null == this.nu || "" === this.nu)
         return (
-          r$1.error(
+          E$1.error(
             "You must supply the safariWebsitePushId initialization option in order to use registerPush on Safari",
           ),
           void ("function" == typeof t && t(!0))
         );
-      const e = window.safari.pushNotification.permission(this.hn);
-      this.jn(this.hn, e, i, t);
+      const e = window.safari.pushNotification.permission(this.nu);
+      this.Pu(this.nu, e, i, t);
     }
   }
   unsubscribe(i, t) {
-    if (!yt$1.isPushSupported())
-      return r$1.info(ea.Un), void ("function" == typeof t && t());
-    this.dn
-      ? navigator.serviceWorker.getRegistration(this.un).then((e) => {
+    if (!vt$1.isPushSupported())
+      return E$1.info(na.Au), void ("function" == typeof t && t());
+    this.hu
+      ? navigator.serviceWorker.getRegistration(this.su).then((e) => {
           e
             ? e.pushManager
                 .getSubscription()
                 .then((s) => {
                   s
-                    ? (this.Dn(),
+                    ? (this.vu(),
                       s
                         .unsubscribe()
                         .then((s) => {
                           s
-                            ? (r$1.info(
+                            ? (E$1.info(
                                 "Device successfully unsubscribed from push.",
                               ),
                               "function" == typeof i && i())
-                            : (r$1.error(
+                            : (E$1.error(
                                 "Failed to unsubscribe device from push.",
                               ),
                               "function" == typeof t && t()),
-                            this.Nn(e);
+                            this.Su(e);
                         })
                         .catch((i) => {
-                          r$1.error("Push unsubscription error: " + i),
+                          E$1.error("Push unsubscription error: " + i),
                             "function" == typeof t && t();
                         }))
-                    : (r$1.info("Device already unsubscribed from push."),
+                    : (E$1.info("Device already unsubscribed from push."),
                       "function" == typeof i && i());
                 })
                 .catch((i) => {
-                  r$1.error("Error unsubscribing from push: " + i),
+                  E$1.error("Error unsubscribing from push: " + i),
                     "function" == typeof t && t();
                 })
-            : (r$1.info("Device already unsubscribed from push."),
+            : (E$1.info("Device already unsubscribed from push."),
               "function" == typeof i && i());
         })
-      : this.bn &&
-        (this.Dn(),
-        r$1.info("Device unsubscribed from push."),
+      : this.fu &&
+        (this.vu(),
+        E$1.info("Device unsubscribed from push."),
         "function" == typeof i && i());
   }
 }
-ea.Un = "Push notifications are not supported in this browser.";
+na.Au = "Push notifications are not supported in this browser.";
 
-const na = {
-  t: !1,
-  i: null,
-  m: () => (
-    na.o(),
-    na.i ||
-      (na.i = new ea(
-        e.pr(),
-        e.ba(),
-        e.te(),
-        e.Os(),
-        e.nn(L.Ma),
-        e.nn(L._a),
-        e.nn(L.ka),
-        e.ir(),
-        e.nn(L.qa),
-        e.nn(L.Aa),
-        e.l(),
+const ra = {
+  i: !1,
+  na: null,
+  ra: () => (
+    ra.t(),
+    ra.na ||
+      (ra.na = new na(
+        r.br(),
+        r._a(),
+        r.ue(),
+        r.V(),
+        r.re(D.Ga),
+        r.re(D.Ha),
+        r.re(D.Ia),
+        r.l(),
+        r.re(D.Ka),
+        r.re(D.La),
+        r.p(),
       )),
-    na.i
+    ra.na
   ),
-  o: () => {
-    na.t || (e.g(na), (na.t = !0));
+  t: () => {
+    ra.i || (r.g(ra), (ra.i = !0));
   },
   destroy: () => {
-    (na.i = null), (na.t = !1);
+    (ra.na = null), (ra.i = !1);
   },
 };
-var na$1 = na;
+var ra$1 = ra;
 
 var pushManagerFactory = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	'default': na$1
+	'default': ra$1
 });
 
-function requestPushPermission(r, n) {
-  if (e.X())
-    return na$1.m().subscribe((n, o, t) => {
-      const s = e.cr();
-      s && s.requestImmediateDataFlush(), "function" == typeof r && r(n, o, t);
-    }, n);
+function requestPushPermission(n, o) {
+  if (r.rr())
+    return ra$1.ra().subscribe((o, t, e) => {
+      const s = r.nn();
+      s && s.requestImmediateDataFlush(), "function" == typeof n && n(o, t, e);
+    }, o);
 }
 
 var requestPushPermission$1 = /*#__PURE__*/Object.freeze({
@@ -9561,8 +10276,8 @@ var requestPushPermission$1 = /*#__PURE__*/Object.freeze({
 	requestPushPermission: requestPushPermission
 });
 
-function unregisterPush(r, n) {
-  if (e.X()) return na$1.m().unsubscribe(r, n);
+function unregisterPush(e, n) {
+  if (r.rr()) return ra$1.ra().unsubscribe(e, n);
 }
 
 var unregisterPush$1 = /*#__PURE__*/Object.freeze({
@@ -9570,358 +10285,864 @@ var unregisterPush$1 = /*#__PURE__*/Object.freeze({
 	unregisterPush: unregisterPush
 });
 
-class FeatureFlag {
-  constructor(t, e = !1, r = {}, i) {
-    (this.id = t),
-      (this.enabled = e),
-      (this.properties = r),
-      (this.trackingString = i),
-      (this.id = t),
-      (this.enabled = e),
-      (this.properties = r),
-      (this.trackingString = i);
+class PropertiesBase {
+  constructor(t) {
+    (this.properties = t), (this.properties = t || {});
   }
-  he(t, e, r) {
-    const i = this.properties[t];
-    return null == i ? (this.ye(t), null) : e(i) ? i.value : (this.Pe(r), null);
+  tp(t, r, e) {
+    const o = this.properties[t];
+    return null == o ? (this.rp(t), null) : r(o) ? o.value : (this.ep(e), null);
   }
   getStringProperty(t) {
-    return this.he(t, this.be, "string");
+    return this.tp(t, this.op, "string");
   }
   getNumberProperty(t) {
-    return this.he(t, this.Ie, "number");
+    return this.tp(t, this.sp, "number");
   }
   getBooleanProperty(t) {
-    return this.he(t, this.de, "boolean");
+    return this.tp(t, this.ip, "boolean");
   }
   getImageProperty(t) {
-    return this.he(t, this.Te, "image");
+    return this.tp(t, this.np, "image");
   }
   getJsonProperty(t) {
-    return this.he(t, this.Ee, "jsonobject");
+    return this.tp(t, this.pp, "jsonobject");
   }
   getTimestampProperty(t) {
-    return this.he(t, this.Ne, "datetime");
+    return this.tp(t, this.up, "datetime");
   }
-  Y() {
-    const t = {};
-    return (
-      (t[FeatureFlag.tt.ht] = this.id),
-      (t[FeatureFlag.tt.le] = this.enabled),
-      (t[FeatureFlag.tt.pe] = this.properties),
-      (t[FeatureFlag.tt.Fe] = this.trackingString),
-      t
-    );
+  ep(t) {
+    E$1.info(`Property is not of type ${t}.`);
   }
-  Pe(t) {
-    r$1.info(`Property is not of type ${t}.`);
+  rp(t) {
+    E$1.info(`${t} not found in properties.`);
   }
-  ye(t) {
-    r$1.info(`${t} not found in feature flag properties.`);
-  }
-  be(t) {
+  op(t) {
     return "string" === t.type && "string" == typeof t.value;
   }
-  Ie(t) {
+  sp(t) {
     return "number" === t.type && "number" == typeof t.value;
   }
-  de(t) {
+  ip(t) {
     return "boolean" === t.type && "boolean" == typeof t.value;
   }
-  Te(t) {
+  np(t) {
     return "image" === t.type && "string" == typeof t.value;
   }
-  Ee(t) {
+  pp(t) {
     return (
       "jsonobject" === t.type &&
       "object" == typeof t.value &&
       t.value.constructor == Object
     );
   }
-  Ne(t) {
+  up(t) {
     return "datetime" === t.type && "number" == typeof t.value;
   }
 }
-(FeatureFlag.tt = { ht: "id", le: "e", pe: "pr", Fe: "fts" }),
-  (FeatureFlag._t = { ht: "id", le: "enabled", pe: "properties", Fe: "fts" });
+
+class FeatureFlag extends PropertiesBase {
+  constructor(s, t = !1, i = {}, e) {
+    super(i),
+      (this.id = s),
+      (this.enabled = t),
+      (this.trackingString = e),
+      (this.id = s),
+      (this.enabled = t),
+      (this.trackingString = e);
+  }
+  gt() {
+    const s = {};
+    return (
+      (s[FeatureFlag.ss.rs] = this.id),
+      (s[FeatureFlag.ss.Jr] = this.enabled),
+      (s[FeatureFlag.ss.Nr] = this.properties),
+      (s[FeatureFlag.ss.Or] = this.trackingString),
+      s
+    );
+  }
+}
+(FeatureFlag.ss = { rs: "id", Jr: "e", Nr: "pr", Or: "fts" }),
+  (FeatureFlag.ui = { rs: "id", Jr: "enabled", Nr: "properties", Or: "fts" });
 
 function newFeatureFlagFromJson(e) {
-  if (e[FeatureFlag._t.ht] && "boolean" == typeof e[FeatureFlag._t.le])
+  if (e[FeatureFlag.ui.rs] && "boolean" == typeof e[FeatureFlag.ui.Jr])
     return new FeatureFlag(
-      e[FeatureFlag._t.ht],
-      e[FeatureFlag._t.le],
-      e[FeatureFlag._t.pe],
-      e[FeatureFlag._t.Fe],
+      e[FeatureFlag.ui.rs],
+      e[FeatureFlag.ui.Jr],
+      e[FeatureFlag.ui.Nr],
+      e[FeatureFlag.ui.Or],
     );
-  r$1.info(`Unable to create feature flag from ${JSON.stringify(e, null, 2)}`);
+  E$1.info(`Unable to create feature flag from ${JSON.stringify(e, null, 2)}`);
 }
 function newFeatureFlagFromSerializedValue(e) {
-  if (e[FeatureFlag.tt.ht] && "boolean" == typeof e[FeatureFlag.tt.le])
+  if (e[FeatureFlag.ss.rs] && "boolean" == typeof e[FeatureFlag.ss.Jr])
     return new FeatureFlag(
-      e[FeatureFlag.tt.ht],
-      e[FeatureFlag.tt.le],
-      e[FeatureFlag.tt.pe],
-      e[FeatureFlag.tt.Fe],
+      e[FeatureFlag.ss.rs],
+      e[FeatureFlag.ss.Jr],
+      e[FeatureFlag.ss.Nr],
+      e[FeatureFlag.ss.Or],
     );
-  r$1.info(
+  E$1.info(
     `Unable to deserialize feature flag from ${JSON.stringify(e, null, 2)}`,
   );
 }
 
-class er extends y {
-  constructor(t, s, i, r) {
+class ar extends t {
+  constructor(t, s, i, e) {
     super(),
-      (this.qt = t),
-      (this.$t = s),
-      (this.u = i),
-      (this.oi = r),
-      (this.ai = []),
-      (this.ni = 0),
-      (this.qt = t),
-      (this.$t = s),
-      (this.u = i),
-      (this.oi = r),
-      (this.li = null),
-      (this.ui = new T()),
-      (this.fi = 10),
-      (this.ci = null),
-      (this.di = null),
-      e.Ht(this.ui);
+      (this.h = t),
+      (this.j = s),
+      (this.B = i),
+      (this.C = e),
+      (this.Xr = []),
+      (this.Gr = 0),
+      (this.h = t),
+      (this.j = s),
+      (this.B = i),
+      (this.C = e),
+      (this.Kr = null),
+      (this.Qr = new m()),
+      (this.S = 10),
+      (this.T = null),
+      (this.I = null),
+      r.q(this.Qr);
   }
-  Ss(t) {
+  N(t) {
     var s;
     if (
-      (null === (s = this.qt) || void 0 === s ? void 0 : s.mi()) &&
+      (null === (s = this.h) || void 0 === s ? void 0 : s.Yr()) &&
       null != t &&
       t.feature_flags
     ) {
-      this.ai = [];
+      this.Xr = [];
       for (const s of t.feature_flags) {
         const t = newFeatureFlagFromJson(s);
-        t && this.ai.push(t);
+        t && this.Xr.push(t);
       }
-      (this.ni = new Date().getTime()), this.gi(), this.ui.Rt(this.ai);
+      (this.Gr = new Date().getTime()), this.Zr(), this.Qr.L(this.Xr);
     }
   }
-  Fi() {
+  ho() {
     let t = {};
-    this.u && (t = this.u.j(STORAGE_KEYS.C.vi));
-    const s = {};
-    for (const i in t) {
-      const e = newFeatureFlagFromSerializedValue(t[i]);
-      e && (s[e.id] = e);
+    this.B && (t = this.B.dt(STORAGE_KEYS.ft.lo));
+    const i = {};
+    for (const s in t) {
+      const e = newFeatureFlagFromSerializedValue(t[s]);
+      e && (i[e.id] = e);
     }
-    return s;
+    return i;
   }
-  pi() {
+  do() {
     var t;
-    return (null === (t = this.u) || void 0 === t ? void 0 : t.j(STORAGE_KEYS.C.wi)) || {};
+    return (
+      (null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.vo)) || {}
+    );
   }
-  ji(t) {
-    this.u && this.u.I(STORAGE_KEYS.C.wi, t);
+  Fo(t) {
+    this.B && this.B.bt(STORAGE_KEYS.ft.vo, t);
   }
-  si(t) {
-    return this.ui.Nt(t);
+  It(t) {
+    return this.Qr.Rt(t);
   }
   refreshFeatureFlags(t, s, i = !1, e = !0) {
     const r = () => {
-      "function" == typeof s && s(), this.ui.Rt(this.ai);
+      "function" == typeof s && s(), this.Qr.L(this.Xr);
     };
-    if (!this.yi(i))
+    if (!this.po(i))
       return (
-        !this.li &&
-          this.qt &&
-          (this.li = this.qt.bi(() => {
+        !this.Kr &&
+          this.h &&
+          (this.Kr = this.h.jo(() => {
             this.refreshFeatureFlags(t, s);
           })),
         void r()
       );
-    const h = this.$t;
-    if (!h) return void r();
-    e && this.Ci();
-    const o = h.$s({}, !0),
-      a = h.Ps(o, D._s.Ri);
-    let n = !1;
-    h.Gs(
-      o,
-      (h = -1) => {
-        if (!this.$t) return void r();
-        const l = new Date().valueOf();
-        D.Hs(this.u, D._s.Ri, l),
-          -1 !== h && a.push(["X-Braze-Req-Tokens-Remaining", h.toString()]),
-          C.Ks({
-            url: `${this.$t.Os()}/feature_flags/sync`,
-            headers: a,
-            data: o,
-            L: (s) => {
-              if (!this.$t.Qs(o, s, a)) return (n = !0), void r();
-              this.$t.Vs(),
-                this.Ss(s),
-                (n = !1),
-                D.Ws(this.u, D._s.Ri, 1),
-                "function" == typeof t && t();
+    const o = this.j;
+    if (!o) return void r();
+    e && this.X();
+    const n = o.$({}, !0),
+      f = o.A(n, h.H.wo);
+    let m = !1;
+    o.J(
+      n,
+      (e = -1) => {
+        const o = this.j;
+        if (!o) return void r();
+        const v = new Date().valueOf();
+        h.K(this.B, h.H.wo, v),
+          -1 !== e && f.push(["X-Braze-Req-Tokens-Remaining", e.toString()]),
+          l.O({
+            url: `${o.V()}/feature_flags/sync`,
+            headers: f,
+            data: n,
+            W: (s) => {
+              if (!o.Y(n, s, f)) return (m = !0), void r();
+              o.Z(), this.N(s), (m = !1), "function" == typeof t && t();
             },
             error: (t) => {
-              this.$t.Ys(t, "retrieving feature flags"), (n = !0), r();
+              o._(t, "retrieving feature flags"), (m = !0), r();
             },
-            Zs: () => {
-              if (e && n && !this.di) {
-                D.ti(this.u, D._s.Ri);
-                let e = this.ci;
-                (null == e || e < 1e3 * this.fi) && (e = 1e3 * this.fi),
-                  this.Ti(Math.min(3e5, randomInclusive(1e3 * this.fi, 3 * e)), t, s, i);
+            tt: (e, r) => {
+              var n, l, f;
+              let v;
+              if (m) {
+                const t =
+                    (null === (n = this.h) || void 0 === n ? void 0 : n.st()) ||
+                    REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
+                  s =
+                    (null === (l = this.h) || void 0 === l ? void 0 : l.it()) ||
+                    REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
+                  i =
+                    (null === (f = this.h) || void 0 === f ? void 0 : f.nt()) ||
+                    REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
+                let e = this.T;
+                (null == e || e < t) && (e = t), (v = Math.min(i, randomInclusive(t, e * s)));
               }
+              o.et(
+                r,
+                () => {
+                  this.refreshFeatureFlags(t, s, i, !0);
+                },
+                h.H.wo,
+                (t) => this.rt(t),
+                () => this.X(),
+                v,
+              );
             },
           });
       },
-      D._s.Ri,
+      h.H.wo,
       s,
     );
   }
-  Ci() {
-    null != this.di && (clearTimeout(this.di), (this.di = null));
+  X() {
+    null != this.I && (clearTimeout(this.I), (this.I = null));
   }
-  Ti(t = 1e3 * this.fi, s, i, e = !1) {
-    this.Ci(),
-      (this.di = window.setTimeout(() => {
-        this.refreshFeatureFlags(s, i, e);
-      }, t)),
-      (this.ci = t);
+  rt(t) {
+    this.X(), (this.I = t);
   }
-  yi(t) {
-    if (!this.qt) return !1;
+  po(t) {
+    if (!this.h) return !1;
     if (!t) {
-      const t = this.qt.Di();
+      const t = this.h.yo();
       if (null == t) return !1;
       let s = !1;
       if (!isNaN(t)) {
-        if (-1 === t) return r$1.info("Feature flag refreshes not allowed"), !1;
-        s = new Date().getTime() >= (this.ni || 0) + 1e3 * t;
+        if (-1 === t) return E$1.info("Feature flag refreshes not allowed"), !1;
+        s = new Date().getTime() >= (this.Gr || 0) + 1e3 * t;
       }
       if (!s)
         return (
-          r$1.info(`Feature flag refreshes were rate limited to ${t} seconds`), !1
+          E$1.info(`Feature flag refreshes were rate limited to ${t} seconds`), !1
         );
     }
-    return this.qt.mi();
+    return this.h.Yr();
   }
-  Ii() {
+  bo() {
     var t;
     return (
-      (null === (t = this.u) || void 0 === t ? void 0 : t.j(STORAGE_KEYS.C.Si)) || null
+      (null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.Co)) || null
     );
   }
-  qi() {
-    var t, s;
-    null === (t = this.u) ||
+  Ro() {
+    var t, i;
+    null === (t = this.B) ||
       void 0 === t ||
-      t.I(STORAGE_KEYS.C.Si, null === (s = this.oi) || void 0 === s ? void 0 : s.xi());
+      t.bt(STORAGE_KEYS.ft.Co, null === (i = this.C) || void 0 === i ? void 0 : i.yt());
   }
-  Ni() {
+  To() {
     var t;
-    const s = null === (t = this.oi) || void 0 === t ? void 0 : t.xi(),
-      i = this.Ii();
+    const s = null === (t = this.C) || void 0 === t ? void 0 : t.yt(),
+      i = this.bo();
     return null == i || s === i;
   }
-  gi() {
-    if (!this.u) return;
+  Zr() {
+    if (!this.B) return;
     const t = {};
-    for (const s of this.ai) {
-      const i = s.Y();
+    for (const s of this.Xr) {
+      const i = s.gt();
       t[s.id] = i;
     }
-    this.u.I(STORAGE_KEYS.C.vi, t), this.u.I(STORAGE_KEYS.C.zi, this.ni), this.qi();
+    this.B.bt(STORAGE_KEYS.ft.lo, t), this.B.bt(STORAGE_KEYS.ft.Do, this.Gr), this.Ro();
+  }
+  changeUser() {
+    this.X();
+  }
+  clearData() {
+    this.X();
   }
 }
 
-const ir = {
-  t: !1,
+const lr = {
+  i: !1,
   provider: null,
-  rr: () => (
-    ir.o(),
-    ir.provider ||
-      ((ir.provider = new er(e.ir(), e.nr(), e.l(), e.zr())),
-      e.ar(ir.provider)),
-    ir.provider
+  o: () => (
+    lr.t(),
+    lr.provider ||
+      ((lr.provider = new ar(r.l(), r.m(), r.p(), r.u())), r.v(lr.provider)),
+    lr.provider
   ),
-  o: () => {
-    ir.t || (e.g(ir), (ir.t = !0));
+  t: () => {
+    lr.i || (r.g(lr), (lr.i = !0));
   },
   destroy: () => {
-    (ir.provider = null), (ir.t = !1);
+    (lr.provider = null), (lr.i = !1);
   },
 };
-var ir$1 = ir;
+var lr$1 = lr;
 
-function tr(r, t, a = !1) {
-  if (e.X()) return ir$1.rr().refreshFeatureFlags(r, t, a);
+function fr(e, t, a = !1) {
+  if (r.rr()) return lr$1.o().refreshFeatureFlags(e, t, a);
 }
 function refreshFeatureFlags(r, e) {
-  tr(r, e);
+  fr(r, e);
 }
 
 var refreshFeatureFlags$1 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	refreshFeatureFlags: refreshFeatureFlags,
-	'default': tr
+	'default': fr
 });
 
 function getFeatureFlag(t) {
-  if (!e.X()) return;
-  const n = e.ir();
-  if (n && !n.mi()) return r$1.info("Feature flags are not enabled."), null;
-  const a = ir$1.rr().Fi();
-  return a[t] ? a[t] : null;
+  if (!r.rr()) return;
+  const e = r.l();
+  if (e && !e.Yr()) return null;
+  const n = lr$1.o().ho();
+  return n[t] ? n[t] : null;
 }
 
 function getAllFeatureFlags() {
-  if (!e.X()) return;
+  if (!r.rr()) return;
   const t = [],
-    n = e.ir();
-  if (n && !n.mi()) return r$1.info("Feature flags are not enabled."), t;
-  const o = ir$1.rr().Fi();
-  for (const r in o) t.push(o[r]);
+    e = r.l();
+  if (e && !e.Yr()) return t;
+  const n = lr$1.o().ho();
+  for (const r in n) t.push(n[r]);
   return t;
 }
 
-function subscribeToFeatureFlagsUpdates(r) {
-  if (!e.X()) return;
-  const t = ir$1.rr();
-  if (t.Ni()) {
-    const t = getAllFeatureFlags();
-    t && "function" == typeof r && r(t);
+function subscribeToFeatureFlagsUpdates(t) {
+  if (!r.rr()) return;
+  const e = lr$1.o();
+  if (e.To()) {
+    const r = getAllFeatureFlags();
+    r && "function" == typeof t && t(r);
   }
-  return t.si(r);
+  return e.It(t);
 }
 
-function logFeatureFlagImpression(o) {
-  if (!e.X()) return;
-  if (!o) return !1;
-  const n =
+function logFeatureFlagImpression(e) {
+  if (!r.rr()) return;
+  if (!e) return !1;
+  const t =
       "Not logging a feature flag impression. The feature flag was not part of any matching experiment.",
-    s = ir$1.rr().Fi();
-  if (!s[o]) return r$1.info(n), !1;
-  const a = s[o].trackingString;
-  if (!a) return r$1.info(n), !1;
-  const f = ir$1.rr().pi();
-  if (f[a])
+    o = lr$1.o().ho();
+  if (!o[e]) return E$1.info(t), !1;
+  const n = o[e].trackingString;
+  if (!n) return E$1.info(t), !1;
+  const i = lr$1.o().do();
+  if (i[n])
     return (
-      r$1.info(
+      E$1.info(
         "Not logging another feature flag impression. This ID was already logged this session.",
       ),
       !1
     );
-  (f[a] = !0), ir$1.rr().ji(f);
-  const g = { fid: o, fts: a };
-  return t$1.q(i.Fr, g).L;
+  (i[n] = !0), lr$1.o().Fo(i);
+  const s = { fid: e, fts: n };
+  return v$1.lt(f.xo, s).W;
+}
+
+class Banner extends PropertiesBase {
+  constructor(t, s, i, h = !1, r = !1, e = -1, o = {}) {
+    super(o),
+      (this.id = t),
+      (this.placementId = s),
+      (this.html = i),
+      (this.At = h),
+      (this.isControl = r),
+      (this.Et = e),
+      (this.id = t),
+      (this.placementId = s),
+      (this.html = i),
+      (this.At = h),
+      (this.isControl = r),
+      (this.Et = e),
+      (this.Gt = !1);
+  }
+  Ht() {
+    return this.isControl;
+  }
+  gt() {
+    return {
+      id: this.id,
+      pid: this.placementId,
+      html: this.html,
+      its: this.At,
+      ic: this.isControl,
+      eat: this.Et,
+      pr: this.properties,
+    };
+  }
+}
+
+function newBannerFromSerializedValue(n) {
+  return new Banner(n.id, n.pid, n.html, n.its, n.ic, n.eat, n.pr);
+}
+function newBannerFromJson(n) {
+  return new Banner(
+    n.id,
+    n.placement_id,
+    n.html,
+    n.is_test_send,
+    n.is_control,
+    n.expires_at,
+    n.properties,
+  );
+}
+
+class e extends t {
+  constructor(t, s, i, n) {
+    super(),
+      (this.h = t),
+      (this.j = s),
+      (this.B = i),
+      (this.C = n),
+      (this.banners = {}),
+      (this.h = t),
+      (this.j = s),
+      (this.B = i),
+      (this.C = n),
+      (this.S = 10),
+      (this.T = null),
+      (this.I = null),
+      (this.R = new m()),
+      r.q(this.R),
+      (this.D = null),
+      (this.F = null);
+  }
+  N(t) {
+    if (this.k() && null != t && t.banners) {
+      this.banners = {};
+      const s = t.banners;
+      for (const t in s) {
+        const i = s[t];
+        let e = null;
+        null != i && null != i.banner && (e = newBannerFromJson(i.banner)),
+          e && (this.banners[t] = e);
+      }
+      this.U(), this.R.L(this.banners);
+    }
+  }
+  M(t, s, i, n = !0) {
+    var e;
+    const r = () => {
+      "function" == typeof i && i();
+    };
+    if (!this.k())
+      return void (
+        null === (e = this.h) ||
+        void 0 === e ||
+        e.P(() => {
+          this.M(t, s, i);
+        })
+      );
+    const o = this.j;
+    if (!o) return void r();
+    n && this.X();
+    const m = o.$({}, !0),
+      v = [];
+    for (const s of t) v.push({ id: s });
+    m.placements = v;
+    const f = o.A(m, h.H.G);
+    let p = !1;
+    o.J(
+      m,
+      (n = -1) => {
+        const e = this.j;
+        if (!e) return void r();
+        const o = new Date().valueOf();
+        h.K(this.B, h.H.G, o),
+          -1 !== n && f.push(["X-Braze-Req-Tokens-Remaining", n.toString()]),
+          l.O({
+            url: `${e.V()}/banners/sync`,
+            headers: f,
+            data: m,
+            W: (t) => {
+              if (!e.Y(m, t, f)) return (p = !0), void r();
+              e.Z(), this.N(t), (p = !1), "function" == typeof s && s();
+            },
+            error: (t) => {
+              e._(t, "retrieving banners"), (p = !0), r();
+            },
+            tt: (n, r) => {
+              var o, l, m;
+              let v;
+              if (((this.F = t), p)) {
+                const t =
+                    (null === (o = this.h) || void 0 === o ? void 0 : o.st()) ||
+                    REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
+                  s =
+                    (null === (l = this.h) || void 0 === l ? void 0 : l.it()) ||
+                    REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
+                  i =
+                    (null === (m = this.h) || void 0 === m ? void 0 : m.nt()) ||
+                    REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
+                let n = this.T;
+                (null == n || n < t) && (n = t), (v = Math.min(i, randomInclusive(t, n * s)));
+              }
+              e.et(
+                r,
+                () => {
+                  this.M(t, s, i, !1);
+                },
+                h.H.G,
+                (t) => this.rt(t),
+                () => this.X(),
+                v,
+              );
+            },
+          });
+      },
+      h.H.G,
+      i,
+    );
+  }
+  ot() {
+    return this.F;
+  }
+  ht(t, s) {
+    const i = { id: t.id };
+    s && (i.bid = s);
+    return v$1.lt(f.ut, i).W;
+  }
+  X() {
+    null != this.I && (clearTimeout(this.I), (this.I = null));
+  }
+  rt(t) {
+    this.X(), (this.I = t);
+  }
+  ct() {
+    let t = {};
+    this.B && (t = this.B.dt(STORAGE_KEYS.ft.vt));
+    const i = {};
+    for (const s in t) {
+      let n = null;
+      null != t[s] && (n = newBannerFromSerializedValue(t[s])), n && (i[n.placementId] = n);
+    }
+    return i;
+  }
+  U() {
+    var t;
+    if (!this.B) return;
+    const i = {};
+    for (const s in this.banners) {
+      const n =
+        (null === (t = this.banners[s]) || void 0 === t ? void 0 : t.gt()) ||
+        null;
+      i[s] = n;
+    }
+    this.B.bt(STORAGE_KEYS.ft.vt, i), this.jt();
+  }
+  jt() {
+    var t, i;
+    null === (t = this.B) ||
+      void 0 === t ||
+      t.bt(STORAGE_KEYS.ft.Bt, null === (i = this.C) || void 0 === i ? void 0 : i.yt());
+  }
+  Ct() {
+    var t;
+    return (
+      (null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.Bt)) || null
+    );
+  }
+  St() {
+    return this.D;
+  }
+  wt(t) {
+    this.D = t;
+  }
+  Tt() {
+    var t;
+    const s = null === (t = this.C) || void 0 === t ? void 0 : t.yt(),
+      i = this.Ct();
+    return null == i || s === i;
+  }
+  It(t) {
+    return this.R.Rt(t);
+  }
+  qt() {
+    var t;
+    return (
+      (null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.Dt)) || {}
+    );
+  }
+  Ft(t) {
+    this.B && this.B.bt(STORAGE_KEYS.ft.Dt, t);
+  }
+  changeUser() {
+    this.Nt(), this.X();
+  }
+  clearData() {
+    this.X();
+  }
+  k() {
+    return !!this.h && (!!this.h.kt() || (0 !== this.h.xt() && this.Nt(), !1));
+  }
+  Nt() {
+    (this.banners = {}),
+      this.B && (this.B.zt(STORAGE_KEYS.ft.vt), this.B.zt(STORAGE_KEYS.ft.Dt)),
+      this.R.L({});
+  }
+}
+
+const i = {
+  i: !1,
+  provider: null,
+  o: () => (
+    i.t(),
+    i.provider ||
+      ((i.provider = new e(r.l(), r.m(), r.p(), r.u())), r.v(i.provider)),
+    i.provider
+  ),
+  t: () => {
+    i.i || (r.g(i), (i.i = !0));
+  },
+  destroy: () => {
+    (i.provider = null), (i.i = !1);
+  },
+};
+
+function getBannerIfNotExpired(n, r) {
+  const e = n[r];
+  if (!e) return null;
+  const t = e.Et,
+    o = new Date().valueOf();
+  return -1 !== t && 1e3 * t < o
+    ? (E$1.info(`Banner with ID: ${e.id} and placement ID: ${r} has expired.`),
+      null)
+    : e;
+}
+function getBanner(n) {
+  var e;
+  if (!r.rr()) return;
+  !1 === (null === (e = r.l()) || void 0 === e ? void 0 : e.kt()) &&
+    E$1.error(BannerStrings.aa);
+  const t = i.o();
+  if (!t.k()) return null;
+  return getBannerIfNotExpired(t.ct(), n);
+}
+
+function logBannerClick(n, o) {
+  if (!r.rr()) return;
+  if (!(n instanceof Banner))
+    return (
+      E$1.error("Banner argument to logBannerClick must be an Banner object."), !1
+    );
+  const e = i.o(),
+    t = e.ct();
+  return 0 === keys(t).length
+    ? (E$1.info("Not logging banner click. No banners exist."), !1)
+    : t[n.placementId]
+    ? e.ht(n, o)
+    : (E$1.info(
+        `Not logging banner click for ID ${n.placementId}. The placement ID did not correspond to any banner.`,
+      ),
+      !1);
+}
+
+const BANNER_PLACEMENT_ID = "data-ab-banner-placement-id";
+const BANNER_HTML_CLASS = "ab-html-banner";
+const CONTROL_BANNER_HTML_CLASS = "ab-html-control-banner";
+function controlBannerToHtml(n) {
+  const t = document.createElement("div");
+  return (
+    (t.id = n.id),
+    (t.className = "ab-html-control-banner"),
+    t.setAttribute(BANNER_PLACEMENT_ID, n.placementId),
+    t
+  );
+}
+function bannerToHtml(n, t) {
+  if (n.Ht()) return controlBannerToHtml(n);
+  const e = document.createElement("iframe");
+  return (
+    (e.id = n.id),
+    t && e.setAttribute("nonce", t),
+    (e.className = "ab-html-banner"),
+    e.setAttribute(BANNER_PLACEMENT_ID, n.placementId),
+    e.setAttribute("title", "Banner"),
+    attachHtmlToIframeWithNonce(e, n.html, t),
+    (e.onload = () => {
+      const t = e.contentWindow,
+        o = t.document.getElementsByTagName("title");
+      o && o.length > 0 && e.setAttribute("title", o[0].textContent || "");
+      const r = Object.assign(Object.assign({}, buildBrazeBridge(e)), {
+        logClick: function () {
+          logBannerClick(n, ...arguments);
+        },
+        closeMessage: function () {},
+        setBannerHeight: (n) => {
+          isNaN(n) || !isFinite(n) || n < 0
+            ? E$1.warn(`Invalid banner height: ${n}`)
+            : (e.style.height = `${n}px`);
+        },
+      });
+      (t.brazeBridge = r),
+        (t.appboyBridge = r),
+        t.dispatchEvent(new CustomEvent("ab.BridgeReady"));
+    }),
+    e
+  );
+}
+
+function destroyBannerHtml(o) {
+  const r = o.getAttribute(BannerStrings.ea);
+  null != r && removeSubscription(r),
+    o && o.parentNode && o.parentNode.removeChild(o);
+}
+
+function logBannerImpressions(o) {
+  if (!r.rr()) return;
+  if (!o || o.length <= 0) return !1;
+  const n = i.o(),
+    s = n.ct();
+  if (0 === keys(s).length)
+    return E$1.info("Not logging banners impression. No banners exist."), !1;
+  const e = n.qt(),
+    t = [];
+  for (const r of o) {
+    const o = s[r];
+    o
+      ? e[o.placementId]
+        ? E$1.info(
+            `Not logging banners impression for ID ${r}. This ID was already logged this session.`,
+          )
+        : ((e[o.placementId] = !0), t.push(o.id))
+      : E$1.info(
+          `Not logging banners impression for ID ${r}. The placement ID did not correspond to any banner.`,
+        );
+  }
+  if (0 === t.length) return !1;
+  n.Ft(e);
+  const a = { ids: t };
+  return v$1.lt(f.ro, a).W;
+}
+
+function detectBannerImpressions() {
+  const o = document.querySelectorAll(`.${BANNER_HTML_CLASS}, .${CONTROL_BANNER_HTML_CLASS}`),
+    t = [];
+  for (let n = 0; n < o.length; n++) {
+    const s = o[n],
+      i = s.getAttribute(BANNER_PLACEMENT_ID);
+    if (!i) continue;
+    const m = detectImpression.oo(s),
+      r = detectImpression.no(s);
+    if (m && r) continue;
+    const e = topIsInView(s),
+      c = bottomIsInView(s);
+    e && !m && impressOnTop(s), c && !r && impressOnBottom(s), detectImpression.oo(s) && detectImpression.no(s) && t.push(i);
+  }
+  t.length > 0 && logBannerImpressions(t);
+}
+
+function getAllBanners() {
+  if (!r.rr()) return;
+  const n = {},
+    o = r.l();
+  if (
+    (!1 === (null == o ? void 0 : o.kt()) && E$1.error(BannerStrings.aa),
+    !(null == o ? void 0 : o.kt()))
+  )
+    return n;
+  const t = i.o().ct();
+  for (const r in t) n[r] = getBannerIfNotExpired(t, r);
+  return n;
+}
+
+function subscribeToBannersUpdates(n) {
+  var o;
+  if (!r.rr()) return;
+  const t = i.o();
+  if (t.Tt()) {
+    const r = getAllBanners();
+    r && "function" == typeof n && n(r);
+  }
+  const s = t.It(n);
+  if (!t.St()) {
+    const n =
+      null === (o = r.nn()) || void 0 === o
+        ? void 0
+        : o.rn(() => {
+            const n = t.ot();
+            n && n.length > 0 && t.M(n);
+          });
+    n && t.wt(n);
+  }
+  return s;
+}
+
+function insertBanner(e, n) {
+  if (!r.rr()) return;
+  if (!e) return void E$1.error("Not inserting banner: banner was not provided.");
+  if (!n)
+    return void E$1.error("Not inserting banner: parentNode was not provided.");
+  if (!r.re(D.te))
+    return void E$1.error(
+      "Banners are disabled. Use the 'allowUserSuppliedJavascript' option for braze.initialize to enable these messages.",
+    );
+  setupBannerUI();
+  const o = bannerToHtml(e, r.re(D.er)),
+    s = subscribeToBannersUpdates((s) => {
+      const i = s[e.placementId];
+      i ? n.replaceChildren(bannerToHtml(i, r.re(D.er))) : destroyBannerHtml(o);
+    });
+  s && o.setAttribute(BannerStrings.ea, s),
+    n.replaceChildren(o),
+    addPassiveEventListener(window, "scroll", detectBannerImpressions),
+    detectBannerImpressions();
+}
+
+function requestBannersRefresh(e, t, o) {
+  if (!r.rr()) return void E$1.warn(CoreStrings.ee);
+  const s = r.l();
+  if (!s) return;
+  if (!isArray(e) || 0 === e.length)
+    return void E$1.warn("placementIds should be a non-empty array.");
+  if (!r.re(D.te))
+    return void E$1.error(
+      "Banners are disabled. Use the 'allowUserSuppliedJavascript' option for braze.initialize to enable these messages.",
+    );
+  const n = i.o();
+  if ((!1 === s.kt() && E$1.error(BannerStrings.aa), !n.k()))
+    return void s.P(() => {
+      requestBannersRefresh(e, t, o);
+    });
+  const a = s.oe();
+  e.length > a &&
+    (E$1.warn(
+      `Number of placement IDs requested exceeds the max allowed. Trimming placementIds array from length ${e.length} to ${a} (max allowed).`,
+    ),
+    (e = e.slice(0, a))),
+    0 !==
+      (e = e.filter(
+        (e) =>
+          !!isValidBannerPlacementId(e) ||
+          (E$1.warn(
+            `Placement ID should be a valid utf8 string with no whitespaces, filtering out: ${e}`,
+          ),
+          !1),
+      )).length &&
+      (E$1.info(`Requesting banners for placement IDs: ${JSON.stringify(e)}`),
+      n.M(e, t, o));
 }
 
 var src = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	WindowUtils: WindowUtils,
-	logCardClick: logCardClick,
 	logCardDismissal: logCardDismissal,
-	logCardImpressions: logCardImpressions,
 	logContentCardImpressions: logContentCardImpressions,
 	logContentCardClick: logContentCardClick,
 	Card: Card,
@@ -9960,14 +11181,6 @@ var src = /*#__PURE__*/Object.freeze({
 	toggleLogging: toggleLogging,
 	wipeData: wipeData,
 	handleBrazeAction: handleBrazeAction,
-	Feed: Feed,
-	getCachedFeed: getCachedFeed,
-	destroyFeed: destroyFeed,
-	logFeedDisplayed: logFeedDisplayed,
-	requestFeedRefresh: requestFeedRefresh,
-	showFeed: showFeed,
-	subscribeToFeedUpdates: subscribeToFeedUpdates,
-	toggleFeed: toggleFeed,
 	InAppMessage: InAppMessage,
 	InAppMessageButton: InAppMessageButton,
 	ControlMessage: ControlMessage,
@@ -9995,7 +11208,15 @@ var src = /*#__PURE__*/Object.freeze({
 	getFeatureFlag: getFeatureFlag,
 	subscribeToFeatureFlagsUpdates: subscribeToFeatureFlagsUpdates,
 	getAllFeatureFlags: getAllFeatureFlags,
-	logFeatureFlagImpression: logFeatureFlagImpression
+	logFeatureFlagImpression: logFeatureFlagImpression,
+	Banner: Banner,
+	getBanner: getBanner,
+	insertBanner: insertBanner,
+	requestBannersRefresh: requestBannersRefresh,
+	getAllBanners: getAllBanners,
+	subscribeToBannersUpdates: subscribeToBannersUpdates,
+	logBannerImpressions: logBannerImpressions,
+	logBannerClick: logBannerClick
 });
 
 var require$$0 = /*@__PURE__*/getAugmentedNamespace(src);
@@ -10017,7 +11238,7 @@ window.braze = require$$0;
 
 // This should remain Appboy and not Braze until the core SDK is able to parse the moduleID and not the name (go.mparticle.com/work/SQDSDKS-4655)
 var name = 'Appboy',
-    suffix = 'v5',
+    suffix = 'v6',
     moduleId = 28,
     version = '5.0.3',
     MessageType = {
