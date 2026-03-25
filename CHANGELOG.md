@@ -2,6 +2,12 @@
 
 --
 
+## 6.0.0 - 2026-03-24
+
+⚠️ **Breaking** - The mParticle web Braze kit now supports Braze's Web SDK v6. Breaking changes can be viewed at [Braze's changelog](https://www.braze.com/docs/developer_guide/platform_integration_guides/web/changelog/#600). There may be API changes that affect you if you call `braze` directly from your code.
+-   feat: Support Braze Web SDK V6 [#62](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/62)
+    * Full details about the changes and recommended code changes can be found in the README.
+
 ## 5.0.3 - 2025-08-11
 
 -   feat: Add support to forward subscriptionGroupIds [(#57)](https://github.com/mparticle-integrations/mparticle-javascript-integration-braze/pull/57))
