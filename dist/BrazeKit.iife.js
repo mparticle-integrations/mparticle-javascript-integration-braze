@@ -26,11 +26,11 @@ var mpBrazeKitV6 = (function (exports) {
 	    (void 0 === n && void 0 !== E.zg) || (E.zg = !!n), E.i || (E.i = !0);
 	  },
 	  destroy: function () {
-	    (E.i = !1), (E.zg = void 0), (E.Rd = void 0);
+	    (E.i = !1), (E.zg = void 0), (E.vd = void 0);
 	  },
 	  setLogger: function (n) {
 	    "function" == typeof n
-	      ? (E.init(), (E.Rd = n))
+	      ? (E.init(), (E.vd = n))
 	      : E.info("Ignoring setLogger call since logger is not a function");
 	  },
 	  toggleLogging: function () {
@@ -42,25 +42,25 @@ var mpBrazeKitV6 = (function (exports) {
 	  info: function (n) {
 	    if (E.zg) {
 	      const o = "Braze: " + n;
-	      null != E.Rd ? E.Rd(o) : console.log(o);
+	      null != E.vd ? E.vd(o) : console.log(o);
 	    }
 	  },
 	  warn: function (n) {
 	    if (E.zg) {
-	      const o = "Braze SDK Warning: " + n + " (v6.5.0)";
-	      null != E.Rd ? E.Rd(o) : console.warn(o);
+	      const o = "Braze SDK Warning: " + n + " (v6.8.0)";
+	      null != E.vd ? E.vd(o) : console.warn(o);
 	    }
 	  },
 	  error: function (n) {
 	    if (E.zg) {
-	      const o = "Braze SDK Error: " + n + " (v6.5.0)";
-	      null != E.Rd ? E.Rd(o) : console.error(o);
+	      const o = "Braze SDK Error: " + n + " (v6.8.0)";
+	      null != E.vd ? E.vd(o) : console.error(o);
 	    }
 	  },
 	};
 	var E$1 = E;
 
-	const ui = {
+	const ai = {
 	  Nu: function (t) {
 	    const r = (t + "=".repeat((4 - (t.length % 4)) % 4))
 	        .replace(/\-/g, "+")
@@ -72,41 +72,42 @@ var mpBrazeKitV6 = (function (exports) {
 	  },
 	};
 
-	const f = {
+	const p = {
 	    CustomEvent: "ce",
 	    Pr: "p",
-	    jd: "pc",
+	    Jc: "pc",
 	    ev: "ca",
-	    Fl: "i",
-	    wl: "ie",
-	    Xt: "cci",
-	    Zt: "ccic",
-	    Lt: "ccc",
-	    Qt: "ccd",
-	    Sm: "ss",
+	    ql: "i",
+	    Va: "ie",
+	    ds: "cci",
+	    js: "ccic",
+	    os: "ccc",
+	    cs: "ccd",
+	    wm: "ss",
 	    hm: "se",
-	    wn: "si",
-	    zn: "sc",
-	    Sn: "sbc",
+	    Xn: "si",
+	    Hn: "sc",
+	    Jn: "sbc",
 	    tv: "sfe",
 	    om: "iec",
-	    yd: "lr",
-	    kd: "uae",
-	    Dd: "lcaa",
-	    Ad: "lcar",
+	    Bc: "lr",
+	    Uc: "uae",
+	    Gc: "lcaa",
+	    Wc: "lcar",
 	    Zu: "inc",
 	    Qu: "add",
 	    Xu: "rem",
 	    Yu: "set",
 	    Vu: "ncam",
-	    $d: "sgu",
+	    Xc: "sgu",
 	    xo: "ffi",
 	    ro: "bi",
-	    ut: "bc",
+	    Dt: "bc",
+	    Ft: "bd",
 	  };
 
-	const P = {
-	  se: function () {
+	const V = {
+	  de: function () {
 	    if ("undefined" != typeof window && window.crypto) {
 	      if ("function" == typeof window.crypto.randomUUID)
 	        return window.crypto.randomUUID();
@@ -133,26 +134,26 @@ var mpBrazeKitV6 = (function (exports) {
 	    return n() + n(!0) + n(!0) + n();
 	  },
 	};
-	var P$1 = P;
+	var V$1 = V;
 
 	class et {
 	  constructor(t, e) {
 	    (this.database = t),
-	      (this.Rd = e),
+	      (this.vd = e),
 	      (this.parent = "undefined" == typeof window ? self : window),
 	      (this.database = t),
-	      (this.Rd = e);
+	      (this.vd = e);
 	  }
-	  Ud() {
+	  Dd() {
 	    if ("indexedDB" in this.parent) return this.parent.indexedDB;
 	  }
 	  isSupported() {
 	    var t;
 	    try {
-	      if (null == this.Ud()) return !1;
+	      if (null == this.Dd()) return !1;
 	      {
 	        const e =
-	          null === (t = this.Ud()) || void 0 === t
+	          null === (t = this.Dd()) || void 0 === t
 	            ? void 0
 	            : t.open("Braze IndexedDB Support Test");
 	        if (
@@ -162,10 +163,10 @@ var mpBrazeKitV6 = (function (exports) {
 	          "undefined" != typeof window)
 	        ) {
 	          const t = window,
-	            e = t.chrome || t.browser || t.Od;
+	            e = t.chrome || t.browser || t.Bd;
 	          if (e && e.runtime && e.runtime.id)
 	            return (
-	              this.Rd.info(
+	              this.vd.info(
 	                "Not using IndexedDB for storage because we are running inside an extension",
 	              ),
 	              !1
@@ -175,37 +176,37 @@ var mpBrazeKitV6 = (function (exports) {
 	      }
 	    } catch (t) {
 	      return (
-	        this.Rd.info(
+	        this.vd.info(
 	          "Not using IndexedDB for storage due to following error: " + t,
 	        ),
 	        !1
 	      );
 	    }
 	  }
-	  Kd(t, e) {
+	  Cd(t, e) {
 	    var n;
 	    const o =
-	      null === (n = this.Ud()) || void 0 === n
+	      null === (n = this.Dd()) || void 0 === n
 	        ? void 0
-	        : n.open(this.database.Ld, this.database.VERSION);
+	        : n.open(this.database.xd, this.database.VERSION);
 	    if (null == o) return "function" == typeof e && e(), !1;
 	    const i = this;
 	    return (
 	      (o.onupgradeneeded = (t) => {
 	        var e;
-	        i.Rd.info(
+	        i.vd.info(
 	          "Upgrading indexedDB " +
-	            i.database.Ld +
+	            i.database.xd +
 	            " to v" +
 	            i.database.VERSION +
 	            "...",
 	        );
 	        const n = null === (e = t.target) || void 0 === e ? void 0 : e.result;
-	        for (const t in i.database.Fs) {
+	        for (const t in i.database.Os) {
 	          const e = t;
-	          i.database.Fs.hasOwnProperty(t) &&
-	            !n.objectStoreNames.contains(i.database.Fs[e]) &&
-	            n.createObjectStore(i.database.Fs[e]);
+	          i.database.Os.hasOwnProperty(t) &&
+	            !n.objectStoreNames.contains(i.database.Os[e]) &&
+	            n.createObjectStore(i.database.Os[e]);
 	        }
 	      }),
 	      (o.onsuccess = (n) => {
@@ -214,7 +215,7 @@ var mpBrazeKitV6 = (function (exports) {
 	        (r.onversionchange = () => {
 	          r.close(),
 	            "function" == typeof e && e(),
-	            i.Rd.error(
+	            i.vd.error(
 	              "Needed to close the database unexpectedly because of an upgrade in another tab",
 	            );
 	        }),
@@ -224,9 +225,9 @@ var mpBrazeKitV6 = (function (exports) {
 	        var n;
 	        const o = t;
 	        return (
-	          i.Rd.info(
+	          i.vd.info(
 	            "Could not open indexedDB " +
-	              i.database.Ld +
+	              i.database.xd +
 	              " v" +
 	              i.database.VERSION +
 	              ": " +
@@ -242,16 +243,16 @@ var mpBrazeKitV6 = (function (exports) {
 	  setItem(t, e, n, o, i) {
 	    if (!this.isSupported()) return "function" == typeof i && i(), !1;
 	    const r = this;
-	    return this.Kd((d) => {
+	    return this.Cd((d) => {
 	      if (!d.objectStoreNames.contains(t))
 	        return (
-	          r.Rd.error(
+	          r.vd.error(
 	            "Could not store object " +
 	              e +
 	              " in " +
 	              t +
 	              " on indexedDB " +
-	              r.database.Ld +
+	              r.database.xd +
 	              " - " +
 	              t +
 	              " is not a valid objectStore",
@@ -263,13 +264,13 @@ var mpBrazeKitV6 = (function (exports) {
 	      s.oncomplete = () => d.close();
 	      const u = s.objectStore(t).put(n, e);
 	      (u.onerror = () => {
-	        r.Rd.error(
+	        r.vd.error(
 	          "Could not store object " +
 	            e +
 	            " in " +
 	            t +
 	            " on indexedDB " +
-	            r.database.Ld,
+	            r.database.xd,
 	        ),
 	          "function" == typeof i && i();
 	      }),
@@ -281,16 +282,16 @@ var mpBrazeKitV6 = (function (exports) {
 	  getItem(t, e, n) {
 	    if (!this.isSupported()) return !1;
 	    const o = this;
-	    return this.Kd((i) => {
+	    return this.Cd((i) => {
 	      if (!i.objectStoreNames.contains(t))
 	        return (
-	          o.Rd.error(
+	          o.vd.error(
 	            "Could not retrieve object " +
 	              e +
 	              " in " +
 	              t +
 	              " on indexedDB " +
-	              o.database.Ld +
+	              o.database.xd +
 	              " - " +
 	              t +
 	              " is not a valid objectStore",
@@ -301,13 +302,13 @@ var mpBrazeKitV6 = (function (exports) {
 	      r.oncomplete = () => i.close();
 	      const d = r.objectStore(t).get(e);
 	      (d.onerror = () => {
-	        o.Rd.error(
+	        o.vd.error(
 	          "Could not retrieve object " +
 	            e +
 	            " in " +
 	            t +
 	            " on indexedDB " +
-	            o.database.Ld,
+	            o.database.xd,
 	        );
 	      }),
 	        (d.onsuccess = (t) => {
@@ -320,14 +321,14 @@ var mpBrazeKitV6 = (function (exports) {
 	  kr(t, e, n) {
 	    if (!this.isSupported()) return "function" == typeof n && n(), !1;
 	    const o = this;
-	    return this.Kd((i) => {
+	    return this.Cd((i) => {
 	      if (!i.objectStoreNames.contains(t))
 	        return (
-	          o.Rd.error(
+	          o.vd.error(
 	            "Could not retrieve last record from " +
 	              t +
 	              " on indexedDB " +
-	              o.database.Ld +
+	              o.database.xd +
 	              " - " +
 	              t +
 	              " is not a valid objectStore",
@@ -339,8 +340,8 @@ var mpBrazeKitV6 = (function (exports) {
 	      r.oncomplete = () => i.close();
 	      const d = r.objectStore(t).openCursor(null, "prev");
 	      (d.onerror = () => {
-	        o.Rd.error(
-	          "Could not open cursor for " + t + " on indexedDB " + o.database.Ld,
+	        o.vd.error(
+	          "Could not open cursor for " + t + " on indexedDB " + o.database.xd,
 	        ),
 	          "function" == typeof n && n();
 	      }),
@@ -353,19 +354,19 @@ var mpBrazeKitV6 = (function (exports) {
 	        });
 	    }, n);
 	  }
-	  je(t, e) {
+	  ge(t, e) {
 	    if (!this.isSupported()) return !1;
 	    const n = this;
-	    return this.Kd((o) => {
+	    return this.Cd((o) => {
 	      if (!o.objectStoreNames.contains(t))
 	        return (
-	          n.Rd.error(
+	          n.vd.error(
 	            "Could not delete record " +
 	              e +
 	              " from " +
 	              t +
 	              " on indexedDB " +
-	              n.database.Ld +
+	              n.database.xd +
 	              " - " +
 	              t +
 	              " is not a valid objectStore",
@@ -375,28 +376,28 @@ var mpBrazeKitV6 = (function (exports) {
 	      const i = o.transaction([t], "readwrite");
 	      i.oncomplete = () => o.close();
 	      i.objectStore(t).delete(e).onerror = () => {
-	        n.Rd.error(
+	        n.vd.error(
 	          "Could not delete record " +
 	            e +
 	            " from " +
 	            t +
 	            " on indexedDB " +
-	            n.database.Ld,
+	            n.database.xd,
 	        );
 	      };
 	    });
 	  }
-	  Ds(t, e) {
+	  Xs(t, e) {
 	    if (!this.isSupported()) return !1;
 	    const n = this;
-	    return this.Kd((o) => {
+	    return this.Cd((o) => {
 	      if (!o.objectStoreNames.contains(t))
 	        return (
-	          n.Rd.error(
+	          n.vd.error(
 	            "Could not retrieve objects from " +
 	              t +
 	              " on indexedDB " +
-	              n.database.Ld +
+	              n.database.xd +
 	              " - " +
 	              t +
 	              " is not a valid objectStore",
@@ -410,18 +411,18 @@ var mpBrazeKitV6 = (function (exports) {
 	        s = [];
 	      (d.onerror = () => {
 	        s.length > 0
-	          ? (n.Rd.info(
+	          ? (n.vd.info(
 	              "Cursor closed midway through for " +
 	                t +
 	                " on indexedDB " +
-	                n.database.Ld,
+	                n.database.xd,
 	            ),
 	            e(s))
-	          : n.Rd.error(
+	          : n.vd.error(
 	              "Could not open cursor for " +
 	                t +
 	                " on indexedDB " +
-	                n.database.Ld,
+	                n.database.xd,
 	            );
 	      }),
 	        (d.onsuccess = (t) => {
@@ -441,79 +442,80 @@ var mpBrazeKitV6 = (function (exports) {
 	  clearData() {
 	    if (!this.isSupported()) return !1;
 	    const t = [];
-	    for (const e in this.database.Fs) {
+	    for (const e in this.database.Os) {
 	      const n = e;
-	      this.database.Fs.hasOwnProperty(e) &&
-	        this.database.Fs[n] !== this.database.Fs.be &&
-	        t.push(this.database.Fs[n]);
+	      this.database.Os.hasOwnProperty(e) &&
+	        this.database.Os[n] !== this.database.Os.pe &&
+	        t.push(this.database.Os[n]);
 	    }
 	    const e = this;
-	    return this.Kd(function (n) {
+	    return this.Cd(function (n) {
 	      const o = n.transaction(t, "readwrite");
 	      o.oncomplete = () => n.close();
 	      for (let n = 0; n < t.length; n++) {
 	        const i = t[n];
 	        o.objectStore(i).clear().onerror = function () {
-	          e.Rd.error(
+	          e.vd.error(
 	            "Could not clear " +
 	              this.source.name +
 	              " on indexedDB " +
-	              e.database.Ld,
+	              e.database.xd,
 	          );
 	        };
 	      }
 	      o.onerror = function () {
-	        e.Rd.error(
-	          "Could not clear object stores on indexedDB " + e.database.Ld,
+	        e.vd.error(
+	          "Could not clear object stores on indexedDB " + e.database.xd,
 	        );
 	      };
 	    });
 	  }
 	}
-	et.Us = {
-	  Rs: {
-	    Ld: "AppboyServiceWorkerAsyncStorage",
+	et.Ps = {
+	  $s: {
+	    xd: "AppboyServiceWorkerAsyncStorage",
 	    VERSION: 6,
-	    Fs: {
-	      Ze: "data",
-	      vr: "pushClicks",
+	    Os: {
+	      wn: "data",
+	      yr: "pushClicks",
 	      Fu: "pushSubscribed",
-	      Gd: "fallbackDevice",
-	      As: "cardUpdates",
-	      be: "optOut",
-	      zr: "pendingData",
-	      qh: "sdkAuthenticationSignature",
+	      yd: "fallbackDevice",
+	      _s: "cardUpdates",
+	      pe: "optOut",
+	      Br: "pendingData",
+	      wh: "sdkAuthenticationSignature",
 	    },
-	    fe: 1,
+	    be: 1,
 	  },
 	};
 
-	var $t = {
-	  Ph: "allowCrawlerActivity",
-	  Wh: "baseUrl",
-	  Vh: "noCookies",
-	  Kh: "devicePropertyAllowlist",
-	  La: "disablePushTokenMaintenance",
-	  $h: "enableLogging",
-	  Yh: "enableSdkAuthentication",
-	  Ka: "manageServiceWorkerExternally",
-	  Xh: "minimumIntervalBetweenTriggerActionsInSeconds",
-	  Zh: "sessionTimeoutInSeconds",
-	  Qh: "appVersion",
-	  Xa: "appVersionNumber",
-	  Ga: "serviceWorkerLocation",
-	  Ia: "safariWebsitePushId",
-	  Wa: "localization",
-	  er: "contentSecurityNonce",
-	  te: "allowUserSuppliedJavascript",
-	  $a: "inAppMessageZIndex",
-	  Ja: "openInAppMessagesInNewTab",
-	  Oh: "requireExplicitInAppMessageDismissal",
-	  Za: "doNotLoadFontAwesome",
-	  tl: "deviceId",
-	  Ha: "serviceWorkerScope",
-	  Ne: "dustHost",
-	  il: "sdkFlavor",
+	var li = {
+	  _h: "allowCrawlerActivity",
+	  Nh: "baseUrl",
+	  se: "cookieExpiryInDays",
+	  Oh: "noCookies",
+	  Th: "devicePropertyAllowlist",
+	  qa: "disablePushTokenMaintenance",
+	  Rh: "enableLogging",
+	  Ph: "enableSdkAuthentication",
+	  ka: "manageServiceWorkerExternally",
+	  Dh: "minimumIntervalBetweenTriggerActionsInSeconds",
+	  Lh: "sessionTimeoutInSeconds",
+	  yh: "appVersion",
+	  Mh: "appVersionNumber",
+	  xa: "serviceWorkerLocation",
+	  _a: "safariWebsitePushId",
+	  Ba: "localization",
+	  sr: "contentSecurityNonce",
+	  nr: "allowUserSuppliedJavascript",
+	  wa: "inAppMessageZIndex",
+	  va: "openInAppMessagesInNewTab",
+	  oh: "requireExplicitInAppMessageDismissal",
+	  Uh: "doNotLoadFontAwesome",
+	  Wh: "deviceId",
+	  Ma: "serviceWorkerScope",
+	  Xe: "dustHost",
+	  Bh: "sdkFlavor",
 	  tn: "openCardsInNewTab",
 	};
 
@@ -639,37 +641,39 @@ var mpBrazeKitV6 = (function (exports) {
 	const LAST_REQUEST_TO_ENDPOINT_MS_AGO_DEFAULT = 72e5;
 	const MAX_RETRY_COUNT_PER_REQUEST = 15;
 	const REQUEST_ATTEMPT_DEFAULT = 1;
+	const DISMISSALS_CACHE_SIZE_DEFAULT = 200;
 	const REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT = 1e4;
 	const REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT = 3;
 	const REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT = 3e5;
 	const CoreStrings = {
 	  ee: "Braze must be initialized before calling methods.",
-	  $e: "logCustomEvent",
+	  je: "logCustomEvent",
+	  QE: "logEcommerceEvent",
 	  Ku: "setCustomUserAttribute",
 	};
 
-	class m {
+	class f {
 	  constructor() {
-	    this.jn = {};
+	    this.In = {};
 	  }
-	  Rt(t) {
+	  Kt(t) {
 	    if ("function" != typeof t) return null;
-	    const i = P$1.se();
-	    return (this.jn[i] = t), i;
+	    const i = V$1.de();
+	    return (this.In[i] = t), i;
 	  }
 	  removeSubscription(t) {
-	    delete this.jn[t];
+	    delete this.In[t];
 	  }
 	  removeAllSubscriptions() {
-	    this.jn = {};
+	    this.In = {};
 	  }
-	  De() {
-	    return Object.keys(this.jn).length;
+	  Ke() {
+	    return Object.keys(this.In).length;
 	  }
-	  L(t) {
+	  A(t) {
 	    const i = [];
-	    for (const s in this.jn) {
-	      const r = this.jn[s];
+	    for (const s in this.In) {
+	      const r = this.In[s];
 	      i.push(r(t));
 	    }
 	    return i;
@@ -721,10 +725,10 @@ var mpBrazeKitV6 = (function (exports) {
 	      (this.si = null);
 	  }
 	  subscribeToClickedEvent(t) {
-	    return this.hi().Rt(t);
+	    return this.hi().Kt(t);
 	  }
 	  subscribeToDismissedEvent(t) {
-	    return this.li().Rt(t);
+	    return this.li().Kt(t);
 	  }
 	  removeSubscription(t) {
 	    this.hi().removeSubscription(t), this.li().removeSubscription(t);
@@ -735,7 +739,7 @@ var mpBrazeKitV6 = (function (exports) {
 	  dismissCard() {
 	    if (!this.dismissible || this.dismissed) return;
 	    "function" == typeof this.logCardDismissal && this.logCardDismissal();
-	    let t = this.ae;
+	    let t = this.te;
 	    !t && this.id && (t = document.getElementById(this.id)),
 	      t &&
 	        ((t.style.height = t.offsetHeight + "px"),
@@ -751,124 +755,124 @@ var mpBrazeKitV6 = (function (exports) {
 	        }, FEED_ANIMATION_DURATION));
 	  }
 	  hi() {
-	    return null == this.ti && (this.ti = new m()), this.ti;
+	    return null == this.ti && (this.ti = new f()), this.ti;
 	  }
 	  li() {
-	    return null == this.ii && (this.ii = new m()), this.ii;
+	    return null == this.ii && (this.ii = new f()), this.ii;
 	  }
-	  Wt() {
+	  gs() {
 	    const t = new Date().valueOf();
 	    return (
 	      !(null != this.si && t - this.si < Card.ei) &&
 	      ((this.si = t), (this.viewed = !0), !0)
 	    );
 	  }
-	  $t() {
-	    (this.viewed = !0), (this.clicked = !0), this.hi().L();
+	  ss() {
+	    (this.viewed = !0), (this.clicked = !0), this.hi().A();
 	  }
-	  Ot() {
+	  ls() {
 	    return (
 	      !(!this.dismissible || this.dismissed) &&
-	      ((this.dismissed = !0), this.li().L(), !0)
+	      ((this.dismissed = !0), this.li().A(), !0)
 	    );
 	  }
 	  ri(t) {
-	    if (null == t || t[Card.ui.rs] !== this.id) return !0;
+	    if (null == t || t[Card.ui.qs] !== this.id) return !0;
 	    if (t[Card.ui.Ei]) return !1;
 	    if (
-	      null != t[Card.ui.ps] &&
+	      null != t[Card.ui.Bs] &&
 	      null != this.updated &&
-	      parseInt(t[Card.ui.ps]) < convertMsToSeconds(this.updated.valueOf())
+	      parseInt(t[Card.ui.Bs]) < convertMsToSeconds(this.updated.valueOf())
 	    )
 	      return !0;
 	    if (
-	      (t[Card.ui.os] && !this.viewed && (this.viewed = !0),
-	      t[Card.ui.js] && !this.clicked && (this.clicked = t[Card.ui.js]),
-	      null != t[Card.ui.cs] && (this.title = t[Card.ui.cs]),
-	      null != t[Card.ui.ns] && (this.imageUrl = t[Card.ui.ns]),
-	      null != t[Card.ui.ds] && (this.description = t[Card.ui.ds]),
-	      null != t[Card.ui.ps])
+	      (t[Card.ui.vs] && !this.viewed && (this.viewed = !0),
+	      t[Card.ui.Is] && !this.clicked && (this.clicked = t[Card.ui.Is]),
+	      null != t[Card.ui.ws] && (this.title = t[Card.ui.ws]),
+	      null != t[Card.ui.ys] && (this.imageUrl = t[Card.ui.ys]),
+	      null != t[Card.ui.As] && (this.description = t[Card.ui.As]),
+	      null != t[Card.ui.Bs])
 	    ) {
-	      const i = dateFromUnixTimestamp(t[Card.ui.ps]);
+	      const i = dateFromUnixTimestamp(t[Card.ui.Bs]);
 	      null != i && (this.updated = i);
 	    }
-	    if (null != t[Card.ui.us]) {
+	    if (null != t[Card.ui.Cs]) {
 	      let i;
-	      (i = t[Card.ui.us] === Card.Ti ? null : dateFromUnixTimestamp(t[Card.ui.us])),
+	      (i = t[Card.ui.Cs] === Card.Ti ? null : dateFromUnixTimestamp(t[Card.ui.Cs])),
 	        (this.expiresAt = i);
 	    }
 	    if (
 	      (null != t[Card.ui.URL] && (this.url = t[Card.ui.URL]),
-	      null != t[Card.ui.ls] && (this.linkText = t[Card.ui.ls]),
-	      null != t[Card.ui.fs])
+	      null != t[Card.ui.Ds] && (this.linkText = t[Card.ui.Ds]),
+	      null != t[Card.ui.Es])
 	    ) {
-	      const i = parseFloat(t[Card.ui.fs].toString());
+	      const i = parseFloat(t[Card.ui.Es].toString());
 	      this.aspectRatio = isNaN(i) ? null : i;
 	    }
 	    return (
-	      null != t[Card.ui.xs] && (this.extras = t[Card.ui.xs]),
-	      null != t[Card.ui.bs] && (this.pinned = t[Card.ui.bs]),
-	      null != t[Card.ui.gs] && (this.dismissible = t[Card.ui.gs]),
-	      null != t[Card.ui.zs] && (this.language = t[Card.ui.zs]),
-	      null != t[Card.ui.ks] && (this.altImageText = t[Card.ui.ks]),
-	      null != t[Card.ui.qs] && (this.test = t[Card.ui.qs]),
+	      null != t[Card.ui.Fs] && (this.extras = t[Card.ui.Fs]),
+	      null != t[Card.ui.Gs] && (this.pinned = t[Card.ui.Gs]),
+	      null != t[Card.ui.Hs] && (this.dismissible = t[Card.ui.Hs]),
+	      null != t[Card.ui.Js] && (this.language = t[Card.ui.Js]),
+	      null != t[Card.ui.Ks] && (this.altImageText = t[Card.ui.Ks]),
+	      null != t[Card.ui.Ls] && (this.test = t[Card.ui.Ls]),
 	      !0
 	    );
 	  }
-	  gt() {
+	  qt() {
 	    E$1.error("Must be implemented in a subclass");
 	  }
 	}
 	(Card.Ti = -1),
 	  (Card.ui = {
-	    rs: "id",
-	    os: "v",
-	    gs: "db",
+	    qs: "id",
+	    vs: "v",
+	    Hs: "db",
 	    Ei: "r",
-	    ps: "ca",
-	    bs: "p",
-	    us: "ea",
-	    xs: "e",
-	    ts: "tp",
-	    ns: "i",
-	    cs: "tt",
-	    ds: "ds",
+	    Bs: "ca",
+	    Gs: "p",
+	    Cs: "ea",
+	    Fs: "e",
+	    xs: "tp",
+	    ys: "i",
+	    ws: "tt",
+	    As: "ds",
 	    URL: "u",
-	    ls: "dm",
-	    fs: "ar",
-	    js: "cl",
-	    qs: "t",
-	    zs: "language",
-	    ks: "image_alt",
+	    Ds: "dm",
+	    Es: "ar",
+	    Is: "cl",
+	    Ls: "t",
+	    Js: "language",
+	    Ks: "image_alt",
 	  }),
-	  (Card.es = {
-	    hs: "captioned_image",
+	  (Card.ks = {
+	    zs: "captioned_image",
 	    oi: "text_announcement",
 	    ai: "short_news",
 	    Ii: "banner_image",
 	    Ni: "control",
 	  }),
-	  (Card.ss = {
-	    rs: "id",
-	    os: "v",
-	    gs: "db",
+	  (Card.bs = {
+	    qs: "id",
+	    vs: "v",
+	    Hs: "db",
 	    Ai: "cr",
-	    ps: "ca",
-	    bs: "p",
+	    Bs: "ca",
+	    Gs: "p",
 	    ci: "t",
-	    us: "ea",
-	    xs: "e",
-	    ts: "tp",
-	    ns: "i",
-	    cs: "tt",
-	    ds: "ds",
+	    Cs: "ea",
+	    Fs: "e",
+	    xs: "tp",
+	    ys: "i",
+	    ws: "tt",
+	    As: "ds",
 	    URL: "u",
-	    ls: "dm",
-	    fs: "ar",
-	    js: "cl",
-	    qs: "s",
-	    zs: "l",
-	    ks: "ia",
+	    Ds: "dm",
+	    Es: "ar",
+	    Is: "cl",
+	    Ls: "s",
+	    Js: "l",
+	    Ks: "ia",
 	  }),
 	  (Card.mi = {
 	    Si: "ADVERTISING",
@@ -882,28 +886,28 @@ var mpBrazeKitV6 = (function (exports) {
 	class ImageOnly extends Card {
 	  constructor(s, t, i, h, l, r, e, n, o, u, a, c, d) {
 	    super(s, t, null, i, null, h, l, r, null, e, n, o, u, a, c, d),
-	      (this.ie = "ab-image-only"),
-	      (this.ne = !1),
+	      (this.ae = "ab-image-only"),
+	      (this.oe = !1),
 	      (this.test = !1);
 	  }
-	  gt() {
+	  qt() {
 	    const s = {};
 	    return (
-	      (s[Card.ss.ts] = Card.es.Ii),
-	      (s[Card.ss.rs] = this.id),
-	      (s[Card.ss.os] = this.viewed),
-	      (s[Card.ss.ns] = this.imageUrl),
-	      (s[Card.ss.ps] = this.updated),
-	      (s[Card.ss.us] = this.expiresAt),
-	      (s[Card.ss.URL] = this.url),
-	      (s[Card.ss.fs] = this.aspectRatio),
-	      (s[Card.ss.xs] = this.extras),
-	      (s[Card.ss.bs] = this.pinned),
-	      (s[Card.ss.gs] = this.dismissible),
-	      (s[Card.ss.js] = this.clicked),
-	      (s[Card.ss.zs] = this.language),
-	      (s[Card.ss.ks] = this.altImageText),
-	      (s[Card.ss.qs] = this.test),
+	      (s[Card.bs.xs] = Card.ks.Ii),
+	      (s[Card.bs.qs] = this.id),
+	      (s[Card.bs.vs] = this.viewed),
+	      (s[Card.bs.ys] = this.imageUrl),
+	      (s[Card.bs.Bs] = this.updated),
+	      (s[Card.bs.Cs] = this.expiresAt),
+	      (s[Card.bs.URL] = this.url),
+	      (s[Card.bs.Es] = this.aspectRatio),
+	      (s[Card.bs.Fs] = this.extras),
+	      (s[Card.bs.Gs] = this.pinned),
+	      (s[Card.bs.Hs] = this.dismissible),
+	      (s[Card.bs.Is] = this.clicked),
+	      (s[Card.bs.Js] = this.language),
+	      (s[Card.bs.Ks] = this.altImageText),
+	      (s[Card.bs.Ls] = this.test),
 	      s
 	    );
 	  }
@@ -912,31 +916,31 @@ var mpBrazeKitV6 = (function (exports) {
 	class CaptionedImage extends Card {
 	  constructor(t, s, i, h, e, r, a, o, c, n, d, p, u, l, m, f) {
 	    super(t, s, i, h, e, r, a, o, c, n, d, p, u, l, m, f),
-	      (this.ie = "ab-captioned-image"),
-	      (this.ne = !0),
+	      (this.ae = "ab-captioned-image"),
+	      (this.oe = !0),
 	      (this.test = !1);
 	  }
-	  gt() {
+	  qt() {
 	    const t = {};
 	    return (
-	      (t[Card.ss.ts] = Card.es.hs),
-	      (t[Card.ss.rs] = this.id),
-	      (t[Card.ss.os] = this.viewed),
-	      (t[Card.ss.cs] = this.title),
-	      (t[Card.ss.ns] = this.imageUrl),
-	      (t[Card.ss.ds] = this.description),
-	      (t[Card.ss.ps] = this.updated),
-	      (t[Card.ss.us] = this.expiresAt),
-	      (t[Card.ss.URL] = this.url),
-	      (t[Card.ss.ls] = this.linkText),
-	      (t[Card.ss.fs] = this.aspectRatio),
-	      (t[Card.ss.xs] = this.extras),
-	      (t[Card.ss.bs] = this.pinned),
-	      (t[Card.ss.gs] = this.dismissible),
-	      (t[Card.ss.js] = this.clicked),
-	      (t[Card.ss.zs] = this.language),
-	      (t[Card.ss.ks] = this.altImageText),
-	      (t[Card.ss.qs] = this.test),
+	      (t[Card.bs.xs] = Card.ks.zs),
+	      (t[Card.bs.qs] = this.id),
+	      (t[Card.bs.vs] = this.viewed),
+	      (t[Card.bs.ws] = this.title),
+	      (t[Card.bs.ys] = this.imageUrl),
+	      (t[Card.bs.As] = this.description),
+	      (t[Card.bs.Bs] = this.updated),
+	      (t[Card.bs.Cs] = this.expiresAt),
+	      (t[Card.bs.URL] = this.url),
+	      (t[Card.bs.Ds] = this.linkText),
+	      (t[Card.bs.Es] = this.aspectRatio),
+	      (t[Card.bs.Fs] = this.extras),
+	      (t[Card.bs.Gs] = this.pinned),
+	      (t[Card.bs.Hs] = this.dismissible),
+	      (t[Card.bs.Is] = this.clicked),
+	      (t[Card.bs.Js] = this.language),
+	      (t[Card.bs.Ks] = this.altImageText),
+	      (t[Card.bs.Ls] = this.test),
 	      t
 	    );
 	  }
@@ -945,30 +949,30 @@ var mpBrazeKitV6 = (function (exports) {
 	class ClassicCard extends Card {
 	  constructor(s, t, i, h, r, c, e, a, o, d, l, n, u, p, f, m) {
 	    super(s, t, i, h, r, c, e, a, o, d, l, n, u, p, f, m),
-	      (this.ie = "ab-classic-card"),
-	      (this.ne = !0);
+	      (this.ae = "ab-classic-card"),
+	      (this.oe = !0);
 	  }
-	  gt() {
+	  qt() {
 	    const s = {};
 	    return (
-	      (s[Card.ss.ts] = Card.es.ai),
-	      (s[Card.ss.rs] = this.id),
-	      (s[Card.ss.os] = this.viewed),
-	      (s[Card.ss.cs] = this.title),
-	      (s[Card.ss.ns] = this.imageUrl),
-	      (s[Card.ss.ds] = this.description),
-	      (s[Card.ss.ps] = this.updated),
-	      (s[Card.ss.us] = this.expiresAt),
-	      (s[Card.ss.URL] = this.url),
-	      (s[Card.ss.ls] = this.linkText),
-	      (s[Card.ss.fs] = this.aspectRatio),
-	      (s[Card.ss.xs] = this.extras),
-	      (s[Card.ss.bs] = this.pinned),
-	      (s[Card.ss.gs] = this.dismissible),
-	      (s[Card.ss.js] = this.clicked),
-	      (s[Card.ss.zs] = this.language),
-	      (s[Card.ss.ks] = this.altImageText),
-	      (s[Card.ss.qs] = this.test),
+	      (s[Card.bs.xs] = Card.ks.ai),
+	      (s[Card.bs.qs] = this.id),
+	      (s[Card.bs.vs] = this.viewed),
+	      (s[Card.bs.ws] = this.title),
+	      (s[Card.bs.ys] = this.imageUrl),
+	      (s[Card.bs.As] = this.description),
+	      (s[Card.bs.Bs] = this.updated),
+	      (s[Card.bs.Cs] = this.expiresAt),
+	      (s[Card.bs.URL] = this.url),
+	      (s[Card.bs.Ds] = this.linkText),
+	      (s[Card.bs.Es] = this.aspectRatio),
+	      (s[Card.bs.Fs] = this.extras),
+	      (s[Card.bs.Gs] = this.pinned),
+	      (s[Card.bs.Hs] = this.dismissible),
+	      (s[Card.bs.Is] = this.clicked),
+	      (s[Card.bs.Js] = this.language),
+	      (s[Card.bs.Ks] = this.altImageText),
+	      (s[Card.bs.Ls] = this.test),
 	      s
 	    );
 	  }
@@ -978,32 +982,32 @@ var mpBrazeKitV6 = (function (exports) {
 	  constructor(t, s, l, i, r, n) {
 	    super(t, s, null, null, null, l, i, null, null, null, r, n),
 	      (this.isControl = !0),
-	      (this.ie = "ab-control-card"),
-	      (this.ne = !1);
+	      (this.ae = "ab-control-card"),
+	      (this.oe = !1);
 	  }
-	  gt() {
+	  qt() {
 	    const t = {};
 	    return (
-	      (t[Card.ss.ts] = Card.es.Ni),
-	      (t[Card.ss.rs] = this.id),
-	      (t[Card.ss.os] = this.viewed),
-	      (t[Card.ss.ps] = this.updated),
-	      (t[Card.ss.us] = this.expiresAt),
-	      (t[Card.ss.xs] = this.extras),
-	      (t[Card.ss.bs] = this.pinned),
-	      (t[Card.ss.qs] = this.test),
+	      (t[Card.bs.xs] = Card.ks.Ni),
+	      (t[Card.bs.qs] = this.id),
+	      (t[Card.bs.vs] = this.viewed),
+	      (t[Card.bs.Bs] = this.updated),
+	      (t[Card.bs.Cs] = this.expiresAt),
+	      (t[Card.bs.Fs] = this.extras),
+	      (t[Card.bs.Gs] = this.pinned),
+	      (t[Card.bs.Ls] = this.test),
 	      t
 	    );
 	  }
 	}
 
 	function getAlias(e) {
-	  const t = null == e ? void 0 : e.dt(STORAGE_KEYS.ft.uE);
+	  const t = null == e ? void 0 : e.Rt(STORAGE_KEYS.Tt.lS);
 	  let n;
 	  return t && (n = { label: t.l, name: t.a }), n;
 	}
 
-	class De {
+	class Ie {
 	  constructor(t, s, i, r, e) {
 	    (this.userId = t),
 	      (this.type = s),
@@ -1016,7 +1020,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      (this.sessionId = r),
 	      (this.data = e);
 	  }
-	  Hn() {
+	  oa() {
 	    var t;
 	    const s = {
 	      name: this.type,
@@ -1025,14 +1029,14 @@ var mpBrazeKitV6 = (function (exports) {
 	      session_id: this.sessionId,
 	    };
 	    null != this.userId && (s.user_id = this.userId);
-	    const i = (null === (t = r.Sr()) || void 0 === t ? void 0 : t.wh()) || !1;
+	    const i = (null === (t = r.Er()) || void 0 === t ? void 0 : t.Fh()) || !1;
 	    if (!s.user_id && !i) {
 	      const t = getAlias(r.p());
 	      t && (s.alias = t);
 	    }
 	    return s;
 	  }
-	  gt() {
+	  qt() {
 	    return {
 	      u: this.userId,
 	      t: this.type,
@@ -1042,13 +1046,13 @@ var mpBrazeKitV6 = (function (exports) {
 	    };
 	  }
 	  static fromJson(t) {
-	    return new De(t.user_id, t.name, t.time, t.session_id, t.data);
+	    return new Ie(t.user_id, t.name, t.time, t.session_id, t.data);
 	  }
-	  static gE(t) {
+	  static AS(t) {
 	    return null != t && isObject$1(t) && null != t.t && "" !== t.t;
 	  }
 	  static _u(t) {
-	    return new De(t.u, t.t, t.ts, t.s, t.d);
+	    return new Ie(t.u, t.t, t.ts, t.s, t.d);
 	  }
 	}
 
@@ -1058,18 +1062,18 @@ var mpBrazeKitV6 = (function (exports) {
 	class _t {
 	  constructor(t, e, i) {
 	    (this.Tu = t),
-	      null == t && (t = P$1.se()),
+	      null == t && (t = V$1.de()),
 	      !i || isNaN(i) ? (this.lm = new Date().valueOf()) : (this.lm = i),
 	      (this.Tu = t),
-	      (this.gm = new Date().valueOf()),
-	      (this.pm = e);
+	      (this.pm = new Date().valueOf()),
+	      (this.fm = e);
 	  }
-	  gt() {
-	    return `g:${encodeURIComponent(this.Tu)}|e:${this.pm}|c:${this.lm}|l:${
-      this.gm
+	  qt() {
+	    return `g:${encodeURIComponent(this.Tu)}|e:${this.fm}|c:${this.lm}|l:${
+      this.pm
     }`;
 	  }
-	  static AE(t) {
+	  static TS(t) {
 	    if ("string" != typeof t) return null;
 	    const e = t.lastIndexOf("|e:"),
 	      i = t.substring(0, e),
@@ -1092,7 +1096,7 @@ var mpBrazeKitV6 = (function (exports) {
 	            if (!isNaN(e)) return e;
 	          };
 	        (e = new _t(decodeURIComponent(r(i[0])), n(i[1]), n(i[2]))),
-	          (e.gm = n(i[3]));
+	          (e.pm = n(i[3]));
 	      } catch (e) {
 	        E$1.info(
 	          `Unable to parse cookie string ${t}, failed with error: ${getErrorMessage(e)}`,
@@ -1100,7 +1104,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      }
 	    else {
 	      if (null == t || null == t.g) return null;
-	      (e = new _t(t.g, t.e, t.c)), (e.gm = t.l);
+	      (e = new _t(t.g, t.e, t.c)), (e.pm = t.l);
 	    }
 	    return e;
 	  }
@@ -1147,11 +1151,11 @@ var mpBrazeKitV6 = (function (exports) {
 	  properties: { type: "type", eo: "steps", so: "args" },
 	};
 	const INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES = {
-	  Pn: "unknownBrazeAction",
+	  Wn: "unknownBrazeAction",
 	  cp: "noPushPrompt",
 	};
 	const ineligibleBrazeActionURLErrorMessage = (t, o) =>
-	  t === INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Pn
+	  t === INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Wn
 	    ? `${o} contains an unknown braze action type and will not be displayed.`
 	    : "";
 	function getDecodedBrazeAction(t) {
@@ -1407,10 +1411,10 @@ var mpBrazeKitV6 = (function (exports) {
 
 	class User {
 	  constructor(t, e) {
-	    (this.vs = t), (this.Ru = e), (this.vs = t), (this.Ru = e);
+	    (this.Ss = t), (this.Ru = e), (this.Ss = t), (this.Ru = e);
 	  }
 	  getUserId(t) {
-	    const e = this.vs.getUserId();
+	    const e = this.Ss.getUserId();
 	    if ("function" != typeof t) return e;
 	    E$1.warn(
 	      "The callback for getUserId is deprecated. You can access its return value directly instead (e.g. `const id = braze.getUser().getUserId()`)",
@@ -1422,22 +1426,22 @@ var mpBrazeKitV6 = (function (exports) {
 	      ? (E$1.error("addAlias requires a non-empty alias"), !1)
 	      : !validateStandardString(e, "add alias", "the label", !1) || e.length <= 0
 	      ? (E$1.error("addAlias requires a non-empty label"), !1)
-	      : this.Ru.Gu(t, e).W;
+	      : this.Ru.Gu(t, e).lt;
 	  }
 	  setFirstName(t) {
 	    return (
 	      !!validateStandardString(t, "set first name", "the firstName", !0) &&
-	      this.vs.zu("first_name", t)
+	      this.Ss.zu("first_name", t)
 	    );
 	  }
 	  setLastName(t) {
 	    return (
-	      !!validateStandardString(t, "set last name", "the lastName", !0) && this.vs.zu("last_name", t)
+	      !!validateStandardString(t, "set last name", "the lastName", !0) && this.Ss.zu("last_name", t)
 	    );
 	  }
 	  setEmail(t) {
 	    return null === t || isValidEmail(t)
-	      ? this.vs.zu("email", t)
+	      ? this.Ss.zu("email", t)
 	      : (E$1.error(
 	          `Cannot set email address - "${t}" did not pass RFC-5322 validation.`,
 	        ),
@@ -1454,12 +1458,12 @@ var mpBrazeKitV6 = (function (exports) {
 	          `Gender "${t}" is not a valid gender.`,
 	          "User.Genders",
 	        )
-	      ) && this.vs.zu("gender", t)
+	      ) && this.Ss.zu("gender", t)
 	    );
 	  }
 	  setDateOfBirth(t, e, r) {
 	    return null === t && null === e && null === r
-	      ? this.vs.zu("dob", null)
+	      ? this.Ss.zu("dob", null)
 	      : ((t = null != t ? parseInt(t.toString()) : null),
 	        (e = null != e ? parseInt(e.toString()) : null),
 	        (r = null != r ? parseInt(r.toString()) : null),
@@ -1477,21 +1481,21 @@ var mpBrazeKitV6 = (function (exports) {
 	              "Cannot set date of birth - parameters should comprise a valid date e.g. setDateOfBirth(1776, 7, 4);",
 	            ),
 	            !1)
-	          : this.vs.zu("dob", `${t}-${e}-${r}`));
+	          : this.Ss.zu("dob", `${t}-${e}-${r}`));
 	  }
 	  setCountry(t) {
 	    return (
-	      !!validateStandardString(t, "set country", "the country", !0) && this.vs.zu("country", t)
+	      !!validateStandardString(t, "set country", "the country", !0) && this.Ss.zu("country", t)
 	    );
 	  }
 	  setHomeCity(t) {
 	    return (
-	      !!validateStandardString(t, "set home city", "the homeCity", !0) && this.vs.zu("home_city", t)
+	      !!validateStandardString(t, "set home city", "the homeCity", !0) && this.Ss.zu("home_city", t)
 	    );
 	  }
 	  setLanguage(t) {
 	    return (
-	      !!validateStandardString(t, "set language", "the language", !0) && this.vs.zu("language", t)
+	      !!validateStandardString(t, "set language", "the language", !0) && this.Ss.zu("language", t)
 	    );
 	  }
 	  setEmailNotificationSubscriptionType(t) {
@@ -1501,7 +1505,7 @@ var mpBrazeKitV6 = (function (exports) {
 	        t,
 	        `Email notification setting "${t}" is not a valid subscription type.`,
 	        "User.NotificationSubscriptionTypes",
-	      ) && this.vs.zu("email_subscribe", t)
+	      ) && this.Ss.zu("email_subscribe", t)
 	    );
 	  }
 	  setPushNotificationSubscriptionType(t) {
@@ -1511,14 +1515,14 @@ var mpBrazeKitV6 = (function (exports) {
 	        t,
 	        `Push notification setting "${t}" is not a valid subscription type.`,
 	        "User.NotificationSubscriptionTypes",
-	      ) && this.vs.zu("push_subscribe", t)
+	      ) && this.Ss.zu("push_subscribe", t)
 	    );
 	  }
 	  setPhoneNumber(t) {
 	    return (
 	      !!validateStandardString(t, "set phone number", "the phoneNumber", !0) &&
 	      (null === t || t.match(User.Hu)
-	        ? this.vs.zu("phone", t)
+	        ? this.Ss.zu("phone", t)
 	        : (E$1.error(`Cannot set phone number - "${t}" did not pass validation.`),
 	          !1))
 	    );
@@ -1553,7 +1557,8 @@ var mpBrazeKitV6 = (function (exports) {
 	              "Cannot set last-known location - accuracy and altitudeAccuracy may not be negative.",
 	            ),
 	            !1)
-	          : this.Ru.setLastKnownLocation(this.vs.getUserId(), t, e, s, r, n).W);
+	          : this.Ru.setLastKnownLocation(this.Ss.getUserId(), t, e, s, r, n)
+	              .lt);
 	  }
 	  setCustomUserAttribute(t, e, r) {
 	    if (!validateCustomAttributeKey(t)) return !1;
@@ -1570,11 +1575,11 @@ var mpBrazeKitV6 = (function (exports) {
 	    if (isArray(e)) {
 	      const [r, n] = validateCustomAttributeArrayType(t, e);
 	      if (!r && !n && 0 !== e.length) return !1;
-	      if (r || 0 === e.length) return this.Ru.Mu(f.Yu, t, e).W;
+	      if (r || 0 === e.length) return this.Ru.Mu(p.Yu, t, e).lt;
 	      for (const t of e) if (!s(t)) return !1;
 	    } else if (isObject$1(e)) {
 	      if (!s(e)) return !1;
-	      if (r) return this.Ru.Mu(f.Vu, t, e).W;
+	      if (r) return this.Ru.Mu(p.Vu, t, e).lt;
 	    } else {
 	      if (!(void 0 !== e && validatePropertyType(e))) return !1;
 	      if (
@@ -1588,7 +1593,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      )
 	        return !1;
 	    }
-	    return this.vs.setCustomUserAttribute(t, e);
+	    return this.Ss.setCustomUserAttribute(t, e);
 	  }
 	  addToCustomAttributeArray(t, e) {
 	    return (
@@ -1597,7 +1602,7 @@ var mpBrazeKitV6 = (function (exports) {
 	        null != e &&
 	        !validateCustomString(e, "add to custom user attribute array", "the given value")
 	      ) &&
-	      this.Ru.Mu(f.Qu, t, e).W
+	      this.Ru.Mu(p.Qu, t, e).lt
 	    );
 	  }
 	  removeFromCustomAttributeArray(t, e) {
@@ -1607,7 +1612,7 @@ var mpBrazeKitV6 = (function (exports) {
 	        null != e &&
 	        !validateCustomString(e, "remove from custom user attribute array", "the given value")
 	      ) &&
-	      this.Ru.Mu(f.Xu, t, e).W
+	      this.Ru.Mu(p.Xu, t, e).lt
 	    );
 	  }
 	  incrementCustomUserAttribute(t, e) {
@@ -1619,7 +1624,7 @@ var mpBrazeKitV6 = (function (exports) {
 	          `Cannot increment custom user attribute because the given incrementValue "${e}" is not an integer.`,
 	        ),
 	        !1)
-	      : this.Ru.Mu(f.Zu, t, r).W;
+	      : this.Ru.Mu(p.Zu, t, r).lt;
 	  }
 	  setCustomLocationAttribute(t, e, r) {
 	    return (
@@ -1635,7 +1640,7 @@ var mpBrazeKitV6 = (function (exports) {
 	            "Received invalid values for latitude and/or longitude. Latitude and longitude are bounded by ±90 and ±180 respectively, or must both be null for removal.",
 	          ),
 	          !1)
-	        : this.Ru.Na(t, e, r).W)
+	        : this.Ru.Na(t, e, r).lt)
 	    );
 	  }
 	  addToSubscriptionGroup(t) {
@@ -1649,7 +1654,7 @@ var mpBrazeKitV6 = (function (exports) {
 	          "addToSubscriptionGroup requires a non-empty subscription group ID",
 	        ),
 	        !1)
-	      : this.Ru.Ra(t, User.Pa.SUBSCRIBED).W;
+	      : this.Ru.Ia(t, User.Ca.SUBSCRIBED).lt;
 	  }
 	  removeFromSubscriptionGroup(t) {
 	    return !validateStandardString(
@@ -1662,24 +1667,24 @@ var mpBrazeKitV6 = (function (exports) {
 	          "removeFromSubscriptionGroup requires a non-empty subscription group ID",
 	        ),
 	        !1)
-	      : this.Ru.Ra(t, User.Pa.UNSUBSCRIBED).W;
+	      : this.Ru.Ia(t, User.Ca.UNSUBSCRIBED).lt;
 	  }
 	  setLineId(t) {
 	    return validateStandardString(t, "set LINE user ID", "the ID", !0) &&
 	      0 !== (null == t ? void 0 : t.length)
-	      ? t && t.length > User.Oa
+	      ? t && t.length > User.Ea
 	        ? (E$1.error(
-	            `Rejected LINE user ID ${t} because it is longer than ${User.Oa} characters.`,
+	            `Rejected LINE user ID ${t} because it is longer than ${User.Ea} characters.`,
 	          ),
 	          !1)
-	        : this.vs.zu("native_line_id", t)
+	        : this.Ss.zu("native_line_id", t)
 	      : (E$1.error("setLineId requires a non-empty ID"), !1);
 	  }
 	  gu(t, e, r, s, n) {
-	    this.vs.gu(t, e, r, s, n), this.Ru.Ya();
+	    this.Ss.gu(t, e, r, s, n), this.Ru.Sa();
 	  }
 	  wu(t) {
-	    this.vs.wu(t);
+	    this.Ss.wu(t);
 	  }
 	}
 	(User.Genders = {
@@ -1696,23 +1701,23 @@ var mpBrazeKitV6 = (function (exports) {
 	    UNSUBSCRIBED: "unsubscribed",
 	  }),
 	  (User.Hu = /^[0-9 .\\(\\)\\+\\-]+$/),
-	  (User.Pa = { SUBSCRIBED: "subscribed", UNSUBSCRIBED: "unsubscribed" }),
-	  (User.Va = "user_id"),
+	  (User.Ca = { SUBSCRIBED: "subscribed", UNSUBSCRIBED: "unsubscribed" }),
+	  (User.Aa = "user_id"),
 	  (User.Bu = "custom"),
-	  (User.mr = 997),
-	  (User.Oa = 33);
+	  (User.br = 997),
+	  (User.Ea = 33);
 
-	class Oe {
+	class Ve {
 	  constructor() {}
+	  ef() {}
 	  ff() {}
-	  cf() {}
-	  rc(t) {}
-	  static lf(t, e) {
+	  Fa(t) {}
+	  static nf(t, e) {
 	    if (t && e)
-	      if (((t = t.toLowerCase()), isArray(e.uf))) {
-	        for (let r = 0; r < e.uf.length; r++)
-	          if (-1 !== t.indexOf(e.uf[r].toLowerCase())) return e.identity;
-	      } else if (-1 !== t.indexOf(e.uf.toLowerCase())) return e.identity;
+	      if (((t = t.toLowerCase()), isArray(e.cf))) {
+	        for (let r = 0; r < e.cf.length; r++)
+	          if (-1 !== t.indexOf(e.cf[r].toLowerCase())) return e.identity;
+	      } else if (-1 !== t.indexOf(e.cf.toLowerCase())) return e.identity;
 	  }
 	}
 
@@ -1731,7 +1736,7 @@ var mpBrazeKitV6 = (function (exports) {
 	  kg: "Windows",
 	};
 
-	class gi extends Oe {
+	class Si extends Ve {
 	  constructor() {
 	    if (
 	      (super(),
@@ -1746,17 +1751,17 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	    this.OS = null;
 	  }
-	  ff() {
+	  ef() {
 	    return this.browser;
 	  }
-	  cf() {
+	  ff() {
 	    return this.version;
 	  }
-	  rc(t) {
+	  Fa(t) {
 	    if (this.OS) return Promise.resolve(this.OS);
 	    const s = (s) => {
 	      for (let r = 0; r < t.length; r++) {
-	        const i = gi.lf(s, t[r]);
+	        const i = Si.nf(s, t[r]);
 	        if (i) return (this.OS = i), this.OS;
 	      }
 	      return s;
@@ -1772,7 +1777,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      s = this.userAgentData.brands;
 	    if (s && s.length)
 	      for (const r of s) {
-	        const s = this.af(Browsers),
+	        const s = this.uf(Browsers),
 	          i = r.brand.match(s);
 	        if (i && i.length > 0) {
 	          (t.browser = i[0]), (t.version = r.version);
@@ -1781,7 +1786,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      }
 	    return t;
 	  }
-	  af(t) {
+	  uf(t) {
 	    const s = [];
 	    for (const r in t) {
 	      const i = r;
@@ -1796,20 +1801,20 @@ var mpBrazeKitV6 = (function (exports) {
 	  }
 	}
 
-	class Si extends Oe {
+	class vi extends Ve {
 	  constructor() {
-	    super(), (this.Vd = Si.hf(navigator.userAgent || ""));
+	    super(), (this.Sd = vi.hf(navigator.userAgent || ""));
+	  }
+	  ef() {
+	    return this.Sd[0] || "Unknown Browser";
 	  }
 	  ff() {
-	    return this.Vd[0] || "Unknown Browser";
+	    return this.Sd[1] || "Unknown Version";
 	  }
-	  cf() {
-	    return this.Vd[1] || "Unknown Version";
-	  }
-	  rc(r) {
+	  Fa(r) {
 	    for (let n = 0; n < r.length; n++) {
 	      const e = r[n].string;
-	      let i = Si.lf(e, r[n]);
+	      let i = vi.nf(e, r[n]);
 	      if (i)
 	        return (
 	          i === OperatingSystems.Pg && navigator.maxTouchPoints > 1 && (i = OperatingSystems.co),
@@ -1877,20 +1882,20 @@ var mpBrazeKitV6 = (function (exports) {
 	  }
 	}
 
-	class vi {
+	class xi {
 	  constructor() {
 	    let t;
 	    (t =
 	      navigator.userAgent.toLowerCase().includes(Browsers.Sg.toLowerCase()) ||
 	      !navigator.userAgentData
-	        ? Si
-	        : gi),
+	        ? vi
+	        : Si),
 	      (this.vg = new t()),
 	      (this.userAgent = navigator.userAgent),
-	      (this.browser = this.vg.ff()),
-	      (this.version = this.vg.cf()),
+	      (this.browser = this.vg.ef()),
+	      (this.version = this.vg.ff()),
 	      (this.OS = null),
-	      this.rc().then((t) => (this.OS = t));
+	      this.Fa().then((t) => (this.OS = t));
 	    const i = navigator;
 	    (this.language = (
 	      i.userLanguage ||
@@ -1899,18 +1904,18 @@ var mpBrazeKitV6 = (function (exports) {
 	      i.systemLanguage ||
 	      ""
 	    ).toLowerCase()),
-	      (this.Il = vi.xg(this.userAgent));
+	      (this.il = xi.xg(this.userAgent));
 	  }
-	  fE() {
+	  bS() {
 	    return this.browser === Browsers.Bg;
 	  }
-	  nc() {
+	  Ha() {
 	    return this.OS || null;
 	  }
-	  rc() {
+	  Fa() {
 	    return this.OS
 	      ? Promise.resolve(this.OS)
-	      : this.vg.rc(vi.Og).then((t) => ((this.OS = t), t));
+	      : this.vg.Fa(xi.Og).then((t) => ((this.OS = t), t));
 	  }
 	  static xg(t) {
 	    t = t.toLowerCase();
@@ -1939,108 +1944,110 @@ var mpBrazeKitV6 = (function (exports) {
 	    return !1;
 	  }
 	}
-	vi.Og = [
-	  { string: navigator.platform, uf: "Win", identity: OperatingSystems.kg },
-	  { string: navigator.platform, uf: "Mac", identity: OperatingSystems.Pg },
-	  { string: navigator.platform, uf: "BlackBerry", identity: "BlackBerry" },
-	  { string: navigator.platform, uf: "FreeBSD", identity: "FreeBSD" },
-	  { string: navigator.platform, uf: "OpenBSD", identity: "OpenBSD" },
-	  { string: navigator.platform, uf: "Nintendo", identity: "Nintendo" },
-	  { string: navigator.platform, uf: "SunOS", identity: "SunOS" },
-	  { string: navigator.platform, uf: "PlayStation", identity: "PlayStation" },
-	  { string: navigator.platform, uf: "X11", identity: "X11" },
+	xi.Og = [
+	  { string: navigator.platform, cf: "Win", identity: OperatingSystems.kg },
+	  { string: navigator.platform, cf: "Mac", identity: OperatingSystems.Pg },
+	  { string: navigator.platform, cf: "BlackBerry", identity: "BlackBerry" },
+	  { string: navigator.platform, cf: "FreeBSD", identity: "FreeBSD" },
+	  { string: navigator.platform, cf: "OpenBSD", identity: "OpenBSD" },
+	  { string: navigator.platform, cf: "Nintendo", identity: "Nintendo" },
+	  { string: navigator.platform, cf: "SunOS", identity: "SunOS" },
+	  { string: navigator.platform, cf: "PlayStation", identity: "PlayStation" },
+	  { string: navigator.platform, cf: "X11", identity: "X11" },
 	  {
 	    string: navigator.userAgent,
-	    uf: ["iPhone", "iPad", "iPod"],
+	    cf: ["iPhone", "iPad", "iPod"],
 	    identity: OperatingSystems.co,
 	  },
-	  { string: navigator.platform, uf: "Pike v", identity: OperatingSystems.co },
-	  { string: navigator.userAgent, uf: ["Web0S"], identity: "WebOS" },
-	  { string: navigator.userAgent, uf: "Tizen", identity: "Tizen" },
-	  { string: navigator.userAgent, uf: "Coolita", identity: "Other Smart TV" },
-	  { string: navigator.userAgent, uf: "WhaleTV", identity: "Other Smart TV" },
+	  { string: navigator.platform, cf: "Pike v", identity: OperatingSystems.co },
+	  { string: navigator.userAgent, cf: ["Web0S"], identity: "WebOS" },
+	  { string: navigator.userAgent, cf: "Tizen", identity: "Tizen" },
+	  { string: navigator.userAgent, cf: "Coolita", identity: "Other Smart TV" },
+	  { string: navigator.userAgent, cf: "WhaleTV", identity: "Other Smart TV" },
 	  {
 	    string: navigator.platform,
-	    uf: ["Linux armv7l", "Android"],
+	    cf: ["Linux armv7l", "Android"],
 	    identity: OperatingSystems.Dg,
 	  },
-	  { string: navigator.userAgent, uf: ["Android"], identity: OperatingSystems.Dg },
-	  { string: navigator.platform, uf: "Linux", identity: "Linux" },
+	  { string: navigator.userAgent, cf: ["Android"], identity: OperatingSystems.Dg },
+	  { string: navigator.platform, cf: "Linux", identity: "Linux" },
 	];
-	const ro = new vi();
+	const ro = new xi();
 
 	const STORAGE_KEYS = {
 	  Ou: {
 	    Cu: "ab.storage.userId",
-	    tl: "ab.storage.deviceId",
+	    Wh: "ab.storage.deviceId",
 	    um: "ab.storage.sessionId",
 	  },
-	  ft: {
-	    Qc: "ab.test",
-	    tE: "ab.storage.events",
-	    eE: "ab.storage.attributes",
-	    sE: "ab.storage.attributes.anonymous_user",
-	    ac: "ab.storage.device",
-	    Dl: "ab.storage.sdk_metadata",
-	    Tl: "ab.storage.session_id_for_cached_metadata",
+	  Tt: {
+	    xc: "ab.test",
+	    ZE: "ab.storage.events",
+	    $E: "ab.storage.attributes",
+	    tS: "ab.storage.attributes.anonymous_user",
+	    Ka: "ab.storage.device",
+	    Ua: "ab.storage.sdk_metadata",
+	    Wa: "ab.storage.session_id_for_cached_metadata",
 	    Uu: "ab.storage.pushToken",
-	    rE: "ab.storage.cardImpressions",
-	    jc: "ab.storage.serverConfig",
-	    oE: "ab.storage.triggers",
-	    nE: "ab.storage.triggers.ts",
+	    eS: "ab.storage.cardImpressions",
+	    sc: "ab.storage.serverConfig",
+	    sS: "ab.storage.triggers",
+	    rS: "ab.storage.triggers.ts",
 	    dm: "ab.storage.messagingSessionStart",
-	    Ps: "ab.storage.cc",
-	    Gs: "ab.storage.ccLastFullSync",
-	    Hs: "ab.storage.ccLastCardUpdated",
-	    uc: "ab.storage.globalRateLimitCurrentTokenCount",
-	    fc: "ab.storage.dynamicRateLimitCurrentTokenCount",
-	    Jt: "ab.storage.ccClicks",
-	    Vt: "ab.storage.ccImpressions",
-	    Pt: "ab.storage.ccDismissals",
-	    aE: "ab.storage.lastDisplayedTriggerTimesById",
-	    iE: "ab.storage.lastDisplayedTriggerTime",
-	    EE: "ab.storage.triggerFireInstancesById",
-	    xh: "ab.storage.signature",
-	    SE: "ab.storage.brazeSyncRetryCount",
-	    Qs: "ab.storage.sdkVersion",
-	    lo: "ab.storage.ff",
-	    vo: "ab.storage.ffImpressions",
-	    Do: "ab.storage.ffLastRefreshAt",
-	    Co: "ab.storage.ff.sessionId",
-	    lE: "ab.storage.lastReqToEndpoint",
-	    _E: "ab.storage.requestAttempts",
-	    Wn: "ab.storage.deferredIam",
-	    Jl: "ab.storage.lastSdkReq",
-	    uE: "ab.storage.alias",
-	    vt: "ab.storage.banners",
-	    Dt: "ab.storage.banners.impressions",
-	    Bt: "ab.storage.banners.sessionId",
-	    Ue: "ab.storage.dust.mite",
-	    Ne: "ab.storage.dust.host",
-	    Te: "ab.storage.dust.auth",
-	    ze: "ab.storage.dust.expiration",
+	    Ci: "ab.storage.cc",
+	    gi: "ab.storage.ccLastFullSync",
+	    ji: "ab.storage.ccLastCardUpdated",
+	    $l: "ab.storage.globalRateLimitCurrentTokenCount",
+	    Fl: "ab.storage.dynamicRateLimitCurrentTokenCount",
+	    ns: "ab.storage.ccClicks",
+	    hs: "ab.storage.ccImpressions",
+	    us: "ab.storage.ccDismissals",
+	    oS: "ab.storage.lastDisplayedTriggerTimesById",
+	    nS: "ab.storage.lastDisplayedTriggerTime",
+	    aS: "ab.storage.triggerFireInstancesById",
+	    fh: "ab.storage.signature",
+	    iS: "ab.storage.brazeSyncRetryCount",
+	    ki: "ab.storage.sdkVersion",
+	    Fo: "ab.storage.ff",
+	    jo: "ab.storage.ffImpressions",
+	    qo: "ab.storage.ffLastRefreshAt",
+	    Do: "ab.storage.ff.sessionId",
+	    ES: "ab.storage.lastReqToEndpoint",
+	    SS: "ab.storage.requestAttempts",
+	    fa: "ab.storage.deferredIam",
+	    Sl: "ab.storage.lastSdkReq",
+	    lS: "ab.storage.alias",
+	    St: "ab.storage.banners",
+	    Wt: "ab.storage.banners.impressions",
+	    Mt: "ab.storage.banners.dismissals",
+	    _t: "ab.storage.banners.sessionId",
+	    Gt: "ab.storage.banners.lastRequestedTime",
+	    Qe: "ab.storage.dust.mite",
+	    Xe: "ab.storage.dust.host",
+	    Ye: "ab.storage.dust.auth",
+	    Ze: "ab.storage.dust.expiration",
 	  },
-	  pe: "ab.optOut",
+	  ce: "ab.optOut",
 	};
-	class ee {
+	class ne {
 	  constructor(t, e) {
-	    (this.TE = t), (this.cE = e), (this.TE = t), (this.cE = e);
+	    (this._S = t), (this.uS = e), (this._S = t), (this.uS = e);
 	  }
-	  Sl(t) {
+	  hl(t) {
 	    const e = keys(STORAGE_KEYS.Ou),
-	      s = new ee.le(t);
+	      s = new ne.le(t);
 	    for (const t of e) s.remove(STORAGE_KEYS.Ou[t]);
 	  }
 	  Iu(t, e) {
 	    let s = null;
-	    null != e && e instanceof _t && (s = e.gt()), this.TE.store(t, s);
+	    null != e && e instanceof _t && (s = e.qt()), this._S.store(t, s);
 	  }
-	  hE(t) {
+	  cS(t) {
 	    const e = this.$u(t);
-	    null != e && ((e.gm = new Date().valueOf()), this.Iu(t, e));
+	    null != e && ((e.pm = new Date().valueOf()), this.Iu(t, e));
 	  }
 	  $u(t) {
-	    const e = this.TE.jr(t),
+	    const e = this._S.wr(t),
 	      s = ((t) => {
 	        let e;
 	        try {
@@ -2053,15 +2060,15 @@ var mpBrazeKitV6 = (function (exports) {
 	    let r;
 	    if (s) (r = _t._u(s) || null), r && this.Iu(t, r);
 	    else {
-	      const s = _t.AE(e);
+	      const s = _t.TS(e);
 	      (r = _t._u(s) || null), s !== e && r && this.Iu(t, r);
 	    }
 	    return r;
 	  }
-	  xm(t) {
-	    this.TE.remove(t);
+	  jm(t) {
+	    this._S.remove(t);
 	  }
-	  Al() {
+	  ll() {
 	    const t = keys(STORAGE_KEYS.Ou);
 	    let e;
 	    for (const s of t)
@@ -2072,23 +2079,23 @@ var mpBrazeKitV6 = (function (exports) {
 	    let e;
 	    if (null == t || 0 === t.length) return !1;
 	    e = isArray(t) ? t : [t];
-	    let s = this.cE.jr(STORAGE_KEYS.ft.tE);
+	    let s = this.uS.wr(STORAGE_KEYS.Tt.ZE);
 	    (null != s && isArray(s)) || (s = []);
-	    for (let t = 0; t < e.length; t++) s.push(e[t].gt());
-	    return this.cE.store(STORAGE_KEYS.ft.tE, s);
+	    for (let t = 0; t < e.length; t++) s.push(e[t].qt());
+	    return this.uS.store(STORAGE_KEYS.Tt.ZE, s);
 	  }
-	  wm(t) {
+	  gm(t) {
 	    return null != t && this.ol([t]);
 	  }
-	  RE() {
-	    let t = this.cE.jr(STORAGE_KEYS.ft.tE);
-	    this.cE.remove(STORAGE_KEYS.ft.tE), null == t && (t = []);
+	  hS() {
+	    let t = this.uS.wr(STORAGE_KEYS.Tt.ZE);
+	    this.uS.remove(STORAGE_KEYS.Tt.ZE), null == t && (t = []);
 	    const e = [];
 	    let s = !1,
 	      r = null;
 	    if (isArray(t))
 	      for (let s = 0; s < t.length; s++)
-	        De.gE(t[s]) ? e.push(De._u(t[s])) : (r = s);
+	        Ie.AS(t[s]) ? e.push(Ie._u(t[s])) : (r = s);
 	    else s = !0;
 	    if (s || null != r) {
 	      let o = "Stored events could not be deserialized as Events";
@@ -2101,129 +2108,129 @@ var mpBrazeKitV6 = (function (exports) {
 	          typeof t +
 	          ": " +
 	          JSON.stringify(t)),
-	        e.push(new De(null, f.wl, new Date().valueOf(), null, { e: o }));
+	        e.push(new Ie(null, p.Va, new Date().valueOf(), null, { e: o }));
 	    }
 	    return e;
 	  }
-	  bt(t, e) {
+	  It(t, e) {
 	    return (
 	      !!validateValueIsFromEnum(
-	        STORAGE_KEYS.ft,
+	        STORAGE_KEYS.Tt,
 	        t,
 	        "StorageManager cannot store object.",
 	        "STORAGE_KEYS.OBJECTS",
-	      ) && this.cE.store(t, e)
+	      ) && this.uS.store(t, e)
 	    );
 	  }
-	  dt(t) {
+	  Rt(t) {
 	    return (
 	      !!validateValueIsFromEnum(
-	        STORAGE_KEYS.ft,
+	        STORAGE_KEYS.Tt,
 	        t,
 	        "StorageManager cannot retrieve object.",
 	        "STORAGE_KEYS.OBJECTS",
-	      ) && this.cE.jr(t)
+	      ) && this.uS.wr(t)
 	    );
 	  }
-	  zt(t) {
+	  Qt(t) {
 	    return (
 	      !!validateValueIsFromEnum(
-	        STORAGE_KEYS.ft,
+	        STORAGE_KEYS.Tt,
 	        t,
 	        "StorageManager cannot remove object.",
 	        "STORAGE_KEYS.OBJECTS",
-	      ) && (this.cE.remove(t), !0)
+	      ) && (this.uS.remove(t), !0)
 	    );
 	  }
 	  clearData() {
 	    const t = keys(STORAGE_KEYS.Ou),
-	      e = keys(STORAGE_KEYS.ft);
+	      e = keys(STORAGE_KEYS.Tt);
 	    for (let e = 0; e < t.length; e++) {
 	      const s = t[e];
-	      this.TE.remove(STORAGE_KEYS.Ou[s]);
+	      this._S.remove(STORAGE_KEYS.Ou[s]);
 	    }
 	    for (let t = 0; t < e.length; t++) {
 	      const s = e[t];
-	      this.cE.remove(STORAGE_KEYS.ft[s]);
+	      this.uS.remove(STORAGE_KEYS.Tt[s]);
 	    }
 	  }
-	  OE(t) {
-	    return t || STORAGE_KEYS.ft.sE;
+	  gS(t) {
+	    return t || STORAGE_KEYS.Tt.tS;
 	  }
-	  Xl(t) {
-	    let e = this.cE.jr(STORAGE_KEYS.ft.eE);
+	  gl(t) {
+	    let e = this.uS.wr(STORAGE_KEYS.Tt.$E);
 	    null == e && (e = {});
-	    const s = this.OE(t[User.Va]),
+	    const s = this.gS(t[User.Aa]),
 	      r = e[s];
 	    for (const o in t)
-	      o !== User.Va &&
+	      o !== User.Aa &&
 	        (null == e[s] || (r && null == r[o])) &&
-	        this.Eu(t[User.Va], o, t[o]);
+	        this.Eu(t[User.Aa], o, t[o]);
 	  }
 	  Eu(t, e, s) {
-	    let r = this.cE.jr(STORAGE_KEYS.ft.eE);
+	    let r = this.uS.wr(STORAGE_KEYS.Tt.$E);
 	    null == r && (r = {});
-	    const o = this.OE(t);
+	    const o = this.gS(t);
 	    let n = r[o];
 	    if (
-	      (null == n && ((n = {}), null != t && (n[User.Va] = t)), e === User.Bu)
+	      (null == n && ((n = {}), null != t && (n[User.Aa] = t)), e === User.Bu)
 	    ) {
 	      null == n[e] && (n[e] = {});
 	      for (const t in s) n[e][t] = s[t];
 	    } else n[e] = s;
-	    return (r[o] = n), this.cE.store(STORAGE_KEYS.ft.eE, r);
+	    return (r[o] = n), this.uS.store(STORAGE_KEYS.Tt.$E, r);
 	  }
-	  IE() {
-	    const t = this.cE.jr(STORAGE_KEYS.ft.eE);
-	    this.cE.remove(STORAGE_KEYS.ft.eE);
+	  RS() {
+	    const t = this.uS.wr(STORAGE_KEYS.Tt.$E);
+	    this.uS.remove(STORAGE_KEYS.Tt.$E);
 	    const e = [];
 	    for (const s in t) null != t[s] && e.push(t[s]);
 	    return e;
 	  }
 	  Lu(t) {
-	    const e = this.cE.jr(STORAGE_KEYS.ft.eE);
+	    const e = this.uS.wr(STORAGE_KEYS.Tt.$E);
 	    if (null != e) {
-	      const s = this.OE(null),
+	      const s = this.gS(null),
 	        r = e[s];
 	      null != r &&
 	        ((e[s] = void 0),
-	        this.cE.store(STORAGE_KEYS.ft.eE, e),
-	        (r[User.Va] = t),
-	        this.Xl(r));
+	        this.uS.store(STORAGE_KEYS.Tt.$E, e),
+	        (r[User.Aa] = t),
+	        this.gl(r));
 	    }
 	    const s = this.$u(STORAGE_KEYS.Ou.um);
 	    let r = null;
 	    null != s && (r = s.Tu);
-	    const o = this.RE();
+	    const o = this.hS();
 	    if (null != o)
 	      for (let e = 0; e < o.length; e++) {
 	        const s = o[e];
-	        null == s.userId && s.sessionId == r && (s.userId = t), this.wm(s);
+	        null == s.userId && s.sessionId == r && (s.userId = t), this.gm(s);
 	      }
 	  }
-	  dE() {
-	    return this.cE.bE;
+	  dS() {
+	    return this.uS.IS;
 	  }
 	}
-	(ee.Wc = class {
+	(ne.wc = class {
 	  constructor(t) {
-	    (this.tu = t), (this.tu = t), (this.bE = ro.fE() ? 3 : 10);
+	    (this.tu = t), (this.tu = t), (this.IS = ro.bS() ? 3 : 10);
 	  }
-	  mE(t) {
+	  fS(t) {
 	    return t + "." + this.tu;
 	  }
 	  store(t, e) {
 	    const s = { v: e };
 	    try {
-	      return localStorage.setItem(this.mE(t), JSON.stringify(s)), !0;
+	      return localStorage.setItem(this.fS(t), JSON.stringify(s)), !0;
 	    } catch (t) {
 	      return E$1.info("Storage failure: " + getErrorMessage(t)), !1;
 	    }
 	  }
-	  jr(t) {
+	  wr(t) {
 	    try {
 	      let e = null;
-	      const s = localStorage.getItem(this.mE(t));
+	      const s = localStorage.getItem(this.fS(t));
 	      return null != s && (e = JSON.parse(s)), null == e ? null : e.v;
 	    } catch (t) {
 	      return E$1.info("Storage retrieval failure: " + getErrorMessage(t)), null;
@@ -2231,30 +2238,30 @@ var mpBrazeKitV6 = (function (exports) {
 	  }
 	  remove(t) {
 	    try {
-	      localStorage.removeItem(this.mE(t));
+	      localStorage.removeItem(this.fS(t));
 	    } catch (t) {
 	      return E$1.info("Storage removal failure: " + getErrorMessage(t)), !1;
 	    }
 	  }
 	}),
-	  (ee.Xc = class {
+	  (ne._c = class {
 	    constructor() {
-	      (this.KE = {}), (this.YE = 5242880), (this.bE = 3);
+	      (this.mS = {}), (this.KS = 5242880), (this.IS = 3);
 	    }
 	    store(t, e) {
 	      const s = { value: e },
-	        r = this.NE(e);
-	      return r > this.YE
+	        r = this.YS(e);
+	      return r > this.KS
 	        ? (E$1.info(
 	            "Storage failure: object is ≈" +
 	              r +
 	              " bytes which is greater than the max of " +
-	              this.YE,
+	              this.KS,
 	          ),
 	          !1)
-	        : ((this.KE[t] = s), !0);
+	        : ((this.mS[t] = s), !0);
 	    }
-	    NE(t) {
+	    YS(t) {
 	      const e = [],
 	        s = [t];
 	      let r = 0;
@@ -2271,27 +2278,24 @@ var mpBrazeKitV6 = (function (exports) {
 	      }
 	      return r;
 	    }
-	    jr(t) {
-	      const e = this.KE[t];
+	    wr(t) {
+	      const e = this.mS[t];
 	      return null == e ? null : e.value;
 	    }
 	    remove(t) {
-	      this.KE[t] = null;
+	      this.mS[t] = null;
 	    }
 	  }),
-	  (ee.le = class {
-	    constructor(t, e) {
-	      (this.tu = t),
-	        (this.DE = e),
-	        (this.tu = t),
-	        (this.GE = this.CE()),
-	        (this.ME = 576e3),
-	        (this.DE = !!e);
+	  (ne.le = class {
+	    constructor(t, e, s) {
+	      (this.tu = t), (this.NS = e), (this.tu = t), (this.DS = this.GS());
+	      const r = "number" == typeof s && s > 0 ? s : 400;
+	      (this.CS = 24 * r * 60), (this.MS = {}), (this.NS = !!e);
 	    }
-	    mE(t) {
+	    fS(t) {
 	      return null != this.tu ? t + "." + this.tu : t;
 	    }
-	    CE() {
+	    GS() {
 	      let t = 0,
 	        e = document.location.hostname;
 	      const s = e.split("."),
@@ -2308,9 +2312,9 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	    me() {
 	      const t = new Date();
-	      return t.setTime(t.getTime() + 60 * this.ME * 1e3), t.getFullYear();
+	      return t.setTime(t.getTime() + 60 * this.CS * 1e3), t.getFullYear();
 	    }
-	    pE() {
+	    pS() {
 	      const t = values(STORAGE_KEYS.Ou),
 	        e = document.cookie.split(";");
 	      for (let s = 0; s < e.length; s++) {
@@ -2324,31 +2328,53 @@ var mpBrazeKitV6 = (function (exports) {
 	          }
 	        if (o) {
 	          const t = r.split("=")[0];
-	          -1 === t.indexOf("." + this.tu) && this.UE(t);
+	          -1 === t.indexOf("." + this.tu) && this.vS(t);
 	        }
 	      }
 	    }
 	    store(t, e) {
-	      this.pE();
-	      const s = new Date();
-	      s.setTime(s.getTime() + 60 * this.ME * 1e3);
-	      const r = "expires=" + s.toUTCString(),
-	        o = "domain=" + this.GE;
-	      let n;
-	      n = this.DE ? e : encodeURIComponent(e);
-	      const a = this.mE(t) + "=" + n + ";" + r + ";" + o + ";path=/";
-	      return a.length >= 4093
-	        ? (E$1.info(
+	      this.pS();
+	      const s = this.fS(t),
+	        r = new Date();
+	      r.setTime(r.getTime() + 60 * this.CS * 1e3);
+	      const o = "expires=" + r.toUTCString(),
+	        n = "domain=" + this.DS;
+	      let a;
+	      a = this.NS ? e : encodeURIComponent(e);
+	      const i = s + "=" + a + ";" + o + ";" + n + ";path=/";
+	      if (i.length >= 4093)
+	        return (
+	          E$1.info(
 	            "Storage failure: string is " +
-	              a.length +
+	              i.length +
 	              " chars which is too large to store as a cookie.",
 	          ),
+	          (this.MS[s] = !0),
+	          this.vS(s),
+	          !1
+	        );
+	      try {
+	        document.cookie = i;
+	      } catch (t) {
+	        return E$1.info("Storage failure: " + getErrorMessage(t)), (this.MS[s] = !0), !1;
+	      }
+	      const S = this.NS ? String(a) : decodeURIComponent(a);
+	      return this.US(s) !== S
+	        ? (E$1.info(
+	            `Storage failure: unable to verify cookie write for "${s}". Falling back to other storage.`,
+	          ),
+	          (this.MS[s] = !0),
+	          this.vS(s),
 	          !1)
-	        : ((document.cookie = a), !0);
+	        : (delete this.MS[s], !0);
 	    }
-	    jr(t) {
+	    wr(t) {
+	      const e = this.fS(t);
+	      return this.MS[e] ? null : this.US(e);
+	    }
+	    US(t) {
 	      const e = [],
-	        s = this.mE(t) + "=",
+	        s = t + "=",
 	        r = document.cookie.split(";");
 	      for (let o = 0; o < r.length; o++) {
 	        let n = r[o];
@@ -2356,121 +2382,119 @@ var mpBrazeKitV6 = (function (exports) {
 	        if (0 === n.indexOf(s))
 	          try {
 	            let t;
-	            (t = this.DE
+	            (t = this.NS
 	              ? n.substring(s.length, n.length)
 	              : decodeURIComponent(n.substring(s.length, n.length))),
 	              e.push(t);
 	          } catch (e) {
 	            return (
-	              E$1.info("Storage retrieval failure: " + getErrorMessage(e)),
-	              this.remove(t),
-	              null
+	              E$1.info("Storage retrieval failure: " + getErrorMessage(e)), this.vS(t), null
 	            );
 	          }
 	      }
 	      return e.length > 0 ? e[e.length - 1] : null;
 	    }
 	    remove(t) {
-	      this.UE(this.mE(t));
+	      this.vS(this.fS(t));
 	    }
-	    UE(t) {
+	    vS(t) {
 	      const e = t + "=;expires=" + new Date(0).toUTCString();
 	      (document.cookie = e), (document.cookie = e + ";path=/");
-	      const s = e + ";domain=" + this.GE;
+	      const s = e + ";domain=" + this.DS;
 	      (document.cookie = s), (document.cookie = s + ";path=/");
 	    }
 	  }),
-	  (ee.Jc = class {
-	    constructor(t, e, s) {
+	  (ne.Ec = class {
+	    constructor(t, e, s, r) {
 	      (this.tu = t),
-	        (this.vE = []),
-	        e && this.vE.push(new ee.le(t)),
-	        s && this.vE.push(new ee.Wc(t)),
-	        this.vE.push(new ee.Xc());
+	        (this.yS = []),
+	        e && this.yS.push(new ne.le(t, void 0, r)),
+	        s && this.yS.push(new ne.wc(t)),
+	        this.yS.push(new ne._c());
 	    }
 	    store(t, e) {
 	      let s = !0;
-	      for (let r = 0; r < this.vE.length; r++) s = this.vE[r].store(t, e) && s;
+	      for (let r = 0; r < this.yS.length; r++) s = this.yS[r].store(t, e) && s;
 	      return s;
 	    }
-	    jr(t) {
-	      for (let e = 0; e < this.vE.length; e++) {
-	        const s = this.vE[e].jr(t);
+	    wr(t) {
+	      for (let e = 0; e < this.yS.length; e++) {
+	        const s = this.yS[e].wr(t);
 	        if (null != s) return s;
 	      }
 	      return null;
 	    }
 	    remove(t) {
-	      new ee.le(this.tu).remove(t);
-	      for (let e = 0; e < this.vE.length; e++) this.vE[e].remove(t);
+	      new ne.le(this.tu).remove(t);
+	      for (let e = 0; e < this.yS.length; e++) this.yS[e].remove(t);
 	    }
 	  });
 
-	class kt {
+	class Gt {
 	  constructor(t, i, s) {
-	    (this.B = t),
+	    (this.C = t),
 	      (this.gh = i),
-	      (this.ph = s),
-	      (this.B = t),
+	      (this.bh = s),
+	      (this.C = t),
 	      (this.gh = i || !1),
-	      (this.ph = s),
-	      (this.Fh = new m()),
-	      (this.kh = 0),
-	      (this.fh = 1);
+	      (this.bh = s),
+	      (this.Sh = new f()),
+	      (this.Ah = 0),
+	      (this.ph = 1);
 	  }
-	  wh() {
+	  Fh() {
 	    return this.gh;
 	  }
-	  jh() {
-	    return this.B.dt(STORAGE_KEYS.ft.xh);
+	  kh() {
+	    return this.C.Rt(STORAGE_KEYS.Tt.fh);
 	  }
 	  setSdkAuthenticationSignature(t) {
-	    const i = this.jh();
-	    this.B.bt(STORAGE_KEYS.ft.xh, t);
-	    const e = et.Us.Rs;
-	    new et(e, E$1).setItem(e.Fs.qh, this.fh, t), i !== t && this.Z();
+	    const i = this.kh();
+	    this.C.It(STORAGE_KEYS.Tt.fh, t);
+	    const e = et.Ps.$s;
+	    new et(e, E$1).setItem(e.Os.wh, this.ph, t), i !== t && this.ct();
 	  }
-	  yh() {
-	    this.B.zt(STORAGE_KEYS.ft.xh);
-	    const t = et.Us.Rs;
-	    new et(t, E$1).je(t.Fs.qh, this.fh);
+	  jh() {
+	    this.C.Qt(STORAGE_KEYS.Tt.fh);
+	    const t = et.Ps.$s;
+	    new et(t, E$1).ge(t.Os.wh, this.ph);
 	  }
 	  subscribeToSdkAuthenticationFailures(t) {
-	    return this.ph.Rt(t);
+	    return this.bh.Kt(t);
 	  }
-	  Bh(t) {
-	    this.ph.L(t);
+	  Ch(t) {
+	    this.bh.A(t);
 	  }
-	  Gh() {
-	    this.Fh.removeAllSubscriptions();
+	  xh() {
+	    this.Sh.removeAllSubscriptions();
 	  }
-	  Hh() {
-	    this.kh += 1;
+	  Eh() {
+	    this.Ah += 1;
 	  }
-	  Jh() {
-	    return this.kh;
+	  Ih() {
+	    return this.Ah;
 	  }
-	  Z() {
-	    this.kh = 0;
+	  ct() {
+	    this.Ah = 0;
 	  }
 	}
 
 	class t {
 	  constructor() {}
-	  N(a) {}
+	  I(a) {}
 	  changeUser(a = !1) {}
 	  clearData(a = !1) {}
 	}
 
-	class Jt {
+	class Se {
 	  constructor(s) {
 	    (this.id = s), (this.id = s);
 	  }
-	  Hn() {
+	  oa() {
 	    const s = {};
 	    return (
 	      null != this.browser && (s.browser = this.browser),
-	      null != this.ec && (s.browser_version = this.ec),
+	      null != this.Oa && (s.browser_version = this.Oa),
 	      null != this.os && (s.os_version = this.os),
 	      null != this.resolution && (s.resolution = this.resolution),
 	      null != this.language && (s.locale = this.language),
@@ -2491,37 +2515,37 @@ var mpBrazeKitV6 = (function (exports) {
 	  USER_AGENT: "userAgent",
 	};
 
-	class Ot {
+	class Pt {
 	  constructor(t, e) {
-	    (this.B = t),
-	      (this.tc = e),
-	      (this.B = t),
+	    (this.C = t),
+	      (this.Da = e),
+	      (this.C = t),
 	      null == e && (e = values(DeviceProperties)),
-	      (this.tc = e);
+	      (this.Da = e);
 	  }
 	  ve(t = !0) {
-	    let e = this.B.$u(STORAGE_KEYS.Ou.tl);
-	    null == e && ((e = new _t(P$1.se())), t && this.B.Iu(STORAGE_KEYS.Ou.tl, e));
-	    const r = new Jt(e.Tu);
-	    for (let t = 0; t < this.tc.length; t++) {
-	      switch (this.tc[t]) {
+	    let e = this.C.$u(STORAGE_KEYS.Ou.Wh);
+	    null == e && ((e = new _t(V$1.de())), t && this.C.Iu(STORAGE_KEYS.Ou.Wh, e));
+	    const r = new Se(e.Tu);
+	    for (let t = 0; t < this.Da.length; t++) {
+	      switch (this.Da[t]) {
 	        case DeviceProperties.BROWSER:
 	          r.browser = ro.browser;
 	          break;
 	        case DeviceProperties.BROWSER_VERSION:
-	          r.ec = ro.version;
+	          r.Oa = ro.version;
 	          break;
 	        case DeviceProperties.OS:
-	          r.os = this.rc();
+	          r.os = this.Fa();
 	          break;
 	        case DeviceProperties.RESOLUTION:
-	          r.sc = screen.width + "x" + screen.height;
+	          r.Ga = screen.width + "x" + screen.height;
 	          break;
 	        case DeviceProperties.LANGUAGE:
 	          r.language = ro.language;
 	          break;
 	        case DeviceProperties.TIME_ZONE:
-	          r.timeZone = this.oc(new Date());
+	          r.timeZone = this.Ja(new Date());
 	          break;
 	        case DeviceProperties.USER_AGENT:
 	          r.userAgent = ro.userAgent;
@@ -2529,12 +2553,12 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	    return r;
 	  }
-	  rc() {
-	    if (ro.nc()) return ro.nc();
-	    const t = this.B.dt(STORAGE_KEYS.ft.ac);
-	    return t && t.os_version ? t.os_version : ro.rc();
+	  Fa() {
+	    if (ro.Ha()) return ro.Ha();
+	    const t = this.C.Rt(STORAGE_KEYS.Tt.Ka);
+	    return t && t.os_version ? t.os_version : ro.Fa();
 	  }
-	  oc(t) {
+	  Ja(t) {
 	    let e = !1;
 	    if ("undefined" != typeof Intl && "function" == typeof Intl.DateTimeFormat)
 	      try {
@@ -2551,9 +2575,9 @@ var mpBrazeKitV6 = (function (exports) {
 	      }
 	    if (e) return "";
 	    const r = t.getTimezoneOffset();
-	    return this.cc(r);
+	    return this.La(r);
 	  }
-	  cc(t) {
+	  La(t) {
 	    const e = Math.trunc(t / 60),
 	      r = Math.trunc(t % 60);
 	    let s = "GMT";
@@ -2569,66 +2593,66 @@ var mpBrazeKitV6 = (function (exports) {
 	  }
 	}
 
-	var Xt = {
-	  Bl: "invalid_api_key",
-	  zl: "blacklisted",
-	  jl: "no_device_identifier",
-	  Cl: "invalid_json_response",
-	  yl: "empty_response",
+	var Ne = {
+	  dl: "invalid_api_key",
+	  fl: "blacklisted",
+	  ml: "no_device_identifier",
+	  Za: "invalid_json_response",
+	  Qa: "empty_response",
 	  __: "sdk_auth_error",
 	};
 
 	const h = {
-	  H: {
-	    Ze: "data",
-	    vi: "content_cards/sync",
-	    wo: "feature_flags/sync",
-	    On: "template",
-	    G: "banners/sync",
+	  it: {
+	    wn: "data",
+	    Ji: "content_cards/sync",
+	    Co: "feature_flags/sync",
+	    ta: "template",
+	    st: "banners/sync",
 	  },
-	  bc: (t) => (null == t ? void 0 : t.dt(STORAGE_KEYS.ft.lE)),
-	  Am: (t) => (null == t ? void 0 : t.dt(STORAGE_KEYS.ft._E)),
+	  xl: (t) => (null == t ? void 0 : t.Rt(STORAGE_KEYS.Tt.ES)),
+	  Am: (t) => (null == t ? void 0 : t.Rt(STORAGE_KEYS.Tt.SS)),
 	  Rm: (t, e) => {
-	    null == t || t.bt(STORAGE_KEYS.ft.lE, e);
+	    null == t || t.It(STORAGE_KEYS.Tt.ES, e);
 	  },
 	  qm: (t, e) => {
-	    null == t || t.bt(STORAGE_KEYS.ft._E, e);
+	    null == t || t.It(STORAGE_KEYS.Tt.SS, e);
 	  },
-	  Pl: (t, e) => {
+	  Dl: (t, e) => {
 	    if (!t || !e) return -1;
-	    const s = h.bc(t);
+	    const s = h.xl(t);
 	    if (null == s) return -1;
 	    const n = s[e];
 	    return null == n || isNaN(n) ? -1 : n;
 	  },
-	  Ul: (t, e) => {
+	  kl: (t, e) => {
 	    let s = REQUEST_ATTEMPT_DEFAULT;
 	    if (!t || !e) return s;
 	    const n = h.Am(t);
 	    return null == n ? s : ((s = n[e]), null == s || isNaN(s) ? REQUEST_ATTEMPT_DEFAULT : s);
 	  },
-	  K: (t, e, s) => {
+	  nt: (t, e, s) => {
 	    if (!t || !e) return;
-	    let n = h.bc(t);
+	    let n = h.xl(t);
 	    null == n && (n = {}), (n[e] = s), h.Rm(t, n);
 	  },
-	  xl: (t, e, s) => {
+	  yl: (t, e, s) => {
 	    if (!t || !e) return;
 	    let n = h.Am(t);
 	    null == n && (n = {}), (n[e] = s), h.qm(t, n);
 	  },
-	  fi: (t, e) => {
-	    t && e && h.xl(t, e, REQUEST_ATTEMPT_DEFAULT);
+	  Li: (t, e) => {
+	    t && e && h.yl(t, e, REQUEST_ATTEMPT_DEFAULT);
 	  },
-	  Zl: (t, e) => {
+	  Ml: (t, e) => {
 	    if (!t || !e) return;
-	    const s = h.Ul(t, e);
-	    h.xl(t, e, s + 1);
+	    const s = h.kl(t, e);
+	    h.yl(t, e, s + 1);
 	  },
 	};
 
 	const l = {
-	  O: (t) => {
+	  ot: (t) => {
 	    let e, o;
 	    try {
 	      const r = () => {
@@ -2639,7 +2663,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      e = new XMLHttpRequest();
 	      const s = (o) => {
 	        "function" == typeof t.error && t.error(e.status),
-	          "function" == typeof t.tt && t.tt(!1, o);
+	          "function" == typeof t.ft && t.ft(!1, o);
 	      };
 	      (e.onload = () => {
 	        let o = !1;
@@ -2647,20 +2671,20 @@ var mpBrazeKitV6 = (function (exports) {
 	        o = (e.status >= 200 && e.status < 300) || 304 === e.status;
 	        const r = e.getAllResponseHeaders();
 	        if (o) {
-	          if ("function" == typeof t.W) {
+	          if ("function" == typeof t.lt) {
 	            let o;
 	            try {
 	              o = JSON.parse(e.responseText);
 	            } catch (o) {
 	              const n = {
-	                error: "" === e.responseText ? Xt.yl : Xt.Cl,
+	                error: "" === e.responseText ? Ne.Qa : Ne.Za,
 	                response: e.responseText,
 	              };
-	              (0, t.W)(n, r);
+	              (0, t.lt)(n, r);
 	            }
-	            o && t.W(o, r);
+	            o && t.lt(o, r);
 	          }
-	          "function" == typeof t.tt && t.tt(!0, r);
+	          "function" == typeof t.ft && t.ft(!0, r);
 	        } else s(r);
 	      }),
 	        (e.onerror = () => {
@@ -2694,67 +2718,67 @@ var mpBrazeKitV6 = (function (exports) {
 	  return e;
 	};
 
-	class Mt {
+	class Vt {
 	  constructor(t, e, i, s, r, n, o, a, h, u, l, c) {
 	    (this.eu = t),
-	      (this.B = e),
-	      (this.hl = i),
-	      (this.vs = s),
-	      (this.C = r),
+	      (this.C = e),
+	      (this.Gh = i),
+	      (this.Ss = s),
+	      (this.j = r),
 	      (this.h = n),
 	      (this.tu = o),
-	      (this.al = a),
-	      (this.sl = h),
-	      (this.rl = u),
+	      (this.Yh = a),
+	      (this.Vh = h),
+	      (this.Kh = u),
 	      (this.appVersion = l),
-	      (this.vl = c),
-	      (this.Rl = (t) => (null == t ? "" : `${t} `)),
+	      (this.Ra = c),
+	      (this.Xa = (t) => (null == t ? "" : `${t} `)),
 	      (this.eu = t),
-	      (this.B = e),
-	      (this.hl = i),
-	      (this.vs = s),
-	      (this.C = r),
+	      (this.C = e),
+	      (this.Gh = i),
+	      (this.Ss = s),
+	      (this.j = r),
 	      (this.h = n),
 	      (this.tu = o),
-	      (this.al = a),
-	      (this.sl = h),
-	      (this.rl = u),
+	      (this.Yh = a),
+	      (this.Vh = h),
+	      (this.Kh = u),
 	      (this.appVersion = l),
-	      (this.vl = c),
-	      (this.bl = ["npm"]),
-	      (this.ql = {});
+	      (this.Ra = c),
+	      (this.$a = ["npm"]),
+	      (this.Pa = {});
 	  }
-	  $(t, e = !1, i = !1) {
+	  Z(t, e = !1, i = !1) {
 	    const r = this.eu.ve(!i),
-	      n = r.Hn(),
-	      o = this.B.dt(STORAGE_KEYS.ft.ac);
+	      n = r.oa(),
+	      o = this.C.Rt(STORAGE_KEYS.Tt.Ka);
 	    isEqual(o, n) || (t.device = n),
 	      (t.api_key = this.tu),
 	      (t.time = convertMsToSeconds(new Date().valueOf(), !0));
-	    const a = this.B.dt(STORAGE_KEYS.ft.Dl) || [],
-	      h = this.B.dt(STORAGE_KEYS.ft.Tl) || "";
-	    this.bl.length > 0 &&
-	      (!isEqual(a, this.bl) || h !== this.C.yt()) &&
-	      (t.sdk_metadata = this.bl),
-	      (t.sdk_version = this.sl),
-	      this.rl && (t.sdk_flavor = this.rl),
+	    const a = this.C.Rt(STORAGE_KEYS.Tt.Ua) || [],
+	      h = this.C.Rt(STORAGE_KEYS.Tt.Wa) || "";
+	    this.$a.length > 0 &&
+	      (!isEqual(a, this.$a) || h !== this.j.kt()) &&
+	      (t.sdk_metadata = this.$a),
+	      (t.sdk_version = this.Vh),
+	      this.Kh && (t.sdk_flavor = this.Kh),
 	      (t.app_version = this.appVersion),
-	      (t.app_version_code = this.vl),
+	      (t.app_version_code = this.Ra),
 	      (t.device_id = r.id);
-	    const u = this.vs.getUserId();
-	    if ((e && null !== u && (t.user_id = u), !u && !this.hl.wh())) {
-	      const e = getAlias(this.B);
+	    const u = this.Ss.getUserId();
+	    if ((e && null !== u && (t.user_id = u), !u && !this.Gh.Fh())) {
+	      const e = getAlias(this.C);
 	      e && (t.alias = e);
 	    }
 	    return t;
 	  }
-	  Y(t, e, i) {
+	  ut(t, e, i) {
 	    const s = e.auth_error,
 	      r = e.error;
 	    if (!s && !r) return !0;
 	    if (s) {
 	      let e;
-	      this.hl.Hh();
+	      this.Gh.Eh();
 	      const r = { errorCode: s.error_code };
 	      for (const t of i)
 	        isArray(t) && "X-Braze-Auth-Signature" === t[0] && (r.signature = t[1]);
@@ -2766,12 +2790,12 @@ var mpBrazeKitV6 = (function (exports) {
 	        n
 	          ? ((r.reason = n), (e = `due to ${n}`))
 	          : (e = `with error code ${s.error_code}.`),
-	        this.hl.wh() ||
+	        this.Gh.Fh() ||
 	          (e +=
 	            ' Please use the "enableSdkAuthentication" initialization option to enable authentication.'),
 	        E$1.error(`SDK Authentication failed ${e}`),
-	        this.kl(t.events || [], t.attributes || []),
-	        this.hl.Bh(r),
+	        this.Ya(t.events || [], t.attributes || []),
+	        this.Gh.Ch(r),
 	        !1
 	      );
 	    }
@@ -2779,42 +2803,42 @@ var mpBrazeKitV6 = (function (exports) {
 	      let i,
 	        s = r;
 	      switch (s) {
-	        case Xt.yl:
+	        case Ne.Qa:
 	          return (
 	            (i = "Received successful response with empty body."),
-	            v$1.lt(f.wl, { e: i }),
+	            v$1.wt(p.Va, { e: i }),
 	            E$1.info(i),
 	            !1
 	          );
-	        case Xt.Cl:
+	        case Ne.Za:
 	          return (
 	            (i = "Received successful response with invalid JSON"),
-	            v$1.lt(f.wl, { e: i + ": " + e.response }),
+	            v$1.wt(p.Va, { e: i + ": " + e.response }),
 	            E$1.info(i),
 	            !1
 	          );
-	        case Xt.Bl:
-	          s = `The API key "${t.api_key}" is invalid for the baseUrl ${this.al}`;
+	        case Ne.dl:
+	          s = `The API key "${t.api_key}" is invalid for the baseUrl ${this.Yh}`;
 	          break;
-	        case Xt.zl:
+	        case Ne.fl:
 	          s =
 	            "Sorry, we are not currently accepting your requests. If you think this is in error, please contact us.";
 	          break;
-	        case Xt.jl:
+	        case Ne.ml:
 	          s = "No device identifier. Please contact support@braze.com";
 	      }
 	      E$1.error("Backend error: " + s);
 	    }
 	    return !1;
 	  }
-	  Ml(t, e, i) {
+	  vl(t, e, i) {
 	    return !!((t && 0 !== t.length) || (e && 0 !== e.length) || i);
 	  }
-	  $l(t, e, i, s = !1) {
+	  Rl(t, e, i, s = !1) {
 	    const r = [],
 	      n = (t) => t || "",
-	      o = n(this.vs.getUserId());
-	    let a = this.Xn(t);
+	      o = n(this.Ss.getUserId());
+	    let a = this.ia(t);
 	    const u = [],
 	      l = [];
 	    let c,
@@ -2822,7 +2846,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    if (e.length > 0) {
 	      const t = [];
 	      for (const i of e) {
-	        if (((c = i.Hn()), this.hl.wh())) {
+	        if (((c = i.oa()), this.Gh.Fh())) {
 	          if (o && !c.user_id) {
 	            d || (d = {}), d.events || (d.events = []), d.events.push(c);
 	            continue;
@@ -2839,127 +2863,128 @@ var mpBrazeKitV6 = (function (exports) {
 	    if (i.length > 0) {
 	      const t = [];
 	      for (const e of i)
-	        e && (this.hl.wh() && n(e.user_id) !== o ? u.push(e) : t.push(e));
+	        e && (this.Gh.Fh() && n(e.user_id) !== o ? u.push(e) : t.push(e));
 	      t.length > 0 && (a.attributes = t);
 	    }
-	    if ((this.kl(l, u), (a = this.$(a, !1, s)), d)) {
-	      d = this.$(d, !1, s);
-	      const t = { requestData: d, headers: this.A(d, h.H.Ze) };
+	    if ((this.Ya(l, u), (a = this.Z(a, !1, s)), d)) {
+	      d = this.Z(d, !1, s);
+	      const t = { requestData: d, headers: this.tt(d, h.it.wn) };
 	      r.push(t);
 	    }
-	    if (a && !this.Ml(a.events, a.attributes, t)) return d ? r : null;
-	    const f = { requestData: a, headers: this.A(a, h.H.Ze) };
+	    if (a && !this.vl(a.events, a.attributes, t)) return d ? r : null;
+	    const f = { requestData: a, headers: this.tt(a, h.it.wn) };
 	    return r.push(f), r;
 	  }
-	  kl(t, e) {
+	  Ya(t, e) {
 	    if (t) {
 	      const e = [];
 	      for (const i of t) {
-	        const t = De.fromJson(i);
+	        const t = Ie.fromJson(i);
 	        (t.time = convertSecondsToMs(t.time)), e.push(t);
 	      }
-	      this.B.ol(e);
+	      this.C.ol(e);
 	    }
-	    if (e) for (const t of e) this.B.Xl(t);
+	    if (e) for (const t of e) this.C.gl(t);
 	  }
-	  _(t, e) {
+	  dt(t, e) {
 	    let i = "HTTP error ";
 	    null != t && (i += t + " "), (i += e), E$1.error(i);
 	  }
-	  Ll(t) {
-	    return v$1.lt(f.Fl, { n: t });
+	  bl(t) {
+	    return v$1.wt(p.ql, { n: t });
 	  }
-	  Xn(t, e) {
+	  ia(t, e) {
 	    const i = {};
 	    t && (i.triggers = !0);
-	    const s = null != e ? e : this.vs.getUserId();
-	    if ((s && (i.user_id = s), !i.user_id && !this.hl.wh())) {
-	      const t = getAlias(this.B);
+	    const s = null != e ? e : this.Ss.getUserId();
+	    if ((s && (i.user_id = s), !i.user_id && !this.Gh.Fh())) {
+	      const t = getAlias(this.C);
 	      t && (i.alias = t);
 	    }
-	    return (i.config = { config_time: this.h.xt() }), { respond_with: i };
+	    return (i.config = { config_time: this.h.Ot() }), { respond_with: i };
 	  }
-	  Kl(t) {
+	  Al(t) {
 	    const e = new Date().valueOf();
 	    let i = LAST_REQUEST_TO_ENDPOINT_MS_AGO_DEFAULT.toString();
-	    const s = h.Pl(this.B, t);
+	    const s = h.Dl(this.C, t);
 	    if (-1 !== s) {
 	      i = (e - s).toString();
 	    }
 	    return i;
 	  }
-	  A(t, e, i = !1) {
+	  tt(t, e, i = "sdk") {
 	    const s = [["X-Braze-Api-Key", this.tu]],
-	      r = this.Kl(e);
+	      r = this.Al(e);
 	    s.push(["X-Braze-Last-Req-Ms-Ago", r]);
-	    const n = h.Ul(this.B, e).toString();
+	    const n = h.kl(this.C, e).toString();
 	    s.push(["X-Braze-Req-Attempt", n]);
 	    let o = !1;
 	    if (
 	      (null != t.respond_with &&
 	        t.respond_with.triggers &&
 	        (s.push(["X-Braze-TriggersRequest", "true"]), (o = !0)),
-	      e === h.H.vi)
+	      e === h.it.Ji)
 	    ) {
 	      s.push(["X-Braze-ContentCardsRequest", "true"]);
-	      let t = h.Ul(this.B, h.H.vi);
-	      (t && !i) || ((t = 1), h.xl(this.B, h.H.vi, t));
+	      let t = h.kl(this.C, h.it.Ji);
+	      (t && "client" !== i) || ((t = 1), h.yl(this.C, h.it.Ji, t));
 	      const e = Math.max(0, t - 1);
 	      s.push(["BRAZE-SYNC-RETRY-COUNT", e.toString()]), (o = !0);
 	    }
 	    if (
-	      (e === h.H.wo &&
+	      (e === h.it.Co &&
 	        (s.push(["X-Braze-FeatureFlagsRequest", "true"]), (o = !0)),
 	      o && s.push(["X-Braze-DataRequest", "true"]),
-	      this.hl.wh())
+	      "dust" === i && s.push(["X-Braze-Request-Initiated-By", "di"]),
+	      this.Gh.Fh())
 	    ) {
-	      const t = this.hl.jh();
+	      const t = this.Gh.kh();
 	      null != t && s.push(["X-Braze-Auth-Signature", t]);
 	    }
 	    return s;
 	  }
-	  Hl(t, e, i, s) {
-	    if (this.ql[s]) return;
+	  Tl(t, e, i, s) {
+	    if (this.Pa[s]) return;
 	    const r = window.setTimeout(() => {
-	      E$1.info(`Retrying rate limited ${this.Rl(s)}SDK request.`),
-	        this.J(e, i, s);
+	      E$1.info(`Retrying rate limited ${this.Xa(s)}SDK request.`),
+	        this.et(e, i, s);
 	    }, t);
-	    this.ql[s] = r;
+	    this.Pa[s] = r;
 	  }
 	  fo() {
-	    for (const t in this.ql) {
-	      const e = this.ql[t];
+	    for (const t in this.Pa) {
+	      const e = this.Pa[t];
 	      window.clearTimeout(e);
 	    }
-	    this.ql = {};
+	    this.Pa = {};
 	  }
-	  J(t, e, i, r) {
-	    if (!this.Ol(i))
+	  et(t, e, i, r) {
+	    if (!this.wl(i))
 	      return (
-	        E$1.info(`${this.Rl(i)}SDK request being rate limited.`),
+	        E$1.info(`${this.Xa(i)}SDK request being rate limited.`),
 	        void ("function" == typeof r && r())
 	      );
-	    const n = this.Gl();
-	    if (!n.Wl)
+	    const n = this.Nl();
+	    if (!n.Bl)
 	      return (
-	        this.Hl(n.Yl, t, e, i),
+	        this.Tl(n.Cl, t, e, i),
 	        void E$1.info(
-	          `${this.Rl(
+	          `${this.Xa(
             i,
           )}SDK request being rate limited. Request will be retried in ${Math.trunc(
-            n.Yl / 1e3,
+            n.Cl / 1e3,
           )} seconds.`,
 	        )
 	      );
-	    this.B.bt(STORAGE_KEYS.ft.Jl, new Date().valueOf());
+	    this.C.It(STORAGE_KEYS.Tt.Sl, new Date().valueOf());
 	    const o = t.device;
 	    o && o.os_version instanceof Promise
 	      ? o.os_version.then((i) => {
-	          (t.device.os_version = i), e(n.Ql);
+	          (t.device.os_version = i), e(n.zl);
 	        })
-	      : e(n.Ql);
+	      : e(n.zl);
 	  }
-	  Vl(t) {
+	  jl(t) {
 	    const e = t ? readResponseHeaders(t) : null;
 	    if (!e || !e["retry-after"]) return null;
 	    const i = e["retry-after"];
@@ -2970,21 +2995,21 @@ var mpBrazeKitV6 = (function (exports) {
 	    {
 	      const t =
 	        "Received unexpected value for retry-after header in /sync response";
-	      v$1.lt(f.wl, { e: t + ": " + i });
+	      v$1.wt(p.Va, { e: t + ": " + i });
 	    }
 	    return null;
 	  }
-	  et(t, e, i, s, r, n) {
-	    if (h.Ul(this.B, i) >= MAX_RETRY_COUNT_PER_REQUEST) return;
+	  yt(t, e, i, s, r, n) {
+	    if (h.kl(this.C, i) >= MAX_RETRY_COUNT_PER_REQUEST) return;
 	    let o;
 	    n = n || 0;
-	    const a = this.Vl(t);
+	    const a = this.jl(t);
 	    r();
 	    const u = (t) => {
 	      const r = window.setTimeout(() => {
 	        e();
 	      }, t);
-	      s(r), h.Zl(this.B, i);
+	      s(r), h.Ml(this.C, i);
 	    };
 	    if (a && !isNaN(a.value)) {
 	      switch (a.type) {
@@ -2995,46 +3020,46 @@ var mpBrazeKitV6 = (function (exports) {
 	          o = a.value + n;
 	      }
 	      u(o);
-	    } else n ? u(n) : h.fi(this.B, i);
+	    } else n ? u(n) : h.Li(this.C, i);
 	  }
-	  hc(t) {
+	  Xl(t) {
 	    var e;
-	    null === (e = this.B) || void 0 === e || e.bt(STORAGE_KEYS.ft.uc, t);
+	    null === (e = this.C) || void 0 === e || e.It(STORAGE_KEYS.Tt.$l, t);
 	  }
-	  lc(t, e) {
-	    let i = this.dc();
-	    null == i && (i = {}), (i[t] = e), this.B.bt(STORAGE_KEYS.ft.fc, i);
+	  Ll(t, e) {
+	    let i = this.El();
+	    null == i && (i = {}), (i[t] = e), this.C.It(STORAGE_KEYS.Tt.Fl, i);
 	  }
-	  mc() {
+	  Il() {
 	    var t;
-	    return null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.uc);
+	    return null === (t = this.C) || void 0 === t ? void 0 : t.Rt(STORAGE_KEYS.Tt.$l);
 	  }
-	  dc() {
+	  El() {
 	    var t;
-	    return null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.fc);
+	    return null === (t = this.C) || void 0 === t ? void 0 : t.Rt(STORAGE_KEYS.Tt.Fl);
 	  }
-	  vc(t, e, i, s, r = "") {
+	  Kl(t, e, i, s, r = "") {
 	    let n;
 	    if (r) {
-	      const t = this.dc();
+	      const t = this.El();
 	      n = null == t || isNaN(t[r]) ? e : t[r];
-	    } else (n = this.mc()), (null == n || isNaN(n)) && (n = e);
+	    } else (n = this.Il()), (null == n || isNaN(n)) && (n = e);
 	    const o = (t - s) / 1e3;
 	    return (n = Math.min(n + o / i, e)), n;
 	  }
-	  Rc(t, e) {
+	  Pl(t, e) {
 	    return Math.max(0, (1 - t) * e * 1e3);
 	  }
-	  gc(t, e = "") {
+	  Ul(t, e = "") {
 	    var i, r, n, o, a;
-	    const u = { Wl: !0, Ql: -1, Yl: 0 };
+	    const u = { Bl: !0, zl: -1, Cl: 0 };
 	    if ((null == t && (t = !0), !t && !e)) return u;
 	    let l,
 	      c,
 	      d = null;
-	    if (t) d = null === (i = this.B) || void 0 === i ? void 0 : i.dt(STORAGE_KEYS.ft.Jl);
+	    if (t) d = null === (i = this.C) || void 0 === i ? void 0 : i.Rt(STORAGE_KEYS.Tt.Sl);
 	    else {
-	      const t = h.bc(this.B);
+	      const t = h.xl(this.C);
 	      if (null == t || null == t[e]) return u;
 	      d = t[e];
 	    }
@@ -3042,107 +3067,126 @@ var mpBrazeKitV6 = (function (exports) {
 	    if (
 	      (t
 	        ? ((l =
-	            (null === (r = this.h) || void 0 === r ? void 0 : r.qc()) || -1),
-	          (c = (null === (n = this.h) || void 0 === n ? void 0 : n.Ac()) || -1))
+	            (null === (r = this.h) || void 0 === r ? void 0 : r.Hl()) || -1),
+	          (c = (null === (n = this.h) || void 0 === n ? void 0 : n.Ol()) || -1))
 	        : ((l =
-	            (null === (o = this.h) || void 0 === o ? void 0 : o.Dc(e)) || -1),
+	            (null === (o = this.h) || void 0 === o ? void 0 : o.Gl(e)) || -1),
 	          (c =
-	            (null === (a = this.h) || void 0 === a ? void 0 : a.Tc(e)) || -1)),
+	            (null === (a = this.h) || void 0 === a ? void 0 : a._l(e)) || -1)),
 	      -1 === l || -1 === c)
 	    )
 	      return u;
 	    const f = new Date().valueOf();
-	    let m = this.vc(f, l, c, d, e);
+	    let m = this.Kl(f, l, c, d, e);
 	    return m < 1
-	      ? ((u.Wl = !1), (u.Yl = this.Rc(m, c)), u)
+	      ? ((u.Bl = !1), (u.Cl = this.Pl(m, c)), u)
 	      : ((m = Math.trunc(m) - 1),
-	        (u.Ql = m),
-	        t ? this.hc(m) : this.lc(e, m),
+	        (u.zl = m),
+	        t ? this.Xl(m) : this.Ll(e, m),
 	        u);
 	  }
-	  Gl() {
-	    return this.gc(!0);
+	  Nl() {
+	    return this.Ul(!0);
 	  }
-	  Ol(t) {
-	    const e = this.gc(!1, t);
-	    return !(e && !e.Wl);
+	  wl(t) {
+	    const e = this.Ul(!1, t);
+	    return !(e && !e.Bl);
 	  }
-	  Z() {
-	    this.hl.Z();
+	  ct() {
+	    this.Gh.ct();
 	  }
-	  V() {
-	    return this.al;
+	  ht() {
+	    return this.Yh;
 	  }
 	  addSdkMetadata(t) {
-	    for (const e of t) -1 === this.bl.indexOf(e) && this.bl.push(e);
+	    for (const e of t) -1 === this.$a.indexOf(e) && this.$a.push(e);
 	  }
 	}
-
-	const randomInclusive = (t, a) => (
-	  (t = Math.ceil(t)),
-	  (a = Math.floor(a)),
-	  Math.floor(Math.random() * (a - t + 1)) + t
-	);
-
-	class H {
-	  constructor(t = !1, s = []) {
-	    (this.W = t), (this.Ee = s), (this.W = t), (this.Ee = s);
-	  }
-	  Yt(t) {
-	    (this.W = this.W && t.W), this.Ee.push(...t.Ee);
-	  }
-	}
-
-	const vt = {
-	  cu: () =>
-	    "serviceWorker" in navigator &&
-	    "undefined" != typeof ServiceWorkerRegistration &&
-	    "showNotification" in ServiceWorkerRegistration.prototype &&
-	    "PushManager" in window,
-	  lu: () =>
-	    "safari" in window &&
-	    "pushNotification" in window.safari &&
-	    "function" == typeof window.safari.pushNotification.permission &&
-	    "function" == typeof window.safari.pushNotification.requestPermission,
-	  isPushSupported: () => vt.cu() || vt.lu(),
-	  isPushBlocked: () => {
-	    const o =
-	        vt.isPushSupported() &&
-	        "Notification" in window &&
-	        null != window.Notification &&
-	        null != window.Notification.permission &&
-	        "denied" === window.Notification.permission,
-	      i =
-	        vt.isPushSupported() &&
-	        (!("Notification" in window) || null == window.Notification);
-	    return o || i;
-	  },
-	  isPushPermissionGranted: () =>
-	    vt.isPushSupported() &&
-	    "Notification" in window &&
-	    null != window.Notification &&
-	    null != window.Notification.permission &&
-	    "granted" === window.Notification.permission,
-	  En: () =>
-	    vt.isPushBlocked()
-	      ? { Gn: !1, reason: "blocked" }
-	      : vt.isPushSupported()
-	      ? vt.isPushPermissionGranted()
-	        ? { Gn: !1, reason: "permissionGranted" }
-	        : { Gn: !0 }
-	      : { Gn: !1, reason: "unsupported" },
-	  Nn: (o, i) =>
-	    "blocked" === o
-	      ? `${i} containing a push prompt is not being shown because the user has already declined push permission prompt.`
-	      : "unsupported" === o
-	      ? `${i} containing a push prompt is not being shown because the browser doesn't support push notifications.`
-	      : `${i} containing a push prompt is not being shown because the user has already accepted the permission prompt.`,
-	};
-	var vt$1 = vt;
 
 	const IamStrings = {
-	  sS: "inAppMessage must be an InAppMessage object",
-	  eS: "ab-pause-scrolling",
+	  EE: "inAppMessage must be an InAppMessage object",
+	  TE: "ab-pause-scrolling",
+	};
+	const IamColors = {
+	  IE: 4281545523,
+	  AE: 4294967295,
+	  _E: 4278219733,
+	  OE: 4293914607,
+	  LE: 4283782485,
+	  SE: 3224580915,
+	  NE: 4288387995,
+	};
+	const IamDisplayFailures = {
+	  RE: "hd",
+	  tE: "ias",
+	  ME: "of",
+	  eE: "do",
+	  oE: "umt",
+	  CE: "tf",
+	  DE: "te",
+	};
+	const IamSlideFrom = { TOP: "TOP", BOTTOM: "BOTTOM" };
+	const IamClickAction = { URI: "URI", NONE: "NONE" };
+	const IamDismissType = { AUTO_DISMISS: "AUTO_DISMISS", MANUAL: "SWIPE" };
+	const IamOpenTarget = { NONE: "NONE", BLANK: "BLANK" };
+	const IamImageStyle = { TOP: "TOP", GRAPHIC: "GRAPHIC" };
+	const IamOrientation = { PORTRAIT: "PORTRAIT", LANDSCAPE: "LANDSCAPE" };
+	const IamTextAlignment = {
+	  START: "START",
+	  CENTER: "CENTER",
+	  END: "END",
+	};
+	const IamCropType = {
+	  CENTER_CROP: "CENTER_CROP",
+	  FIT_CENTER: "FIT_CENTER",
+	};
+	const IamServerTypes = {
+	  sE: "SLIDEUP",
+	  aE: "MODAL",
+	  UE: "MODAL_STYLED",
+	  cE: "FULL",
+	  iE: "WEB_HTML",
+	  PE: "HTML",
+	  nE: "HTML_FULL",
+	};
+	const IamTiming = { gr: 500, pE: 200 };
+	const IAM_SHOW_CLASS = "ab-show";
+	const IAM_HIDE_CLASS = "ab-hide";
+	const IamSerializationKeys = {
+	  rE: "m",
+	  mE: "ma",
+	  GE: "sf",
+	  Fs: "e",
+	  FE: "ti",
+	  HE: "ca",
+	  URI: "u",
+	  xE: "oa",
+	  BE: "dt",
+	  lE: "d",
+	  bE: "i",
+	  ys: "iu",
+	  gE: "is",
+	  YE: "ic",
+	  KE: "ibc",
+	  XE: "bc",
+	  dE: "tc",
+	  hE: "cbc",
+	  yE: "ai",
+	  uE: "ao",
+	  WE: "h",
+	  fE: "ha",
+	  jE: "htc",
+	  kE: "fc",
+	  vE: "b",
+	  wE: "ct",
+	  zE: "o",
+	  VE: "hi",
+	  CSS: "css",
+	  xs: "type",
+	  qE: "messageFields",
+	  JE: "me",
+	  LANGUAGE: "l",
+	  Ks: "ia",
 	};
 
 	function removeAllVisibleInAppMessages() {
@@ -3156,87 +3200,149 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	    s.parentNode && s.parentNode.removeChild(s);
 	  }
-	  const t = document.getElementsByClassName(IamStrings.eS);
+	  const t = document.getElementsByClassName(IamStrings.TE);
 	  for (let o = 0; o < t.length; o++) {
 	    const s = t[o].classList;
-	    s.contains(IamStrings.eS) && s.remove(IamStrings.eS);
+	    s.contains(IamStrings.TE) && s.remove(IamStrings.TE);
 	  }
 	}
 
-	class Wt {
+	class L {
+	  constructor(t = !1, s = []) {
+	    (this.lt = t), (this.Ce = s), (this.lt = t), (this.Ce = s);
+	  }
+	  ps(t) {
+	    (this.lt = this.lt && t.lt), this.Ce.push(...t.Ce);
+	  }
+	}
+
+	const It = {
+	  cu: () =>
+	    "serviceWorker" in navigator &&
+	    "undefined" != typeof ServiceWorkerRegistration &&
+	    "showNotification" in ServiceWorkerRegistration.prototype &&
+	    "PushManager" in window,
+	  lu: () =>
+	    "safari" in window &&
+	    "pushNotification" in window.safari &&
+	    "function" == typeof window.safari.pushNotification.permission &&
+	    "function" == typeof window.safari.pushNotification.requestPermission,
+	  isPushSupported: () => It.cu() || It.lu(),
+	  isPushBlocked: () => {
+	    const o =
+	        It.isPushSupported() &&
+	        "Notification" in window &&
+	        null != window.Notification &&
+	        null != window.Notification.permission &&
+	        "denied" === window.Notification.permission,
+	      i =
+	        It.isPushSupported() &&
+	        (!("Notification" in window) || null == window.Notification);
+	    return o || i;
+	  },
+	  isPushPermissionGranted: () =>
+	    It.isPushSupported() &&
+	    "Notification" in window &&
+	    null != window.Notification &&
+	    null != window.Notification.permission &&
+	    "granted" === window.Notification.permission,
+	  Yn: () =>
+	    It.isPushBlocked()
+	      ? { Zn: !1, reason: "blocked" }
+	      : It.isPushSupported()
+	      ? It.isPushPermissionGranted()
+	        ? { Zn: !1, reason: "permissionGranted" }
+	        : { Zn: !0 }
+	      : { Zn: !1, reason: "unsupported" },
+	  _o: (o, i) =>
+	    "blocked" === o
+	      ? `${i} containing a push prompt is not being shown because the user has already declined push permission prompt.`
+	      : "unsupported" === o
+	      ? `${i} containing a push prompt is not being shown because the browser doesn't support push notifications.`
+	      : `${i} containing a push prompt is not being shown because the user has already accepted the permission prompt.`,
+	};
+	var It$1 = It;
+
+	const randomInclusive = (t, a) => (
+	  (t = Math.ceil(t)),
+	  (a = Math.floor(a)),
+	  Math.floor(Math.random() * (a - t + 1)) + t
+	);
+
+	class Kt {
 	  constructor(t, i, s, e, h, n, o, r, l, u) {
 	    (this.tu = t),
 	      (this.baseUrl = i),
-	      (this.C = s),
+	      (this.j = s),
 	      (this.eu = e),
-	      (this.vs = h),
+	      (this.Ss = h),
 	      (this.h = n),
-	      (this.B = o),
-	      (this.$c = r),
-	      (this.hl = l),
-	      (this.j = u),
+	      (this.C = o),
+	      (this.kc = r),
+	      (this.Gh = l),
+	      (this.B = u),
 	      (this.tu = t),
 	      (this.baseUrl = i),
-	      (this.Zc = 0),
-	      (this.bE = o.dE() || 0),
-	      (this.sd = null),
-	      (this.C = s),
+	      (this.yc = 0),
+	      (this.IS = o.dS() || 0),
+	      (this.jc = null),
+	      (this.j = s),
 	      (this.eu = e),
-	      (this.vs = h),
+	      (this.Ss = h),
 	      (this.h = n),
-	      (this.B = o),
-	      (this.hl = l),
-	      (this.j = u),
-	      (this.$c = r),
-	      (this.hd = new m()),
-	      (this.nd = null),
-	      (this.rd = 50),
-	      (this.ld = !1),
-	      (this.ud = !1);
+	      (this.C = o),
+	      (this.Gh = l),
+	      (this.B = u),
+	      (this.kc = r),
+	      (this.Ac = new f()),
+	      (this.Dc = null),
+	      (this.$c = 50),
+	      (this.qc = !1),
+	      (this.Cc = !1);
 	  }
-	  ad(t, i) {
-	    return !t && !i && this.hl.Jh() >= this.rd;
+	  Mc(t, i) {
+	    return !t && !i && this.Gh.Ih() >= this.$c;
 	  }
-	  md(t) {
-	    let i = this.C.am();
+	  Tc(t) {
+	    let i = this.j.am();
 	    if (t.length > 0) {
-	      const s = this.vs.getUserId();
+	      const s = this.Ss.getUserId();
 	      for (const e of t) {
 	        const t = (!e.userId && !s) || e.userId === s;
-	        e.type === f.Sm && t && (i = !0);
+	        e.type === p.wm && t && (i = !0);
 	      }
 	    }
 	    return i;
 	  }
-	  fd(t = !1, i = !0, e, n, o, r = !1, u = !1) {
-	    i && this.gd();
-	    const c = this.B.RE(),
-	      d = this.B.IE();
+	  Lc(t = !1, i = !0, e, n, o, r = !1, u = !1) {
+	    i && this.Fc();
+	    const c = this.C.hS(),
+	      d = this.C.RS();
 	    let m = !1;
 	    const f = (t, r, u = -1) => {
 	        const c = new Date().valueOf();
-	        h.K(this.B, h.H.Ze, c),
+	        h.nt(this.C, h.it.wn, c),
 	          -1 !== u && r.push(["X-Braze-Req-Tokens-Remaining", u.toString()]);
 	        let d = !1;
-	        l.O({
+	        l.ot({
 	          url: this.baseUrl + "/data/",
 	          data: t,
 	          headers: r,
-	          W: (i) => {
+	          lt: (i) => {
 	            null != t.respond_with &&
 	              t.respond_with.triggers &&
-	              (this.Zc = Math.max(this.Zc - 1, 0)),
-	              this.j.Y(t, i, r)
-	                ? (this.hl.Z(),
-	                  this.h.Sc(i),
+	              (this.yc = Math.max(this.yc - 1, 0)),
+	              this.B.ut(t, i, r)
+	                ? (this.Gh.ct(),
+	                  this.h.rc(i),
 	                  (null != t.respond_with &&
-	                    t.respond_with.user_id != this.vs.getUserId()) ||
-	                    (null != t.device && this.B.bt(STORAGE_KEYS.ft.ac, t.device),
+	                    t.respond_with.user_id != this.Ss.getUserId()) ||
+	                    (null != t.device && this.C.It(STORAGE_KEYS.Tt.Ka, t.device),
 	                    null != t.sdk_metadata &&
-	                      (this.B.bt(STORAGE_KEYS.ft.Dl, t.sdk_metadata),
-	                      this.B.bt(STORAGE_KEYS.ft.Tl, this.C.yt())),
-	                    this.$c(i),
-	                    h.xl(this.B, h.H.Ze, 1),
+	                      (this.C.It(STORAGE_KEYS.Tt.Ua, t.sdk_metadata),
+	                      this.C.It(STORAGE_KEYS.Tt.Wa, this.j.kt())),
+	                    this.kc(i),
+	                    h.yl(this.C, h.it.wn, 1),
 	                    "function" == typeof e && e()))
 	                : i.auth_error && (d = !0);
 	          },
@@ -3244,13 +3350,13 @@ var mpBrazeKitV6 = (function (exports) {
 	            (d = !0),
 	              null != t.respond_with &&
 	                t.respond_with.triggers &&
-	                (this.Zc = Math.max(this.Zc - 1, 0)),
-	              this.j.kl(t.events, t.attributes),
+	                (this.yc = Math.max(this.yc - 1, 0)),
+	              this.B.Ya(t.events, t.attributes),
 	              "function" == typeof n && n();
 	          },
-	          tt: (t, s) => {
+	          ft: (t, s) => {
 	            "function" == typeof o && o(!d);
-	            const e = this.j.Vl(s);
+	            const e = this.B.jl(s);
 	            let n = 0;
 	            if (e)
 	              switch (e.type) {
@@ -3262,97 +3368,97 @@ var mpBrazeKitV6 = (function (exports) {
 	              }
 	            if (i && !m) {
 	              if (d) {
-	                h.Zl(this.B, h.H.Ze);
-	                const t = this.h.st(),
-	                  i = this.h.it(),
-	                  s = this.h.nt();
-	                let e = this.sd;
+	                h.Ml(this.C, h.it.wn);
+	                const t = this.h.vt(),
+	                  i = this.h.gt(),
+	                  s = this.h.bt();
+	                let e = this.jc;
 	                (null == e || e < t) && (e = t);
 	                const o = Math.min(s, randomInclusive(t, e * i)) + n;
-	                this.pd(o);
-	              } else this.pd(Math.max(1e3 * this.bE, n));
+	                this.Ic(o);
+	              } else this.Ic(Math.max(1e3 * this.IS, n));
 	              m = !0;
 	            }
 	          },
 	        });
 	      },
-	      g = this.md(c),
+	      g = this.Tc(c),
 	      p = t || g;
-	    if (this.ad(r, g))
+	    if (this.Mc(r, g))
 	      return void E$1.info(
 	        "Declining to flush data due to 50 consecutive authentication failures",
 	      );
-	    if (i && !this.j.Ml(c, d, p))
-	      return this.pd(), void ("function" == typeof o && o(!0));
-	    const v = this.j.$l(p, c, d, u);
-	    p && this.Zc++;
+	    if (i && !this.B.vl(c, d, p))
+	      return this.Ic(), void ("function" == typeof o && o(!0));
+	    const v = this.B.Rl(p, c, d, u);
+	    p && this.yc++;
 	    let b = !1;
 	    if (v)
 	      for (const t of v)
-	        this.j.J(
+	        this.B.et(
 	          t.requestData,
 	          (i) => f(t.requestData, t.headers, i),
-	          h.H.Ze,
+	          h.it.wn,
 	          n,
 	        ),
 	          (b = !0);
-	    this.hl.wh() && i && !b
-	      ? this.pd()
+	    this.Gh.Fh() && i && !b
+	      ? this.Ic()
 	      : g &&
 	        (E$1.info("Invoking new session subscriptions"),
-	        this.hd.L(),
-	        (this.ud = !0));
+	        this.Ac.A(),
+	        (this.Cc = !0));
 	  }
-	  vd() {
-	    return this.Zc > 0;
+	  Pc() {
+	    return this.yc > 0;
 	  }
-	  pd(t = 1e3 * this.bE) {
-	    this.ld ||
-	      (this.gd(),
-	      (this.nd = window.setTimeout(() => {
+	  Ic(t = 1e3 * this.IS) {
+	    this.qc ||
+	      (this.Fc(),
+	      (this.Dc = window.setTimeout(() => {
 	        if (document.hidden) {
 	          const t = "visibilitychange",
 	            i = () => {
 	              document.hidden ||
-	                (document.removeEventListener(t, i, !1), this.fd());
+	                (document.removeEventListener(t, i, !1), this.Lc());
 	            };
 	          document.addEventListener(t, i, !1);
-	        } else this.fd();
+	        } else this.Lc();
 	      }, t)),
-	      (this.sd = t));
+	      (this.jc = t));
 	  }
-	  gd() {
-	    null != this.nd && (clearTimeout(this.nd), (this.nd = null));
+	  Fc() {
+	    null != this.Dc && (clearTimeout(this.Dc), (this.Dc = null));
 	  }
 	  initialize() {
-	    (this.ld = !1), this.pd();
+	    (this.qc = !1), this.Ic();
 	  }
 	  destroy() {
-	    this.hd.removeAllSubscriptions(),
-	      this.hl.Gh(),
-	      this.gd(),
-	      (this.ld = !0),
-	      this.fd(void 0, !1, void 0, void 0, void 0, void 0, !0),
-	      (this.nd = null),
-	      (this.ud = !1);
+	    this.Ac.removeAllSubscriptions(),
+	      this.Gh.xh(),
+	      this.Fc(),
+	      (this.qc = !0),
+	      this.Lc(void 0, !1, void 0, void 0, void 0, void 0, !0),
+	      (this.Dc = null),
+	      (this.Cc = !1);
 	  }
 	  rn(t) {
-	    return this.ud ? (t(), null) : this.hd.Rt(t);
+	    return this.Cc ? (t(), null) : this.Ac.Kt(t);
 	  }
 	  openSession() {
-	    const t = this.C.yt() !== this.C.el();
-	    t && (this.B.hE(STORAGE_KEYS.Ou.tl), this.B.hE(STORAGE_KEYS.Ou.Cu)),
-	      this.fd(!1, void 0, () => {
-	        t && (this.B.zt(STORAGE_KEYS.ft.vo), this.B.zt(STORAGE_KEYS.ft.Dt));
+	    const t = this.j.kt() !== this.j.el();
+	    t && (this.C.cS(STORAGE_KEYS.Ou.Wh), this.C.cS(STORAGE_KEYS.Ou.Cu)),
+	      this.Lc(!1, void 0, () => {
+	        t && (this.C.Qt(STORAGE_KEYS.Tt.jo), this.C.Qt(STORAGE_KEYS.Tt.Wt));
 	      }),
-	      this.Ya(),
+	      this.Sa(),
 	      t &&
 	        Promise.resolve().then(function () { return pushManagerFactory; }).then((t) => {
-	          if (this.ld) return;
+	          if (this.qc) return;
 	          const i = t.default.ra();
 	          if (
 	            null != i &&
-	            (vt$1.isPushPermissionGranted() || vt$1.isPushBlocked())
+	            (It$1.isPushPermissionGranted() || It$1.isPushBlocked())
 	          ) {
 	            const t = () => {
 	                i.du()
@@ -3365,56 +3471,52 @@ var mpBrazeKitV6 = (function (exports) {
 	                s && t();
 	              },
 	              h = () => {
-	                const i = this.B.dt(STORAGE_KEYS.ft.Uu);
+	                const i = this.C.Rt(STORAGE_KEYS.Tt.Uu);
 	                (null == i || i) && t();
 	              },
-	              n = et.Us.Rs;
-	            new et(n, E$1).kr(n.Fs.Fu, e, h);
+	              n = et.Ps.$s;
+	            new et(n, E$1).kr(n.Os.Fu, e, h);
 	          }
 	        });
 	  }
-	  bd() {
-	    this.B.zt(STORAGE_KEYS.ft.lo), this.B.zt(STORAGE_KEYS.ft.Ps), this.B.zt(STORAGE_KEYS.ft.Wn);
+	  Nc() {
+	    this.C.Qt(STORAGE_KEYS.Tt.Fo), this.C.Qt(STORAGE_KEYS.Tt.Ci), this.C.Qt(STORAGE_KEYS.Tt.fa);
 	  }
-	  wd() {
-	    var t, i;
-	    this.B.zt(STORAGE_KEYS.ft.Jl), this.B.zt(STORAGE_KEYS.ft.lE);
-	    const e = h.H;
-	    for (const i in e) {
-	      const s = e[i];
-	      this.j.lc(s, null === (t = this.h) || void 0 === t ? void 0 : t.Dc(s));
-	    }
-	    this.j.hc(null === (i = this.h) || void 0 === i ? void 0 : i.qc());
+	  Oc() {
+	    this.C.Qt(STORAGE_KEYS.Tt.Sl),
+	      this.C.Qt(STORAGE_KEYS.Tt.ES),
+	      this.C.Qt(STORAGE_KEYS.Tt.$l),
+	      this.C.Qt(STORAGE_KEYS.Tt.Fl);
 	  }
 	  changeUser(t, i, e) {
-	    const h = this.vs.getUserId();
+	    const h = this.Ss.getUserId();
 	    if (h !== t) {
-	      this.C.jm(),
-	        this.bd(),
+	      this.j.Sm(),
+	        this.Nc(),
 	        removeAllVisibleInAppMessages(),
-	        null != h && this.fd(void 0, !1, void 0, void 0, void 0),
-	        this.vs.Ju(t),
-	        e ? this.hl.setSdkAuthenticationSignature(e) : this.hl.yh();
+	        null != h && this.Lc(void 0, !1, void 0, void 0, void 0),
+	        this.Ss.Ju(t),
+	        e ? this.Gh.setSdkAuthenticationSignature(e) : this.Gh.jh();
 	      for (let t = 0; t < i.length; t++) i[t].changeUser(null == h);
-	      this.j.fo(),
-	        null != h && this.B.zt(STORAGE_KEYS.ft.rE),
-	        this.B.zt(STORAGE_KEYS.ft.ac),
-	        this.B.zt(STORAGE_KEYS.ft.uE),
-	        this.wd(),
+	      this.B.fo(),
+	        null != h && this.C.Qt(STORAGE_KEYS.Tt.eS),
+	        this.C.Qt(STORAGE_KEYS.Tt.Ka),
+	        this.C.Qt(STORAGE_KEYS.Tt.lS),
+	        this.Oc(),
 	        this.openSession(),
 	        E$1.info('Changed user to "' + t + '".');
 	    } else {
 	      let i = "Doing nothing.";
 	      e &&
-	        this.hl.jh() !== e &&
-	        (this.hl.setSdkAuthenticationSignature(e),
+	        this.Gh.kh() !== e &&
+	        (this.Gh.setSdkAuthenticationSignature(e),
 	        (i = "Updated SDK authentication signature")),
 	        E$1.info(`Current user is already ${t}. ${i}`);
 	    }
 	  }
 	  requestImmediateDataFlush(t) {
-	    this.gd(), this.C.el();
-	    this.fd(
+	    this.Fc(), this.j.el();
+	    this.Lc(
 	      void 0,
 	      void 0,
 	      void 0,
@@ -3425,27 +3527,27 @@ var mpBrazeKitV6 = (function (exports) {
 	      !0,
 	    );
 	  }
-	  yr(t, i) {
-	    this.C.el(),
+	  Ar(t, i) {
+	    this.j.el(),
 	      E$1.info("Requesting explicit trigger refresh."),
-	      this.fd(!0, void 0, t, i);
+	      this.Lc(!0, void 0, t, i);
 	  }
 	  Gu(t, i) {
-	    const e = f.kd,
+	    const e = p.Uc,
 	      h = { a: t, l: i },
-	      n = v$1.lt(e, h);
+	      n = v$1.wt(e, h);
 	    return (
-	      n && (E$1.info(`Logged alias ${t} with label ${i}`), this.B.bt(STORAGE_KEYS.ft.uE, h)),
+	      n && (E$1.info(`Logged alias ${t} with label ${i}`), this.C.It(STORAGE_KEYS.Tt.lS, h)),
 	      n
 	    );
 	  }
 	  Mu(t, i, s) {
 	    if (this.h.qu(i))
 	      return (
-	        E$1.info(`Custom Attribute "${i}" is blocklisted, ignoring.`), new H()
+	        E$1.info(`Custom Attribute "${i}" is blocklisted, ignoring.`), new L()
 	      );
 	    const e = { key: i, value: s },
-	      h = v$1.lt(t, e);
+	      h = v$1.wt(t, e);
 	    if (h) {
 	      const t = "object" == typeof s ? JSON.stringify(s, null, 2) : s;
 	      E$1.info(`Logged custom attribute: ${i} with value: ${t}`);
@@ -3457,57 +3559,57 @@ var mpBrazeKitV6 = (function (exports) {
 	    null != e && (o.altitude = e),
 	      null != h && (o.ll_accuracy = h),
 	      null != n && (o.alt_accuracy = n);
-	    const r = v$1.lt(f.yd, o, t || void 0);
+	    const r = v$1.wt(p.Bc, o, t || void 0);
 	    return (
 	      r &&
 	        E$1.info(`Set user last known location as ${JSON.stringify(o, null, 2)}`),
 	      r
 	    );
 	  }
-	  $r(t, i) {
-	    const s = this.C.el();
-	    return new De(this.vs.getUserId(), f.jd, t, s, { cid: i });
+	  Fr(t, i) {
+	    const s = this.j.el();
+	    return new Ie(this.Ss.getUserId(), p.Jc, t, s, { cid: i });
 	  }
-	  Sd(t, i) {
+	  Kc(t, i) {
 	    return new et(t, i);
 	  }
-	  Ya() {
-	    const t = et.Us.Rs;
-	    this.Sd(t, E$1).setItem(t.Fs.Ze, 1, {
+	  Sa() {
+	    const t = et.Ps.$s;
+	    this.Kc(t, E$1).setItem(t.Os.wn, 1, {
 	      baseUrl: this.baseUrl,
 	      data: { api_key: this.tu, device_id: this.eu.ve().id },
-	      userId: this.vs.getUserId(),
-	      sdkAuthEnabled: this.hl.wh(),
+	      userId: this.Ss.getUserId(),
+	      sdkAuthEnabled: this.Gh.Fh(),
 	    });
 	  }
-	  Fr(t) {
+	  Dr(t) {
 	    for (const i of t)
-	      if (i.api_key === this.tu) this.j.kl(i.events, i.attributes);
+	      if (i.api_key === this.tu) this.B.Ya(i.events, i.attributes);
 	      else {
-	        const t = et.Us.Rs;
-	        new et(t, E$1).setItem(t.Fs.zr, P$1.se(), i);
+	        const t = et.Ps.$s;
+	        new et(t, E$1).setItem(t.Os.Br, V$1.de(), i);
 	      }
 	  }
 	  Na(t, i, s) {
 	    if (this.h.qu(t))
 	      return (
-	        E$1.info(`Custom Attribute "${t}" is blocklisted, ignoring.`), new H()
+	        E$1.info(`Custom Attribute "${t}" is blocklisted, ignoring.`), new L()
 	      );
 	    let e, h;
 	    return (
 	      null === i && null === s
-	        ? ((e = f.Ad), (h = { key: t }))
-	        : ((e = f.Dd), (h = { key: t, latitude: i, longitude: s })),
-	      v$1.lt(e, h)
+	        ? ((e = p.Wc), (h = { key: t }))
+	        : ((e = p.Gc), (h = { key: t, latitude: i, longitude: s })),
+	      v$1.wt(e, h)
 	    );
 	  }
-	  Ra(t, i) {
+	  Ia(t, i) {
 	    const s = { group_id: t, status: i };
-	    return v$1.lt(f.$d, s);
+	    return v$1.wt(p.Xc, s);
 	  }
 	}
 
-	class li {
+	class di {
 	  constructor(
 	    t = 0,
 	    i = [],
@@ -3521,87 +3623,78 @@ var mpBrazeKitV6 = (function (exports) {
 	    o = null,
 	    u = null,
 	    c = null,
+	    d = null,
 	  ) {
-	    (this.kc = t),
-	      (this.Ic = i),
-	      (this.Kc = s),
-	      (this.Pc = h),
-	      (this.Oc = e),
-	      (this.xc = l),
-	      (this.Gc = r),
+	    (this.nc = t),
+	      (this.ac = i),
+	      (this.hc = s),
+	      (this.cc = h),
+	      (this.mc = e),
+	      (this.uc = l),
+	      (this.oc = r),
 	      (this.Xr = n),
-	      (this.Nc = a),
+	      (this.lc = a),
 	      (this.banners = o),
 	      (this.dust = u),
-	      (this.Hc = c),
-	      (this.kc = t),
-	      (this.Ic = i),
-	      (this.Kc = s),
-	      (this.Pc = h),
-	      (this.Oc = e),
-	      (this.xc = l),
-	      (this.Gc = r),
-	      (this.Xr = n),
-	      (this.Nc = a),
-	      (this.banners = o),
-	      (this.dust = u),
-	      (this.Hc = c);
+	      (this.fc = c),
+	      (this.Rc = d);
 	  }
-	  gt() {
+	  qt() {
 	    return {
-	      s: "6.5.0",
-	      l: this.kc,
-	      e: this.Ic,
-	      a: this.Kc,
-	      p: this.Pc,
-	      m: this.Oc,
-	      v: this.xc,
-	      c: this.Gc,
+	      s: "6.8.0",
+	      l: this.nc,
+	      e: this.ac,
+	      a: this.hc,
+	      p: this.cc,
+	      m: this.mc,
+	      v: this.uc,
+	      c: this.oc,
 	      f: this.Xr,
-	      grl: this.Nc,
+	      grl: this.lc,
 	      b: this.banners,
 	      d: this.dust,
-	      rb: this.Hc,
+	      rb: this.fc,
+	      mst: this.Rc,
 	    };
 	  }
 	  static _u(t) {
 	    let i = t.l;
 	    return (
-	      "6.5.0" !== t.s && (i = 0),
-	      new li(i, t.e, t.a, t.p, t.m, t.v, t.c, t.f, t.grl, t.b, t.d, t.rb)
+	      "6.8.0" !== t.s && (i = 0),
+	      new di(i, t.e, t.a, t.p, t.m, t.v, t.c, t.f, t.grl, t.b, t.d, t.rb, t.mst)
 	    );
 	  }
 	}
 
-	class Bt {
+	class Yt {
 	  constructor(t) {
-	    (this.B = t),
-	      (this.B = t),
-	      (this.Ec = new m()),
-	      (this.Bc = new m()),
-	      (this.wc = new m()),
-	      (this.Cc = new m()),
-	      (this.yc = new m()),
-	      (this.Fc = null),
-	      (this.Lc = null);
+	    (this.C = t),
+	      (this.C = t),
+	      (this.Vl = new f()),
+	      (this.Jl = new f()),
+	      (this.Ql = new f()),
+	      (this.Wl = new f()),
+	      (this.Yl = new f()),
+	      (this.Zl = null),
+	      (this.tc = null);
 	  }
-	  Mc() {
-	    if (null == this.Lc) {
-	      const t = this.B.dt(STORAGE_KEYS.ft.jc);
-	      this.Lc = null != t ? li._u(t) : new li();
+	  ec() {
+	    if (null == this.tc) {
+	      const t = this.C.Rt(STORAGE_KEYS.Tt.sc);
+	      this.tc = null != t ? di._u(t) : new di();
 	    }
-	    return this.Lc;
+	    return this.tc;
 	  }
-	  xt() {
-	    return this.Mc().kc;
+	  Ot() {
+	    return this.ec().nc;
 	  }
-	  Sc(t) {
+	  rc(t) {
 	    var i, e, n, r;
 	    if (null != t && null != t.config) {
 	      const l = t.config;
-	      if (l.time > this.Mc().kc) {
-	        const t = (t) => (null == t ? this.Mc().Nc : t),
-	          u = new li(
+	      if (l.time > this.ec().nc) {
+	        const t = (t) => (null == t ? this.ec().lc : t),
+	          u = new di(
 	            l.time,
 	            l.events_blacklist,
 	            l.attributes_blacklist,
@@ -3614,246 +3707,242 @@ var mpBrazeKitV6 = (function (exports) {
 	            l.banners,
 	            l.dust,
 	            l.request_backoff,
+	            l.minimum_session_timeout,
 	          );
 	        let o = !1;
-	        null != u.xc && this.ju() !== u.xc && (o = !0);
+	        null != u.uc && this.ju() !== u.uc && (o = !0);
 	        let a = !1;
-	        null != u.Gc.enabled && this.wi() !== u.Gc.enabled && (a = !0);
+	        null != u.oc.enabled && this.Bi() !== u.oc.enabled && (a = !0);
 	        let h = !1;
-	        null != u.Xr.enabled && this.Yr() !== u.Xr.enabled && (h = !0);
+	        null != u.Xr.enabled && this.lo() !== u.Xr.enabled && (h = !0);
 	        let c = !1;
 	        null !=
 	          (null === (i = u.banners) || void 0 === i ? void 0 : i.enabled) &&
-	          this.kt() !==
+	          this.Jt() !==
 	            (null === (e = u.banners) || void 0 === e ? void 0 : e.enabled) &&
 	          (c = !0);
 	        let d = !1;
 	        null != (null === (n = u.dust) || void 0 === n ? void 0 : n.enabled) &&
-	          this.Ye() !==
+	          this.vn() !==
 	            (null === (r = u.dust) || void 0 === r ? void 0 : r.enabled) &&
 	          (d = !0),
-	          (this.Lc = u),
-	          this.B.bt(STORAGE_KEYS.ft.jc, u.gt()),
-	          o && this.Ec.L(),
-	          a && this.Bc.L(),
-	          h && this.wc.L(),
-	          c && this.Cc.L(),
-	          d && this.yc.L();
+	          (this.tc = u),
+	          this.C.It(STORAGE_KEYS.Tt.sc, u.qt()),
+	          o && this.Vl.A(),
+	          a && this.Jl.A(),
+	          h && this.Ql.A(),
+	          c && this.Wl.A(),
+	          d && this.Yl.A();
 	      }
 	    }
 	  }
 	  xu(t) {
-	    const i = this.Ec.Rt(t);
-	    return this.Fc && this.Ec.removeSubscription(this.Fc), (this.Fc = i), i;
+	    const i = this.Vl.Kt(t);
+	    return this.Zl && this.Vl.removeSubscription(this.Zl), (this.Zl = i), i;
 	  }
-	  Ci(t) {
-	    return this.Bc.Rt(t);
+	  Mi(t) {
+	    return this.Jl.Kt(t);
 	  }
-	  jo(t) {
-	    return this.wc.Rt(t);
+	  bo(t) {
+	    return this.Ql.Kt(t);
 	  }
-	  P(t) {
-	    return this.Cc.Rt(t);
+	  V(t) {
+	    return this.Wl.Kt(t);
 	  }
 	  Tr(t) {
-	    return this.yc.Rt(t);
+	    return this.Yl.Kt(t);
 	  }
-	  Ce(t) {
-	    return -1 !== this.Mc().Ic.indexOf(t);
+	  $e(t) {
+	    return -1 !== this.ec().ac.indexOf(t);
 	  }
 	  qu(t) {
-	    return -1 !== this.Mc().Kc.indexOf(t);
+	    return -1 !== this.ec().hc.indexOf(t);
 	  }
-	  Dr(t) {
-	    return -1 !== this.Mc().Pc.indexOf(t);
+	  $r(t) {
+	    return -1 !== this.ec().cc.indexOf(t);
 	  }
-	  _c() {
-	    return this.Mc().Oc;
+	  dc() {
+	    return this.ec().mc;
 	  }
 	  ju() {
-	    return this.Mc().xc;
+	    return this.ec().uc;
 	  }
-	  wi() {
-	    return this.Mc().Gc.enabled || !1;
+	  Bi() {
+	    return this.ec().oc.enabled || !1;
 	  }
-	  Vc() {
-	    const t = this.Mc().Nc;
+	  vc() {
+	    const t = this.ec().lc;
 	    return !(!t || null == t.enabled) && t.enabled;
 	  }
-	  qc() {
-	    if (!this.Vc()) return -1;
-	    const t = this.Mc().Nc;
+	  Hl() {
+	    if (!this.vc()) return -1;
+	    const t = this.ec().lc;
 	    return null == t.capacity || t.capacity < 10 ? -1 : t.capacity;
 	  }
-	  Ac() {
-	    if (!this.Vc()) return -1;
-	    const t = this.Mc().Nc;
+	  Ol() {
+	    if (!this.vc()) return -1;
+	    const t = this.ec().lc;
 	    return null == t.refill_rate || t.refill_rate <= 0 ? -1 : t.refill_rate;
 	  }
-	  zc(t) {
-	    const i = this.Mc().Nc.endpoint_overrides;
+	  gc(t) {
+	    const i = this.ec().lc.endpoint_overrides;
 	    return null == i ? null : i[t];
 	  }
-	  Dc(t) {
-	    const i = this.zc(t);
+	  Gl(t) {
+	    const i = this.gc(t);
 	    return null == i || isNaN(i.capacity) || i.capacity <= 0 ? -1 : i.capacity;
 	  }
-	  Tc(t) {
-	    const i = this.zc(t);
+	  _l(t) {
+	    const i = this.gc(t);
 	    return null == i || isNaN(i.refill_rate) || i.refill_rate <= 0
 	      ? -1
 	      : i.refill_rate;
 	  }
-	  Yr() {
-	    return this.Mc().Xr.enabled && null == this.yo()
-	      ? (v$1.lt(f.wl, { e: "Missing feature flag refresh_rate_limit." }), !1)
-	      : this.Mc().Xr.enabled || !1;
+	  lo() {
+	    return this.ec().Xr.enabled && null == this.Ro()
+	      ? (v$1.wt(p.Va, { e: "Missing feature flag refresh_rate_limit." }), !1)
+	      : this.ec().Xr.enabled || !1;
 	  }
-	  yo() {
-	    return this.Mc().Xr.refresh_rate_limit;
+	  Ro() {
+	    return this.ec().Xr.refresh_rate_limit;
 	  }
-	  kt() {
+	  Jt() {
 	    var t;
 	    return (
-	      (null === (t = this.Mc().banners) || void 0 === t ? void 0 : t.enabled) ||
+	      (null === (t = this.ec().banners) || void 0 === t ? void 0 : t.enabled) ||
 	      null
 	    );
 	  }
-	  oe() {
+	  re() {
 	    var t;
 	    return (
-	      (null === (t = this.Mc().banners) || void 0 === t
+	      (null === (t = this.ec().banners) || void 0 === t
 	        ? void 0
 	        : t.max_placements) || 0
 	    );
 	  }
-	  Ye() {
-	    var t;
-	    return (
-	      (null === (t = this.Mc().dust) || void 0 === t ? void 0 : t.enabled) || !1
-	    );
-	  }
-	  st() {
+	  Xt() {
 	    var t;
 	    const i =
-	      null === (t = this.Mc().Hc) || void 0 === t
+	      null === (t = this.ec().banners) || void 0 === t
+	        ? void 0
+	        : t.dismissals_cache_size;
+	    return null != i && "number" == typeof i && i > 0 ? i : DISMISSALS_CACHE_SIZE_DEFAULT;
+	  }
+	  vn() {
+	    var t;
+	    return (
+	      (null === (t = this.ec().dust) || void 0 === t ? void 0 : t.enabled) || !1
+	    );
+	  }
+	  vt() {
+	    var t;
+	    const i =
+	      null === (t = this.ec().fc) || void 0 === t
 	        ? void 0
 	        : t.min_sleep_duration_ms;
 	    return null != i ? i : REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT;
 	  }
-	  it() {
+	  gt() {
 	    var t;
 	    const i =
-	      null === (t = this.Mc().Hc) || void 0 === t ? void 0 : t.scale_factor;
+	      null === (t = this.ec().fc) || void 0 === t ? void 0 : t.scale_factor;
 	    return null != i ? i : REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT;
 	  }
-	  nt() {
+	  bt() {
 	    var t;
 	    const i =
-	      null === (t = this.Mc().Hc) || void 0 === t
+	      null === (t = this.ec().fc) || void 0 === t
 	        ? void 0
 	        : t.max_sleep_duration_ms;
 	    return null != i ? i : REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
 	  }
+	  bc() {
+	    return this.ec().Rc;
+	  }
 	}
 
-	class Vt {
+	const DEFAULT_MINIMUM_SESSION_TIMEOUT_IN_MS = 1e4;
+
+	class Xt {
 	  constructor(s, t, i, e) {
-	    (this.B = s),
-	      (this.vs = t),
+	    (this.C = s),
+	      (this.Ss = t),
 	      (this.h = i),
 	      (this.tm = e),
-	      (this.B = s),
-	      (this.vs = t),
-	      (this.h = i),
-	      (this.im = 1e3),
+	      (this.C = s),
+	      (this.Ss = t),
+	      (this.h = i);
+	    const n = this.h.bc();
+	    (this.im = n ? 1e3 * n : DEFAULT_MINIMUM_SESSION_TIMEOUT_IN_MS),
 	      (null == e || isNaN(e)) && (e = 1800),
 	      e < this.im / 1e3 &&
-	        (E$1.info(
+	        E$1.info(
 	          "Specified session timeout of " +
 	            e +
 	            "s is too small, using the minimum session timeout of " +
 	            this.im / 1e3 +
 	            "s instead.",
 	        ),
-	        (e = this.im / 1e3)),
-	      (this.tm = e);
+	      (this.tm = Math.max(e, this.im / 1e3));
 	  }
 	  nm(s, t) {
-	    return new De(this.vs.getUserId(), f.hm, s, t.Tu, { d: convertMsToSeconds(s - t.lm) });
+	    return new Ie(this.Ss.getUserId(), p.hm, s, t.Tu, { d: convertMsToSeconds(s - t.lm) });
 	  }
-	  yt() {
-	    const t = this.B.$u(STORAGE_KEYS.Ou.um);
+	  al() {
+	    return this.C.$u(STORAGE_KEYS.Ou.um);
+	  }
+	  kt() {
+	    const t = this.C.$u(STORAGE_KEYS.Ou.um);
 	    return null == t ? null : t.Tu;
 	  }
 	  am() {
 	    const t = new Date().valueOf(),
-	      i = this.h._c();
+	      i = this.h.dc();
 	    if (null == i) return !1;
-	    const e = this.B.dt(STORAGE_KEYS.ft.dm),
+	    const e = this.C.Rt(STORAGE_KEYS.Tt.dm),
 	      n = null == e || t - e > 1e3 * i;
-	    return n && this.B.bt(STORAGE_KEYS.ft.dm, t), n;
+	    return n && this.C.It(STORAGE_KEYS.Tt.dm, t), n;
 	  }
-	  fm(s, t) {
-	    return null == t || null == t.pm || (!(s - t.lm < this.im) && t.pm < s);
+	  ul(s, t) {
+	    return null == t || null == t.fm || (!(s - t.lm < this.im) && t.fm < s);
 	  }
 	  el() {
 	    const t = new Date().valueOf(),
 	      i = t + 1e3 * this.tm,
-	      e = this.B.$u(STORAGE_KEYS.Ou.um);
-	    if (this.fm(t, e)) {
+	      e = this.C.$u(STORAGE_KEYS.Ou.um);
+	    if (this.ul(t, e)) {
 	      let n = "Generating session start event with time " + t;
 	      if (null != e) {
-	        let s = e.gm;
+	        let s = e.pm;
 	        s - e.lm < this.im && (s = e.lm + this.im),
-	          this.B.wm(this.nm(s, e)),
+	          this.C.gm(this.nm(s, e)),
 	          (n += " (old session ended " + s + ")");
 	      }
 	      (n += ". Will expire " + i.valueOf()), E$1.info(n);
-	      const o = new _t(P$1.se(), i);
-	      this.B.wm(new De(this.vs.getUserId(), f.Sm, t, o.Tu)),
-	        this.B.Iu(STORAGE_KEYS.Ou.um, o);
-	      return null == this.B.dt(STORAGE_KEYS.ft.dm) && this.B.bt(STORAGE_KEYS.ft.dm, t), o.Tu;
+	      const r = new _t(V$1.de(), i);
+	      this.C.gm(new Ie(this.Ss.getUserId(), p.wm, t, r.Tu)),
+	        this.C.Iu(STORAGE_KEYS.Ou.um, r);
+	      return null == this.C.Rt(STORAGE_KEYS.Tt.dm) && this.C.It(STORAGE_KEYS.Tt.dm, t), r.Tu;
 	    }
-	    if (null != e) return (e.gm = t), (e.pm = i), this.B.Iu(STORAGE_KEYS.Ou.um, e), e.Tu;
+	    if (null != e) return (e.pm = t), (e.fm = i), this.C.Iu(STORAGE_KEYS.Ou.um, e), e.Tu;
 	  }
-	  jm() {
-	    const t = this.B.$u(STORAGE_KEYS.Ou.um);
+	  Sm() {
+	    const t = this.C.$u(STORAGE_KEYS.Ou.um);
 	    null != t &&
-	      (this.B.xm(STORAGE_KEYS.Ou.um), this.B.wm(this.nm(new Date().valueOf(), t)));
+	      (this.C.jm(STORAGE_KEYS.Ou.um), this.C.gm(this.nm(new Date().valueOf(), t)));
 	  }
 	}
 
-	const Kt = {
-	  _l: function (e, o = !1) {
-	    let t = !1;
-	    try {
-	      if (localStorage && localStorage.getItem)
-	        try {
-	          localStorage.setItem(STORAGE_KEYS.ft.Qc, "true"),
-	            localStorage.getItem(STORAGE_KEYS.ft.Qc) &&
-	              (localStorage.removeItem(STORAGE_KEYS.ft.Qc), (t = !0));
-	        } catch (e) {
-	          if (
-	            !(
-	              e instanceof Error &&
-	              ("QuotaExceededError" === e.name ||
-	                "NS_ERROR_DOM_QUOTA_REACHED" === e.name) &&
-	              localStorage.length > 0
-	            )
-	          )
-	            throw e;
-	          t = !0;
-	        }
-	    } catch (e) {
-	      E$1.info("Local Storage not supported!");
-	    }
-	    const r = Kt.Uc(),
-	      a = new ee.Jc(e, r && !o, t);
-	    let n;
-	    return (n = t ? new ee.Wc(e) : new ee.Xc()), new ee(a, n);
+	const Zt = {
+	  rl: function (o, t = !1, e) {
+	    const r = Zt.Sc(),
+	      a = Zt.sl(),
+	      n = new ne.Ec(o, r && !t, a, e);
+	    let c;
+	    return (c = a ? new ne.wc(o) : new ne._c()), new ne(n, c);
 	  },
-	  Uc: function () {
+	  Sc: function () {
 	    return (
 	      navigator.cookieEnabled ||
 	      ("cookie" in document &&
@@ -3861,6 +3950,32 @@ var mpBrazeKitV6 = (function (exports) {
 	          (document.cookie = "test").indexOf.call(document.cookie, "test") >
 	            -1))
 	    );
+	  },
+	  sl: function () {
+	    let o = !1;
+	    try {
+	      if (localStorage && localStorage.getItem)
+	        try {
+	          localStorage.setItem(STORAGE_KEYS.Tt.xc, "true"),
+	            localStorage.getItem(STORAGE_KEYS.Tt.xc)
+	              ? (localStorage.removeItem(STORAGE_KEYS.Tt.xc), (o = !0))
+	              : (o = !1);
+	        } catch (t) {
+	          if (
+	            !(
+	              t instanceof Error &&
+	              ("QuotaExceededError" === t.name ||
+	                "NS_ERROR_DOM_QUOTA_REACHED" === t.name) &&
+	              localStorage.length > 0
+	            )
+	          )
+	            throw t;
+	          o = !0;
+	        }
+	    } catch (o) {
+	      E$1.info("Local Storage not supported!");
+	    }
+	    return o;
 	  },
 	};
 
@@ -3872,16 +3987,16 @@ var mpBrazeKitV6 = (function (exports) {
 	      (this.messageExtras = t),
 	      (this.extras = {}),
 	      (this.isControl = !0),
-	      (this.Gt = !1);
+	      (this.Zt = !1);
 	  }
 	  static fromJson(s) {
 	    return new ControlMessage(s.trigger_id, s.message_extras);
 	  }
-	  Wt() {
-	    return !this.Gt && ((this.Gt = !0), !0);
+	  gs() {
+	    return !this.Zt && ((this.Zt = !0), !0);
 	  }
 	  sm() {
-	    return this.Gt;
+	    return this.Zt;
 	  }
 	}
 
@@ -3904,7 +4019,7 @@ var mpBrazeKitV6 = (function (exports) {
 	  );
 	}
 	const DOMUtils = { lp: null, td: _isInView };
-	const DIRECTIONS = { Uo: "up", Vo: "down", de: "left", ce: "right" };
+	const DIRECTIONS = { Uo: "up", Vo: "down", ie: "left", ne: "right" };
 	function supportsPassive() {
 	  if (null == DOMUtils.lp) {
 	    DOMUtils.lp = !1;
@@ -3948,7 +4063,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      const l = s - o.touches[0].clientX,
 	        u = i - o.touches[0].clientY;
 	      Math.abs(l) > Math.abs(u) && Math.abs(l) >= 25
-	        ? (((l > 0 && n === DIRECTIONS.de) || (l < 0 && n === DIRECTIONS.ce)) &&
+	        ? (((l > 0 && n === DIRECTIONS.ie) || (l < 0 && n === DIRECTIONS.ne)) &&
 	            e(o),
 	          (s = null),
 	          (i = null))
@@ -3975,7 +4090,7 @@ var mpBrazeKitV6 = (function (exports) {
 	  );
 	}
 
-	const KeyCodes = { Ho: 32, Wo: 9, Go: 13, Ih: 27 };
+	const KeyCodes = { Ao: 32, Wo: 9, Lo: 13, rh: 27 };
 
 	const isIFrame = (e) => null !== e && "IFRAME" === e.tagName;
 
@@ -3986,125 +4101,125 @@ var mpBrazeKitV6 = (function (exports) {
 	    i,
 	    h,
 	    e,
-	    E,
 	    n,
-	    T,
-	    o,
 	    r,
+	    o,
 	    l,
 	    u,
 	    a,
-	    A,
-	    I,
+	    m,
 	    c,
-	    O,
-	    L,
-	    _,
-	    N,
-	    R,
-	    S,
-	    M,
-	    D,
-	    C,
 	    d,
-	    U,
-	    b,
-	    P,
 	    p,
-	    f,
-	    G,
+	    b,
+	    g,
+	    v,
+	    I,
+	    j,
+	    k,
+	    w,
+	    y,
+	    S,
+	    T,
+	    x,
+	    E,
+	    H,
+	    M,
+	    C,
+	    D,
+	    z,
 	  ) {
 	    (this.message = t),
 	      (this.messageAlignment = s),
 	      (this.slideFrom = i),
 	      (this.extras = h),
 	      (this.triggerId = e),
-	      (this.clickAction = E),
-	      (this.uri = n),
-	      (this.openTarget = T),
-	      (this.dismissType = o),
-	      (this.duration = r),
-	      (this.icon = l),
-	      (this.imageUrl = u),
-	      (this.imageStyle = a),
-	      (this.iconColor = A),
-	      (this.iconBackgroundColor = I),
-	      (this.backgroundColor = c),
-	      (this.textColor = O),
-	      (this.closeButtonColor = L),
-	      (this.animateIn = _),
-	      (this.animateOut = N),
-	      (this.header = R),
-	      (this.headerAlignment = S),
-	      (this.headerTextColor = M),
-	      (this.frameColor = D),
-	      (this.buttons = C),
-	      (this.cropType = d),
-	      (this.orientation = U),
-	      (this.htmlId = b),
-	      (this.css = P),
-	      (this.messageExtras = p),
-	      (this.language = f),
-	      (this.altImageText = G),
+	      (this.clickAction = n),
+	      (this.uri = r),
+	      (this.openTarget = o),
+	      (this.dismissType = l),
+	      (this.duration = u),
+	      (this.icon = a),
+	      (this.imageUrl = m),
+	      (this.imageStyle = c),
+	      (this.iconColor = d),
+	      (this.iconBackgroundColor = p),
+	      (this.backgroundColor = b),
+	      (this.textColor = g),
+	      (this.closeButtonColor = v),
+	      (this.animateIn = I),
+	      (this.animateOut = j),
+	      (this.header = k),
+	      (this.headerAlignment = w),
+	      (this.headerTextColor = y),
+	      (this.frameColor = S),
+	      (this.buttons = T),
+	      (this.cropType = x),
+	      (this.orientation = E),
+	      (this.htmlId = H),
+	      (this.css = M),
+	      (this.messageExtras = C),
+	      (this.language = D),
+	      (this.altImageText = z),
 	      (this.message = t),
-	      (this.messageAlignment = s || InAppMessage.TextAlignment.CENTER),
-	      (this.duration = r || 5e3),
-	      (this.slideFrom = i || InAppMessage.SlideFrom.BOTTOM),
+	      (this.messageAlignment = s || IamTextAlignment.CENTER),
+	      (this.duration = u || 5e3),
+	      (this.slideFrom = i || IamSlideFrom.BOTTOM),
 	      (this.extras = h || {}),
 	      (this.triggerId = e),
-	      (this.clickAction = E || InAppMessage.ClickAction.NONE),
-	      (this.uri = n),
-	      (this.openTarget = T || InAppMessage.OpenTarget.NONE),
-	      (this.dismissType = o || InAppMessage.DismissType.AUTO_DISMISS),
-	      (this.icon = l),
-	      (this.imageUrl = u),
-	      (this.imageStyle = a || InAppMessage.ImageStyle.TOP),
-	      (this.iconColor = A || InAppMessage.th.ih),
-	      (this.iconBackgroundColor = I || InAppMessage.th.sh),
-	      (this.backgroundColor = c || InAppMessage.th.ih),
-	      (this.textColor = O || InAppMessage.th.hh),
-	      (this.closeButtonColor = L || InAppMessage.th.eh),
-	      (this.animateIn = _),
+	      (this.clickAction = n || IamClickAction.NONE),
+	      (this.uri = r),
+	      (this.openTarget = o || IamOpenTarget.NONE),
+	      (this.dismissType = l || IamDismissType.AUTO_DISMISS),
+	      (this.icon = a),
+	      (this.imageUrl = m),
+	      (this.imageStyle = c || IamImageStyle.TOP),
+	      (this.iconColor = d || IamColors.AE),
+	      (this.iconBackgroundColor = p || IamColors._E),
+	      (this.backgroundColor = b || IamColors.AE),
+	      (this.textColor = g || IamColors.IE),
+	      (this.closeButtonColor = v || IamColors.NE),
+	      (this.animateIn = I),
 	      null == this.animateIn && (this.animateIn = !0),
-	      (this.animateOut = N),
+	      (this.animateOut = j),
 	      null == this.animateOut && (this.animateOut = !0),
-	      (this.header = R),
-	      (this.headerAlignment = S || InAppMessage.TextAlignment.CENTER),
-	      (this.headerTextColor = M || InAppMessage.th.hh),
-	      (this.frameColor = D || InAppMessage.th.Eh),
-	      (this.buttons = C || []),
-	      (this.cropType = d || InAppMessage.CropType.FIT_CENTER),
-	      (this.orientation = U),
-	      (this.htmlId = b),
-	      (this.css = P),
+	      (this.header = k),
+	      (this.headerAlignment = w || IamTextAlignment.CENTER),
+	      (this.headerTextColor = y || IamColors.IE),
+	      (this.frameColor = S || IamColors.SE),
+	      (this.buttons = T || []),
+	      (this.cropType = x || IamCropType.FIT_CENTER),
+	      (this.orientation = E),
+	      (this.htmlId = H),
+	      (this.css = M),
 	      (this.isControl = !1),
-	      (this.messageExtras = p),
-	      (this.language = f),
-	      (this.altImageText = G),
-	      (this.nh = !1),
-	      (this.Gt = !1),
-	      (this.dd = !1),
-	      (this.Th = !1),
-	      (this.qo = null),
+	      (this.messageExtras = C),
+	      (this.language = D),
+	      (this.altImageText = z),
+	      (this.th = !1),
+	      (this.Zt = !1),
+	      (this.rd = !1),
+	      (this.sh = !1),
+	      (this.Eo = null),
 	      (this.$o = null),
-	      (this.ti = new m()),
-	      (this.oh = new m()),
-	      (this.Io = InAppMessage.TextAlignment.CENTER);
+	      (this.ti = new f()),
+	      (this.ih = new f()),
+	      (this.Go = IamTextAlignment.CENTER);
 	  }
 	  subscribeToClickedEvent(t) {
-	    return this.ti.Rt(t);
+	    return this.ti.Kt(t);
 	  }
 	  subscribeToDismissedEvent(t) {
-	    return this.oh.Rt(t);
+	    return this.ih.Kt(t);
 	  }
 	  removeSubscription(t) {
-	    this.ti.removeSubscription(t), this.oh.removeSubscription(t);
+	    this.ti.removeSubscription(t), this.ih.removeSubscription(t);
 	  }
 	  removeAllSubscriptions() {
-	    this.ti.removeAllSubscriptions(), this.oh.removeAllSubscriptions();
+	    this.ti.removeAllSubscriptions(), this.ih.removeAllSubscriptions();
 	  }
 	  closeMessage() {
-	    this.ll(this.qo);
+	    this.tl(this.Eo);
 	  }
 	  zo() {
 	    return !0;
@@ -4112,43 +4227,43 @@ var mpBrazeKitV6 = (function (exports) {
 	  od() {
 	    return this.zo();
 	  }
-	  _o() {
+	  Bo() {
 	    return null != this.htmlId && this.htmlId.length > 4;
 	  }
 	  Mo() {
-	    return this._o() && null != this.css && this.css.length > 0;
+	    return this.Bo() && null != this.css && this.css.length > 0;
 	  }
 	  Oo() {
-	    if (this._o() && this.Mo()) return this.htmlId + "-css";
+	    if (this.Bo() && this.Mo()) return this.htmlId + "-css";
 	  }
-	  Wt() {
-	    return !this.Gt && ((this.Gt = !0), !0);
+	  gs() {
+	    return !this.Zt && ((this.Zt = !0), !0);
 	  }
 	  sm() {
-	    return this.Gt;
+	    return this.Zt;
 	  }
-	  $t(t) {
-	    return !this.dd && ((this.dd = !0), this.ti.L(), !0);
+	  ss(t) {
+	    return !this.rd && ((this.rd = !0), this.ti.A(), !0);
 	  }
-	  Ot() {
-	    return !this.Th && ((this.Th = !0), this.oh.L(), !0);
+	  ls() {
+	    return !this.sh && ((this.sh = !0), this.ih.A(), !0);
 	  }
 	  hide(t) {
 	    if (t && t.parentNode) {
 	      let s = t.closest(".ab-iam-root");
 	      if ((null == s && (s = t), this.zo() && null != s.parentNode)) {
 	        const t = s.parentNode.classList;
-	        t && t.contains(IamStrings.eS) && t.remove(IamStrings.eS),
-	          document.body.removeEventListener("touchmove", InAppMessage.rh);
+	        t && t.contains(IamStrings.TE) && t.remove(IamStrings.TE),
+	          document.body.removeEventListener("touchmove", InAppMessage.hh);
 	      }
-	      s.className = s.className.replace(InAppMessage.lh, InAppMessage.uh);
+	      s.className = s.className.replace(IAM_SHOW_CLASS, IAM_HIDE_CLASS);
 	    }
 	    return this.animateOut || !1;
 	  }
-	  ll(t, s) {
+	  tl(t, s) {
 	    if (null == t) return;
 	    let i;
-	    (this.qo = null),
+	    (this.Eo = null),
 	      (i =
 	        -1 === t.className.indexOf("ab-in-app-message")
 	          ? t.getElementsByClassName("ab-in-app-message")[0]
@@ -4156,9 +4271,9 @@ var mpBrazeKitV6 = (function (exports) {
 	    let h = !1;
 	    i && (h = this.hide(i));
 	    const e = document.body;
-	    let E;
-	    null != e && (E = e.scrollTop);
-	    const n = () => {
+	    let n;
+	    null != e && (n = e.scrollTop);
+	    const r = () => {
 	      if (t && t.parentNode) {
 	        let s = t.closest(".ab-iam-root");
 	        null == s && (s = t), s.parentNode && s.parentNode.removeChild(s);
@@ -4168,45 +4283,45 @@ var mpBrazeKitV6 = (function (exports) {
 	        const t = document.getElementById(i);
 	        t && t.parentNode && t.parentNode.removeChild(t);
 	      }
-	      null != e && "Safari" === ro.browser && (e.scrollTop = E),
-	        s ? s() : this.Ot();
+	      null != e && "Safari" === ro.browser && (e.scrollTop = n),
+	        s ? s() : this.ls();
 	    };
-	    h ? setTimeout(n, InAppMessage.hr) : n(), this.$o && this.$o.focus();
+	    h ? setTimeout(r, IamTiming.gr) : r(), this.$o && this.$o.focus();
 	  }
-	  No() {
+	  Ko() {
 	    return document.createTextNode(this.message || "");
 	  }
-	  Jo(t) {
+	  Ho(t) {
 	    t.setAttribute("alt", this.altImageText || "");
 	  }
-	  static rh(t) {
+	  static hh(t) {
 	    if (t.targetTouches && t.targetTouches.length > 1) return;
 	    const s = t.target;
 	    (s &&
 	      s.classList &&
 	      s.classList.contains("ab-message-text") &&
 	      s.scrollHeight > s.clientHeight) ||
-	      (document.querySelector(`.${IamStrings.eS}`) &&
+	      (document.querySelector(`.${IamStrings.TE}`) &&
 	        t.cancelable &&
 	        t.preventDefault());
 	  }
-	  ah(t) {
+	  eh(t) {
 	    const s = t.parentNode;
 	    this.zo() &&
 	      null != s &&
-	      this.orientation !== InAppMessage.Orientation.LANDSCAPE &&
-	      (null != s.classList && s.classList.add(IamStrings.eS),
+	      this.orientation !== IamOrientation.LANDSCAPE &&
+	      (null != s.classList && s.classList.add(IamStrings.TE),
 	      document.body.addEventListener(
 	        "touchmove",
-	        InAppMessage.rh,
+	        InAppMessage.hh,
 	        !!supportsPassive() && { passive: !1 },
 	      )),
-	      (t.className += " " + InAppMessage.lh);
+	      (t.className += " " + IAM_SHOW_CLASS);
 	  }
-	  static Ah(t) {
+	  static nh(t) {
 	    if (
-	      t.keyCode === KeyCodes.Ih &&
-	      !r.re(D.Oh) &&
+	      t.keyCode === KeyCodes.rh &&
+	      !r.er(U.oh) &&
 	      document.querySelectorAll(".ab-modal-interactions").length > 0
 	    ) {
 	      const t = document.getElementsByClassName("ab-html-message");
@@ -4228,164 +4343,93 @@ var mpBrazeKitV6 = (function (exports) {
 	      }
 	    }
 	  }
-	  Lh() {
-	    this.nh ||
-	      r.re(D.Oh) ||
-	      (document.addEventListener("keydown", InAppMessage.Ah, !1),
-	      r.mh(() => {
-	        document.removeEventListener("keydown", InAppMessage.Ah);
+	  lh() {
+	    this.th ||
+	      r.er(U.oh) ||
+	      (document.addEventListener("keydown", InAppMessage.nh, !1),
+	      r.uh(() => {
+	        document.removeEventListener("keydown", InAppMessage.nh);
 	      }),
-	      (this.nh = !0));
+	      (this.th = !0));
 	  }
-	  gt(t) {
+	  qt(t) {
 	    const s = {};
 	    return t
-	      ? ((s[InAppMessage.ss.pa] = this.message),
-	        (s[InAppMessage.ss.ma] = this.messageAlignment),
-	        (s[InAppMessage.ss._h] = this.slideFrom),
-	        (s[InAppMessage.ss.xs] = this.extras),
-	        (s[InAppMessage.ss.ua] = this.triggerId),
-	        (s[InAppMessage.ss.ca] = this.clickAction),
-	        (s[InAppMessage.ss.URI] = this.uri),
-	        (s[InAppMessage.ss.fa] = this.openTarget),
-	        (s[InAppMessage.ss.da] = this.dismissType),
-	        (s[InAppMessage.ss.la] = this.duration),
-	        (s[InAppMessage.ss.ga] = this.icon),
-	        (s[InAppMessage.ss.ns] = this.imageUrl),
-	        (s[InAppMessage.ss.ja] = this.imageStyle),
-	        (s[InAppMessage.ss.xa] = this.iconColor),
-	        (s[InAppMessage.ss.za] = this.iconBackgroundColor),
-	        (s[InAppMessage.ss.ha] = this.backgroundColor),
-	        (s[InAppMessage.ss.va] = this.textColor),
-	        (s[InAppMessage.ss.wa] = this.closeButtonColor),
-	        (s[InAppMessage.ss.ya] = this.animateIn),
-	        (s[InAppMessage.ss.Sa] = this.animateOut),
-	        (s[InAppMessage.ss.ba] = this.header),
-	        (s[InAppMessage.ss.ka] = this.headerAlignment),
-	        (s[InAppMessage.ss.qa] = this.headerTextColor),
-	        (s[InAppMessage.ss.Aa] = this.frameColor),
-	        (s[InAppMessage.ss.Ba] = this.buttons),
-	        (s[InAppMessage.ss.Ca] = this.cropType),
-	        (s[InAppMessage.ss.Da] = this.orientation),
-	        (s[InAppMessage.ss.Ea] = this.htmlId),
-	        (s[InAppMessage.ss.CSS] = this.css),
-	        (s[InAppMessage.ss.ts] = t),
-	        (s[InAppMessage.ss.Fa] = this.messageExtras),
-	        (s[InAppMessage.ss.LANGUAGE] = this.language),
-	        (s[InAppMessage.ss.ks] = this.altImageText),
+	      ? ((s[IamSerializationKeys.rE] = this.message),
+	        (s[IamSerializationKeys.mE] = this.messageAlignment),
+	        (s[IamSerializationKeys.GE] = this.slideFrom),
+	        (s[IamSerializationKeys.Fs] = this.extras),
+	        (s[IamSerializationKeys.FE] = this.triggerId),
+	        (s[IamSerializationKeys.HE] = this.clickAction),
+	        (s[IamSerializationKeys.URI] = this.uri),
+	        (s[IamSerializationKeys.xE] = this.openTarget),
+	        (s[IamSerializationKeys.BE] = this.dismissType),
+	        (s[IamSerializationKeys.lE] = this.duration),
+	        (s[IamSerializationKeys.bE] = this.icon),
+	        (s[IamSerializationKeys.ys] = this.imageUrl),
+	        (s[IamSerializationKeys.gE] = this.imageStyle),
+	        (s[IamSerializationKeys.YE] = this.iconColor),
+	        (s[IamSerializationKeys.KE] = this.iconBackgroundColor),
+	        (s[IamSerializationKeys.XE] = this.backgroundColor),
+	        (s[IamSerializationKeys.dE] = this.textColor),
+	        (s[IamSerializationKeys.hE] = this.closeButtonColor),
+	        (s[IamSerializationKeys.yE] = this.animateIn),
+	        (s[IamSerializationKeys.uE] = this.animateOut),
+	        (s[IamSerializationKeys.WE] = this.header),
+	        (s[IamSerializationKeys.fE] = this.headerAlignment),
+	        (s[IamSerializationKeys.jE] = this.headerTextColor),
+	        (s[IamSerializationKeys.kE] = this.frameColor),
+	        (s[IamSerializationKeys.vE] = this.buttons),
+	        (s[IamSerializationKeys.wE] = this.cropType),
+	        (s[IamSerializationKeys.zE] = this.orientation),
+	        (s[IamSerializationKeys.VE] = this.htmlId),
+	        (s[IamSerializationKeys.CSS] = this.css),
+	        (s[IamSerializationKeys.xs] = t),
+	        (s[IamSerializationKeys.JE] = this.messageExtras),
+	        (s[IamSerializationKeys.LANGUAGE] = this.language),
+	        (s[IamSerializationKeys.Ks] = this.altImageText),
 	        s)
 	      : s;
 	  }
 	}
-	(InAppMessage.th = {
-	  hh: 4281545523,
-	  ih: 4294967295,
-	  sh: 4278219733,
-	  Nh: 4293914607,
-	  Rh: 4283782485,
-	  Eh: 3224580915,
-	  eh: 4288387995,
-	}),
-	  (InAppMessage.Ao = {
-	    Sh: "hd",
-	    Lo: "ias",
-	    Mh: "of",
-	    Dh: "do",
-	    Ch: "umt",
-	    dh: "tf",
-	    Uh: "te",
-	  }),
-	  (InAppMessage.SlideFrom = { TOP: "TOP", BOTTOM: "BOTTOM" }),
-	  (InAppMessage.ClickAction = { URI: "URI", NONE: "NONE" }),
-	  (InAppMessage.DismissType = {
-	    AUTO_DISMISS: "AUTO_DISMISS",
-	    MANUAL: "SWIPE",
-	  }),
-	  (InAppMessage.OpenTarget = { NONE: "NONE", BLANK: "BLANK" }),
-	  (InAppMessage.ImageStyle = { TOP: "TOP", GRAPHIC: "GRAPHIC" }),
-	  (InAppMessage.Orientation = { PORTRAIT: "PORTRAIT", LANDSCAPE: "LANDSCAPE" }),
-	  (InAppMessage.TextAlignment = {
-	    START: "START",
-	    CENTER: "CENTER",
-	    END: "END",
-	  }),
-	  (InAppMessage.CropType = {
-	    CENTER_CROP: "CENTER_CROP",
-	    FIT_CENTER: "FIT_CENTER",
-	  }),
-	  (InAppMessage.Eo = {
-	    ia: "SLIDEUP",
-	    ta: "MODAL",
-	    Xo: "MODAL_STYLED",
-	    Yn: "FULL",
-	    Zo: "WEB_HTML",
-	    Bo: "HTML",
-	    Yo: "HTML_FULL",
-	  }),
-	  (InAppMessage.hr = 500),
-	  (InAppMessage.bh = 200),
-	  (InAppMessage.lh = "ab-show"),
-	  (InAppMessage.uh = "ab-hide"),
-	  (InAppMessage.ss = {
-	    pa: "m",
-	    ma: "ma",
-	    _h: "sf",
-	    xs: "e",
-	    ua: "ti",
-	    ca: "ca",
-	    URI: "u",
-	    fa: "oa",
-	    da: "dt",
-	    la: "d",
-	    ga: "i",
-	    ns: "iu",
-	    ja: "is",
-	    xa: "ic",
-	    za: "ibc",
-	    ha: "bc",
-	    va: "tc",
-	    wa: "cbc",
-	    ya: "ai",
-	    Sa: "ao",
-	    ba: "h",
-	    ka: "ha",
-	    qa: "htc",
-	    Aa: "fc",
-	    Ba: "b",
-	    Ca: "ct",
-	    Da: "o",
-	    Ea: "hi",
-	    CSS: "css",
-	    ts: "type",
-	    ed: "messageFields",
-	    Fa: "me",
-	    LANGUAGE: "l",
-	    ks: "ia",
-	  });
+	(InAppMessage.ah = IamColors),
+	  (InAppMessage.mh = IamDisplayFailures),
+	  (InAppMessage.SlideFrom = IamSlideFrom),
+	  (InAppMessage.ClickAction = IamClickAction),
+	  (InAppMessage.DismissType = IamDismissType),
+	  (InAppMessage.OpenTarget = IamOpenTarget),
+	  (InAppMessage.ImageStyle = IamImageStyle),
+	  (InAppMessage.Orientation = IamOrientation),
+	  (InAppMessage.TextAlignment = IamTextAlignment),
+	  (InAppMessage.CropType = IamCropType),
+	  (InAppMessage.dh = IamServerTypes),
+	  (InAppMessage.gr = IamTiming.gr),
+	  (InAppMessage.pE = IamTiming.pE),
+	  (InAppMessage.bs = IamSerializationKeys);
 
 	class HtmlMessage extends InAppMessage {
-	  constructor(i, o, d, e, r, t, s, v, n, u, a, c) {
+	  constructor(i, o, r, t, d, s, e, v, n, u, a, c) {
 	    super(
 	      i,
 	      void 0,
 	      void 0,
 	      o,
-	      d,
-	      void 0,
-	      void 0,
-	      void 0,
-	      (e = e || InAppMessage.DismissType.MANUAL),
 	      r,
 	      void 0,
 	      void 0,
 	      void 0,
+	      (t = t || IamDismissType.MANUAL),
+	      d,
 	      void 0,
 	      void 0,
 	      void 0,
 	      void 0,
 	      void 0,
-	      t,
+	      void 0,
+	      void 0,
+	      void 0,
 	      s,
+	      e,
 	      void 0,
 	      void 0,
 	      void 0,
@@ -4405,35 +4449,34 @@ var mpBrazeKitV6 = (function (exports) {
 	  od() {
 	    return !1;
 	  }
-	  $t(i) {
-	    if (this.ko === InAppMessage.Eo.Zo) {
-	      if (this.dd) return !1;
-	      this.dd = !0;
+	  ss(i) {
+	    if (this.ko === IamServerTypes.iE) {
+	      if (this.rd) return !1;
+	      this.rd = !0;
 	    }
-	    return this.ti.L(i), !0;
+	    return this.ti.A(i), !0;
 	  }
-	  gt() {
-	    const i = super.gt(HtmlMessage.es);
-	    return (i[InAppMessage.ss.ed] = this.messageFields), i;
+	  qt() {
+	    const i = super.qt(IamServerTypes.iE);
+	    return (i[IamSerializationKeys.qE] = this.messageFields), i;
 	  }
-	  static Zn(i) {
+	  static ga(i) {
 	    return new HtmlMessage(
-	      i[InAppMessage.ss.pa],
-	      i[InAppMessage.ss.xs],
-	      i[InAppMessage.ss.ua],
-	      i[InAppMessage.ss.da],
-	      i[InAppMessage.ss.la],
-	      i[InAppMessage.ss.ya],
-	      i[InAppMessage.ss.Sa],
-	      i[InAppMessage.ss.Aa],
-	      i[InAppMessage.ss.Ea],
-	      i[InAppMessage.ss.CSS],
-	      i[InAppMessage.ss.ed],
-	      i[InAppMessage.ss.Fa],
+	      i[IamSerializationKeys.rE],
+	      i[IamSerializationKeys.Fs],
+	      i[IamSerializationKeys.FE],
+	      i[IamSerializationKeys.BE],
+	      i[IamSerializationKeys.lE],
+	      i[IamSerializationKeys.yE],
+	      i[IamSerializationKeys.uE],
+	      i[IamSerializationKeys.kE],
+	      i[IamSerializationKeys.VE],
+	      i[IamSerializationKeys.CSS],
+	      i[IamSerializationKeys.qE],
+	      i[IamSerializationKeys.JE],
 	    );
 	  }
 	}
-	HtmlMessage.es = InAppMessage.Eo.Zo;
 
 	class InAppMessageButton {
 	  constructor(s, t, i, r, h, e, n) {
@@ -4445,18 +4488,18 @@ var mpBrazeKitV6 = (function (exports) {
 	      (this.uri = e),
 	      (this.id = n),
 	      (this.text = s || ""),
-	      (this.backgroundColor = t || InAppMessage.th.sh),
-	      (this.textColor = i || InAppMessage.th.ih),
+	      (this.backgroundColor = t || IamColors._E),
+	      (this.textColor = i || IamColors.AE),
 	      (this.borderColor = r || this.backgroundColor),
-	      (this.clickAction = h || InAppMessage.ClickAction.NONE),
+	      (this.clickAction = h || IamClickAction.NONE),
 	      (this.uri = e),
-	      null == n && (n = InAppMessageButton._n),
+	      null == n && (n = InAppMessageButton.Qn),
 	      (this.id = n),
-	      (this.dd = !1),
-	      (this.ti = new m());
+	      (this.rd = !1),
+	      (this.ti = new f());
 	  }
 	  subscribeToClickedEvent(s) {
-	    return this.ti.Rt(s);
+	    return this.ti.Kt(s);
 	  }
 	  removeSubscription(s) {
 	    this.ti.removeSubscription(s);
@@ -4464,8 +4507,8 @@ var mpBrazeKitV6 = (function (exports) {
 	  removeAllSubscriptions() {
 	    this.ti.removeAllSubscriptions();
 	  }
-	  $t() {
-	    return !this.dd && ((this.dd = !0), this.ti.L(), !0);
+	  ss() {
+	    return !this.rd && ((this.rd = !0), this.ti.A(), !0);
 	  }
 	  static fromJson(s) {
 	    return new InAppMessageButton(
@@ -4479,27 +4522,27 @@ var mpBrazeKitV6 = (function (exports) {
 	    );
 	  }
 	}
-	InAppMessageButton._n = -1;
+	InAppMessageButton.Qn = -1;
 
 	class FullScreenMessage extends InAppMessage {
 	  constructor(
-	    e,
 	    r,
 	    s,
+	    e,
 	    t,
+	    o,
 	    i,
 	    a,
-	    o,
 	    p,
 	    m,
 	    n,
-	    u,
 	    c,
 	    f,
+	    u,
 	    d,
 	    l,
-	    g,
 	    j,
+	    g,
 	    x,
 	    z,
 	    h,
@@ -4515,27 +4558,27 @@ var mpBrazeKitV6 = (function (exports) {
 	    C,
 	    D,
 	  ) {
-	    (p = p || InAppMessage.DismissType.MANUAL),
-	      (k = k || InAppMessage.Orientation.PORTRAIT),
+	    (p = p || IamDismissType.MANUAL),
+	      (k = k || IamOrientation.PORTRAIT),
 	      super(
-	        e,
 	        r,
-	        void 0,
 	        s,
+	        void 0,
+	        e,
 	        t,
+	        o,
 	        i,
 	        a,
-	        o,
 	        p,
 	        m,
 	        n,
-	        u,
 	        c,
 	        f,
+	        u,
 	        d,
 	        l,
-	        g,
 	        j,
+	        g,
 	        x,
 	        z,
 	        h,
@@ -4543,7 +4586,7 @@ var mpBrazeKitV6 = (function (exports) {
 	        w,
 	        y,
 	        S,
-	        (b = b || InAppMessage.CropType.CENTER_CROP),
+	        (b = b || IamCropType.CENTER_CROP),
 	        k,
 	        q,
 	        A,
@@ -4551,68 +4594,67 @@ var mpBrazeKitV6 = (function (exports) {
 	        C,
 	        D,
 	      ),
-	      (this.Io = InAppMessage.TextAlignment.CENTER);
+	      (this.Go = IamTextAlignment.CENTER);
 	  }
-	  gt() {
-	    return super.gt(FullScreenMessage.es);
+	  qt() {
+	    return super.qt(IamServerTypes.cE);
 	  }
-	  static Zn(e) {
+	  static ga(r) {
 	    return new FullScreenMessage(
-	      e[InAppMessage.ss.pa],
-	      e[InAppMessage.ss.ma],
-	      e[InAppMessage.ss.xs],
-	      e[InAppMessage.ss.ua],
-	      e[InAppMessage.ss.ca],
-	      e[InAppMessage.ss.URI],
-	      e[InAppMessage.ss.fa],
-	      e[InAppMessage.ss.da],
-	      e[InAppMessage.ss.la],
-	      e[InAppMessage.ss.ga],
-	      e[InAppMessage.ss.ns],
-	      e[InAppMessage.ss.ja],
-	      e[InAppMessage.ss.xa],
-	      e[InAppMessage.ss.za],
-	      e[InAppMessage.ss.ha],
-	      e[InAppMessage.ss.va],
-	      e[InAppMessage.ss.wa],
-	      e[InAppMessage.ss.ya],
-	      e[InAppMessage.ss.Sa],
-	      e[InAppMessage.ss.ba],
-	      e[InAppMessage.ss.ka],
-	      e[InAppMessage.ss.qa],
-	      e[InAppMessage.ss.Aa],
-	      buttonsFromSerializedInAppMessage(e[InAppMessage.ss.Ba]),
-	      e[InAppMessage.ss.Ca],
-	      e[InAppMessage.ss.Da],
-	      e[InAppMessage.ss.Ea],
-	      e[InAppMessage.ss.CSS],
-	      e[InAppMessage.ss.Fa],
-	      e[InAppMessage.ss.LANGUAGE],
-	      e[InAppMessage.ss.ks],
+	      r[IamSerializationKeys.rE],
+	      r[IamSerializationKeys.mE],
+	      r[IamSerializationKeys.Fs],
+	      r[IamSerializationKeys.FE],
+	      r[IamSerializationKeys.HE],
+	      r[IamSerializationKeys.URI],
+	      r[IamSerializationKeys.xE],
+	      r[IamSerializationKeys.BE],
+	      r[IamSerializationKeys.lE],
+	      r[IamSerializationKeys.bE],
+	      r[IamSerializationKeys.ys],
+	      r[IamSerializationKeys.gE],
+	      r[IamSerializationKeys.YE],
+	      r[IamSerializationKeys.KE],
+	      r[IamSerializationKeys.XE],
+	      r[IamSerializationKeys.dE],
+	      r[IamSerializationKeys.hE],
+	      r[IamSerializationKeys.yE],
+	      r[IamSerializationKeys.uE],
+	      r[IamSerializationKeys.WE],
+	      r[IamSerializationKeys.fE],
+	      r[IamSerializationKeys.jE],
+	      r[IamSerializationKeys.kE],
+	      buttonsFromSerializedInAppMessage(r[IamSerializationKeys.vE]),
+	      r[IamSerializationKeys.wE],
+	      r[IamSerializationKeys.zE],
+	      r[IamSerializationKeys.VE],
+	      r[IamSerializationKeys.CSS],
+	      r[IamSerializationKeys.JE],
+	      r[IamSerializationKeys.LANGUAGE],
+	      r[IamSerializationKeys.Ks],
 	    );
 	  }
 	}
-	FullScreenMessage.es = InAppMessage.Eo.Yn;
 
 	class ModalMessage extends InAppMessage {
 	  constructor(
-	    e,
 	    r,
 	    s,
+	    e,
 	    t,
-	    i,
 	    o,
+	    i,
 	    a,
 	    p,
 	    m,
 	    n,
-	    u,
 	    c,
-	    d,
 	    f,
+	    u,
+	    d,
 	    l,
-	    g,
 	    j,
+	    g,
 	    v,
 	    x,
 	    z,
@@ -4628,24 +4670,24 @@ var mpBrazeKitV6 = (function (exports) {
 	    C,
 	  ) {
 	    super(
-	      e,
 	      r,
-	      void 0,
 	      s,
+	      void 0,
+	      e,
 	      t,
-	      i,
 	      o,
+	      i,
 	      a,
-	      (p = p || InAppMessage.DismissType.MANUAL),
+	      (p = p || IamDismissType.MANUAL),
 	      m,
 	      n,
-	      u,
 	      c,
-	      d,
 	      f,
+	      u,
+	      d,
 	      l,
-	      g,
 	      j,
+	      g,
 	      v,
 	      x,
 	      z,
@@ -4653,7 +4695,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      w,
 	      y,
 	      S,
-	      (b = b || InAppMessage.CropType.FIT_CENTER),
+	      (b = b || IamCropType.FIT_CENTER),
 	      void 0,
 	      k,
 	      q,
@@ -4661,96 +4703,95 @@ var mpBrazeKitV6 = (function (exports) {
 	      B,
 	      C,
 	    ),
-	      (this.Io = InAppMessage.TextAlignment.CENTER);
+	      (this.Go = IamTextAlignment.CENTER);
 	  }
-	  gt() {
-	    return super.gt(ModalMessage.es);
+	  qt() {
+	    return super.qt(IamServerTypes.aE);
 	  }
-	  static Zn(e) {
+	  static ga(r) {
 	    return new ModalMessage(
-	      e[InAppMessage.ss.pa],
-	      e[InAppMessage.ss.ma],
-	      e[InAppMessage.ss.xs],
-	      e[InAppMessage.ss.ua],
-	      e[InAppMessage.ss.ca],
-	      e[InAppMessage.ss.URI],
-	      e[InAppMessage.ss.fa],
-	      e[InAppMessage.ss.da],
-	      e[InAppMessage.ss.la],
-	      e[InAppMessage.ss.ga],
-	      e[InAppMessage.ss.ns],
-	      e[InAppMessage.ss.ja],
-	      e[InAppMessage.ss.xa],
-	      e[InAppMessage.ss.za],
-	      e[InAppMessage.ss.ha],
-	      e[InAppMessage.ss.va],
-	      e[InAppMessage.ss.wa],
-	      e[InAppMessage.ss.ya],
-	      e[InAppMessage.ss.Sa],
-	      e[InAppMessage.ss.ba],
-	      e[InAppMessage.ss.ka],
-	      e[InAppMessage.ss.qa],
-	      e[InAppMessage.ss.Aa],
-	      buttonsFromSerializedInAppMessage(e[InAppMessage.ss.Ba]),
-	      e[InAppMessage.ss.Ca],
-	      e[InAppMessage.ss.Ea],
-	      e[InAppMessage.ss.CSS],
-	      e[InAppMessage.ss.Fa],
-	      e[InAppMessage.ss.LANGUAGE],
-	      e[InAppMessage.ss.ks],
+	      r[IamSerializationKeys.rE],
+	      r[IamSerializationKeys.mE],
+	      r[IamSerializationKeys.Fs],
+	      r[IamSerializationKeys.FE],
+	      r[IamSerializationKeys.HE],
+	      r[IamSerializationKeys.URI],
+	      r[IamSerializationKeys.xE],
+	      r[IamSerializationKeys.BE],
+	      r[IamSerializationKeys.lE],
+	      r[IamSerializationKeys.bE],
+	      r[IamSerializationKeys.ys],
+	      r[IamSerializationKeys.gE],
+	      r[IamSerializationKeys.YE],
+	      r[IamSerializationKeys.KE],
+	      r[IamSerializationKeys.XE],
+	      r[IamSerializationKeys.dE],
+	      r[IamSerializationKeys.hE],
+	      r[IamSerializationKeys.yE],
+	      r[IamSerializationKeys.uE],
+	      r[IamSerializationKeys.WE],
+	      r[IamSerializationKeys.fE],
+	      r[IamSerializationKeys.jE],
+	      r[IamSerializationKeys.kE],
+	      buttonsFromSerializedInAppMessage(r[IamSerializationKeys.vE]),
+	      r[IamSerializationKeys.wE],
+	      r[IamSerializationKeys.VE],
+	      r[IamSerializationKeys.CSS],
+	      r[IamSerializationKeys.JE],
+	      r[IamSerializationKeys.LANGUAGE],
+	      r[IamSerializationKeys.Ks],
 	    );
 	  }
 	}
-	ModalMessage.es = InAppMessage.Eo.ta;
 
 	class SlideUpMessage extends InAppMessage {
 	  constructor(
-	    e,
 	    t,
 	    s,
+	    e,
 	    o,
 	    i,
 	    r,
 	    n,
 	    d,
 	    a,
-	    u,
 	    p,
+	    u,
 	    m,
 	    c,
 	    l,
 	    v,
-	    x,
 	    f,
+	    x,
 	    h,
 	    g,
+	    j,
 	    I,
 	    M,
 	    b,
-	    j,
 	    z,
 	  ) {
-	    (x = x || InAppMessage.th.Rh),
-	      (v = v || InAppMessage.th.Nh),
+	    (f = f || IamColors.LE),
+	      (v = v || IamColors.OE),
 	      super(
+	        t,
+	        (s = s || IamTextAlignment.START),
 	        e,
-	        (t = t || InAppMessage.TextAlignment.START),
-	        s,
 	        o,
 	        i,
 	        r,
 	        n,
 	        d,
 	        a,
-	        u,
 	        p,
+	        u,
 	        m,
 	        void 0,
 	        c,
 	        l,
 	        v,
-	        x,
 	        f,
+	        x,
 	        h,
 	        g,
 	        void 0,
@@ -4760,62 +4801,61 @@ var mpBrazeKitV6 = (function (exports) {
 	        void 0,
 	        void 0,
 	        void 0,
+	        j,
 	        I,
 	        M,
 	        b,
-	        j,
 	        z,
 	      ),
-	      (this.Io = InAppMessage.TextAlignment.START);
+	      (this.Go = IamTextAlignment.START);
 	  }
 	  zo() {
 	    return !1;
 	  }
-	  No() {
-	    const e = document.createElement("span");
-	    return e.appendChild(document.createTextNode(this.message || "")), e;
+	  Ko() {
+	    const t = document.createElement("span");
+	    return t.appendChild(document.createTextNode(this.message || "")), t;
 	  }
-	  ah(e) {
-	    const t = e.getElementsByClassName("ab-in-app-message")[0];
-	    DOMUtils.td(t, !0, !0) ||
-	      (this.slideFrom === InAppMessage.SlideFrom.TOP
-	        ? (t.style.top = "0px")
-	        : (t.style.bottom = "0px")),
-	      super.ah(e);
+	  eh(t) {
+	    const s = t.getElementsByClassName("ab-in-app-message")[0];
+	    DOMUtils.td(s, !0, !0) ||
+	      (this.slideFrom === IamSlideFrom.TOP
+	        ? (s.style.top = "0px")
+	        : (s.style.bottom = "0px")),
+	      super.eh(t);
 	  }
-	  gt() {
-	    return super.gt(SlideUpMessage.es);
+	  qt() {
+	    return super.qt(IamServerTypes.sE);
 	  }
-	  static Zn(e) {
+	  static ga(t) {
 	    return new SlideUpMessage(
-	      e[InAppMessage.ss.pa],
-	      e[InAppMessage.ss.ma],
-	      e[InAppMessage.ss._h],
-	      e[InAppMessage.ss.xs],
-	      e[InAppMessage.ss.ua],
-	      e[InAppMessage.ss.ca],
-	      e[InAppMessage.ss.URI],
-	      e[InAppMessage.ss.fa],
-	      e[InAppMessage.ss.da],
-	      e[InAppMessage.ss.la],
-	      e[InAppMessage.ss.ga],
-	      e[InAppMessage.ss.ns],
-	      e[InAppMessage.ss.xa],
-	      e[InAppMessage.ss.za],
-	      e[InAppMessage.ss.ha],
-	      e[InAppMessage.ss.va],
-	      e[InAppMessage.ss.wa],
-	      e[InAppMessage.ss.ya],
-	      e[InAppMessage.ss.Sa],
-	      e[InAppMessage.ss.Ea],
-	      e[InAppMessage.ss.CSS],
-	      e[InAppMessage.ss.Fa],
-	      e[InAppMessage.ss.LANGUAGE],
-	      e[InAppMessage.ss.ks],
+	      t[IamSerializationKeys.rE],
+	      t[IamSerializationKeys.mE],
+	      t[IamSerializationKeys.GE],
+	      t[IamSerializationKeys.Fs],
+	      t[IamSerializationKeys.FE],
+	      t[IamSerializationKeys.HE],
+	      t[IamSerializationKeys.URI],
+	      t[IamSerializationKeys.xE],
+	      t[IamSerializationKeys.BE],
+	      t[IamSerializationKeys.lE],
+	      t[IamSerializationKeys.bE],
+	      t[IamSerializationKeys.ys],
+	      t[IamSerializationKeys.YE],
+	      t[IamSerializationKeys.KE],
+	      t[IamSerializationKeys.XE],
+	      t[IamSerializationKeys.dE],
+	      t[IamSerializationKeys.hE],
+	      t[IamSerializationKeys.yE],
+	      t[IamSerializationKeys.uE],
+	      t[IamSerializationKeys.VE],
+	      t[IamSerializationKeys.CSS],
+	      t[IamSerializationKeys.JE],
+	      t[IamSerializationKeys.LANGUAGE],
+	      t[IamSerializationKeys.Ks],
 	    );
 	  }
 	}
-	SlideUpMessage.es = InAppMessage.Eo.ia;
 
 	function newInAppMessageFromJson(e) {
 	  if (!e) return null;
@@ -4824,8 +4864,8 @@ var mpBrazeKitV6 = (function (exports) {
 	  null != o && (o = o.toUpperCase());
 	  const s = e.message,
 	    n = e.text_align_message,
-	    r = e.slide_from,
-	    t = e.extras,
+	    t = e.slide_from,
+	    r = e.extras,
 	    m = e.trigger_id,
 	    l = e.click_action,
 	    i = e.uri,
@@ -4834,8 +4874,8 @@ var mpBrazeKitV6 = (function (exports) {
 	    u = e.duration,
 	    a = e.icon,
 	    d = e.image_url,
-	    g = e.image_style,
-	    c = e.icon_color,
+	    c = e.image_style,
+	    g = e.icon_color,
 	    j = e.icon_bg_color,
 	    w = e.bg_color,
 	    b = e.text_color,
@@ -4860,11 +4900,11 @@ var mpBrazeKitV6 = (function (exports) {
 	    C = e.language,
 	    D = e.image_alt;
 	  let G;
-	  if (o === ModalMessage.es || o === InAppMessage.Eo.Xo)
+	  if (o === IamServerTypes.aE || o === IamServerTypes.UE)
 	    G = new ModalMessage(
 	      s,
 	      n,
-	      t,
+	      r,
 	      m,
 	      l,
 	      i,
@@ -4873,8 +4913,8 @@ var mpBrazeKitV6 = (function (exports) {
 	      u,
 	      a,
 	      d,
-	      g,
 	      c,
+	      g,
 	      j,
 	      w,
 	      b,
@@ -4893,11 +4933,11 @@ var mpBrazeKitV6 = (function (exports) {
 	      C,
 	      D,
 	    );
-	  else if (o === FullScreenMessage.es)
+	  else if (o === IamServerTypes.cE)
 	    G = new FullScreenMessage(
 	      s,
 	      n,
-	      t,
+	      r,
 	      m,
 	      l,
 	      i,
@@ -4906,8 +4946,8 @@ var mpBrazeKitV6 = (function (exports) {
 	      u,
 	      a,
 	      d,
-	      g,
 	      c,
+	      g,
 	      j,
 	      w,
 	      b,
@@ -4927,12 +4967,12 @@ var mpBrazeKitV6 = (function (exports) {
 	      C,
 	      D,
 	    );
-	  else if (o === SlideUpMessage.es)
+	  else if (o === IamServerTypes.sE)
 	    G = new SlideUpMessage(
 	      s,
 	      n,
-	      r,
 	      t,
+	      r,
 	      m,
 	      l,
 	      i,
@@ -4941,7 +4981,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      u,
 	      a,
 	      d,
-	      c,
+	      g,
 	      j,
 	      w,
 	      b,
@@ -4955,15 +4995,11 @@ var mpBrazeKitV6 = (function (exports) {
 	      D,
 	    );
 	  else {
-	    if (
-	      o !== HtmlMessage.es &&
-	      o !== InAppMessage.Eo.Bo &&
-	      o !== InAppMessage.Eo.Yo
-	    )
+	    if (o !== IamServerTypes.iE && o !== IamServerTypes.PE && o !== IamServerTypes.nE)
 	      return void E$1.error("Ignoring message with unknown type " + o);
 	    {
 	      const o = e.message_fields;
-	      (G = new HtmlMessage(s, t, m, p, u, z, J, A, S, q, o, B)),
+	      (G = new HtmlMessage(s, r, m, p, u, z, J, A, S, q, o, B)),
 	        (G.trusted = e.trusted || !1);
 	    }
 	  }
@@ -4986,128 +5022,128 @@ var mpBrazeKitV6 = (function (exports) {
 	  return o;
 	}
 
-	class rs {
+	class es {
 	  constructor(t) {
-	    (this.tf = t), (this.tf = t);
+	    (this.Hc = t), (this.Hc = t);
 	  }
-	  sf(t) {
-	    return null == this.tf || this.tf === t[0];
+	  Qc(t) {
+	    return null == this.Hc || this.Hc === t[0];
 	  }
 	  static fromJson(t) {
-	    return new rs(t ? t.event_name : null);
+	    return new es(t ? t.event_name : null);
 	  }
-	  gt() {
-	    return this.tf;
+	  qt() {
+	    return this.Hc;
 	  }
 	}
 
-	class cr {
+	class hr {
 	  constructor(t, s, e, i) {
-	    (this.yE = t),
-	      (this.HE = s),
+	    (this.tT = t),
+	      (this.sT = s),
 	      (this.comparator = e),
-	      (this.LE = i),
-	      (this.yE = t),
-	      (this.HE = s),
+	      (this.eT = i),
+	      (this.tT = t),
+	      (this.sT = s),
 	      (this.comparator = e),
-	      (this.LE = i),
-	      this.HE === cr.XE.QE &&
-	        this.comparator !== cr.BE.wE &&
-	        this.comparator !== cr.BE.jE &&
-	        this.comparator !== cr.BE.zE &&
-	        this.comparator !== cr.BE.FE &&
-	        (this.LE = dateFromUnixTimestamp(this.LE));
+	      (this.eT = i),
+	      this.sT === hr.lT.iT &&
+	        this.comparator !== hr.hT.rT &&
+	        this.comparator !== hr.hT.nT &&
+	        this.comparator !== hr.hT.uT &&
+	        this.comparator !== hr.hT.oT &&
+	        (this.eT = dateFromUnixTimestamp(this.eT));
 	  }
-	  sf(t) {
+	  Qc(t) {
 	    let s = null;
-	    switch ((null != t && (s = t[this.yE]), this.comparator)) {
-	      case cr.BE.kE:
-	        return null != s && s.valueOf() === this.LE.valueOf();
-	      case cr.BE.xE:
-	        return null == s || s.valueOf() !== this.LE.valueOf();
-	      case cr.BE.JE:
-	        return null != s && typeof s == typeof this.LE && s > this.LE;
-	      case cr.BE.wE:
-	        return this.HE === cr.XE.QE
-	          ? null != s && isDate(s) && secondsAgo(s) <= this.LE.valueOf()
-	          : null != s && typeof s == typeof this.LE && s >= this.LE;
-	      case cr.BE.VE:
-	        return null != s && typeof s == typeof this.LE && s < this.LE;
-	      case cr.BE.jE:
-	        return this.HE === cr.XE.QE
-	          ? null != s && isDate(s) && secondsAgo(s) >= this.LE.valueOf()
-	          : null != s && typeof s == typeof this.LE && s <= this.LE;
-	      case cr.BE.qE:
+	    switch ((null != t && (s = t[this.tT]), this.comparator)) {
+	      case hr.hT.ET:
+	        return null != s && s.valueOf() === this.eT.valueOf();
+	      case hr.hT.aT:
+	        return null == s || s.valueOf() !== this.eT.valueOf();
+	      case hr.hT.TT:
+	        return null != s && typeof s == typeof this.eT && s > this.eT;
+	      case hr.hT.rT:
+	        return this.sT === hr.lT.iT
+	          ? null != s && isDate(s) && secondsAgo(s) <= this.eT.valueOf()
+	          : null != s && typeof s == typeof this.eT && s >= this.eT;
+	      case hr.hT.cT:
+	        return null != s && typeof s == typeof this.eT && s < this.eT;
+	      case hr.hT.nT:
+	        return this.sT === hr.lT.iT
+	          ? null != s && isDate(s) && secondsAgo(s) >= this.eT.valueOf()
+	          : null != s && typeof s == typeof this.eT && s <= this.eT;
+	      case hr.hT.AT:
 	        return (
 	          null != s &&
 	          "string" == typeof s &&
-	          typeof s == typeof this.LE &&
-	          null != s.match(this.LE)
+	          typeof s == typeof this.eT &&
+	          null != s.match(this.eT)
 	        );
-	      case cr.BE.PE:
+	      case hr.hT._T:
 	        return null != s;
-	      case cr.BE.WE:
+	      case hr.hT.fT:
 	        return null == s;
-	      case cr.BE.zE:
-	        return null != s && isDate(s) && secondsInTheFuture(s) < this.LE;
-	      case cr.BE.FE:
-	        return null != s && isDate(s) && secondsInTheFuture(s) > this.LE;
-	      case cr.BE.ZE:
+	      case hr.hT.uT:
+	        return null != s && isDate(s) && secondsInTheFuture(s) < this.eT;
+	      case hr.hT.oT:
+	        return null != s && isDate(s) && secondsInTheFuture(s) > this.eT;
+	      case hr.hT.pT:
 	        return (
 	          null == s ||
-	          typeof s != typeof this.LE ||
+	          typeof s != typeof this.eT ||
 	          "string" != typeof s ||
-	          null == s.match(this.LE)
+	          null == s.match(this.eT)
 	        );
 	    }
 	    return !1;
 	  }
 	  static fromJson(t) {
-	    return new cr(
+	    return new hr(
 	      t.property_key,
 	      t.property_type,
 	      t.comparator,
 	      t.property_value,
 	    );
 	  }
-	  gt() {
-	    let t = this.LE;
+	  qt() {
+	    let t = this.eT;
 	    return (
-	      isDate(this.LE) && (t = convertMsToSeconds(t.valueOf())),
-	      { k: this.yE, t: this.HE, c: this.comparator, v: t }
+	      isDate(this.eT) && (t = convertMsToSeconds(t.valueOf())),
+	      { k: this.tT, t: this.sT, c: this.comparator, v: t }
 	    );
 	  }
 	  static _u(t) {
-	    return new cr(t.k, t.t, t.c, t.v);
+	    return new hr(t.k, t.t, t.c, t.v);
 	  }
 	}
-	(cr.XE = { $E: "boolean", tT: "number", sT: "string", QE: "date" }),
-	  (cr.BE = {
-	    kE: 1,
-	    xE: 2,
-	    JE: 3,
-	    wE: 4,
-	    VE: 5,
-	    jE: 6,
-	    qE: 10,
-	    PE: 11,
-	    WE: 12,
-	    zE: 15,
-	    FE: 16,
-	    ZE: 17,
+	(hr.lT = { yT: "boolean", ST: "number", NT: "string", iT: "date" }),
+	  (hr.hT = {
+	    ET: 1,
+	    aT: 2,
+	    TT: 3,
+	    rT: 4,
+	    cT: 5,
+	    nT: 6,
+	    AT: 10,
+	    _T: 11,
+	    fT: 12,
+	    uT: 15,
+	    oT: 16,
+	    pT: 17,
 	  });
 
-	class is {
+	class ls {
 	  constructor(t) {
 	    (this.filters = t), (this.filters = t);
 	  }
-	  sf(t) {
+	  Qc(t) {
 	    let r = !0;
 	    for (let e = 0; e < this.filters.length; e++) {
 	      const o = this.filters[e];
 	      let s = !1;
 	      for (let r = 0; r < o.length; r++)
-	        if (o[r].sf(t)) {
+	        if (o[r].Qc(t)) {
 	          s = !0;
 	          break;
 	        }
@@ -5124,17 +5160,17 @@ var mpBrazeKitV6 = (function (exports) {
 	    for (let e = 0; e < t.length; e++) {
 	      const o = [],
 	        s = t[e];
-	      for (let t = 0; t < s.length; t++) o.push(cr.fromJson(s[t]));
+	      for (let t = 0; t < s.length; t++) o.push(hr.fromJson(s[t]));
 	      r.push(o);
 	    }
-	    return new is(r);
+	    return new ls(r);
 	  }
-	  gt() {
+	  qt() {
 	    const t = [];
 	    for (let r = 0; r < this.filters.length; r++) {
 	      const e = this.filters[r],
 	        o = [];
-	      for (let t = 0; t < e.length; t++) o.push(e[t].gt());
+	      for (let t = 0; t < e.length; t++) o.push(e[t].qt());
 	      t.push(o);
 	    }
 	    return t;
@@ -5144,127 +5180,127 @@ var mpBrazeKitV6 = (function (exports) {
 	    for (let e = 0; e < t.length; e++) {
 	      const o = [],
 	        s = t[e];
-	      for (let t = 0; t < s.length; t++) o.push(cr._u(s[t]));
+	      for (let t = 0; t < s.length; t++) o.push(hr._u(s[t]));
 	      r.push(o);
 	    }
-	    return new is(r);
+	    return new ls(r);
 	  }
 	}
 
-	class ls {
+	class ns {
 	  constructor(t, s) {
-	    (this.tf = t), (this.if = s), (this.tf = t), (this.if = s);
+	    (this.Hc = t), (this.tf = s), (this.Hc = t), (this.tf = s);
 	  }
-	  sf(t) {
-	    if (null == this.tf || null == this.if) return !1;
+	  Qc(t) {
+	    if (null == this.Hc || null == this.tf) return !1;
 	    const s = t[0],
 	      i = t[1];
-	    return s === this.tf && this.if.sf(i);
+	    return s === this.Hc && this.tf.Qc(i);
 	  }
 	  static fromJson(t) {
-	    return new ls(
+	    return new ns(
 	      t ? t.event_name : null,
-	      t ? is.fromJson(t.property_filters) : null,
+	      t ? ls.fromJson(t.property_filters) : null,
 	    );
 	  }
-	  gt() {
-	    return { e: this.tf, pf: this.if ? this.if.gt() : null };
+	  qt() {
+	    return { e: this.Hc, pf: this.tf ? this.tf.qt() : null };
 	  }
 	}
 
-	class mi {
+	class bi {
 	  constructor(t, i) {
-	    (this.rf = t), (this.nf = i), (this.rf = t), (this.nf = i);
+	    (this.if = t), (this.rf = i), (this.if = t), (this.rf = i);
 	  }
-	  sf(t) {
-	    if (null == this.rf) return !1;
-	    const i = fi.ef(t[0], this.rf);
+	  Qc(t) {
+	    if (null == this.if) return !1;
+	    const i = pi.sf(t[0], this.if);
 	    if (!i) return !1;
-	    let r = null == this.nf || 0 === this.nf.length;
-	    if (null != this.nf)
-	      for (let i = 0; i < this.nf.length; i++)
-	        if (this.nf[i] === t[1]) {
+	    let r = null == this.rf || 0 === this.rf.length;
+	    if (null != this.rf)
+	      for (let i = 0; i < this.rf.length; i++)
+	        if (this.rf[i] === t[1]) {
 	          r = !0;
 	          break;
 	        }
 	    return i && r;
 	  }
 	  static fromJson(t) {
-	    return new mi(t ? t.id : null, t ? t.buttons : null);
+	    return new bi(t ? t.id : null, t ? t.buttons : null);
 	  }
-	  gt() {
-	    return this.rf;
+	  qt() {
+	    return this.if;
 	  }
 	}
 
-	class ns {
+	class os {
 	  constructor(t) {
 	    (this.productId = t), (this.productId = t);
 	  }
-	  sf(t) {
+	  Qc(t) {
 	    return null == this.productId || t[0] === this.productId;
 	  }
 	  static fromJson(t) {
-	    return new ns(t ? t.product_id : null);
+	    return new os(t ? t.product_id : null);
 	  }
-	  gt() {
+	  qt() {
 	    return this.productId;
 	  }
 	}
 
-	class us {
+	class fs {
 	  constructor(t, s) {
-	    (this.productId = t), (this.if = s), (this.productId = t), (this.if = s);
+	    (this.productId = t), (this.tf = s), (this.productId = t), (this.tf = s);
 	  }
-	  sf(t) {
-	    if (null == this.productId || null == this.if) return !1;
+	  Qc(t) {
+	    if (null == this.productId || null == this.tf) return !1;
 	    const s = t[0],
 	      i = t[1];
-	    return s === this.productId && this.if.sf(i);
+	    return s === this.productId && this.tf.Qc(i);
 	  }
 	  static fromJson(t) {
-	    return new us(
+	    return new fs(
 	      t ? t.product_id : null,
-	      t ? is.fromJson(t.property_filters) : null,
+	      t ? ls.fromJson(t.property_filters) : null,
 	    );
 	  }
-	  gt() {
-	    return { id: this.productId, pf: this.if ? this.if.gt() : null };
+	  qt() {
+	    return { id: this.productId, pf: this.tf ? this.tf.qt() : null };
 	  }
 	}
 
-	class ur {
+	class jr {
 	  constructor(t) {
-	    (this.rf = t), (this.rf = t);
+	    (this.if = t), (this.if = t);
 	  }
-	  sf(t) {
-	    return null == this.rf || fi.ef(t[0], this.rf);
+	  Qc(t) {
+	    return null == this.if || pi.sf(t[0], this.if);
 	  }
 	  static fromJson(t) {
-	    return new ur(t ? t.campaign_id : null);
+	    return new jr(t ? t.campaign_id : null);
 	  }
-	  gt() {
-	    return this.rf;
+	  qt() {
+	    return this.if;
 	  }
 	}
 
 	var ot = {
 	  OPEN: "open",
-	  Rr: "purchase",
-	  wr: "push_click",
-	  xe: "custom_event",
+	  qr: "purchase",
+	  Sr: "push_click",
+	  he: "custom_event",
 	  rm: "iam_click",
-	  qs: "test",
+	  Ls: "test",
 	};
 
-	class fi {
+	class pi {
 	  constructor(e, t) {
 	    (this.type = e), (this.data = t), (this.type = e), (this.data = t);
 	  }
-	  km(e, t) {
-	    return fi._m[this.type] === e && (null == this.data || this.data.sf(t));
+	  Vc(e, t) {
+	    return pi.Yc[this.type] === e && (null == this.data || this.data.Qc(t));
 	  }
-	  static ef(e, t) {
+	  static sf(e, t) {
 	    let r = null;
 	    try {
 	      r = window.atob(e);
@@ -5277,129 +5313,129 @@ var mpBrazeKitV6 = (function (exports) {
 	    const t = e.type;
 	    let r = null;
 	    switch (t) {
-	      case fi.Ln.OPEN:
-	      case fi.Ln.qs:
+	      case pi.ma.OPEN:
+	      case pi.ma.Ls:
 	        break;
-	      case fi.Ln.Rr:
+	      case pi.ma.qr:
+	        r = os.fromJson(e.data);
+	        break;
+	      case pi.ma.Zc:
+	        r = fs.fromJson(e.data);
+	        break;
+	      case pi.ma.Sr:
+	        r = jr.fromJson(e.data);
+	        break;
+	      case pi.ma.he:
+	        r = es.fromJson(e.data);
+	        break;
+	      case pi.ma.km:
 	        r = ns.fromJson(e.data);
 	        break;
-	      case fi.Ln.bm:
-	        r = us.fromJson(e.data);
-	        break;
-	      case fi.Ln.wr:
-	        r = ur.fromJson(e.data);
-	        break;
-	      case fi.Ln.xe:
-	        r = rs.fromJson(e.data);
-	        break;
-	      case fi.Ln.Em:
-	        r = ls.fromJson(e.data);
-	        break;
-	      case fi.Ln.rm:
-	        r = mi.fromJson(e.data);
+	      case pi.ma.rm:
+	        r = bi.fromJson(e.data);
 	    }
-	    return new fi(t, r);
+	    return new pi(t, r);
 	  }
-	  gt() {
-	    return { t: this.type, d: this.data ? this.data.gt() : null };
+	  qt() {
+	    return { t: this.type, d: this.data ? this.data.qt() : null };
 	  }
 	  static _u(e) {
 	    let t,
 	      r = null;
 	    switch (e.t) {
-	      case fi.Ln.OPEN:
-	      case fi.Ln.qs:
+	      case pi.ma.OPEN:
+	      case pi.ma.Ls:
 	        break;
-	      case fi.Ln.Rr:
-	        r = new ns(e.d);
+	      case pi.ma.qr:
+	        r = new os(e.d);
 	        break;
-	      case fi.Ln.bm:
-	        (t = e.d || {}), (r = new us(t.id, is._u(t.pf || [])));
+	      case pi.ma.Zc:
+	        (t = e.d || {}), (r = new fs(t.id, ls._u(t.pf || [])));
 	        break;
-	      case fi.Ln.wr:
-	        r = new ur(e.d);
+	      case pi.ma.Sr:
+	        r = new jr(e.d);
 	        break;
-	      case fi.Ln.xe:
-	        r = new rs(e.d);
+	      case pi.ma.he:
+	        r = new es(e.d);
 	        break;
-	      case fi.Ln.Em:
-	        (t = e.d || {}), (r = new ls(t.e, is._u(t.pf || [])));
+	      case pi.ma.km:
+	        (t = e.d || {}), (r = new ns(t.e, ls._u(t.pf || [])));
 	        break;
-	      case fi.Ln.rm:
-	        r = new mi(e.d);
+	      case pi.ma.rm:
+	        r = new bi(e.d);
 	    }
-	    return new fi(e.t, r);
+	    return new pi(e.t, r);
 	  }
 	}
-	(fi.Ln = {
+	(pi.ma = {
 	  OPEN: "open",
-	  Rr: "purchase",
-	  bm: "purchase_property",
-	  wr: "push_click",
-	  xe: "custom_event",
-	  Em: "custom_event_property",
+	  qr: "purchase",
+	  Zc: "purchase_property",
+	  Sr: "push_click",
+	  he: "custom_event",
+	  km: "custom_event_property",
 	  rm: "iam_click",
-	  qs: "test",
+	  Ls: "test",
 	}),
-	  (fi._m = {}),
-	  (fi._m[fi.Ln.OPEN] = ot.OPEN),
-	  (fi._m[fi.Ln.Rr] = ot.Rr),
-	  (fi._m[fi.Ln.bm] = ot.Rr),
-	  (fi._m[fi.Ln.wr] = ot.wr),
-	  (fi._m[fi.Ln.xe] = ot.xe),
-	  (fi._m[fi.Ln.Em] = ot.xe),
-	  (fi._m[fi.Ln.rm] = ot.rm),
-	  (fi._m[fi.Ln.qs] = ot.qs);
+	  (pi.Yc = {}),
+	  (pi.Yc[pi.ma.OPEN] = ot.OPEN),
+	  (pi.Yc[pi.ma.qr] = ot.qr),
+	  (pi.Yc[pi.ma.Zc] = ot.qr),
+	  (pi.Yc[pi.ma.Sr] = ot.Sr),
+	  (pi.Yc[pi.ma.he] = ot.he),
+	  (pi.Yc[pi.ma.km] = ot.he),
+	  (pi.Yc[pi.ma.rm] = ot.rm),
+	  (pi.Yc[pi.ma.Ls] = ot.Ls);
 
-	class pt {
-	  constructor(t, i = [], s, e, r = 0, h, l, o = 0, n = pt.Td, a, u, d) {
+	class gt {
+	  constructor(t, i = [], s, e, r = 0, h, l, o = 0, n = gt.sd, a, u, d) {
 	    (this.id = t),
-	      (this.Pd = i),
+	      (this.ed = i),
 	      (this.startTime = s),
 	      (this.endTime = e),
 	      (this.priority = r),
 	      (this.type = h),
 	      (this.data = l),
-	      (this.Ed = o),
-	      (this.Nd = n),
-	      (this.Vn = a),
-	      (this._d = u),
-	      (this.Id = d),
+	      (this.hd = o),
+	      (this.nd = n),
+	      (this.ha = a),
+	      (this.ad = u),
+	      (this.ud = d),
 	      (this.id = t),
-	      (this.Pd = i || []),
+	      (this.ed = i || []),
 	      void 0 === s && (s = null),
 	      (this.startTime = s),
 	      void 0 === e && (e = null),
 	      (this.endTime = e),
 	      (this.priority = r || 0),
 	      (this.type = h),
-	      (this.Ed = o || 0),
-	      null == a && (a = 1e3 * (this.Ed + 30)),
-	      (this.Vn = a),
+	      (this.hd = o || 0),
+	      null == a && (a = 1e3 * (this.hd + 30)),
+	      (this.ha = a),
 	      (this.data = l),
-	      null != n && (this.Nd = n),
-	      (this._d = u),
-	      (this.Id = d || null);
+	      null != n && (this.nd = n),
+	      (this.ad = u),
+	      (this.ud = d || null);
 	  }
-	  xd(t) {
+	  dd(t) {
 	    return (
-	      null == this.Id || (this.Nd !== pt.Td && t - this.Id >= 1e3 * this.Nd)
+	      null == this.ud || (this.nd !== gt.sd && t - this.ud >= 1e3 * this.nd)
 	    );
 	  }
-	  zd(t) {
-	    this.Id = t;
+	  md(t) {
+	    this.ud = t;
 	  }
-	  Md(t) {
-	    const i = t + 1e3 * this.Ed;
+	  gd(t) {
+	    const i = t + 1e3 * this.hd;
 	    return Math.max(i - new Date().valueOf(), 0);
 	  }
-	  Bd(t) {
+	  fd(t) {
 	    const i = new Date().valueOf() - t,
-	      s = null == t || isNaN(i) || null == this.Vn || i < this.Vn;
+	      s = null == t || isNaN(i) || null == this.ha || i < this.ha;
 	    return (
 	      s ||
 	        E$1.info(
-	          `Trigger action ${this.type} is no longer eligible for display - fired ${i}ms ago and has a timeout of ${this.Vn}ms.`,
+	          `Trigger action ${this.type} is no longer eligible for display - fired ${i}ms ago and has a timeout of ${this.ha}ms.`,
 	        ),
 	      !s
 	    );
@@ -5408,7 +5444,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    const i = t.id,
 	      s = [];
 	    for (let i = 0; i < t.trigger_condition.length; i++)
-	      s.push(fi.fromJson(t.trigger_condition[i]));
+	      s.push(pi.fromJson(t.trigger_condition[i]));
 	    const e = dateFromUnixTimestamp(t.start_time),
 	      r = dateFromUnixTimestamp(t.end_time),
 	      h = t.priority,
@@ -5419,17 +5455,17 @@ var mpBrazeKitV6 = (function (exports) {
 	      u = t.data,
 	      d = t.min_seconds_since_last_trigger;
 	    return validateValueIsFromEnum(
-	      pt.Ln,
+	      gt.ma,
 	      l,
 	      "Could not construct Trigger from server data",
 	      "Trigger.Types",
 	    )
-	      ? new pt(i, s, e, r, h, l, u, o, n, a, d)
+	      ? new gt(i, s, e, r, h, l, u, o, n, a, d)
 	      : null;
 	  }
-	  gt() {
+	  qt() {
 	    const t = [];
-	    for (let i = 0; i < this.Pd.length; i++) t.push(this.Pd[i].gt());
+	    for (let i = 0; i < this.ed.length; i++) t.push(this.ed[i].qt());
 	    return {
 	      i: this.id,
 	      c: t,
@@ -5438,18 +5474,18 @@ var mpBrazeKitV6 = (function (exports) {
 	      p: this.priority,
 	      t: this.type,
 	      da: this.data,
-	      d: this.Ed,
-	      r: this.Nd,
-	      tm: this.Vn,
-	      ss: this._d,
-	      ld: this.Id,
+	      d: this.hd,
+	      r: this.nd,
+	      tm: this.ha,
+	      ss: this.ad,
+	      ld: this.ud,
 	    };
 	  }
 	  static _u(t) {
 	    const i = [],
 	      s = t.c || [];
-	    for (let t = 0; t < s.length; t++) i.push(fi._u(s[t]));
-	    return new pt(
+	    for (let t = 0; t < s.length; t++) i.push(pi._u(s[t]));
+	    return new gt(
 	      t.i,
 	      i,
 	      rehydrateDateAfterJsonization(t.s),
@@ -5465,23 +5501,23 @@ var mpBrazeKitV6 = (function (exports) {
 	    );
 	  }
 	}
-	(pt.Ln = { Kn: "inapp", Cd: "templated_iam" }), (pt.Td = -1);
+	(gt.ma = { ua: "inapp", pd: "templated_iam" }), (gt.sd = -1);
 
 	function attachCSS(n, t, o) {
 	  const c = n || document.querySelector("head"),
-	    e = `ab-${t}-css-definitions-${"6.5.0".replace(/\./g, "-")}`;
+	    e = `ab-${t}-css-definitions-${"6.8.0".replace(/\./g, "-")}`;
 	  if (!c) return;
 	  const s = c.ownerDocument || document;
 	  if (null == s.getElementById(e)) {
 	    const n = s.createElement("style");
 	    (n.innerHTML = o || ""), (n.id = e);
-	    const t = r.re(D.er);
+	    const t = r.er(U.sr);
 	    null != t && n.setAttribute("nonce", t), c.appendChild(n);
 	  }
 	}
 
 	function loadFontAwesome() {
-	  if (r.re(D.Za)) return;
+	  if (r.er(U.Uh)) return;
 	  const e = "https://use.fontawesome.com/7f85a56ba4.css";
 	  if (
 	    !(null !== document.querySelector('link[rel=stylesheet][href="' + e + '"]'))
@@ -5558,7 +5594,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    n.appendChild(l),
 	    l.setAttribute("aria-hidden", "true"),
 	    n.addEventListener("keydown", (t) => {
-	      (t.keyCode !== KeyCodes.Ho && t.keyCode !== KeyCodes.Go) ||
+	      (t.keyCode !== KeyCodes.Ao && t.keyCode !== KeyCodes.Lo) ||
 	        (e(), t.stopPropagation());
 	    }),
 	    (n.onclick = (t) => {
@@ -5593,21 +5629,21 @@ var mpBrazeKitV6 = (function (exports) {
 	function logInAppMessageImpression(s) {
 	  if (!r.rr()) return !1;
 	  if (!(s instanceof InAppMessage || s instanceof ControlMessage))
-	    return E$1.error(IamStrings.sS), !1;
-	  const o = s instanceof ControlMessage ? f.om : f.wn;
-	  return je$1.ra().lt(s, o).W;
+	    return E$1.error(IamStrings.EE), !1;
+	  const o = s instanceof ControlMessage ? p.om : p.Xn;
+	  return je$1.ra().wt(s, o).lt;
 	}
 
 	function logInAppMessageClick(s) {
 	  if (!r.rr()) return !1;
-	  if (!(s instanceof InAppMessage)) return E$1.error(IamStrings.sS), !1;
-	  const e = je$1.ra().lt(s, f.zn);
+	  if (!(s instanceof InAppMessage)) return E$1.error(IamStrings.EE), !1;
+	  const e = je$1.ra().wt(s, p.Hn);
 	  if (e) {
 	    s.sm() || logInAppMessageImpression(s);
-	    for (let r = 0; r < e.Ee.length; r++)
-	      TriggersProviderFactory.o().he(ot.rm, [s.triggerId], e.Ee[r]);
+	    for (let r = 0; r < e.Ce.length; r++)
+	      TriggersProviderFactory.o().Ee(ot.rm, [s.triggerId], e.Ce[r]);
 	  }
-	  return e.W;
+	  return e.lt;
 	}
 
 	const ORIENTATION = { PORTRAIT: 0, LANDSCAPE: 1 };
@@ -5640,13 +5676,13 @@ var mpBrazeKitV6 = (function (exports) {
 	}
 	const WindowUtils = {
 	  openUri: _openUri,
-	  Ua: _isPhone,
-	  Ma: _getOrientation,
-	  gl: _getCurrentUrl,
+	  ja: _isPhone,
+	  ba: _getOrientation,
+	  Qh: _getCurrentUrl,
 	};
 
 	function getUser() {
-	  if (r.rr()) return r.br();
+	  if (r.rr()) return r.zr();
 	}
 
 	function _handleBrazeAction(o, e, s) {
@@ -5752,35 +5788,35 @@ var mpBrazeKitV6 = (function (exports) {
 	      ),
 	      !1
 	    );
-	  let o = f.zn;
-	  null != t && (o = f.Sn);
-	  const m = je$1.ra().lt(e, o, t, s);
-	  if (m.W)
-	    for (let r = 0; r < m.Ee.length; r++)
-	      TriggersProviderFactory.o().he(ot.rm, [e.triggerId, t], m.Ee[r]);
-	  return m.W;
+	  let o = p.Hn;
+	  null != t && (o = p.Jn);
+	  const m = je$1.ra().wt(e, o, t, s);
+	  if (m.lt)
+	    for (let r = 0; r < m.Ce.length; r++)
+	      TriggersProviderFactory.o().Ee(ot.rm, [e.triggerId, t], m.Ce[r]);
+	  return m.lt;
 	}
 
-	const buildHtmlClickHandler = (l, t, i, o) => {
+	const buildHtmlClickHandler = (t, l, i, o) => {
 	  const r = i.getAttribute("href"),
-	    e = i.onclick;
-	  return (n) => {
-	    if (null != e && "function" == typeof e && !1 === e.bind(i)(n)) return;
-	    let s = parseQueryStringKeyValues(r).abButtonId;
+	    n = i.onclick;
+	  return (s) => {
+	    if (null != n && "function" == typeof n && !1 === n.bind(i)(s)) return;
+	    let e = parseQueryStringKeyValues(r).abButtonId;
 	    if (
-	      ((null != s && "" !== s) || (s = i.getAttribute("id") || void 0),
+	      ((null != e && "" !== e) || (e = i.getAttribute("id") || void 0),
 	      null != r && "" !== r && 0 !== r.indexOf("#"))
 	    ) {
-	      const e =
+	      const n =
 	          "blank" ===
 	          (i.getAttribute("target") || "").toLowerCase().replace("_", ""),
-	        m = o || l.openTarget === InAppMessage.OpenTarget.BLANK || e,
-	        u = () => {
-	          logInAppMessageHtmlClick(l, s, r), WindowUtils.openUri(r, m, n);
+	        u = o || t.openTarget === IamOpenTarget.BLANK || n,
+	        m = () => {
+	          logInAppMessageHtmlClick(t, e, r), WindowUtils.openUri(r, u, s);
 	        };
-	      m ? u() : l.ll(t, u);
-	    } else logInAppMessageHtmlClick(l, s, r || void 0);
-	    return n.stopPropagation(), !1;
+	      u ? m() : t.tl(l, m);
+	    } else logInAppMessageHtmlClick(t, e, r || void 0);
+	    return s.stopPropagation(), !1;
 	  };
 	};
 
@@ -5941,73 +5977,71 @@ var mpBrazeKitV6 = (function (exports) {
 	  t.srcdoc = o ? o.innerHTML : e || "";
 	};
 
-	function ct(t, e, o, s, n) {
+	function ft(t, o, s, e, n) {
 	  const i = document.createElement("iframe");
 	  i.setAttribute("title", "Modal Message"),
-	    s && (i.style.zIndex = (s + 1).toString());
+	    e && (i.style.zIndex = (e + 1).toString());
 	  if (
 	    (attachHtmlToIframeWithNonce(i, t.message, n),
 	    (i.onload = () => {
-	      const s = i.contentWindow;
-	      s.focus();
-	      const l = s.document.getElementsByTagName("head")[0];
-	      if (null != l) {
+	      const e = i.contentWindow;
+	      e.focus();
+	      const a = e.document.getElementsByTagName("head")[0];
+	      if (null != a) {
 	        if (t.Mo()) {
-	          const e = document.createElement("style");
-	          (e.innerHTML = t.css || ""),
-	            (e.id = t.Oo() || ""),
-	            null != n && e.setAttribute("nonce", n),
-	            l.appendChild(e);
+	          const o = document.createElement("style");
+	          (o.innerHTML = t.css || ""),
+	            (o.id = t.Oo() || ""),
+	            null != n && o.setAttribute("nonce", n),
+	            a.appendChild(o);
 	        }
-	        const e = s.document.createElement("base");
-	        null != e && (e.setAttribute("target", "_parent"), l.appendChild(e));
+	        const o = e.document.createElement("base");
+	        null != o && (o.setAttribute("target", "_parent"), a.appendChild(o));
 	      }
-	      const a = s.document.getElementsByTagName("title");
-	      a && a.length > 0 && i.setAttribute("title", a[0].textContent || "");
+	      const l = e.document.getElementsByTagName("title");
+	      l && l.length > 0 && i.setAttribute("title", l[0].textContent || "");
 	      const r = Object.assign(
 	        Object.assign(
 	          {},
-	          buildBrazeBridge(i, (e, o) => t.ll(e, o)),
+	          buildBrazeBridge(i, (o, s) => t.tl(o, s)),
 	        ),
 	        {
 	          closeMessage: function () {
-	            t.ll(i);
+	            t.tl(i);
 	          },
 	          logClick: function () {
 	            logInAppMessageHtmlClick(t, ...arguments);
 	          },
 	        },
 	      );
-	      if (
-	        ((s.appboyBridge = r), (s.brazeBridge = r), t.ko !== InAppMessage.Eo.Bo)
-	      ) {
-	        const e = s.document.getElementsByTagName("a");
-	        for (let s = 0; s < e.length; s++) e[s].onclick = buildHtmlClickHandler(t, i, e[s], o);
-	        const n = s.document.getElementsByTagName("button");
-	        for (let e = 0; e < n.length; e++) n[e].onclick = buildHtmlClickHandler(t, i, n[e], o);
+	      if (((e.appboyBridge = r), (e.brazeBridge = r), t.ko !== IamServerTypes.PE)) {
+	        const o = e.document.getElementsByTagName("a");
+	        for (let e = 0; e < o.length; e++) o[e].onclick = buildHtmlClickHandler(t, i, o[e], s);
+	        const n = e.document.getElementsByTagName("button");
+	        for (let o = 0; o < n.length; o++) n[o].onclick = buildHtmlClickHandler(t, i, n[o], s);
 	      }
-	      const c = s.document.body;
+	      const c = e.document.body;
 	      if (null != c) {
-	        t._o() && (c.id = t.htmlId || "");
-	        const e = document.createElement("hidden");
-	        (e.onclick = r.closeMessage),
-	          (e.className = "ab-programmatic-close-button"),
-	          c.appendChild(e);
+	        t.Bo() && (c.id = t.htmlId || "");
+	        const o = document.createElement("hidden");
+	        (o.onclick = r.closeMessage),
+	          (o.className = "ab-programmatic-close-button"),
+	          c.appendChild(o);
 	      }
-	      s.dispatchEvent(new CustomEvent("ab.BridgeReady")),
+	      e.dispatchEvent(new CustomEvent("ab.BridgeReady")),
 	        -1 !== i.className.indexOf("ab-start-hidden") &&
-	          ((i.className = i.className.replace("ab-start-hidden", "")), e(i));
+	          ((i.className = i.className.replace("ab-start-hidden", "")), o(i));
 	    }),
 	    (i.className =
 	      "ab-in-app-message ab-start-hidden ab-html-message ab-modal-interactions"),
 	    ro.OS === OperatingSystems.co)
 	  ) {
-	    const e = document.createElement("div");
+	    const o = document.createElement("div");
 	    return (
-	      (e.className = "ab-ios-scroll-wrapper"), e.appendChild(i), (t.qo = e), e
+	      (o.className = "ab-ios-scroll-wrapper"), o.appendChild(i), (t.Eo = o), o
 	    );
 	  }
-	  return (t.qo = i), i;
+	  return (t.Eo = i), i;
 	}
 
 	function logInAppMessageButtonClick(t, o) {
@@ -6015,23 +6049,23 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (!r.rr()) return !1;
 	  if (!(t instanceof InAppMessageButton))
 	    return E$1.error("button must be an InAppMessageButton object"), !1;
-	  if (!(o instanceof InAppMessage)) return E$1.error(IamStrings.sS), !1;
-	  const s = je$1.ra().Rn(t, o);
-	  if (s.W)
-	    for (let r = 0; r < s.Ee.length; r++)
-	      TriggersProviderFactory.o().he(
+	  if (!(o instanceof InAppMessage)) return E$1.error(IamStrings.EE), !1;
+	  const s = je$1.ra().Ln(t, o);
+	  if (s.lt)
+	    for (let r = 0; r < s.Ce.length; r++)
+	      TriggersProviderFactory.o().Ee(
 	        ot.rm,
 	        [
 	          o.triggerId,
 	          null === (e = t.id) || void 0 === e ? void 0 : e.toString(),
 	        ],
-	        s.Ee[r],
+	        s.Ce[r],
 	      );
-	  return s.W;
+	  return s.lt;
 	}
 
 	const xe = {
-	  Qo: (t) => {
+	  Po: (t) => {
 	    const o = t.querySelectorAll(".ab-close-button, .ab-message-button");
 	    let e;
 	    for (let t = 0; t < o.length; t++) (e = o[t]), (e.tabIndex = 0);
@@ -6049,28 +6083,24 @@ var mpBrazeKitV6 = (function (exports) {
 	      });
 	    }
 	  },
-	  So: (t, o) => {
+	  Qo: (t, o) => {
 	    o.setAttribute("role", "dialog"),
 	      o.setAttribute("aria-modal", "true"),
 	      t
 	        ? o.setAttribute("aria-labelledby", t)
 	        : o.setAttribute("aria-label", "Modal Message");
 	  },
-	  Po: (t, o, e) => {
+	  No: (t, o, e) => {
 	    if (t.buttons && t.buttons.length > 0) {
 	      const s = document.createElement("div");
 	      (s.className = "ab-message-buttons"), o.appendChild(s);
 	      const a = o.getElementsByClassName("ab-message-text")[0];
 	      null != a && (a.className += " ab-with-buttons");
 	      const l = (s) => (a) => (
-	        t.ll(o, () => {
+	        t.tl(o, () => {
 	          logInAppMessageButtonClick(s, t),
-	            s.clickAction === InAppMessage.ClickAction.URI &&
-	              _handleBrazeAction(
-	                s.uri || "",
-	                e || t.openTarget === InAppMessage.OpenTarget.BLANK,
-	                a,
-	              );
+	            s.clickAction === IamClickAction.URI &&
+	              _handleBrazeAction(s.uri || "", e || t.openTarget === IamOpenTarget.BLANK, a);
 	        }),
 	        a.stopPropagation(),
 	        !1
@@ -6095,9 +6125,9 @@ var mpBrazeKitV6 = (function (exports) {
 	  },
 	};
 
-	function $e(e, o, t, a, n, i, s = document.body, m = "ltr") {
+	function Ge(e, o, t, a, n, i, s = document.body, m = "ltr") {
 	  if (((e.$o = document.activeElement), e instanceof HtmlMessage))
-	    return ct(e, o, a, n, i);
+	    return ft(e, o, a, n, i);
 	  const l = (function (e, o, t, a, n, i = document.body, s = "ltr") {
 	    let m = null;
 	    const l = document.createElement("div");
@@ -6117,7 +6147,7 @@ var mpBrazeKitV6 = (function (exports) {
 	          document.querySelectorAll(".ab-iam-img-loading").length > 0
 	            ? t(
 	                `Cannot show in-app message ${e.message} because another message is being shown.`,
-	                InAppMessage.Ao.Lo,
+	                IamDisplayFailures.tE,
 	              )
 	            : o(l));
 	      },
@@ -6135,37 +6165,30 @@ var mpBrazeKitV6 = (function (exports) {
 	                ));
 	      };
 	    if (
-	      (e.imageStyle === InAppMessage.ImageStyle.GRAPHIC &&
-	        (l.className += " graphic"),
-	      e.orientation === InAppMessage.Orientation.LANDSCAPE &&
-	        (l.className += " landscape"),
+	      (e.imageStyle === IamImageStyle.GRAPHIC && (l.className += " graphic"),
+	      e.orientation === IamOrientation.LANDSCAPE && (l.className += " landscape"),
 	      null != e.buttons && 0 === e.buttons.length)
 	    ) {
-	      e.clickAction !== InAppMessage.ClickAction.NONE &&
-	        (l.className += " ab-clickable");
+	      e.clickAction !== IamClickAction.NONE && (l.className += " ab-clickable");
 	      const o = (o) => (
-	        e.ll(l, () => {
+	        e.tl(l, () => {
 	          logInAppMessageClick(e),
-	            e.clickAction === InAppMessage.ClickAction.URI &&
-	              _handleBrazeAction(
-	                e.uri || "",
-	                a || e.openTarget === InAppMessage.OpenTarget.BLANK,
-	                o,
-	              );
+	            e.clickAction === IamClickAction.URI &&
+	              _handleBrazeAction(e.uri || "", a || e.openTarget === IamOpenTarget.BLANK, o);
 	        }),
 	        o.stopPropagation(),
 	        !1
 	      );
 	      (l.onclick = o),
 	        l.addEventListener("keydown", (e) => {
-	          if (e.keyCode === KeyCodes.Go || e.keyCode === KeyCodes.Ho) return o(e);
+	          if (e.keyCode === KeyCodes.Lo || e.keyCode === KeyCodes.Ao) return o(e);
 	        });
 	    }
 	    const d = createCloseButton(
 	      "Close Message",
 	      e.Mo() ? void 0 : toRgba(e.closeButtonColor),
 	      () => {
-	        e.ll(l);
+	        e.tl(l);
 	      },
 	      s,
 	    );
@@ -6174,7 +6197,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    (u.className = "ab-message-text"),
 	      (u.dir = s),
 	      u.setAttribute("role", "article");
-	    const b = (e.messageAlignment || e.Io).toLowerCase();
+	    const b = (e.messageAlignment || e.Go).toLowerCase();
 	    u.className += " " + b + "-aligned";
 	    let f = !1;
 	    const p = document.createElement("div");
@@ -6182,7 +6205,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      const o = document.createElement("img");
 	      if (
 	        (o.setAttribute("src", e.imageUrl),
-	        e.Jo(o),
+	        e.Ho(o),
 	        0 === document.querySelectorAll(".ab-iam-img-loading").length)
 	      ) {
 	        f = !0;
@@ -6198,7 +6221,7 @@ var mpBrazeKitV6 = (function (exports) {
 	            r(!1);
 	          });
 	      }
-	      if (e.cropType === InAppMessage.CropType.CENTER_CROP) {
+	      if (e.cropType === IamCropType.CENTER_CROP) {
 	        const e = document.createElement("div");
 	        (e.className = "ab-center-cropped-img"),
 	          e.appendChild(o),
@@ -6223,24 +6246,22 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	    if ((addPassiveEventListener(u, "touchstart"), e.header && e.header.length > 0)) {
 	      const o = document.createElement("h1");
-	      (o.className = "ab-message-header"), (e.Ko = P$1.se()), (o.id = e.Ko);
-	      const t = (
-	        e.headerAlignment || InAppMessage.TextAlignment.CENTER
-	      ).toLowerCase();
+	      (o.className = "ab-message-header"), (e.Jo = V$1.de()), (o.id = e.Jo);
+	      const t = (e.headerAlignment || IamTextAlignment.CENTER).toLowerCase();
 	      (o.className += " " + t + "-aligned"),
 	        e.Mo() || (o.style.color = toRgba(e.headerTextColor)),
 	        o.appendChild(document.createTextNode(e.header)),
 	        u.appendChild(o);
 	    }
-	    const g = e.No();
-	    return u.appendChild(g), l.appendChild(u), f || c(), (e.qo = l), l;
+	    const g = e.Ko();
+	    return u.appendChild(g), l.appendChild(u), f || c(), (e.Eo = l), l;
 	  })(e, o, t, a, n, s, m);
 	  if (e instanceof FullScreenMessage || e instanceof ModalMessage) {
 	    const o = e instanceof FullScreenMessage ? "ab-fullscreen" : "ab-modal";
 	    (l.className += ` ${o} ab-centered`),
-	      xe.Po(e, l, a),
-	      xe.Qo(l),
-	      xe.So(e.Ko, l);
+	      xe.No(e, l, a),
+	      xe.Po(l),
+	      xe.Qo(e.Jo, l);
 	  } else if (e instanceof SlideUpMessage) {
 	    (l.className += " ab-slideup"),
 	      l.setAttribute("tabindex", "0"),
@@ -6255,15 +6276,15 @@ var mpBrazeKitV6 = (function (exports) {
 	      t.setAttribute("class", `ab-chevron ${m}`), o.appendChild(t);
 	    }
 	    let t, a;
-	    detectSwipe(l, DIRECTIONS.de, (e) => {
+	    detectSwipe(l, DIRECTIONS.ie, (e) => {
 	      (l.className += " ab-swiped-left"),
 	        null != o && null != o.onclick && o.onclick(e);
 	    }),
-	      detectSwipe(l, DIRECTIONS.ce, (e) => {
+	      detectSwipe(l, DIRECTIONS.ne, (e) => {
 	        (l.className += " ab-swiped-right"),
 	          null != o && null != o.onclick && o.onclick(e);
 	      }),
-	      e.slideFrom === InAppMessage.SlideFrom.TOP
+	      e.slideFrom === IamSlideFrom.TOP
 	        ? ((t = DIRECTIONS.Uo), (a = " ab-swiped-up"))
 	        : ((t = DIRECTIONS.Vo), (a = " ab-swiped-down")),
 	      detectSwipe(l, t, (e) => {
@@ -6422,7 +6443,7 @@ var mpBrazeKitV6 = (function (exports) {
 	  },
 	};
 
-	class mr {
+	class gr {
 	  constructor(t, e = !1) {
 	    if (
 	      ((this.language = t),
@@ -6444,7 +6465,7 @@ var mpBrazeKitV6 = (function (exports) {
 	  get(t) {
 	    return zt[this.language][t];
 	  }
-	  Ta() {
+	  ya() {
 	    switch (this.language) {
 	      case "ar":
 	      case "he":
@@ -6456,22 +6477,22 @@ var mpBrazeKitV6 = (function (exports) {
 	  }
 	}
 
-	const Me = {
+	const Je = {
 	  i: !1,
 	  na: null,
 	  ra: () => {
-	    if ((Me.t(), !Me.na)) {
+	    if ((Je.t(), !Je.na)) {
 	      let e = ro.language,
 	        t = !1;
-	      r.re(D.Wa) && ((e = r.re(D.Wa)), (t = !0)), (Me.na = new mr(e, t));
+	      r.er(U.Ba) && ((e = r.er(U.Ba)), (t = !0)), (Je.na = new gr(e, t));
 	    }
-	    return Me.na;
+	    return Je.na;
 	  },
 	  t: () => {
-	    Me.i || (r.g(Me), (Me.i = !0));
+	    Je.i || (r.g(Je), (Je.i = !0));
 	  },
 	  destroy: () => {
-	    (Me.na = null), (Me.i = !1);
+	    (Je.na = null), (Je.i = !1);
 	  },
 	};
 
@@ -6488,9 +6509,9 @@ var mpBrazeKitV6 = (function (exports) {
 	    );
 	  if (!(e instanceof InAppMessage)) return !1;
 	  if (e.constructor === InAppMessage) return !1;
-	  e.Lh();
+	  e.lh();
 	  const o = e instanceof HtmlMessage;
-	  if (o && !e.trusted && !r.nr())
+	  if (o && !e.trusted && !r.dr())
 	    return (
 	      E$1.error(
 	        'HTML in-app messages are disabled. Use the "allowUserSuppliedJavascript" option for braze.initialize to enable these messages.',
@@ -6506,19 +6527,14 @@ var mpBrazeKitV6 = (function (exports) {
 	        !1
 	      );
 	  }
-	  if (WindowUtils.Ua()) {
-	    const t = WindowUtils.Ma();
+	  if (WindowUtils.ja()) {
+	    const t = WindowUtils.ba();
 	    if (
-	      (t === ORIENTATION.PORTRAIT &&
-	        e.orientation === InAppMessage.Orientation.LANDSCAPE) ||
-	      (t === ORIENTATION.LANDSCAPE &&
-	        e.orientation === InAppMessage.Orientation.PORTRAIT)
+	      (t === ORIENTATION.PORTRAIT && e.orientation === IamOrientation.LANDSCAPE) ||
+	      (t === ORIENTATION.LANDSCAPE && e.orientation === IamOrientation.PORTRAIT)
 	    ) {
 	      const s = t === ORIENTATION.PORTRAIT ? "portrait" : "landscape",
-	        o =
-	          e.orientation === InAppMessage.Orientation.PORTRAIT
-	            ? "portrait"
-	            : "landscape";
+	        o = e.orientation === IamOrientation.PORTRAIT ? "portrait" : "landscape";
 	      return (
 	        E$1.info(
 	          `Not showing ${o} in-app message ${e.message} because the screen is currently ${s}`,
@@ -6527,16 +6543,16 @@ var mpBrazeKitV6 = (function (exports) {
 	      );
 	    }
 	  }
-	  if (!r.nr()) {
+	  if (!r.dr()) {
 	    let t = !1;
 	    if (e.buttons && e.buttons.length > 0) {
 	      const s = e.buttons;
 	      for (let e = 0; e < s.length; e++)
-	        if (s[e].clickAction === InAppMessage.ClickAction.URI) {
+	        if (s[e].clickAction === IamClickAction.URI) {
 	          const o = s[e].uri;
 	          t = isURIJavascriptOrData(o);
 	        }
-	    } else e.clickAction === InAppMessage.ClickAction.URI && (t = isURIJavascriptOrData(e.uri));
+	    } else e.clickAction === IamClickAction.URI && (t = isURIJavascriptOrData(e.uri));
 	    if (t)
 	      return (
 	        E$1.error(
@@ -6550,19 +6566,19 @@ var mpBrazeKitV6 = (function (exports) {
 	    ((i.className = "ab-iam-root v3"),
 	    (i.className += be(e)),
 	    e.language && !o && (i.lang = e.language),
-	    e._o() && (i.id = e.htmlId),
-	    r.re(D.$a) && (i.style.zIndex = (r.re(D.$a) + 1).toString()),
+	    e.Bo() && (i.id = e.htmlId),
+	    r.er(U.wa) && (i.style.zIndex = (r.er(U.wa) + 1).toString()),
 	    t.appendChild(i),
 	    e.Mo())
 	  ) {
 	    const t = document.createElement("style");
 	    (t.innerHTML = e.css),
 	      (t.id = e.Oo()),
-	      null != r.re(D.er) && t.setAttribute("nonce", r.re(D.er)),
+	      null != r.er(U.sr) && t.setAttribute("nonce", r.er(U.sr)),
 	      document.getElementsByTagName("head")[0].appendChild(t);
 	  }
 	  const n = e instanceof SlideUpMessage,
-	    a = $e(
+	    a = Ge(
 	      e,
 	      (t) => {
 	        if (e.zo() && e.od()) {
@@ -6570,17 +6586,17 @@ var mpBrazeKitV6 = (function (exports) {
 	          if (
 	            ((s.className = "ab-page-blocker"),
 	            e.Mo() || (s.style.backgroundColor = toRgba(e.frameColor)),
-	            r.re(D.$a) && (s.style.zIndex = r.re(D.$a).toString()),
+	            r.er(U.wa) && (s.style.zIndex = r.er(U.wa).toString()),
 	            i.appendChild(s),
-	            !r.re(D.Oh))
+	            !r.er(U.oh))
 	          ) {
 	            const o = new Date().valueOf();
 	            s.onclick = (s) => {
-	              new Date().valueOf() - o > InAppMessage.bh &&
-	                (e.ll(t), s.stopPropagation());
+	              new Date().valueOf() - o > IamTiming.pE &&
+	                (e.tl(t), s.stopPropagation());
 	            };
 	          }
-	          i.appendChild(t), t.focus(), e.ah(i);
+	          i.appendChild(t), t.focus(), e.eh(i);
 	        } else if (n) {
 	          const s = document.querySelectorAll(".ab-slideup");
 	          let o = null;
@@ -6589,7 +6605,7 @@ var mpBrazeKitV6 = (function (exports) {
 	              o = s[e];
 	              break;
 	            }
-	          if (e.slideFrom === InAppMessage.SlideFrom.TOP) {
+	          if (e.slideFrom === IamSlideFrom.TOP) {
 	            let e = 0;
 	            null != o && (e = o.offsetTop + o.offsetHeight),
 	              (t.style.top = Math.max(e, 0) + "px");
@@ -6601,38 +6617,38 @@ var mpBrazeKitV6 = (function (exports) {
 	                o.offsetTop),
 	              (t.style.bottom = Math.max(e, 0) + "px");
 	          }
-	        } else if (o && !r.re(D.Oh)) {
+	        } else if (o && !r.er(U.oh)) {
 	          const s = e;
 	          isIFrame(t) &&
 	            t.contentWindow &&
 	            t.contentWindow.addEventListener("keydown", function (e) {
-	              e.keyCode === KeyCodes.Ih && s.closeMessage();
+	              e.keyCode === KeyCodes.rh && s.closeMessage();
 	            });
 	        }
 	        logInAppMessageImpression(e),
-	          e.dismissType === InAppMessage.DismissType.AUTO_DISMISS &&
+	          e.dismissType === IamDismissType.AUTO_DISMISS &&
 	            setTimeout(() => {
-	              i.contains(t) && e.ll(t);
+	              i.contains(t) && e.tl(t);
 	            }, e.duration),
 	          "function" == typeof s && s();
 	      },
 	      (e) => {
 	        E$1.info(e);
 	      },
-	      r.re(D.Ja),
-	      r.re(D.$a),
-	      r.re(D.er),
+	      r.er(U.va),
+	      r.er(U.wa),
+	      r.er(U.sr),
 	      t,
-	      Me.ra().Ta(),
+	      Je.ra().ya(),
 	    );
-	  return (o || n) && (i.appendChild(a), e.ah(i)), !0;
+	  return (o || n) && (i.appendChild(a), e.eh(i)), !0;
 	}
 
 	function subscribeToInAppMessage(n) {
 	  if (r.rr())
 	    return "function" != typeof n
 	      ? null
-	      : je$1.ra().Tn(function (r) {
+	      : je$1.ra().Nn(function (r) {
 	          return n(r[0]), r.slice(1);
 	        });
 	}
@@ -6641,11 +6657,11 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (!r.rr()) return;
 	  setupInAppMessageUI();
 	  const s = je$1.ra();
-	  if (null == s.kn()) {
+	  if (null == s.Fn()) {
 	    const r = subscribeToInAppMessage((s) => showInAppMessage(s));
-	    s.Dn(r);
+	    s.On(r);
 	  }
-	  return s.kn();
+	  return s.Fn();
 	}
 
 	function deferInAppMessage(e) {
@@ -6653,7 +6669,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    return e instanceof ControlMessage
 	      ? (E$1.info("Not deferring since this is a ControlMessage."), !1)
 	      : e instanceof InAppMessage
-	      ? je$1.ra().fn(e)
+	      ? je$1.ra().An(e)
 	      : (E$1.info("Not an instance of InAppMessage, ignoring."), !1);
 	}
 
@@ -6663,47 +6679,47 @@ var mpBrazeKitV6 = (function (exports) {
 
 	class ea {
 	  constructor(t, e, s, i) {
-	    (this.j = t),
-	      (this.C = e),
-	      (this.B = s),
-	      (this.vs = i),
-	      (this.j = t),
-	      (this.C = e),
-	      (this.B = s),
-	      (this.vs = i),
-	      (this.jn = new m()),
-	      r.q(this.jn),
-	      (this.vn = 1e3),
-	      (this.yn = 6e4),
-	      (this.bn = null),
-	      (this.In = null),
-	      (this.Mn = null);
+	    (this.B = t),
+	      (this.j = e),
+	      (this.C = s),
+	      (this.Ss = i),
+	      (this.B = t),
+	      (this.j = e),
+	      (this.C = s),
+	      (this.Ss = i),
+	      (this.In = new f()),
+	      r.S(this.In),
+	      (this.Bn = 1e3),
+	      (this._n = 6e4),
+	      (this.qn = null),
+	      (this.Pn = null),
+	      (this.En = null);
 	  }
-	  An() {
-	    return this.jn;
+	  Gn() {
+	    return this.In;
 	  }
-	  Tn(t) {
-	    return this.jn.Rt(t);
+	  Nn(t) {
+	    return this.In.Kt(t);
 	  }
-	  kn() {
-	    return this.bn;
+	  Fn() {
+	    return this.qn;
 	  }
-	  Dn(t) {
-	    this.bn = t;
+	  On(t) {
+	    this.qn = t;
 	  }
-	  lt(t, e, s, i) {
-	    const r = new H();
+	  wt(t, e, s, i) {
+	    const r = new L();
 	    let n;
-	    if (e === f.wn || t instanceof ControlMessage) {
-	      if (!t.Wt())
+	    if (e === p.Xn || t instanceof ControlMessage) {
+	      if (!t.gs())
 	        return (
 	          E$1.info(
 	            "This in-app message has already received an impression. Ignoring analytics event.",
 	          ),
 	          r
 	        );
-	    } else if (e === f.zn || (t instanceof HtmlMessage && e === f.Sn)) {
-	      if (!t.$t(i))
+	    } else if (e === p.Hn || (t instanceof HtmlMessage && e === p.Jn)) {
+	      if (!t.ss(i))
 	        return (
 	          E$1.info(
 	            "This in-app message has already received a click. Ignoring analytics event.",
@@ -6715,144 +6731,142 @@ var mpBrazeKitV6 = (function (exports) {
 	      (n =
 	        t instanceof ControlMessage
 	          ? { trigger_ids: [t.triggerId] }
-	          : this.Bn(t)),
+	          : this.Kn(t)),
 	      null == n
 	        ? r
 	        : (t.messageExtras && (n.message_extras = t.messageExtras),
 	          null != s && (n.bid = s),
-	          v$1.lt(e, n))
+	          v$1.wt(e, n))
 	    );
 	  }
-	  Rn(t, e) {
-	    const s = new H();
-	    if (!t.$t())
+	  Ln(t, e) {
+	    const s = new L();
+	    if (!t.ss())
 	      return (
 	        E$1.info(
 	          "This in-app message button has already received a click. Ignoring analytics event.",
 	        ),
 	        s
 	      );
-	    const i = this.Bn(e);
+	    const i = this.Kn(e);
 	    return null == i
 	      ? s
-	      : t.id === InAppMessageButton._n
+	      : t.id === InAppMessageButton.Qn
 	      ? (E$1.info(
 	          "This in-app message button does not have a tracking id. Not logging event to Braze servers.",
 	        ),
 	        s)
-	      : (null != t.id && (i.bid = t.id), v$1.lt(f.Sn, i));
+	      : (null != t.id && (i.bid = t.id), v$1.wt(p.Jn, i));
 	  }
-	  qn(t) {
+	  Un(t) {
 	    const e = t.messageFields;
 	    return (null != e && e.is_push_primer) || !1;
 	  }
-	  xn(t) {
+	  Vn(t) {
 	    if (!(t instanceof InAppMessage)) return;
 	    const e = (t) => {
 	      if (!t) return;
 	      const e = getDecodedBrazeAction(t);
-	      if (containsUnknownBrazeAction(e)) return ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Pn, "In-App Message");
+	      if (containsUnknownBrazeAction(e)) return ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Wn, "In-App Message");
 	      if (containsPushPrimerBrazeAction(e)) {
-	        const t = vt$1.En();
-	        if (!t.Gn) return vt$1.Nn(t.reason, "In-App Message");
+	        const t = It$1.Yn();
+	        if (!t.Zn) return It$1._o(t.reason, "In-App Message");
 	      }
 	    };
-	    if (this.qn(t)) {
-	      const t = vt$1.En();
-	      if (!t.Gn) return vt$1.Nn(t.reason, "In-App Message");
+	    if (this.Un(t)) {
+	      const t = It$1.Yn();
+	      if (!t.Zn) return It$1._o(t.reason, "In-App Message");
 	    }
 	    const s = t.buttons || [];
 	    let i;
 	    for (const t of s)
 	      if (
-	        t.clickAction === InAppMessage.ClickAction.URI &&
+	        t.clickAction === IamClickAction.URI &&
 	        t.uri &&
 	        BRAZE_ACTION_URI_REGEX.test(t.uri) &&
 	        ((i = e(t.uri)), i)
 	      )
 	        return i;
-	    return t.clickAction === InAppMessage.ClickAction.URI &&
-	      t.uri &&
-	      BRAZE_ACTION_URI_REGEX.test(t.uri)
+	    return t.clickAction === IamClickAction.URI && t.uri && BRAZE_ACTION_URI_REGEX.test(t.uri)
 	      ? e(t.uri)
 	      : void 0;
 	  }
-	  $n(t, e) {
-	    e !== this.Mn && this.Cn(), (this.In = t), (this.Mn = e);
+	  Xo(t, e) {
+	    e !== this.En && this.Yo(), (this.Pn = t), (this.En = e);
 	  }
-	  Cn() {
-	    null != this.In &&
-	      (clearTimeout(this.In), (this.In = null), (this.Mn = null));
+	  Yo() {
+	    null != this.Pn &&
+	      (clearTimeout(this.Pn), (this.Pn = null), (this.En = null));
 	  }
-	  Fn(t, e, s, i) {
-	    const r = this.j;
+	  Zo(t, e, s, i) {
+	    const r = this.B;
 	    if (!r) return;
-	    this.Mn && t.triggerId !== this.Mn && (this.Cn(), h.fi(this.B, h.H.On));
-	    const n = r.Xn(!1),
-	      o = r.$(n);
+	    this.En && t.triggerId !== this.En && (this.Yo(), h.Li(this.C, h.it.ta));
+	    const n = r.ia(!1),
+	      o = r.Z(n);
 	    (o.template = { trigger_id: t.triggerId, trigger_event_type: e }),
-	      null != s && (o.template.data = s.Hn());
-	    const u = r.A(o, h.H.On);
-	    r.J(
+	      null != s && (o.template.data = s.oa());
+	    const u = r.tt(o, h.it.ta);
+	    r.et(
 	      o,
 	      (r = -1) => {
-	        const n = this.j;
+	        const n = this.B;
 	        if (!n) return;
 	        const m = new Date().valueOf();
-	        h.K(this.B, h.H.On, m),
+	        h.nt(this.C, h.it.ta, m),
 	          -1 !== r && u.push(["X-Braze-Req-Tokens-Remaining", r.toString()]);
 	        let c,
 	          p,
 	          f = !1;
-	        l.O({
-	          url: `${n.V()}/template/`,
+	        l.ot({
+	          url: `${n.ht()}/template/`,
 	          data: o,
 	          headers: u,
-	          W: (e) => {
-	            if (!n.Y(o, e, u))
-	              return void ("function" == typeof t.Jn && t.Jn());
-	            if ((n.Z(), null == e || null == e.templated_message)) return;
+	          lt: (e) => {
+	            if (!n.ut(o, e, u))
+	              return void ("function" == typeof t.la && t.la());
+	            if ((n.ct(), null == e || null == e.templated_message)) return;
 	            const s = e.templated_message;
-	            if (s.type !== pt.Ln.Kn) return;
+	            if (s.type !== gt.ma.ua) return;
 	            const i = newInAppMessageFromJson(s.data);
 	            if (null == i) return;
-	            const r = this.xn(i);
+	            const r = this.Vn(i);
 	            if (r)
-	              return E$1.error(r), void ("function" == typeof t.Jn && t.Jn());
-	            "function" == typeof t.Qn && t.Qn(i);
+	              return E$1.error(r), void ("function" == typeof t.la && t.la());
+	            "function" == typeof t.ca && t.ca(i);
 	          },
 	          error: (e) => {
 	            (f = !0),
 	              (c = e),
 	              (p = `getting user personalization for message ${t.triggerId}.`);
 	          },
-	          tt: (r, o) => {
-	            if (new Date().valueOf() - t.Un < t.Vn) {
+	          ft: (r, o) => {
+	            if (new Date().valueOf() - t.pa < t.ha) {
 	              let r = 0;
 	              if (f) {
-	                const e = Math.min(t.Vn, this.yn),
-	                  s = this.vn;
+	                const e = Math.min(t.ha, this._n),
+	                  s = this.Bn;
 	                null == i && (i = s), (r = Math.min(e, randomInclusive(s, 3 * i)));
 	              }
-	              n.et(
+	              n.yt(
 	                o,
 	                () => {
-	                  this.Fn(t, e, s, r);
+	                  this.Zo(t, e, s, r);
 	                },
-	                h.H.On,
-	                (e) => this.$n(e, t.triggerId),
-	                () => this.Cn(),
+	                h.it.ta,
+	                (e) => this.Xo(e, t.triggerId),
+	                () => this.Yo(),
 	                r,
 	              );
 	            }
-	            f && n._(c, p);
+	            f && n.dt(c, p);
 	          },
 	        });
 	      },
-	      h.H.On,
+	      h.it.ta,
 	    );
 	  }
-	  Bn(t) {
+	  Kn(t) {
 	    if (null == t.triggerId)
 	      return (
 	        E$1.info(
@@ -6863,41 +6877,41 @@ var mpBrazeKitV6 = (function (exports) {
 	    const e = {};
 	    return null != t.triggerId && (e.trigger_ids = [t.triggerId]), e;
 	  }
-	  fn(t) {
+	  An(t) {
 	    return (
-	      !!this.B &&
+	      !!this.C &&
 	      !(
 	        !(t && t instanceof InAppMessage && t.constructor !== InAppMessage) ||
 	        t instanceof ControlMessage
 	      ) &&
-	      this.B.bt(STORAGE_KEYS.ft.Wn, t.gt())
+	      this.C.It(STORAGE_KEYS.Tt.fa, t.qt())
 	    );
 	  }
 	  sa() {
-	    if (!this.B) return null;
-	    const t = this.B.dt(STORAGE_KEYS.ft.Wn);
+	    if (!this.C) return null;
+	    const t = this.C.Rt(STORAGE_KEYS.Tt.fa);
 	    if (!t) return null;
 	    let e;
 	    switch (t.type) {
-	      case InAppMessage.Eo.Yn:
-	        e = FullScreenMessage.Zn(t);
+	      case IamServerTypes.cE:
+	        e = FullScreenMessage.ga(t);
 	        break;
-	      case InAppMessage.Eo.Zo:
-	      case InAppMessage.Eo.Bo:
-	      case InAppMessage.Eo.Yo:
-	        e = HtmlMessage.Zn(t);
+	      case IamServerTypes.iE:
+	      case IamServerTypes.PE:
+	      case IamServerTypes.nE:
+	        e = HtmlMessage.ga(t);
 	        break;
-	      case InAppMessage.Eo.ta:
-	      case InAppMessage.Eo.Xo:
-	        e = ModalMessage.Zn(t);
+	      case IamServerTypes.aE:
+	      case IamServerTypes.UE:
+	        e = ModalMessage.ga(t);
 	        break;
-	      case InAppMessage.Eo.ia:
-	        e = SlideUpMessage.Zn(t);
+	      case IamServerTypes.sE:
+	        e = SlideUpMessage.ga(t);
 	    }
-	    return e && this.oa(), e;
+	    return e && this.da(), e;
 	  }
-	  oa() {
-	    this.B && this.B.zt(STORAGE_KEYS.ft.Wn);
+	  da() {
+	    this.C && this.C.Qt(STORAGE_KEYS.Tt.fa);
 	  }
 	}
 
@@ -6916,37 +6930,37 @@ var mpBrazeKitV6 = (function (exports) {
 	};
 	var je$1 = je;
 
-	class wt {
+	class Jt {
 	  constructor(t, s, i, h, l) {
 	    (this.triggerId = t),
-	      (this.Qn = s),
-	      (this.Jn = i),
-	      (this.Un = h),
-	      (this.Vn = l),
+	      (this.ca = s),
+	      (this.la = i),
+	      (this.pa = h),
+	      (this.ha = l),
 	      (this.triggerId = t),
-	      (this.Qn = s),
-	      (this.Jn = i),
-	      (this.Un = h),
-	      (this.Vn = l);
+	      (this.ca = s),
+	      (this.la = i),
+	      (this.pa = h),
+	      (this.ha = l);
 	  }
 	  static fromJson(t, s, i, h, l) {
 	    return null == t || null == t.trigger_id
 	      ? null
-	      : new wt(t.trigger_id, s, i, h, l);
+	      : new Jt(t.trigger_id, s, i, h, l);
 	  }
 	}
 
-	class gr extends t {
+	class vr extends t {
 	  constructor(t, i, s, e, r) {
 	    super(),
 	      (this.tg = t),
-	      (this.ws = i),
-	      (this.B = s),
+	      (this.Rs = i),
+	      (this.C = s),
 	      (this.Ru = e),
 	      (this.ig = r),
 	      (this.tg = t),
-	      (this.ws = i),
-	      (this.B = s),
+	      (this.Rs = i),
+	      (this.C = s),
 	      (this.Ru = e),
 	      (this.ig = r),
 	      (this.sg = []),
@@ -6960,22 +6974,22 @@ var mpBrazeKitV6 = (function (exports) {
 	      this.gg();
 	  }
 	  fg() {
-	    if (this.B) {
-	      (this.hg = this.B.dt(STORAGE_KEYS.ft.iE) || this.hg),
-	        (this.ng = this.B.dt(STORAGE_KEYS.ft.EE) || this.ng),
-	        (this.og = this.B.dt(STORAGE_KEYS.ft.aE) || this.og);
+	    if (this.C) {
+	      (this.hg = this.C.Rt(STORAGE_KEYS.Tt.nS) || this.hg),
+	        (this.ng = this.C.Rt(STORAGE_KEYS.Tt.aS) || this.ng),
+	        (this.og = this.C.Rt(STORAGE_KEYS.Tt.oS) || this.og);
 	      for (let t = 0; t < this.triggers.length; t++) {
 	        const i = this.triggers[t];
-	        i.id && null != this.og[i.id] && i.zd(this.og[i.id]);
+	        i.id && null != this.og[i.id] && i.md(this.og[i.id]);
 	      }
 	    }
 	  }
 	  ag() {
-	    if (!this.B) return;
-	    this.lg = this.B.dt(STORAGE_KEYS.ft.nE) || 0;
-	    const t = this.B.dt(STORAGE_KEYS.ft.oE) || [],
+	    if (!this.C) return;
+	    this.lg = this.C.Rt(STORAGE_KEYS.Tt.rS) || 0;
+	    const t = this.C.Rt(STORAGE_KEYS.Tt.sS) || [],
 	      i = [];
-	    for (let s = 0; s < t.length; s++) i.push(pt._u(t[s]));
+	    for (let s = 0; s < t.length; s++) i.push(gt._u(t[s]));
 	    (this.triggers = i), this.fg();
 	  }
 	  gg() {
@@ -6995,19 +7009,19 @@ var mpBrazeKitV6 = (function (exports) {
 	          h = [];
 	        for (let r = 0; r < t.length; r++) {
 	          const n = t[r],
-	            o = s.Md(n.Un || 0);
+	            o = s.gd(n.pa || 0);
 	          if (o > 0) {
 	            let t, r;
 	            h.push(n),
 	              null != n.ug && (t = n.ug),
-	              null != n.dg && De.gE(n.dg) && (r = De._u(n.dg));
+	              null != n.dg && Ie.AS(n.dg) && (r = Ie._u(n.dg));
 	            const l = [];
 	            if (n.pg && isArray(n.pg))
 	              for (let t = 0; t < n.pg.length; t++) {
 	                const i = e[n.pg[t]];
 	                null != i && l.push(i);
 	              }
-	            this.eg.push(window.setTimeout(i(s, n.Un || 0, t, r, l), o));
+	            this.eg.push(window.setTimeout(i(s, n.pa || 0, t, r, l), o));
 	          }
 	        }
 	        this.ng[s.id].length > h.length &&
@@ -7016,73 +7030,73 @@ var mpBrazeKitV6 = (function (exports) {
 	          0 === this.ng[s.id].length && delete this.ng[s.id]);
 	      }
 	    }
-	    r && this.B && this.B.bt(STORAGE_KEYS.ft.EE, this.ng);
+	    r && this.C && this.C.It(STORAGE_KEYS.Tt.aS, this.ng);
 	  }
 	  mg() {
-	    if (!this.B) return;
+	    if (!this.C) return;
 	    const t = [];
 	    for (let i = 0; i < this.triggers.length; i++)
-	      t.push(this.triggers[i].gt());
+	      t.push(this.triggers[i].qt());
 	    (this.lg = new Date().valueOf()),
-	      this.B.bt(STORAGE_KEYS.ft.oE, t),
-	      this.B.bt(STORAGE_KEYS.ft.nE, this.lg);
+	      this.C.It(STORAGE_KEYS.Tt.sS, t),
+	      this.C.It(STORAGE_KEYS.Tt.rS, this.lg);
 	  }
 	  bg() {
-	    if (!this.B) return;
-	    (this.B.dt(STORAGE_KEYS.ft.nE) || 0) > this.lg ? this.ag() : this.fg();
+	    if (!this.C) return;
+	    (this.C.Rt(STORAGE_KEYS.Tt.rS) || 0) > this.lg ? this.ag() : this.fg();
 	  }
-	  N(t) {
+	  I(t) {
 	    let i = !1;
 	    if (null != t && t.triggers) {
-	      this.ig.oa(), this.fg();
+	      this.ig.da(), this.fg();
 	      const e = {},
 	        r = {};
 	      this.triggers = [];
 	      for (let s = 0; s < t.triggers.length; s++) {
-	        const h = pt.fromJson(t.triggers[s]);
+	        const h = gt.fromJson(t.triggers[s]);
 	        if (h) {
 	          h.id &&
 	            null != this.og[h.id] &&
-	            (h.zd(this.og[h.id]), (e[h.id] = this.og[h.id])),
+	            (h.md(this.og[h.id]), (e[h.id] = this.og[h.id])),
 	            h.id && null != this.ng[h.id] && (r[h.id] = this.ng[h.id]);
-	          for (let t = 0; t < h.Pd.length; t++)
-	            if (h.Pd[t].km(ot.qs, null)) {
+	          for (let t = 0; t < h.ed.length; t++)
+	            if (h.ed[t].Vc(ot.Ls, null)) {
 	              i = !0;
 	              break;
 	            }
 	          this.triggers.push(h);
 	        }
 	      }
-	      isEqual(this.og, e) || ((this.og = e), this.B && this.B.bt(STORAGE_KEYS.ft.aE, this.og)),
+	      isEqual(this.og, e) || ((this.og = e), this.C && this.C.It(STORAGE_KEYS.Tt.oS, this.og)),
 	        isEqual(this.ng, r) ||
-	          ((this.ng = r), this.B && this.B.bt(STORAGE_KEYS.ft.EE, this.ng)),
+	          ((this.ng = r), this.C && this.C.It(STORAGE_KEYS.Tt.aS, this.ng)),
 	        this.mg(),
 	        i &&
 	          (E$1.info("Trigger with test condition found, firing test."),
-	          this.he(ot.qs)),
-	        this.he(ot.OPEN);
+	          this.Ee(ot.Ls)),
+	        this.Ee(ot.OPEN);
 	      const h = this.sg;
 	      let n;
 	      this.sg = [];
 	      for (let t = 0; t < h.length; t++)
-	        (n = Array.prototype.slice.call(h[t])), this.he(...n);
+	        (n = Array.prototype.slice.call(h[t])), this.Ee(...n);
 	    }
 	  }
 	  cg(t, i, s, e, r) {
 	    const h = (e) => {
 	        this.fg();
 	        const r = new Date().valueOf();
-	        t.Bd(i) ||
-	          (!1 === navigator.onLine && t.type === pt.Ln.Kn && e.imageUrl
+	        t.fd(i) ||
+	          (!1 === navigator.onLine && t.type === gt.ma.ua && e.imageUrl
 	            ? E$1.info(
 	                `Not showing ${t.type} trigger action ${t.id} due to offline state.`,
 	              )
-	            : t.xd(r) && this.wg(t, r, s)
-	            ? 0 === this.ws.De()
+	            : t.dd(r) && this.wg(t, r, s)
+	            ? 0 === this.Rs.Ke()
 	              ? E$1.info(
 	                  `Not displaying trigger ${t.id} because neither automaticallyShowInAppMessages() nor subscribeToInAppMessage() were called.`,
 	                )
-	              : (this.ws.L([e]), this.yg(t, r))
+	              : (this.Rs.A([e]), this.yg(t, r))
 	            : E$1.info(
 	                `Not displaying trigger ${t.id} because display time fell outside of the acceptable time window.`,
 	              ));
@@ -7091,14 +7105,14 @@ var mpBrazeKitV6 = (function (exports) {
 	        this.fg();
 	        const h = r.pop();
 	        if (null != h)
-	          if ((this.Tg(h, i, s, e, r), h.Bd(i))) {
+	          if ((this.Tg(h, i, s, e, r), h.fd(i))) {
 	            let t = `Server aborted in-app message display, but the timeout on fallback trigger ${h.id} has already elapsed.`;
 	            r.length > 0 && (t += " Continuing to fall back."), E$1.info(t), n();
 	          } else {
 	            E$1.info(
 	              `Server aborted in-app message display. Falling back to lower priority ${h.type} trigger action ${t.id}.`,
 	            );
-	            const n = 1e3 * h.Ed - (new Date().valueOf() - i);
+	            const n = 1e3 * h.hd - (new Date().valueOf() - i);
 	            n > 0
 	              ? this.eg.push(
 	                  window.setTimeout(() => {
@@ -7110,35 +7124,35 @@ var mpBrazeKitV6 = (function (exports) {
 	      };
 	    let o, l, a;
 	    switch (t.type) {
-	      case pt.Ln.Kn:
+	      case gt.ma.ua:
 	        if (((o = newInAppMessageFromJson(t.data)), null == o)) {
 	          E$1.error(
 	            `Could not parse trigger data for trigger ${t.id}, ignoring.`,
 	          );
 	          break;
 	        }
-	        if (((l = this.ig.xn(o)), l)) {
+	        if (((l = this.ig.Vn(o)), l)) {
 	          E$1.error(l), n();
 	          break;
 	        }
 	        h(o);
 	        break;
-	      case pt.Ln.Cd:
-	        if (((a = wt.fromJson(t.data, h, n, i, t.Vn || 0)), null == a)) {
+	      case gt.ma.pd:
+	        if (((a = Jt.fromJson(t.data, h, n, i, t.ha || 0)), null == a)) {
 	          E$1.error(
 	            `Could not parse trigger data for trigger ${t.id}, ignoring.`,
 	          );
 	          break;
 	        }
-	        this.ig.Fn(a, s, e);
+	        this.ig.Zo(a, s, e);
 	        break;
 	      default:
 	        E$1.error(`Trigger ${t.id} was of unexpected type ${t.type}, ignoring.`);
 	    }
 	  }
-	  he(t, i = null, s) {
+	  Ee(t, i = null, s) {
 	    if (!validateValueIsFromEnum(ot, t, "Cannot fire trigger action.", "TriggerEvents")) return;
-	    if (this.Ru && this.Ru.vd())
+	    if (this.Ru && this.Ru.Pc())
 	      return (
 	        E$1.info(
 	          "Trigger sync is currently in progress, awaiting sync completion before firing trigger event.",
@@ -7153,15 +7167,15 @@ var mpBrazeKitV6 = (function (exports) {
 	    const o = [];
 	    for (let s = 0; s < this.triggers.length; s++) {
 	      const r = this.triggers[s],
-	        l = e + 1e3 * r.Ed;
+	        l = e + 1e3 * r.hd;
 	      if (
-	        r.xd(l) &&
+	        r.dd(l) &&
 	        (null == r.startTime || r.startTime.valueOf() <= e) &&
 	        (null == r.endTime || r.endTime.valueOf() >= e)
 	      ) {
 	        let s = !1;
-	        for (let e = 0; e < r.Pd.length; e++)
-	          if (r.Pd[e].km(t, i)) {
+	        for (let e = 0; e < r.ed.length; e++)
+	          if (r.ed[e].Vc(t, i)) {
 	            s = !0;
 	            break;
 	          }
@@ -7185,20 +7199,20 @@ var mpBrazeKitV6 = (function (exports) {
 	        `Firing ${l.type} trigger action ${l.id} from trigger event ${t}.`,
 	      ),
 	      this.Tg(l, e, t, s, o),
-	      0 === l.Ed
+	      0 === l.hd
 	        ? this.cg(l, e, t, s, o)
 	        : this.eg.push(
 	            window.setTimeout(() => {
 	              this.cg(l, e, t, s, o);
-	            }, 1e3 * l.Ed),
+	            }, 1e3 * l.hd),
 	          ));
 	  }
 	  changeUser(t = !1) {
-	    if (((this.triggers = []), this.B && this.B.zt(STORAGE_KEYS.ft.oE), !t)) {
+	    if (((this.triggers = []), this.C && this.C.Qt(STORAGE_KEYS.Tt.sS), !t)) {
 	      (this.sg = []), (this.hg = null), (this.og = {}), (this.ng = {});
 	      for (let t = 0; t < this.eg.length; t++) clearTimeout(this.eg[t]);
 	      (this.eg = []),
-	        this.B && (this.B.zt(STORAGE_KEYS.ft.iE), this.B.zt(STORAGE_KEYS.ft.aE), this.B.zt(STORAGE_KEYS.ft.EE));
+	        this.C && (this.C.Qt(STORAGE_KEYS.Tt.nS), this.C.Qt(STORAGE_KEYS.Tt.oS), this.C.Qt(STORAGE_KEYS.Tt.aS));
 	    }
 	  }
 	  clearData() {
@@ -7208,33 +7222,33 @@ var mpBrazeKitV6 = (function (exports) {
 	  }
 	  wg(t, i, s) {
 	    if (null == this.hg) return !0;
-	    if (s === ot.qs)
+	    if (s === ot.Ls)
 	      return (
 	        E$1.info(
 	          "Ignoring minimum interval between trigger because it is a test type.",
 	        ),
 	        !0
 	      );
-	    let e = t._d;
+	    let e = t.ad;
 	    return null == e && (e = this.tg), i - this.hg >= 1e3 * e;
 	  }
 	  Tg(t, i, e, r, h) {
 	    this.fg(), t.id && (this.ng[t.id] = this.ng[t.id] || []);
 	    const n = {};
 	    let o;
-	    (n.Un = i), (n.ug = e), null != r && (o = r.gt()), (n.dg = o);
+	    (n.pa = i), (n.ug = e), null != r && (o = r.qt()), (n.dg = o);
 	    const l = [];
 	    for (const t of h) t.id && l.push(t.id);
 	    (n.pg = l),
 	      t.id && this.ng[t.id].push(n),
-	      this.B && this.B.bt(STORAGE_KEYS.ft.EE, this.ng);
+	      this.C && this.C.It(STORAGE_KEYS.Tt.aS, this.ng);
 	  }
 	  yg(t, i) {
 	    this.fg(),
-	      t.zd(i),
+	      t.md(i),
 	      (this.hg = i),
 	      t.id && (this.og[t.id] = i),
-	      this.B && (this.B.bt(STORAGE_KEYS.ft.iE, i), this.B.bt(STORAGE_KEYS.ft.aE, this.og));
+	      this.C && (this.C.It(STORAGE_KEYS.Tt.nS, i), this.C.It(STORAGE_KEYS.Tt.oS, this.og));
 	  }
 	}
 
@@ -7248,10 +7262,10 @@ var mpBrazeKitV6 = (function (exports) {
 	  ),
 	  rg: () => {
 	    if (!TriggersProviderFactory.provider) {
-	      const i = r.re(D.Xh);
-	      (TriggersProviderFactory.provider = new gr(
+	      const i = r.er(U.Dh);
+	      (TriggersProviderFactory.provider = new vr(
 	        null != i ? i : 30,
-	        je$1.ra().An(),
+	        je$1.ra().Gn(),
 	        r.p(),
 	        r.nn(),
 	        je$1.ra(),
@@ -7271,6 +7285,7 @@ var mpBrazeKitV6 = (function (exports) {
 	};
 
 	const MAX_RETRIES = 5;
+	const CONNECTION_VALID_THRESHOLD_MS = 3e3;
 	function buildSseUrl(t, e, n, o, r) {
 	  const c = /^https?:\/\//i.test(t) ? t : `https://${t}`;
 	  let p = `mite=${encodeURIComponent(e)}&attempts=${n}`;
@@ -7282,7 +7297,7 @@ var mpBrazeKitV6 = (function (exports) {
 	}
 
 	const DUST_SHARED_WORKER_CODE =
-	  '\n"use strict";\nconst workerSelf = self;\nlet eventSource = null;\nlet currentConfig = null;\nlet retryCount = 0;\nlet retryTimeoutId = null;\nlet connectionInProgress = false;\nconst maxRetries = 5;\nconst connectedPorts = new Map();\nlet lastSleepMs = null;\nlet currentRcs = null;\nlet ttlTimeoutId = null;\nlet leaderPortId = null;\nlet ddrTimeoutId = null;\nconst fn = {\n    startConnection: null,\n    handleMessage: null,\n};\nfunction broadcast(message) {\n    connectedPorts.forEach((portInfo, portId) => {\n        try {\n            portInfo.port.postMessage(message);\n        }\n        catch (_a) {\n            connectedPorts.delete(portId);\n        }\n    });\n}\nfunction randomInclusive(min, max) {\n    return Math.floor(Math.random() * (max - min + 1)) + min;\n}\nfunction electLeader() {\n    if (leaderPortId && connectedPorts.has(leaderPortId)) {\n        return;\n    }\n    const firstPortId = connectedPorts.keys().next().value;\n    leaderPortId = firstPortId || null;\n    if (leaderPortId) {\n        console.log("[Braze Real-Time] Elected leader port:", leaderPortId);\n    }\n}\nfunction promoteToLeader(portId) {\n    if (connectedPorts.has(portId) && leaderPortId !== portId) {\n        leaderPortId = portId;\n        console.log("[Braze Real-Time] Promoted to leader (tab became active):", portId);\n    }\n}\nfunction sendToLeader(message) {\n    electLeader();\n    if (!leaderPortId) {\n        console.warn("[Braze Real-Time] No leader to send message to");\n        return;\n    }\n    const leader = connectedPorts.get(leaderPortId);\n    if (leader) {\n        try {\n            leader.port.postMessage(message);\n        }\n        catch (_a) {\n            connectedPorts.delete(leaderPortId);\n            leaderPortId = null;\n            sendToLeader(message);\n        }\n    }\n}\nfunction closeConnection() {\n    connectionInProgress = false;\n    if (retryTimeoutId !== null) {\n        clearTimeout(retryTimeoutId);\n        retryTimeoutId = null;\n    }\n    if (ttlTimeoutId !== null) {\n        clearTimeout(ttlTimeoutId);\n        ttlTimeoutId = null;\n    }\n    if (ddrTimeoutId !== null) {\n        clearTimeout(ddrTimeoutId);\n        ddrTimeoutId = null;\n    }\n    if (eventSource) {\n        eventSource.close();\n        eventSource = null;\n        broadcast({ type: "disconnected" });\n    }\n}\nfunction retryWithBackoff() {\n    if (!currentConfig) {\n        return;\n    }\n    retryCount++;\n    const { minSleepMs, maxSleepMs, scaleFactor } = currentConfig.backoff;\n    let previousSleepMs = lastSleepMs;\n    if (previousSleepMs == null || previousSleepMs < minSleepMs) {\n        previousSleepMs = minSleepMs;\n    }\n    const backoffMs = Math.min(maxSleepMs, randomInclusive(minSleepMs, previousSleepMs * scaleFactor));\n    lastSleepMs = backoffMs;\n    console.log("[Braze Real-Time] Retrying in " + backoffMs + "ms (attempt " + retryCount + "/" + maxRetries + ")");\n    retryTimeoutId = setTimeout(function () {\n        retryTimeoutId = null;\n        fn.startConnection();\n    }, backoffMs);\n}\nfunction startConnection(oldEventSourceToClose) {\n    if (!currentConfig) {\n        return;\n    }\n    if (eventSource && !oldEventSourceToClose) {\n        console.warn("[Braze Real-Time] Connection already exists");\n        return;\n    }\n    if (connectionInProgress && !oldEventSourceToClose) {\n        console.warn("[Braze Real-Time] Connection attempt already in progress");\n        return;\n    }\n    connectionInProgress = true;\n    const { dustHost, mite, auth } = currentConfig;\n    const dustHostWithScheme = /^https?:\\/\\//i.test(dustHost) ? dustHost : "https://" + dustHost;\n    let queryString = "mite=" + encodeURIComponent(mite) + "&attempts=" + retryCount;\n    if (auth) {\n        queryString += "&auth=" + encodeURIComponent(auth);\n    }\n    if (currentRcs) {\n        queryString += "&rcs=" + encodeURIComponent(currentRcs);\n    }\n    const subscribeUrl = dustHostWithScheme + "/sse?" + queryString;\n    try {\n        const newEventSource = new EventSource(subscribeUrl);\n        newEventSource.onopen = function () {\n            if (oldEventSourceToClose) {\n                console.log("[Braze Real-Time] Gapless reconnection: new connection established, closing old connection");\n                oldEventSourceToClose.close();\n            }\n            else {\n                console.log("[Braze Real-Time] Connection established");\n            }\n            eventSource = newEventSource;\n            connectionInProgress = false;\n            retryCount = 0;\n            lastSleepMs = null;\n            broadcast({ type: "connected" });\n        };\n        newEventSource.addEventListener("msg", function (event) {\n            fn.handleMessage(event.data);\n        });\n        newEventSource.onerror = function () {\n            const readyState = newEventSource ? newEventSource.readyState : -1;\n            if (readyState === 0) {\n                console.log("[Braze Real-Time] Failed to connect");\n            }\n            else {\n                console.log("[Braze Real-Time] Connection lost");\n            }\n            if (oldEventSourceToClose && eventSource !== newEventSource) {\n                console.log("[Braze Real-Time] Gapless reconnection failed, keeping old connection");\n                newEventSource.close();\n                connectionInProgress = false;\n                if (retryCount < maxRetries) {\n                    retryWithBackoff();\n                }\n                return;\n            }\n            closeConnection();\n            if (retryCount < maxRetries) {\n                retryWithBackoff();\n            }\n            else {\n                console.error("[Braze Real-Time] Max retries reached");\n                broadcast({ type: "error", error: "Max retry attempts reached" });\n            }\n        };\n    }\n    catch (error) {\n        connectionInProgress = false;\n        console.error("[Braze Real-Time] Failed to create EventSource:", error);\n        broadcast({ type: "error", error: String(error) });\n    }\n}\nfunction handleTtlMessage(tMs, rcs) {\n    if (typeof tMs !== "number") {\n        return;\n    }\n    if (typeof rcs === "string") {\n        currentRcs = rcs;\n    }\n    console.log("[Braze Real-Time] TTL set to " + tMs + "ms, will perform gapless reconnection when expired");\n    if (ttlTimeoutId !== null) {\n        clearTimeout(ttlTimeoutId);\n    }\n    ttlTimeoutId = setTimeout(function () {\n        ttlTimeoutId = null;\n        console.log("[Braze Real-Time] TTL expired, performing gapless reconnection");\n        startConnection(eventSource || undefined);\n    }, tMs);\n}\nfunction handleDdrMessage(rMs, reason) {\n    if (typeof rMs !== "number") {\n        return;\n    }\n    const jitter = Math.random() * rMs * 0.3;\n    const waitMs = Math.round(rMs + jitter);\n    const reasonStr = reason ? " (" + reason + ")" : "";\n    console.log("[Braze Real-Time] Admin requested disconnect" + reasonStr + ", reconnecting in " + waitMs + "ms");\n    if (ddrTimeoutId !== null) {\n        clearTimeout(ddrTimeoutId);\n    }\n    closeConnection();\n    ddrTimeoutId = setTimeout(function () {\n        ddrTimeoutId = null;\n        fn.startConnection();\n    }, waitMs);\n}\nfunction handleMessage(data) {\n    try {\n        const message = JSON.parse(data);\n        if (!message.type) {\n            console.warn("[Braze Real-Time] Message without type:", message);\n            return;\n        }\n        if (message.type === "ttl" && message.body) {\n            handleTtlMessage(message.body.t_ms, message.body.rcs);\n            return;\n        }\n        if (message.type === "ddr" && message.body) {\n            handleDdrMessage(message.body.r_ms, message.body.e);\n            return;\n        }\n        console.log("[Braze Real-Time] Routing \'" + message.type + "\' message to leader");\n        sendToLeader({ type: "message", data: message });\n    }\n    catch (error) {\n        console.warn("[Braze Real-Time] Failed to parse message:", error);\n    }\n}\nfn.startConnection = startConnection;\nfn.handleMessage = handleMessage;\nfunction handlePortMessage(port, portId, message) {\n    switch (message.type) {\n        case "connect":\n            if (currentConfig &&\n                (currentConfig.mite !== message.config.mite || currentConfig.dustHost !== message.config.dustHost)) {\n                console.log("[Braze Real-Time] Config changed, reconnecting");\n                closeConnection();\n                retryCount = 0;\n                lastSleepMs = null;\n                currentRcs = null;\n            }\n            currentConfig = message.config;\n            electLeader();\n            if (!eventSource && !connectionInProgress) {\n                startConnection();\n            }\n            else if (eventSource) {\n                port.postMessage({ type: "connected" });\n            }\n            break;\n        case "disconnect":\n            connectedPorts.delete(portId);\n            if (portId === leaderPortId) {\n                leaderPortId = null;\n                electLeader();\n            }\n            if (connectedPorts.size === 0) {\n                console.log("[Braze Real-Time] No more ports, closing connection");\n                closeConnection();\n                currentConfig = null;\n                currentRcs = null;\n                leaderPortId = null;\n            }\n            break;\n        case "tab_active":\n            promoteToLeader(portId);\n            break;\n        case "ping":\n            port.postMessage({ type: "pong" });\n            break;\n        default:\n            console.warn("[Braze Real-Time] Unknown message type:", message.type);\n    }\n}\nworkerSelf.onconnect = function (event) {\n    const port = event.ports[0];\n    const portId = "port-" + Date.now() + "-" + Math.random().toString(36).substr(2, 9);\n    connectedPorts.set(portId, { port: port });\n    port.onmessage = function (messageEvent) {\n        try {\n            handlePortMessage(port, portId, messageEvent.data);\n        }\n        catch (error) {\n            console.error("[Braze Real-Time] Error handling message:", error);\n        }\n    };\n    port.onmessageerror = function () {\n        console.warn("[Braze Real-Time] Message error from port:", portId);\n        connectedPorts.delete(portId);\n    };\n    port.start();\n};\n';
+	  '\n"use strict";\nconst workerSelf = self;\nlet eventSource = null;\nlet currentConfig = null;\nlet retryCount = 0;\nlet retryTimeoutId = null;\nlet connectionInProgress = false;\nconst maxRetries = 5;\nconst connectedPorts = new Map();\nlet lastSleepMs = null;\nlet currentRcs = null;\nlet ttlTimeoutId = null;\nlet leaderPortId = null;\nlet ddrTimeoutId = null;\nconst fn = {\n    startConnection: null,\n    handleMessage: null,\n};\nfunction broadcast(message) {\n    connectedPorts.forEach((portInfo, portId) => {\n        try {\n            portInfo.port.postMessage(message);\n        }\n        catch (_a) {\n            connectedPorts.delete(portId);\n        }\n    });\n}\nfunction randomInclusive(min, max) {\n    return Math.floor(Math.random() * (max - min + 1)) + min;\n}\nfunction electLeader() {\n    if (leaderPortId && connectedPorts.has(leaderPortId)) {\n        return;\n    }\n    const firstPortId = connectedPorts.keys().next().value;\n    leaderPortId = firstPortId || null;\n    if (leaderPortId) {\n        console.log("[Braze Real-Time] Elected leader port:", leaderPortId);\n    }\n}\nfunction promoteToLeader(portId) {\n    if (connectedPorts.has(portId) && leaderPortId !== portId) {\n        leaderPortId = portId;\n        console.log("[Braze Real-Time] Promoted to leader (tab became active):", portId);\n    }\n}\nfunction sendToLeader(message) {\n    electLeader();\n    if (!leaderPortId) {\n        console.warn("[Braze Real-Time] No leader to send message to");\n        return;\n    }\n    const leader = connectedPorts.get(leaderPortId);\n    if (leader) {\n        try {\n            leader.port.postMessage(message);\n        }\n        catch (_a) {\n            connectedPorts.delete(leaderPortId);\n            leaderPortId = null;\n            sendToLeader(message);\n        }\n    }\n}\nfunction closeConnection() {\n    connectionInProgress = false;\n    if (retryTimeoutId !== null) {\n        clearTimeout(retryTimeoutId);\n        retryTimeoutId = null;\n    }\n    if (ttlTimeoutId !== null) {\n        clearTimeout(ttlTimeoutId);\n        ttlTimeoutId = null;\n    }\n    if (ddrTimeoutId !== null) {\n        clearTimeout(ddrTimeoutId);\n        ddrTimeoutId = null;\n    }\n    if (eventSource) {\n        eventSource.close();\n        eventSource = null;\n        broadcast({ type: "disconnected" });\n    }\n}\nfunction retryWithBackoff() {\n    if (!currentConfig) {\n        return;\n    }\n    retryCount++;\n    const { minSleepMs, maxSleepMs, scaleFactor } = currentConfig.backoff;\n    let previousSleepMs = lastSleepMs;\n    if (previousSleepMs == null || previousSleepMs < minSleepMs) {\n        previousSleepMs = minSleepMs;\n    }\n    const backoffMs = Math.min(maxSleepMs, randomInclusive(minSleepMs, previousSleepMs * scaleFactor));\n    lastSleepMs = backoffMs;\n    console.log(`[Braze Real-Time] Retrying in ${backoffMs}ms (attempt ${retryCount}/${maxRetries})`);\n    retryTimeoutId = setTimeout(function () {\n        retryTimeoutId = null;\n        fn.startConnection();\n    }, backoffMs);\n}\nfunction startConnection(oldEventSourceToClose) {\n    if (!currentConfig) {\n        return;\n    }\n    if (eventSource && !oldEventSourceToClose) {\n        console.warn("[Braze Real-Time] Connection already exists");\n        return;\n    }\n    if (connectionInProgress && !oldEventSourceToClose) {\n        console.warn("[Braze Real-Time] Connection attempt already in progress");\n        return;\n    }\n    connectionInProgress = true;\n    const { dustHost, mite, auth } = currentConfig;\n    const dustHostWithScheme = /^https?:\\/\\//i.test(dustHost) ? dustHost : `https://${dustHost}`;\n    let queryString = `mite=${encodeURIComponent(mite)}&attempts=${retryCount}`;\n    if (auth) {\n        queryString += `&auth=${encodeURIComponent(auth)}`;\n    }\n    if (currentRcs) {\n        queryString += `&rcs=${encodeURIComponent(currentRcs)}`;\n    }\n    const subscribeUrl = `${dustHostWithScheme}/sse?${queryString}`;\n    try {\n        const newEventSource = new EventSource(subscribeUrl);\n        newEventSource.onopen = function () {\n            if (oldEventSourceToClose) {\n                console.log("[Braze Real-Time] Gapless reconnection: new connection established, closing old connection");\n                oldEventSourceToClose.close();\n            }\n            else {\n                console.log("[Braze Real-Time] Connection established");\n            }\n            eventSource = newEventSource;\n            connectionInProgress = false;\n            retryCount = 0;\n            lastSleepMs = null;\n            broadcast({ type: "connected" });\n        };\n        newEventSource.addEventListener("msg", function (event) {\n            fn.handleMessage(event.data);\n        });\n        newEventSource.onerror = function () {\n            const readyState = newEventSource ? newEventSource.readyState : -1;\n            if (readyState === 0) {\n                console.log("[Braze Real-Time] Failed to connect");\n            }\n            else {\n                console.log("[Braze Real-Time] Connection lost");\n            }\n            if (oldEventSourceToClose && eventSource !== newEventSource) {\n                console.log("[Braze Real-Time] Gapless reconnection failed, keeping old connection");\n                newEventSource.close();\n                connectionInProgress = false;\n                if (retryCount < maxRetries) {\n                    retryWithBackoff();\n                }\n                return;\n            }\n            closeConnection();\n            if (retryCount < maxRetries) {\n                retryWithBackoff();\n            }\n            else {\n                console.error("[Braze Real-Time] Max retries reached");\n                broadcast({ type: "error", error: "Max retry attempts reached" });\n            }\n        };\n    }\n    catch (error) {\n        connectionInProgress = false;\n        console.error("[Braze Real-Time] Failed to create EventSource:", error);\n        broadcast({ type: "error", error: String(error) });\n    }\n}\nfunction handleTtlMessage(tMs, rcs) {\n    if (typeof tMs !== "number") {\n        return;\n    }\n    if (typeof rcs === "string") {\n        currentRcs = rcs;\n    }\n    console.log(`[Braze Real-Time] TTL set to ${tMs}ms, will perform gapless reconnection when expired`);\n    if (ttlTimeoutId !== null) {\n        clearTimeout(ttlTimeoutId);\n    }\n    ttlTimeoutId = setTimeout(function () {\n        ttlTimeoutId = null;\n        console.log("[Braze Real-Time] TTL expired, performing gapless reconnection");\n        startConnection(eventSource || undefined);\n    }, tMs);\n}\nfunction handleDdrMessage(rMs, reason) {\n    if (typeof rMs !== "number") {\n        return;\n    }\n    const backoffConfig = currentConfig === null || currentConfig === void 0 ? void 0 : currentConfig.backoff;\n    const minSleepMs = (backoffConfig === null || backoffConfig === void 0 ? void 0 : backoffConfig.minSleepMs) || 10000;\n    const scaleFactor = (backoffConfig === null || backoffConfig === void 0 ? void 0 : backoffConfig.scaleFactor) || 3;\n    const maxSleepMs = (backoffConfig === null || backoffConfig === void 0 ? void 0 : backoffConfig.maxSleepMs) || 300000;\n    const backoffMs = Math.min(maxSleepMs, randomInclusive(minSleepMs, minSleepMs * scaleFactor));\n    const waitMs = Math.round(rMs + backoffMs);\n    const reasonStr = reason ? ` (${reason})` : "";\n    console.log(`[Braze Real-Time] Admin requested disconnect${reasonStr}, reconnecting in ${waitMs}ms (r_ms=${rMs} + backoff=${backoffMs})`);\n    if (ddrTimeoutId !== null) {\n        clearTimeout(ddrTimeoutId);\n    }\n    closeConnection();\n    ddrTimeoutId = setTimeout(function () {\n        ddrTimeoutId = null;\n        fn.startConnection();\n    }, waitMs);\n}\nfunction handleMessage(data) {\n    try {\n        const message = JSON.parse(data);\n        if (!message.type) {\n            console.warn("[Braze Real-Time] Message without type:", message);\n            return;\n        }\n        if (message.type === "ttl" && message.body) {\n            handleTtlMessage(message.body.t_ms, message.body.rcs);\n            return;\n        }\n        if (message.type === "ddr" && message.body) {\n            handleDdrMessage(message.body.r_ms, message.body.e);\n            return;\n        }\n        console.log(`[Braze Real-Time] Routing \'${message.type}\' message to leader`);\n        sendToLeader({ type: "message", data: message });\n    }\n    catch (error) {\n        console.warn("[Braze Real-Time] Failed to parse message:", error);\n    }\n}\nfn.startConnection = startConnection;\nfn.handleMessage = handleMessage;\nfunction handlePortMessage(port, portId, message) {\n    switch (message.type) {\n        case "connect":\n            if (currentConfig &&\n                (currentConfig.mite !== message.config.mite || currentConfig.dustHost !== message.config.dustHost)) {\n                console.log("[Braze Real-Time] Config changed, reconnecting");\n                closeConnection();\n                retryCount = 0;\n                lastSleepMs = null;\n                currentRcs = null;\n            }\n            currentConfig = message.config;\n            electLeader();\n            if (!eventSource && !connectionInProgress) {\n                startConnection();\n            }\n            else if (eventSource) {\n                port.postMessage({ type: "connected" });\n            }\n            break;\n        case "disconnect":\n            connectedPorts.delete(portId);\n            if (portId === leaderPortId) {\n                leaderPortId = null;\n                electLeader();\n            }\n            if (connectedPorts.size === 0) {\n                console.log("[Braze Real-Time] No more ports, closing connection");\n                closeConnection();\n                currentConfig = null;\n                currentRcs = null;\n                leaderPortId = null;\n            }\n            break;\n        case "tab_active":\n            promoteToLeader(portId);\n            break;\n        case "ping":\n            port.postMessage({ type: "pong" });\n            break;\n        default:\n            console.warn("[Braze Real-Time] Unknown message type:", message.type);\n    }\n}\nworkerSelf.onconnect = function (event) {\n    const port = event.ports[0];\n    const portId = `port-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;\n    connectedPorts.set(portId, { port: port });\n    port.onmessage = function (messageEvent) {\n        try {\n            handlePortMessage(port, portId, messageEvent.data);\n        }\n        catch (error) {\n            console.error("[Braze Real-Time] Error handling message:", error);\n        }\n    };\n    port.onmessageerror = function () {\n        console.warn("[Braze Real-Time] Message error from port:", portId);\n        connectedPorts.delete(portId);\n    };\n    port.start();\n};\n';
 
 	function isSharedWorkerSupported() {
 	  return "undefined" != typeof SharedWorker;
@@ -7290,14 +7305,14 @@ var mpBrazeKitV6 = (function (exports) {
 	class DustWorkerBridge {
 	  constructor(i) {
 	    (this.Wr = null),
-	      (this.Lr = null),
+	      (this.Rr = null),
 	      (this.isConnected = !1),
+	      (this.Lr = null),
 	      (this.Ir = null),
-	      (this.Mr = null),
-	      (this.we = i.we),
-	      (this.ke = i.ke),
-	      (this.Re = i.Re),
-	      (this.Me = i.Me);
+	      (this.Ge = i.Ge),
+	      (this.qe = i.qe),
+	      (this.Je = i.Je),
+	      (this.Le = i.Le);
 	  }
 	  initialize() {
 	    if (!isSharedWorkerSupported())
@@ -7307,10 +7322,10 @@ var mpBrazeKitV6 = (function (exports) {
 	    try {
 	      const i = new Blob([DUST_SHARED_WORKER_CODE], { type: "application/javascript" });
 	      return (
-	        (this.Lr = URL.createObjectURL(i)),
-	        (this.Wr = new SharedWorker(this.Lr, { name: "braze-dust-worker" })),
+	        (this.Rr = URL.createObjectURL(i)),
+	        (this.Wr = new SharedWorker(this.Rr, { name: "braze-dust-worker" })),
 	        (this.Wr.port.onmessage = (i) => {
-	          this.Br(i.data);
+	          this.Mr(i.data);
 	        }),
 	        (this.Wr.port.onmessageerror = () => {
 	          E$1.warn("Message error from real-time messaging worker");
@@ -7320,7 +7335,7 @@ var mpBrazeKitV6 = (function (exports) {
 	          E$1.error(
 	            `Real-time messaging worker error: ${i.message || "unknown error"}`,
 	          ),
-	            null === (e = this.Me) ||
+	            null === (e = this.Le) ||
 	              void 0 === e ||
 	              e.call(this, "SharedWorker error");
 	        }),
@@ -7337,65 +7352,65 @@ var mpBrazeKitV6 = (function (exports) {
             i instanceof Error ? i.message : String(i)
           }`,
 	        ),
-	        this.Er(),
+	        this._r(),
 	        !1
 	      );
 	    }
 	  }
-	  Br(i) {
+	  Mr(i) {
 	    var e, t, s;
 	    switch (i.type) {
 	      case "connected":
 	        E$1.info("Real-time messaging connection established via SharedWorker"),
 	          (this.isConnected = !0),
-	          null === (e = this.ke) || void 0 === e || e.call(this);
+	          null === (e = this.qe) || void 0 === e || e.call(this);
 	        break;
 	      case "disconnected":
 	        E$1.info("Real-time messaging connection closed via SharedWorker"),
 	          (this.isConnected = !1),
-	          null === (t = this.Re) || void 0 === t || t.call(this);
+	          null === (t = this.Je) || void 0 === t || t.call(this);
 	        break;
 	      case "message":
-	        this.we(i.data);
+	        this.Ge(i.data);
 	        break;
 	      case "error":
 	        E$1.error(`Real-time messaging error: ${i.error}`),
-	          null === (s = this.Me) || void 0 === s || s.call(this, i.error);
+	          null === (s = this.Le) || void 0 === s || s.call(this, i.error);
 	    }
 	  }
 	  Ur() {
-	    this.Ir = window.setInterval(() => {
-	      this.Wr && this._r({ type: "ping" });
+	    this.Lr = window.setInterval(() => {
+	      this.Wr && this.Gr({ type: "ping" });
 	    }, 3e4);
 	  }
-	  qr() {
-	    null !== this.Ir && (window.clearInterval(this.Ir), (this.Ir = null));
+	  Jr() {
+	    null !== this.Lr && (window.clearInterval(this.Lr), (this.Lr = null));
 	  }
 	  Vr() {
-	    (this.Mr = () => {
+	    (this.Ir = () => {
 	      "visible" === document.visibilityState &&
 	        this.Wr &&
-	        this._r({ type: "tab_active" });
+	        this.Gr({ type: "tab_active" });
 	    }),
-	      document.addEventListener("visibilitychange", this.Mr);
+	      document.addEventListener("visibilitychange", this.Ir);
 	  }
-	  Ar() {
-	    this.Mr &&
-	      (document.removeEventListener("visibilitychange", this.Mr),
-	      (this.Mr = null));
+	  Kr() {
+	    this.Ir &&
+	      (document.removeEventListener("visibilitychange", this.Ir),
+	      (this.Ir = null));
 	  }
-	  _r(i) {
+	  Gr(i) {
 	    this.Wr && this.Wr.port.postMessage(i);
 	  }
 	  connect(i) {
 	    this.Wr
-	      ? (this._r({ type: "connect", pn: i }),
+	      ? (this.Gr({ type: "connect", zn: i }),
 	        E$1.info("Connecting to real-time messaging"))
 	      : E$1.error("Cannot connect: real-time messaging worker not initialized");
 	  }
 	  disconnect() {
 	    this.Wr &&
-	      (this._r({ type: "disconnect" }),
+	      (this.Gr({ type: "disconnect" }),
 	      (this.isConnected = !1),
 	      E$1.info("Disconnecting from real-time messaging"));
 	  }
@@ -7405,57 +7420,58 @@ var mpBrazeKitV6 = (function (exports) {
 	  isInitialized() {
 	    return null !== this.Wr;
 	  }
-	  Er() {
-	    this.qr(),
-	      this.Ar(),
+	  _r() {
+	    this.Jr(),
+	      this.Kr(),
 	      this.Wr && (this.Wr.port.close(), (this.Wr = null)),
-	      this.Lr && (URL.revokeObjectURL(this.Lr), (this.Lr = null)),
+	      this.Rr && (URL.revokeObjectURL(this.Rr), (this.Rr = null)),
 	      (this.isConnected = !1);
 	  }
 	  destroy() {
 	    this.disconnect(),
-	      this.Er(),
+	      this._r(),
 	      E$1.info("Real-time messaging worker destroyed");
 	  }
 	}
 
-	class tr extends t {
+	class sr extends t {
 	  constructor(i, t, s, e, n = !0) {
 	    super(),
-	      (this.j = i),
-	      (this.B = t),
+	      (this.B = i),
+	      (this.C = t),
 	      (this.h = s),
-	      (this.j = i),
-	      (this.B = t),
+	      (this.B = i),
+	      (this.C = t),
 	      (this.h = s),
 	      (this.mite = null),
-	      (this.ki = null),
-	      (this.yi = null),
-	      (this.$i = null),
-	      (this.Ri = e || null),
-	      (this.Mi = null),
-	      (this.xi = null),
-	      (this.D = null),
-	      (this.ji = 0),
-	      (this.Wi = MAX_RETRIES),
-	      (this.Fi = null),
-	      (this.Ui = null),
-	      (this.zi = !0),
-	      (this.Bi = null),
+	      (this.Wi = null),
 	      (this.Gi = null),
-	      (this.Pi = null),
-	      (this.qi = null),
-	      (this.Hi = !1),
-	      (this.Ji = new Map()),
-	      (this.Li = null),
-	      (this.Oi = null),
+	      (this.Hi = null),
+	      (this.Oi = e || null),
 	      (this.Ki = null),
-	      (this.Qi = this.Vi(n)),
-	      (this.Xi = !1),
-	      (this.Yi = 0),
-	      this.Zi();
+	      (this.Vi = null),
+	      (this.T = null),
+	      (this._i = 0),
+	      (this.Qi = MAX_RETRIES),
+	      (this.Xi = null),
+	      (this.Yi = null),
+	      (this.Zi = !0),
+	      (this.we = null),
+	      (this.Se = null),
+	      (this.ke = null),
+	      (this.ye = null),
+	      (this.Re = !1),
+	      (this.De = new Map()),
+	      (this.Me = null),
+	      (this.xe = null),
+	      (this.We = null),
+	      (this.Fe = this.Ue(n)),
+	      (this.Ne = !1),
+	      (this.Be = 0),
+	      (this.Te = null),
+	      this.ze();
 	  }
-	  Vi(i) {
+	  Ue(i) {
 	    return i
 	      ? isSharedWorkerSupported()
 	        ? "sharedworker"
@@ -7466,44 +7482,56 @@ var mpBrazeKitV6 = (function (exports) {
 	      : (E$1.info("Shared connection disabled, using direct EventSource"),
 	        "direct");
 	  }
-	  _i() {
-	    this.Ki = new DustWorkerBridge({
-	      we: (i) => {
-	        this.Se(i);
+	  Ae() {
+	    this.We = new DustWorkerBridge({
+	      Ge: (i) => {
+	        this.Pe(i);
 	      },
-	      ke: () => {
-	        this.ye();
+	      qe: () => {
+	        this.He(), (this.Te = new Date().valueOf());
 	      },
-	      Re: () => {},
-	      Me: (i) => {
+	      Je: () => {
+	        this.Te = null;
+	      },
+	      Le: (i) => {
 	        E$1.error(`Real-time messaging SharedWorker error: ${i}`);
 	      },
 	    });
-	    this.Ki.initialize() ||
+	    this.We.initialize() ||
 	      (E$1.info(
 	        "SharedWorker initialization failed, falling back to direct EventSource",
 	      ),
-	      (this.Qi = "direct"),
-	      (this.Ki = null));
+	      (this.Fe = "direct"),
+	      (this.We = null));
 	  }
-	  ye() {
-	    (this.ji = 0),
-	      (this.Bi = null),
-	      (this.zi = !0),
-	      (this.Xi = !1),
-	      (this.Yi = 0);
+	  He() {
+	    (this._i = 0),
+	      (this.we = null),
+	      (this.Zi = !0),
+	      (this.Ne = !1),
+	      (this.Be = 0);
 	  }
-	  Se(i) {
+	  Oe() {
+	    var i;
+	    return (
+	      !(
+	        !("sharedworker" === this.Fe
+	          ? Boolean(null === (i = this.We) || void 0 === i ? void 0 : i.Ie())
+	          : Boolean(this.Vi)) || null === this.Te
+	      ) && new Date().valueOf() - this.Te >= CONNECTION_VALID_THRESHOLD_MS
+	    );
+	  }
+	  Pe(i) {
 	    if (!i.type)
 	      return void E$1.warn(
 	        `Received real-time message without type: ${JSON.stringify(i)}`,
 	      );
-	    const t = "sharedworker" === this.Qi ? "SharedWorker" : "Direct";
+	    const t = "sharedworker" === this.Fe ? "SharedWorker" : "Direct";
 	    E$1.info(`Received real-time message of type '${i.type}' via ${t}`);
-	    const s = this.Ji.get(i.type);
-	    if (s && s.De() > 0)
+	    const s = this.De.get(i.type);
+	    if (s && s.Ke() > 0)
 	      try {
-	        s.L(i);
+	        s.A(i);
 	      } catch (t) {
 	        E$1.error(
 	          `Error invoking subscription for message type '${i.type}': ${t}`,
@@ -7511,195 +7539,202 @@ var mpBrazeKitV6 = (function (exports) {
 	      }
 	    else E$1.info(`No subscribers for real-time message type '${i.type}'`);
 	  }
-	  We() {
-	    return "sharedworker" === this.Qi;
+	  Ve() {
+	    return "sharedworker" === this.Fe;
 	  }
-	  Fe() {
-	    return this.Qi;
+	  _e() {
+	    return this.Fe;
 	  }
-	  Zi() {
-	    if (this.B) {
-	      const i = this.B.dt(STORAGE_KEYS.ft.Ue),
-	        t = this.B.dt(STORAGE_KEYS.ft.Ne),
-	        e = this.B.dt(STORAGE_KEYS.ft.Te),
-	        n = this.B.dt(STORAGE_KEYS.ft.ze);
+	  ze() {
+	    if (this.C) {
+	      const i = this.C.Rt(STORAGE_KEYS.Tt.Qe),
+	        t = this.C.Rt(STORAGE_KEYS.Tt.Xe),
+	        e = this.C.Rt(STORAGE_KEYS.Tt.Ye),
+	        n = this.C.Rt(STORAGE_KEYS.Tt.Ze);
 	      i && t
 	        ? ((this.mite = i),
-	          (this.ki = t),
-	          (this.yi = e),
-	          (this.$i = n),
+	          (this.Wi = t),
+	          (this.Gi = e),
+	          (this.Hi = n),
 	          E$1.info("Restored real-time messaging configuration from storage"))
 	        : (i || t) &&
 	          (E$1.warn(
 	            "Incomplete real-time messaging configuration in storage, clearing",
 	          ),
-	          this.Ae());
+	          this.sn());
 	    }
 	  }
 	  Hr() {
-	    this.Li ||
-	      this.Oi ||
-	      ((this.Li = this.Be("ddr", (i) => {
-	        if (!i.body || "number" != typeof i.body.Ge) return;
-	        const t = Math.random() * i.body.Ge * 0.3,
-	          s = Math.round(i.body.Ge + t),
-	          e = i.body.e ? ` (${i.body.e})` : "";
-	        E$1.info(`Admin requested disconnect${e}, reconnecting in ${s}ms`),
-	          this.Pe(),
-	          setTimeout(() => this.qe(), s);
+	    this.Me ||
+	      this.xe ||
+	      ((this.Me = this.en("ddr", (i) => {
+	        var t, s, e;
+	        if (!i.body || "number" != typeof i.body.on) return;
+	        const n =
+	            (null === (t = this.h) || void 0 === t ? void 0 : t.vt()) || REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
+	          r = (null === (s = this.h) || void 0 === s ? void 0 : s.gt()) || REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
+	          o = (null === (e = this.h) || void 0 === e ? void 0 : e.bt()) || REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT,
+	          h = Math.min(o, randomInclusive(n, n * r)),
+	          l = Math.round(i.body.on + h),
+	          u = i.body.e ? ` (${i.body.e})` : "";
+	        E$1.info(
+	          `Admin requested disconnect${u}, reconnecting in ${l}ms (r_ms=${i.body.on} + backoff=${h})`,
+	        ),
+	          this.hn(),
+	          setTimeout(() => this.an(), l);
 	      })),
-	      (this.Oi = this.Be("ttl", (i) => {
-	        if (!i.body || "number" != typeof i.body.He) return;
-	        const t = i.body.He;
+	      (this.xe = this.en("ttl", (i) => {
+	        if (!i.body || "number" != typeof i.body.ln) return;
+	        const t = i.body.ln;
 	        E$1.info(`Time to live set to ${t}ms, will reconnect when expired`),
-	          "sharedworker" !== this.Qi &&
-	            ("string" == typeof i.body.Je && (this.Mi = i.body.Je),
-	            null !== this.Ui && window.clearTimeout(this.Ui),
-	            (this.Ui = window.setTimeout(() => {
-	              (this.Ui = null),
+	          "sharedworker" !== this.Fe &&
+	            ("string" == typeof i.body.cn && (this.Ki = i.body.cn),
+	            null !== this.Yi && window.clearTimeout(this.Yi),
+	            (this.Yi = window.setTimeout(() => {
+	              (this.Yi = null),
 	                E$1.info("Time to live expired, performing gapless reconnection"),
-	                this.Le();
+	                this.un();
 	            }, t)));
 	      })));
 	  }
-	  Oe() {
-	    this.Gi ||
-	      this.Pi ||
-	      ((this.qi = () => {
-	        (this.Hi = !0), (this.zi = !1);
+	  dn() {
+	    this.Se ||
+	      this.ke ||
+	      ((this.ye = () => {
+	        (this.Re = !0), (this.Zi = !1);
 	      }),
-	      window.addEventListener("beforeunload", this.qi),
-	      (this.Gi = () => {
+	      window.addEventListener("beforeunload", this.ye),
+	      (this.Se = () => {
 	        var i;
-	        this.Hi = !0;
-	        (this.xi ||
-	          (null === (i = this.Ki) || void 0 === i ? void 0 : i.Ie())) &&
+	        this.Re = !0;
+	        (this.Vi ||
+	          (null === (i = this.We) || void 0 === i ? void 0 : i.Ie())) &&
 	          (E$1.info("Page unloading, closing real-time connection gracefully"),
-	          (this.zi = !1),
-	          this.Pe());
+	          (this.Zi = !1),
+	          this.hn());
 	      }),
-	      window.addEventListener("pagehide", this.Gi),
-	      (this.Pi = (i) => {
+	      window.addEventListener("pagehide", this.Se),
+	      (this.ke = (i) => {
 	        var t;
 	        const s =
-	          this.xi || (null === (t = this.Ki) || void 0 === t ? void 0 : t.Ie());
+	          this.Vi || (null === (t = this.We) || void 0 === t ? void 0 : t.Ie());
 	        i.persisted &&
-	          this.Ke() &&
+	          this.gn() &&
 	          !s &&
 	          (E$1.info("Page restored from bfcache, reconnecting"),
-	          (this.Hi = !1),
-	          this.ye(),
-	          this.qe());
+	          (this.Re = !1),
+	          this.He(),
+	          this.an());
 	      }),
-	      window.addEventListener("pageshow", this.Pi));
+	      window.addEventListener("pageshow", this.ke));
 	  }
-	  St() {
-	    return this.D;
+	  Lt() {
+	    return this.T;
 	  }
-	  wt(i) {
-	    this.D = i;
+	  $t(i) {
+	    this.T = i;
 	  }
-	  Be(i, t) {
+	  en(i, t) {
 	    if ("function" != typeof t) return null;
-	    let s = this.Ji.get(i);
-	    return s || ((s = new m()), this.Ji.set(i, s), r.q(s)), s.Rt(t);
+	    let s = this.De.get(i);
+	    return s || ((s = new f()), this.De.set(i, s), r.S(s)), s.Kt(t);
 	  }
-	  Qe(i, t) {
-	    const s = this.Ji.get(i);
+	  mn(i, t) {
+	    const s = this.De.get(i);
 	    s && s.removeSubscription(t);
 	  }
-	  Ke() {
-	    return Boolean(this.mite && this.ki);
+	  gn() {
+	    return Boolean(this.mite && this.Wi);
 	  }
-	  Ve() {
-	    if (!this.$i) return !1;
-	    return Math.floor(new Date().valueOf() / 1e3) >= this.$i;
+	  fn() {
+	    if (!this.Hi) return !1;
+	    return Math.floor(new Date().valueOf() / 1e3) >= this.Hi;
 	  }
-	  Ae() {
+	  sn() {
 	    (this.mite = null),
-	      (this.ki = null),
-	      (this.yi = null),
-	      (this.$i = null),
-	      (this.Mi = null),
-	      this.B &&
-	        (this.B.zt(STORAGE_KEYS.ft.Ue),
-	        this.B.zt(STORAGE_KEYS.ft.Ne),
-	        this.B.zt(STORAGE_KEYS.ft.Te),
-	        this.B.zt(STORAGE_KEYS.ft.ze));
+	      (this.Wi = null),
+	      (this.Gi = null),
+	      (this.Hi = null),
+	      (this.Ki = null),
+	      this.C &&
+	        (this.C.Qt(STORAGE_KEYS.Tt.Qe),
+	        this.C.Qt(STORAGE_KEYS.Tt.Xe),
+	        this.C.Qt(STORAGE_KEYS.Tt.Ye),
+	        this.C.Qt(STORAGE_KEYS.Tt.Ze));
 	  }
-	  Xe(i, t) {
+	  pn(i, t) {
 	    const e = () => {
 	        "function" == typeof t && t();
 	      },
-	      n = this.j,
-	      r = this.B;
+	      n = this.B,
+	      r = this.C;
 	    if (!n || !r)
 	      return (
 	        E$1.error("NetworkManager or StorageManager not available"), void e()
 	      );
-	    if (!this.h || !this.h.Ye())
+	    if (!this.h || !this.h.vn())
 	      return (
 	        E$1.info("Real-time messaging is not enabled, skipping refresh"), void e()
 	      );
-	    this.Ke()
+	    this.gn()
 	      ? E$1.info("Refreshing real-time messaging configuration")
 	      : E$1.info("Fetching initial real-time messaging configuration");
-	    const o = n.$({}, !0),
-	      a = n.A(o, h.H.Ze, !1),
+	    const o = n.Z({}, !0),
+	      a = n.tt(o, h.it.wn),
 	      c = new Date().valueOf();
-	    h.K(r, h.H.Ze, c),
-	      l.O({
-	        url: `${n.V()}/dust/config`,
+	    h.nt(r, h.it.wn, c),
+	      l.ot({
+	        url: `${n.ht()}/dust/config`,
 	        headers: a,
 	        data: o,
-	        W: (t) => {
-	          if (!n.Y(o, t, a))
+	        lt: (t) => {
+	          if (!n.ut(o, t, a))
 	            return (
 	              E$1.error(
 	                "Failed to validate server response for real-time messaging configuration",
 	              ),
 	              void e()
 	            );
-	          n.Z(),
+	          n.ct(),
 	            t.mite && t.host
 	              ? ((this.mite = t.mite),
-	                (this.ki = t.host),
-	                (this.yi = t.auth || null),
-	                (this.$i = t.expiration || null),
+	                (this.Wi = t.host),
+	                (this.Gi = t.auth || null),
+	                (this.Hi = t.expiration || null),
 	                E$1.info(
 	                  "Received real-time messaging configuration from server",
 	                ),
-	                r.bt(STORAGE_KEYS.ft.Ue, t.mite),
-	                r.bt(STORAGE_KEYS.ft.Ne, t.host),
-	                t.auth ? r.bt(STORAGE_KEYS.ft.Te, t.auth) : r.zt(STORAGE_KEYS.ft.Te),
-	                t.expiration ? r.bt(STORAGE_KEYS.ft.ze, t.expiration) : r.zt(STORAGE_KEYS.ft.ze),
-	                this.qe(),
+	                r.It(STORAGE_KEYS.Tt.Qe, t.mite),
+	                r.It(STORAGE_KEYS.Tt.Xe, t.host),
+	                t.auth ? r.It(STORAGE_KEYS.Tt.Ye, t.auth) : r.Qt(STORAGE_KEYS.Tt.Ye),
+	                t.expiration ? r.It(STORAGE_KEYS.Tt.Ze, t.expiration) : r.Qt(STORAGE_KEYS.Tt.Ze),
+	                this.an(),
 	                "function" == typeof i && i())
 	              : (E$1.info(
 	                  "Real-time messaging configuration not available - this SDK version may not be supported",
 	                ),
-	                this.Ae(),
+	                this.sn(),
 	                e());
 	        },
 	        error: (i) => {
-	          n._(i, "retrieving DUST config"), e();
+	          n.dt(i, "retrieving DUST config"), e();
 	        },
 	      });
 	  }
-	  qe() {
-	    if (!this.h || !this.h.Ye()) return;
-	    if (!this.Ke())
+	  an() {
+	    if (!this.h || !this.h.vn()) return;
+	    if (!this.gn())
 	      return void E$1.error(
 	        "Cannot start real-time subscription without configuration",
 	      );
-	    if (this.Ve())
+	    if (this.fn())
 	      return (
 	        E$1.info(
 	          "Real-time messaging auth token has expired, refreshing configuration",
 	        ),
-	        void this.Xe(
+	        void this.pn(
 	          () => {
-	            this.qe();
+	            this.an();
 	          },
 	          () => {
 	            E$1.error(
@@ -7709,62 +7744,62 @@ var mpBrazeKitV6 = (function (exports) {
 	        )
 	      );
 	    const i = this.mite,
-	      t = this.Ri || this.ki;
+	      t = this.Oi || this.Wi;
 	    if (i && t)
-	      switch (this.Qi) {
+	      switch (this.Fe) {
 	        case "sharedworker":
-	          this._e(i, t);
+	          this.bn(i, t);
 	          break;
 	        case "direct":
-	          this.xi &&
+	          this.Vi &&
 	            (E$1.info(
 	              "Real-time connection already exists, closing before starting new subscription",
 	            ),
-	            this.Pe()),
-	            this.sn();
+	            this.hn()),
+	            this.Sn();
 	      }
 	  }
-	  en() {
+	  kn() {
 	    const i = this.mite,
-	      t = this.Ri || this.ki;
+	      t = this.Oi || this.Wi;
 	    return i && t
-	      ? buildSseUrl(t, i, this.ji, this.yi || void 0, this.Mi || void 0)
+	      ? buildSseUrl(t, i, this._i, this.Gi || void 0, this.Ki || void 0)
 	      : null;
 	  }
-	  _e(i, t) {
+	  bn(i, t) {
 	    var s, e, n;
-	    if ((this.Ki || this._i(), !this.Ki))
+	    if ((this.We || this.Ae(), !this.We))
 	      return (
 	        E$1.info(
 	          "SharedWorker initialization failed, falling back to direct EventSource",
 	        ),
-	        (this.Qi = "direct"),
-	        void this.on()
+	        (this.Fe = "direct"),
+	        void this.yn()
 	      );
-	    this.Ri && E$1.info(`Using custom real-time messaging host: ${this.Ri}`),
+	    this.Oi && E$1.info(`Using custom real-time messaging host: ${this.Oi}`),
 	      E$1.info("Starting real-time subscription via SharedWorker");
-	    const r = (null === (s = this.h) || void 0 === s ? void 0 : s.st()) || REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
-	      o = (null === (e = this.h) || void 0 === e ? void 0 : e.nt()) || REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT,
-	      h = (null === (n = this.h) || void 0 === n ? void 0 : n.it()) || REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT;
-	    this.Ki.connect({
+	    const r = (null === (s = this.h) || void 0 === s ? void 0 : s.vt()) || REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
+	      o = (null === (e = this.h) || void 0 === e ? void 0 : e.bt()) || REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT,
+	      h = (null === (n = this.h) || void 0 === n ? void 0 : n.gt()) || REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT;
+	    this.We.connect({
 	      mite: i,
-	      ki: t,
-	      auth: this.yi || void 0,
-	      hn: { an: r, ln: o, cn: h },
+	      Wi: t,
+	      auth: this.Gi || void 0,
+	      $n: { Rn: r, Cn: o, Dn: h },
 	    });
 	  }
-	  on() {
-	    this.xi &&
+	  yn() {
+	    this.Vi &&
 	      (E$1.info(
 	        "Real-time connection already exists, closing before starting new subscription",
 	      ),
-	      this.un()),
-	      this.sn();
+	      this.Mn()),
+	      this.Sn();
 	  }
-	  sn(i) {
-	    const t = this.en();
+	  Sn(i) {
+	    const t = this.kn();
 	    if (t) {
-	      this.Ri && E$1.info(`Using custom real-time messaging host: ${this.Ri}`);
+	      this.Oi && E$1.info(`Using custom real-time messaging host: ${this.Oi}`);
 	      try {
 	        const s = new EventSource(t);
 	        (s.onopen = () => {
@@ -7774,41 +7809,42 @@ var mpBrazeKitV6 = (function (exports) {
 	              ),
 	              i.close())
 	            : E$1.info("Real-time messaging connection established"),
-	            (this.xi = s),
-	            (this.ji = 0),
-	            (this.Bi = null),
-	            (this.zi = !0),
-	            (this.Xi = !0);
+	            (this.Vi = s),
+	            (this._i = 0),
+	            (this.we = null),
+	            (this.Zi = !0),
+	            (this.Ne = !0),
+	            (this.Te = new Date().valueOf());
 	        }),
 	          s.addEventListener("msg", (i) => {
-	            this.dn(i.data);
+	            this.xn(i.data);
 	          }),
 	          (s.onerror = () => {
 	            const t = s.readyState;
 	            return (
-	              this.Hi ||
+	              this.Re ||
 	                (0 === t
 	                  ? E$1.info("Real-time messaging failed to connect")
 	                  : E$1.info("Real-time messaging connection lost")),
-	              i && this.xi !== s
+	              i && this.Vi !== s
 	                ? (E$1.info(
 	                    "Gapless reconnection failed, keeping old connection",
 	                  ),
 	                  s.close(),
-	                  void (this.zi && this.ji < this.Wi && this.gn()))
-	                : (this.un(),
-	                  this.Xi && (this.Yi++, this.Yi > 1)
+	                  void (this.Zi && this._i < this.Qi && this.jn()))
+	                : (this.Mn(),
+	                  this.Ne && (this.Be++, this.Be > 1)
 	                    ? (E$1.info(
 	                        "Real-time messaging connection lost twice after successful connect (likely multi-tab conflict), yielding to other tab",
 	                      ),
-	                      void (this.zi = !1))
-	                    : void (this.zi && this.ji < this.Wi
-	                        ? this.gn()
-	                        : (this.ji >= this.Wi &&
+	                      void (this.Zi = !1))
+	                    : void (this.Zi && this._i < this.Qi
+	                        ? this.jn()
+	                        : (this._i >= this.Qi &&
 	                            E$1.error(
-	                              `Max retry attempts (${this.Wi}) reached for real-time messaging, giving up for current session`,
+	                              `Max retry attempts (${this.Qi}) reached for real-time messaging, giving up for current session`,
 	                            ),
-	                          (this.zi = !1))))
+	                          (this.Zi = !1))))
 	            );
 	          });
 	      } catch (i) {
@@ -7820,59 +7856,60 @@ var mpBrazeKitV6 = (function (exports) {
 	      }
 	    }
 	  }
-	  gn() {
+	  jn() {
 	    var i, t, s;
-	    this.ji++;
-	    const e = (null === (i = this.h) || void 0 === i ? void 0 : i.st()) || REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
-	      n = (null === (t = this.h) || void 0 === t ? void 0 : t.it()) || REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
-	      r = (null === (s = this.h) || void 0 === s ? void 0 : s.nt()) || REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
-	    let o = this.Bi;
+	    this._i++;
+	    const e = (null === (i = this.h) || void 0 === i ? void 0 : i.vt()) || REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
+	      n = (null === (t = this.h) || void 0 === t ? void 0 : t.gt()) || REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
+	      r = (null === (s = this.h) || void 0 === s ? void 0 : s.bt()) || REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
+	    let o = this.we;
 	    (null == o || o < e) && (o = e);
 	    const h = Math.min(r, randomInclusive(e, o * n));
-	    (this.Bi = h),
+	    (this.we = h),
 	      E$1.info(
-	        `Retrying real-time messaging connection in ${h}ms (attempt ${this.ji}/${this.Wi})`,
+	        `Retrying real-time messaging connection in ${h}ms (attempt ${this._i}/${this.Qi})`,
 	      ),
-	      (this.Fi = window.setTimeout(() => {
-	        (this.Fi = null), this.qe();
+	      (this.Xi = window.setTimeout(() => {
+	        (this.Xi = null), this.an();
 	      }, h));
 	  }
-	  Le() {
-	    if (this.Ke()) {
-	      if (this.Ve())
+	  un() {
+	    if (this.gn()) {
+	      if (this.fn())
 	        return (
 	          E$1.info(
 	            "Auth token expired during gapless reconnection, falling back to regular reconnection",
 	          ),
-	          this.Pe(),
-	          void this.qe()
+	          this.hn(),
+	          void this.an()
 	        );
-	      null !== this.Ui && (window.clearTimeout(this.Ui), (this.Ui = null)),
-	        this.sn(this.xi || void 0);
+	      null !== this.Yi && (window.clearTimeout(this.Yi), (this.Yi = null)),
+	        this.Sn(this.Vi || void 0);
 	    } else E$1.error("Cannot perform gapless reconnection without configuration");
 	  }
-	  Pe() {
+	  hn() {
 	    var i;
-	    switch (this.Qi) {
+	    switch (((this.Te = null), this.Fe)) {
 	      case "sharedworker":
-	        null === (i = this.Ki) || void 0 === i || i.disconnect();
+	        null === (i = this.We) || void 0 === i || i.disconnect();
 	        break;
 	      case "direct":
-	        this.un();
+	        this.Mn();
 	    }
 	  }
-	  un() {
-	    null !== this.Fi && (window.clearTimeout(this.Fi), (this.Fi = null)),
-	      null !== this.Ui && (window.clearTimeout(this.Ui), (this.Ui = null)),
-	      this.xi &&
-	        (this.xi.close(),
-	        (this.xi = null),
+	  Mn() {
+	    null !== this.Xi && (window.clearTimeout(this.Xi), (this.Xi = null)),
+	      null !== this.Yi && (window.clearTimeout(this.Yi), (this.Yi = null)),
+	      (this.Te = null),
+	      this.Vi &&
+	        (this.Vi.close(),
+	        (this.Vi = null),
 	        E$1.info("Real-time messaging connection closed"));
 	  }
-	  dn(i) {
+	  xn(i) {
 	    try {
 	      const t = JSON.parse(i);
-	      this.Se(t);
+	      this.Pe(t);
 	    } catch (i) {
 	      E$1.warn(
 	        `Failed to parse real-time message: ${
@@ -7882,60 +7919,60 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	  }
 	  changeUser(i = !1) {
-	    this.Pe(),
+	    this.hn(),
 	      i ||
-	        (this.Ke() &&
+	        (this.gn() &&
 	          E$1.info(
 	            "Clearing cached real-time messaging configuration for user change",
 	          ),
-	        this.Ae()),
-	      this.ye();
+	        this.sn()),
+	      this.He();
 	  }
 	  clearData(i = !1) {
-	    (this.zi = !1),
-	      this.Pe(),
+	    (this.Zi = !1),
+	      this.hn(),
 	      i &&
-	        (this.Ke() &&
+	        (this.gn() &&
 	          E$1.info(
 	            "Clearing cached real-time messaging configuration (wipeData)",
 	          ),
-	        this.Ae()),
-	      this.ye();
+	        this.sn()),
+	      this.He();
 	  }
 	  destroy() {
-	    (this.zi = !1),
-	      this.Pe(),
-	      this.Ae(),
-	      this.Ki && (this.Ki.destroy(), (this.Ki = null)),
-	      this.Li && (this.Qe("ddr", this.Li), (this.Li = null)),
-	      this.Oi && (this.Qe("ttl", this.Oi), (this.Oi = null)),
-	      this.qi &&
-	        (window.removeEventListener("beforeunload", this.qi), (this.qi = null)),
-	      this.Gi &&
-	        (window.removeEventListener("pagehide", this.Gi), (this.Gi = null)),
-	      this.Pi &&
-	        (window.removeEventListener("pageshow", this.Pi), (this.Pi = null)),
-	      this.D && (r.removeSubscription(this.D), (this.D = null));
+	    (this.Zi = !1),
+	      this.hn(),
+	      this.sn(),
+	      this.We && (this.We.destroy(), (this.We = null)),
+	      this.Me && (this.mn("ddr", this.Me), (this.Me = null)),
+	      this.xe && (this.mn("ttl", this.xe), (this.xe = null)),
+	      this.ye &&
+	        (window.removeEventListener("beforeunload", this.ye), (this.ye = null)),
+	      this.Se &&
+	        (window.removeEventListener("pagehide", this.Se), (this.Se = null)),
+	      this.ke &&
+	        (window.removeEventListener("pageshow", this.ke), (this.ke = null)),
+	      this.T && (r.removeSubscription(this.T), (this.T = null));
 	  }
 	}
 
-	const nr = {
+	const dr = {
 	  i: !1,
 	  provider: null,
 	  o: () => {
-	    if ((nr.t(), !nr.provider)) {
-	      const t = r.re("dustHost");
-	      (nr.provider = new tr(r.m(), r.p(), r.l(), t)),
-	        r.v(nr.provider),
-	        nr.provider.Hr();
+	    if ((dr.t(), !dr.provider)) {
+	      const t = r.er("dustHost");
+	      (dr.provider = new sr(r.m(), r.p(), r.l(), t)),
+	        r.v(dr.provider),
+	        dr.provider.Hr();
 	    }
-	    return nr.provider;
+	    return dr.provider;
 	  },
 	  t: () => {
-	    nr.i || (r.g(nr), (nr.i = !0));
+	    dr.i || (r.g(dr), (dr.i = !0));
 	  },
 	  destroy: () => {
-	    nr.provider && nr.provider.destroy(), (nr.provider = null), (nr.i = !1);
+	    dr.provider && dr.provider.destroy(), (dr.provider = null), (dr.i = !1);
 	  },
 	};
 
@@ -7943,70 +7980,70 @@ var mpBrazeKitV6 = (function (exports) {
 	  const t = r.l(),
 	    n = r.nn();
 	  if (!t || !n) return null;
-	  const o = nr.o(),
+	  const o = dr.o(),
 	    s = () => {
-	      if (!o.St()) {
-	        o.Oe();
+	      if (!o.Lt()) {
+	        o.dn();
 	        const r = n.rn(() => {
-	          t.Ye() && o.Xe();
+	          t.vn() && o.pn();
 	        });
-	        return r && o.wt(r), o.Ke() && o.qe(), r;
+	        return r && o.$t(r), o.gn() && o.an(), r;
 	      }
-	      return o.St();
+	      return o.Lt();
 	    };
 	  return (
 	    t.Tr(() => {
-	      r.ao() && (t.Ye() ? (o.Xe(), s()) : (o.Pe(), o.Ke() && o.Ae()));
+	      r.ao() && (t.vn() ? (o.pn(), s()) : (o.hn(), o.gn() && o.sn()));
 	    }),
-	    t.Ye() ? s() : null
+	    t.vn() ? s() : null
 	  );
 	}
 
-	class oi {
+	class ui {
 	  constructor(t, i, s, l, h) {
 	    (this.endpoint = t),
 	      (this.Wu = i),
 	      (this.publicKey = s),
-	      (this.Yc = l),
-	      (this.xc = h),
+	      (this.zc = l),
+	      (this.uc = h),
 	      (this.endpoint = t || null),
 	      (this.Wu = i || null),
 	      (this.publicKey = s || null),
-	      (this.Yc = l || null),
-	      (this.xc = h || null);
+	      (this.zc = l || null),
+	      (this.uc = h || null);
 	  }
-	  gt() {
+	  qt() {
 	    return {
 	      e: this.endpoint,
 	      c: this.Wu,
 	      p: this.publicKey,
-	      u: this.Yc,
-	      v: this.xc,
+	      u: this.zc,
+	      v: this.uc,
 	    };
 	  }
 	  static _u(t) {
-	    return new oi(t.e, rehydrateDateAfterJsonization(t.c), t.p, t.u, t.v);
+	    return new ui(t.e, rehydrateDateAfterJsonization(t.c), t.p, t.u, t.v);
 	  }
 	}
 
-	class bt {
+	class Ut {
 	  constructor(t, s) {
-	    (this.h = t), (this.B = s), (this.h = t), (this.B = s);
+	    (this.h = t), (this.C = s), (this.h = t), (this.C = s);
 	  }
 	  getUserId() {
-	    const t = this.B.$u(STORAGE_KEYS.Ou.Cu);
+	    const t = this.C.$u(STORAGE_KEYS.Ou.Cu);
 	    if (null == t) return null;
 	    let i = t.Tu,
 	      e = getByteLength(i);
-	    if (e > User.mr) {
-	      for (; e > User.mr; ) (i = i.slice(0, i.length - 1)), (e = getByteLength(i));
-	      (t.Tu = i), this.B.Iu(STORAGE_KEYS.Ou.Cu, t);
+	    if (e > User.br) {
+	      for (; e > User.br; ) (i = i.slice(0, i.length - 1)), (e = getByteLength(i));
+	      (t.Tu = i), this.C.Iu(STORAGE_KEYS.Ou.Cu, t);
 	    }
 	    return i;
 	  }
 	  Ju(t) {
 	    const i = null == this.getUserId();
-	    this.B.Iu(STORAGE_KEYS.Ou.Cu, new _t(t)), i && this.B.Lu(t);
+	    this.C.Iu(STORAGE_KEYS.Ou.Cu, new _t(t)), i && this.C.Lu(t);
 	  }
 	  setCustomUserAttribute(t, s) {
 	    if (this.h.qu(t))
@@ -8017,7 +8054,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    return (i[t] = s), this.zu(User.Bu, i, !0);
 	  }
 	  zu(t, s, i = !1, e = !1) {
-	    const u = this.B.Eu(this.getUserId(), t, s);
+	    const u = this.C.Eu(this.getUserId(), t, s);
 	    let o = "",
 	      r = t,
 	      h = s;
@@ -8037,10 +8074,10 @@ var mpBrazeKitV6 = (function (exports) {
 	      this.zu("custom_push_public_key", e, !1, !0),
 	      this.zu("custom_push_user_auth", u, !1, !0),
 	      this.zu("custom_push_vapid_public_key", o, !1, !0);
-	    const r = et.Us.Rs,
+	    const r = et.Ps.$s,
 	      h = new et(r, E$1),
-	      n = new oi(t, i, e, u, o);
-	    this.B.bt(STORAGE_KEYS.ft.Uu, n.gt()), h.setItem(r.Fs.Fu, r.fe, !0);
+	      n = new ui(t, i, e, u, o);
+	    this.C.It(STORAGE_KEYS.Tt.Uu, n.qt()), h.setItem(r.Os.Fu, r.be, !0);
 	  }
 	  wu(t) {
 	    if (
@@ -8050,80 +8087,82 @@ var mpBrazeKitV6 = (function (exports) {
 	      this.zu("custom_push_vapid_public_key", null, !1, !0),
 	      t)
 	    ) {
-	      const t = et.Us.Rs,
+	      const t = et.Ps.$s,
 	        i = new et(t, E$1);
-	      this.B.bt(STORAGE_KEYS.ft.Uu, !1), i.setItem(t.Fs.Fu, t.fe, !1);
+	      this.C.It(STORAGE_KEYS.Tt.Uu, !1), i.setItem(t.Os.Fu, t.be, !1);
 	    }
 	  }
 	}
 
-	const D = {
-	  Ph: "allowCrawlerActivity",
-	  Wh: "baseUrl",
-	  Vh: "noCookies",
-	  Kh: "devicePropertyAllowlist",
-	  La: "disablePushTokenMaintenance",
-	  $h: "enableLogging",
-	  Yh: "enableSdkAuthentication",
-	  Ka: "manageServiceWorkerExternally",
-	  Xh: "minimumIntervalBetweenTriggerActionsInSeconds",
-	  Zh: "sessionTimeoutInSeconds",
-	  Qh: "appVersion",
-	  Xa: "appVersionNumber",
-	  Ga: "serviceWorkerLocation",
-	  Ia: "safariWebsitePushId",
-	  Wa: "localization",
-	  er: "contentSecurityNonce",
-	  te: "allowUserSuppliedJavascript",
-	  $a: "inAppMessageZIndex",
-	  Ja: "openInAppMessagesInNewTab",
+	const U = {
+	  _h: "allowCrawlerActivity",
+	  Nh: "baseUrl",
+	  se: "cookieExpiryInDays",
+	  Oh: "noCookies",
+	  Th: "devicePropertyAllowlist",
+	  qa: "disablePushTokenMaintenance",
+	  Rh: "enableLogging",
+	  Ph: "enableSdkAuthentication",
+	  ka: "manageServiceWorkerExternally",
+	  Dh: "minimumIntervalBetweenTriggerActionsInSeconds",
+	  Lh: "sessionTimeoutInSeconds",
+	  yh: "appVersion",
+	  Mh: "appVersionNumber",
+	  xa: "serviceWorkerLocation",
+	  _a: "safariWebsitePushId",
+	  Ba: "localization",
+	  sr: "contentSecurityNonce",
+	  nr: "allowUserSuppliedJavascript",
+	  wa: "inAppMessageZIndex",
+	  va: "openInAppMessagesInNewTab",
 	  tn: "openCardsInNewTab",
-	  Oh: "requireExplicitInAppMessageDismissal",
-	  Za: "doNotLoadFontAwesome",
-	  tl: "deviceId",
-	  Ha: "serviceWorkerScope",
-	  Ne: "dustHost",
-	  il: "sdkFlavor",
+	  oh: "requireExplicitInAppMessageDismissal",
+	  Uh: "doNotLoadFontAwesome",
+	  Wh: "deviceId",
+	  Ma: "serviceWorkerScope",
+	  Xe: "dustHost",
+	  Bh: "sdkFlavor",
 	};
-	class qt {
+	class ci {
 	  constructor() {
 	    (this.tu = ""),
-	      (this.sl = ""),
-	      (this.rl = void 0),
-	      (this.hl = null),
+	      (this.Vh = ""),
+	      (this.Kh = void 0),
+	      (this.Gh = null),
 	      (this.eu = null),
-	      (this.j = null),
+	      (this.B = null),
 	      (this.Ru = null),
 	      (this.h = null),
+	      (this.j = null),
 	      (this.C = null),
-	      (this.B = null),
-	      (this.vs = null),
-	      (this.al = ""),
+	      (this.Ss = null),
+	      (this.Yh = ""),
 	      (this.isInitialized = !1),
-	      (this.ul = !1),
-	      (this.cl = new m()),
-	      (this.fl = new m()),
+	      (this.$h = !1),
+	      (this.qh = new f()),
+	      (this.Hh = new f()),
 	      (this.options = {}),
-	      (this.ml = []),
-	      (this.dl = []),
-	      (this.jn = []),
-	      (this.sl = "6.5.0");
+	      (this.Jh = []),
+	      (this.Xh = []),
+	      (this.In = []),
+	      (this.Vh = "6.8.0");
 	  }
-	  El(t) {
-	    this.cl.Rt(t);
+	  Zh(t) {
+	    this.qh.Kt(t);
 	  }
-	  mh(t) {
-	    this.fl.Rt(t);
+	  uh(t) {
+	    this.Hh.Kt(t);
 	  }
 	  initialize(t, i) {
+	    var e, r, o;
 	    if (this.ao())
 	      return E$1.info("Braze has already been initialized with an API key."), !0;
 	    this.options = i || {};
-	    let e = this.re(D.$h);
-	    const r = parseQueryStringKeyValues(WindowUtils.gl());
+	    let n = this.er(U.Rh);
+	    const h = parseQueryStringKeyValues(WindowUtils.Qh());
 	    if (
-	      (r && "true" === r.brazeLogging && (e = !0),
-	      E$1.init(e),
+	      (h && "true" === h.brazeLogging && (n = !0),
+	      E$1.init(n),
 	      E$1.info(
 	        `Initialization Options: ${JSON.stringify(this.options, null, 2)}`,
 	      ),
@@ -8131,113 +8170,116 @@ var mpBrazeKitV6 = (function (exports) {
 	    )
 	      return E$1.error("Braze requires a valid API key to be initialized."), !1;
 	    this.tu = t;
-	    let o = this.re(D.Wh);
-	    if (null == o || "" === o || "string" != typeof o)
+	    let l = this.er(U.Nh);
+	    if (null == l || "" === l || "string" != typeof l)
 	      return E$1.error("Braze requires a valid baseUrl to be initialized."), !1;
-	    !1 === /^https?:/.test(o) && (o = `https://${o}`);
-	    const n = o;
+	    !1 === /^https?:/.test(l) && (l = `https://${l}`);
+	    const a = l;
 	    if (
-	      ((o = document.createElement("a")),
-	      (o.href = n),
-	      "/" === o.pathname && (o = `${o}api/v3`),
-	      (this.al = o.toString()),
-	      ro.Il && !this.re(D.Ph))
+	      ((l = document.createElement("a")),
+	      (l.href = a),
+	      "/" === l.pathname && (l = `${l}api/v3`),
+	      (this.Yh = l.toString()),
+	      ro.il && !this.er(U._h))
 	    )
 	      return (
 	        E$1.info("Ignoring activity from crawler bot " + navigator.userAgent),
-	        (this.ul = !0),
+	        (this.$h = !0),
 	        !1
 	      );
-	    const h = this.re(D.Vh) || !1;
+	    const u = this.er(U.Oh) || !1,
+	      c = this.er(U.se),
+	      m = Zt.sl();
 	    if (
-	      ((this.B = Kt._l(t, h)), h && this.B.Sl(t), new ee.le(null, !0).jr(STORAGE_KEYS.pe))
+	      ((this.C = Zt.rl(t, u, c)),
+	      u && this.C.hl(t),
+	      new ne.le(null, !0).wr(STORAGE_KEYS.ce))
 	    )
 	      return (
 	        E$1.info("Ignoring all activity due to previous opt out"),
-	        (this.ul = !0),
+	        (this.$h = !0),
 	        !1
 	      );
 	    for (const t of keys(this.options))
-	      -1 === values($t).indexOf(t) &&
+	      -1 === values(li).indexOf(t) &&
 	        E$1.warn(`Ignoring unknown initialization option '${t}'.`);
-	    const a = ["mparticle", "wordpress", "tealium"];
-	    if (null != this.re(D.il)) {
-	      const t = this.re(D.il);
-	      -1 !== a.indexOf(t)
-	        ? (this.rl = t)
+	    const p = ["mparticle", "wordpress", "tealium"];
+	    if (null != this.er(U.Bh)) {
+	      const t = this.er(U.Bh);
+	      -1 !== p.indexOf(t)
+	        ? (this.Kh = t)
 	        : E$1.error("Invalid sdk flavor passed: " + t);
 	    }
-	    let l = this.re($t.Kh);
-	    if (null != l)
-	      if (isArray(l)) {
+	    let d = this.er(li.Th);
+	    if (null != d)
+	      if (isArray(d)) {
 	        const t = [];
-	        for (let i = 0; i < l.length; i++)
+	        for (let i = 0; i < d.length; i++)
 	          validateValueIsFromEnum(
 	            DeviceProperties,
-	            l[i],
+	            d[i],
 	            "devicePropertyAllowlist contained an invalid value.",
 	            "DeviceProperties",
-	          ) && t.push(l[i]);
-	        l = t;
+	          ) && t.push(d[i]);
+	        d = t;
 	      } else
 	        E$1.error(
 	          "devicePropertyAllowlist must be an array. Defaulting to all properties.",
 	        ),
-	          (l = null);
-	    const u = this.re(D.tl);
-	    if (u) {
-	      const t = new _t(u);
-	      this.B.Iu(STORAGE_KEYS.Ou.tl, t);
+	          (d = null);
+	    const I = this.er(U.Wh);
+	    if (I) {
+	      const t = new _t(I);
+	      this.C.Iu(STORAGE_KEYS.Ou.Wh, t);
 	    }
-	    (this.eu = new Ot(this.B, l)),
-	      (this.h = new Bt(this.B)),
-	      (this.vs = new bt(this.h, this.B)),
-	      (this.C = new Vt(this.B, this.vs, this.h, this.re(D.Zh)));
-	    const c = new m();
-	    return (
-	      (this.hl = new kt(this.B, this.re(D.Yh), c)),
-	      this.q(c),
-	      (this.j = new Mt(
+	    (this.eu = new Pt(this.C, d)),
+	      (this.h = new Yt(this.C)),
+	      (this.Ss = new Ut(this.h, this.C)),
+	      (this.j = new Xt(this.C, this.Ss, this.h, this.er(U.Lh)));
+	    const _ = new f();
+	    (this.Gh = new Gt(this.C, this.er(U.Ph), _)),
+	      this.S(_),
+	      (this.B = new Vt(
 	        this.eu,
-	        this.B,
-	        this.hl,
-	        this.vs,
 	        this.C,
-	        this.h,
-	        this.tu,
-	        this.al,
-	        this.sl,
-	        this.rl || "",
-	        this.re(D.Qh),
-	        this.re(D.Xa),
-	      )),
-	      (this.Ru = new Wt(
-	        this.tu,
-	        this.al,
-	        this.C,
-	        this.eu,
-	        this.vs,
-	        this.h,
-	        this.B,
-	        (t) => {
-	          if (this.ao()) for (const i of this.gr()) i.N(t);
-	        },
-	        this.hl,
+	        this.Gh,
+	        this.Ss,
 	        this.j,
+	        this.h,
+	        this.tu,
+	        this.Yh,
+	        this.Vh,
+	        this.Kh || "",
+	        this.er(U.yh),
+	        this.er(U.Mh),
+	      )),
+	      (this.Ru = new Kt(
+	        this.tu,
+	        this.Yh,
+	        this.j,
+	        this.eu,
+	        this.Ss,
+	        this.h,
+	        this.C,
+	        (t) => {
+	          if (this.ao()) for (const i of this.vr()) i.I(t);
+	        },
+	        this.Gh,
+	        this.B,
 	      )),
 	      this.Ru.initialize(),
-	      h || this.B.Al(),
+	      u || this.C.ll(),
 	      E$1.info(
-	        `Initialized for the Braze backend at "${this.re(
-          D.Wh,
+	        `Initialized for the Braze backend at "${this.er(
+          U.Nh,
         )}" with API key "${this.tu}".`,
 	      ),
 	      TriggersProviderFactory.t(),
 	      subscribeToDust(),
-	      this.h.jo(() => {
+	      this.h.bo(() => {
 	        var t;
 	        this.isInitialized &&
-	          (null === (t = this.h) || void 0 === t ? void 0 : t.Yr()) &&
+	          (null === (t = this.h) || void 0 === t ? void 0 : t.lo()) &&
 	          Promise.resolve().then(function () { return refreshFeatureFlags$1; }).then((t) => {
 	            if (!this.isInitialized) return;
 	            (0, t.default)();
@@ -8246,66 +8288,76 @@ var mpBrazeKitV6 = (function (exports) {
 	      this.Ru.rn(() => {
 	        var t;
 	        this.isInitialized &&
-	          (null === (t = this.h) || void 0 === t ? void 0 : t.Yr()) &&
+	          (null === (t = this.h) || void 0 === t ? void 0 : t.lo()) &&
 	          Promise.resolve().then(function () { return refreshFeatureFlags$1; }).then((t) => {
 	            if (!this.isInitialized) return;
 	            (0, t.default)(void 0, void 0, !0);
 	          });
 	      }),
-	      this.cl.L(this.options),
+	      this.qh.A(this.options),
 	      (this.isInitialized = !0),
-	      window.dispatchEvent(new CustomEvent("braze.initialized")),
+	      window.dispatchEvent(new CustomEvent("braze.initialized"));
+	    const S = null === (e = this.j) || void 0 === e ? void 0 : e.al();
+	    return (
+	      m ||
+	        null == S ||
+	        (null === (r = this.j) || void 0 === r
+	          ? void 0
+	          : r.ul(new Date().valueOf(), S)) ||
+	        null === (o = this.Ru) ||
+	        void 0 === o ||
+	        o.Ar(),
 	      !0
 	    );
 	  }
 	  destroy(t) {
 	    if ((E$1.destroy(), this.ao())) {
-	      this.fl.L(), this.fl.removeAllSubscriptions();
-	      for (const t of this.ml) t.destroy();
-	      this.ml = [];
-	      for (const t of this.dl) t.clearData(!1);
-	      this.j && this.j.fo(),
-	        (this.dl = []),
+	      this.Hh.A(), this.Hh.removeAllSubscriptions();
+	      for (const t of this.Jh) t.destroy();
+	      this.Jh = [];
+	      for (const t of this.Xh) t.clearData(!1);
+	      this.B && this.B.fo(),
+	        (this.Xh = []),
 	        this.removeAllSubscriptions(),
-	        (this.jn = []),
+	        (this.In = []),
 	        null != this.Ru && this.Ru.destroy(),
 	        (this.Ru = null),
-	        (this.hl = null),
+	        (this.Gh = null),
 	        (this.eu = null),
-	        (this.j = null),
+	        (this.B = null),
 	        (this.h = null),
-	        (this.C = null),
-	        (this.vs = null),
+	        (this.j = null),
+	        (this.Ss = null),
 	        (this.options = {}),
-	        (this.rl = void 0),
+	        (this.Kh = void 0),
 	        (this.isInitialized = !1),
-	        (this.ul = !1),
-	        t && (this.B = null);
+	        (this.$h = !1),
+	        t && (this.C = null);
 	    }
 	  }
 	  rr() {
-	    return !this.Nl() && (!!this.ao() || (console.warn(CoreStrings.ee), !1));
+	    return !this.cl() && (!!this.ao() || (console.warn(CoreStrings.ee), !1));
 	  }
-	  _a() {
+	  za() {
 	    return this.tu;
 	  }
-	  Sr() {
-	    return this.hl;
+	  Er() {
+	    return this.Gh;
 	  }
-	  V() {
-	    return this.al;
+	  ht() {
+	    return this.Yh;
 	  }
 	  ue() {
 	    return this.eu;
 	  }
 	  m() {
-	    return this.j;
+	    return this.B;
 	  }
-	  re(t) {
+	  er(t) {
 	    return this.options[t];
 	  }
-	  gr() {
-	    return this.dl;
+	  vr() {
+	    return this.Xh;
 	  }
 	  nn() {
 	    return this.Ru;
@@ -8314,62 +8366,62 @@ var mpBrazeKitV6 = (function (exports) {
 	    return this.h;
 	  }
 	  u() {
-	    return this.C;
+	    return this.j;
 	  }
 	  p() {
-	    return this.B;
+	    return this.C;
 	  }
-	  br() {
-	    if (this.vs && this.Ru) return new User(this.vs, this.Ru);
+	  zr() {
+	    if (this.Ss && this.Ru) return new User(this.Ss, this.Ru);
 	  }
 	  ir() {
-	    return this.vs;
+	    return this.Ss;
 	  }
-	  nr() {
-	    return !0 === this.re(D.te);
+	  dr() {
+	    return !0 === this.er(U.nr);
 	  }
 	  g(t) {
 	    let i = !1;
-	    for (const s of this.ml) s === t && (i = !0);
-	    i || this.ml.push(t);
+	    for (const s of this.Jh) s === t && (i = !0);
+	    i || this.Jh.push(t);
 	  }
 	  v(i) {
 	    let s = !1;
-	    for (const t of this.dl) t.constructor === i.constructor && (s = !0);
-	    i instanceof t && !s && this.dl.push(i);
+	    for (const t of this.Xh) t.constructor === i.constructor && (s = !0);
+	    i instanceof t && !s && this.Xh.push(i);
 	  }
-	  q(t) {
-	    t instanceof m && this.jn.push(t);
+	  S(t) {
+	    t instanceof f && this.In.push(t);
 	  }
 	  removeAllSubscriptions() {
-	    if (this.rr()) for (const t of this.jn) t.removeAllSubscriptions();
+	    if (this.rr()) for (const t of this.In) t.removeAllSubscriptions();
 	  }
 	  removeSubscription(t) {
-	    if (this.rr()) for (const i of this.jn) i.removeSubscription(t);
+	    if (this.rr()) for (const i of this.In) i.removeSubscription(t);
 	  }
-	  ge(t) {
-	    this.ul = t;
+	  fe(t) {
+	    this.$h = t;
 	  }
 	  ao() {
 	    return this.isInitialized;
 	  }
-	  Nl() {
-	    return this.ul;
+	  cl() {
+	    return this.$h;
 	  }
-	  tr(t, i) {
+	  ar(t, i) {
 	    if (!this.rr()) return null;
-	    return nr.o().Be(t, i);
+	    return dr.o().en(t, i);
 	  }
-	  Vs() {
-	    return this.sl;
+	  zi() {
+	    return this.Vh;
 	  }
 	}
-	const r = new qt();
+	const r = new ci();
 
 	const v = {
-	  lt: (e, o, t) => {
+	  wt: (e, o, t) => {
 	    var n, s;
-	    const i = new H(),
+	    const i = new L(),
 	      l = r.u();
 	    if (!l)
 	      return (
@@ -8380,8 +8432,8 @@ var mpBrazeKitV6 = (function (exports) {
 	      );
 	    const d = l.el();
 	    return (
-	      i.Ee.push(
-	        new De(
+	      i.Ce.push(
+	        new Ie(
 	          t || (null === (n = r.ir()) || void 0 === n ? void 0 : n.getUserId()),
 	          e,
 	          new Date().valueOf(),
@@ -8389,8 +8441,8 @@ var mpBrazeKitV6 = (function (exports) {
 	          o,
 	        ),
 	      ),
-	      (i.W =
-	        (null === (s = r.p()) || void 0 === s ? void 0 : s.ol(i.Ee)) || !1),
+	      (i.lt =
+	        (null === (s = r.p()) || void 0 === s ? void 0 : s.ol(i.Ce)) || !1),
 	      i
 	    );
 	  },
@@ -8399,69 +8451,69 @@ var mpBrazeKitV6 = (function (exports) {
 
 	class M {
 	  constructor(t) {
-	    (this.B = t), (this.B = t);
+	    (this.C = t), (this.C = t);
 	  }
 	  logClick(t) {
-	    const n = new H();
-	    if ((t.$t(), null == t.url || "" === t.url))
+	    const n = new L();
+	    if ((t.ss(), null == t.url || "" === t.url))
 	      return (
 	        E$1.info(`Card ${t.id} has no url. Not logging click to Braze servers.`),
 	        n
 	      );
-	    if (t.id && this.B) {
-	      const n = this.B.dt(STORAGE_KEYS.ft.Jt) || {};
-	      (n[t.id] = !0), this.B.bt(STORAGE_KEYS.ft.Jt, n);
+	    if (t.id && this.C) {
+	      const n = this.C.Rt(STORAGE_KEYS.Tt.ns) || {};
+	      (n[t.id] = !0), this.C.It(STORAGE_KEYS.Tt.ns, n);
 	    }
-	    const r = this.Kt([t]);
+	    const r = this.rs([t]);
 	    if (null == r) return n;
-	    const i = f.Lt;
-	    return v$1.lt(i, r);
+	    const i = p.os;
+	    return v$1.wt(i, r);
 	  }
-	  Mt(t) {
-	    const n = new H();
-	    if (!t.Ot())
+	  es(t) {
+	    const n = new L();
+	    if (!t.ls())
 	      return (
 	        E$1.info(
 	          `Card ${t.id} refused this dismissal. Ignoring analytics event.`,
 	        ),
 	        n
 	      );
-	    if (t.id && this.B) {
-	      const n = this.B.dt(STORAGE_KEYS.ft.Pt) || {};
-	      (n[t.id] = !0), this.B.bt(STORAGE_KEYS.ft.Pt, n);
+	    if (t.id && this.C) {
+	      const n = this.C.Rt(STORAGE_KEYS.Tt.us) || {};
+	      (n[t.id] = !0), this.C.It(STORAGE_KEYS.Tt.us, n);
 	    }
-	    const r = this.Kt([t]);
-	    return null == r ? n : v$1.lt(f.Qt, r);
+	    const r = this.rs([t]);
+	    return null == r ? n : v$1.wt(p.cs, r);
 	  }
-	  Ut(t) {
-	    const n = new H(!0),
+	  fs(t) {
+	    const n = new L(!0),
 	      r = [],
 	      i = [];
 	    let o = {};
-	    this.B && (o = this.B.dt(STORAGE_KEYS.ft.Vt) || {});
+	    this.C && (o = this.C.Rt(STORAGE_KEYS.Tt.hs) || {});
 	    for (const s of t) {
-	      s.Wt()
+	      s.gs()
 	        ? (s instanceof ControlCard ? i.push(s) : r.push(s),
 	          s.id && (o[s.id] = !0))
 	        : E$1.info(
 	            `Card ${s.id} logged an impression too recently. Ignoring analytics event.`,
 	          );
 	    }
-	    const e = this.Kt(r),
-	      l = this.Kt(i);
-	    if (null == e && null == l) return (n.W = !1), n;
-	    if ((this.B && this.B.bt(STORAGE_KEYS.ft.Vt, o), null != e)) {
-	      const t = f.Xt,
-	        s = v$1.lt(t, e);
-	      n.Yt(s);
+	    const e = this.rs(r),
+	      l = this.rs(i);
+	    if (null == e && null == l) return (n.lt = !1), n;
+	    if ((this.C && this.C.It(STORAGE_KEYS.Tt.hs, o), null != e)) {
+	      const t = p.ds,
+	        s = v$1.wt(t, e);
+	      n.ps(s);
 	    }
 	    if (null != l) {
-	      const t = v$1.lt(f.Zt, l);
-	      n.Yt(t);
+	      const t = v$1.wt(p.js, l);
+	      n.ps(t);
 	    }
 	    return n;
 	  }
-	  Kt(t) {
+	  rs(t) {
 	    let s,
 	      n = null;
 	    for (let r = 0; r < t.length; r++)
@@ -8473,25 +8525,25 @@ var mpBrazeKitV6 = (function (exports) {
 	  }
 	}
 
-	const _ = {
+	const K = {
 	  i: !1,
 	  na: null,
-	  ra: () => (_.t(), _.na || (_.na = new M(r.p())), _.na),
+	  ra: () => (K.t(), K.na || (K.na = new M(r.p())), K.na),
 	  t: () => {
-	    _.i || (r.g(_), (_.i = !0));
+	    K.i || (r.g(K), (K.i = !0));
 	  },
 	  destroy: () => {
-	    (_.na = null), (_.i = !1);
+	    (K.na = null), (K.i = !1);
 	  },
 	};
-	var _$1 = _;
+	var K$1 = K;
 
-	const CardStrings = { _t: "must be a Card object" };
+	const CardStrings = { tr: "must be a Card object" };
 
 	function logCardDismissal(o) {
 	  return (
 	    !!r.rr() &&
-	    (o instanceof Card ? _$1.ra().Mt(o).W : (E$1.error("card " + CardStrings._t), !1))
+	    (o instanceof Card ? K$1.ra().es(o).lt : (E$1.error("card " + CardStrings.tr), !1))
 	  );
 	}
 
@@ -8499,27 +8551,27 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (!r.rr()) return !1;
 	  if (!isArray(o)) return E$1.error("cards must be an array"), !1;
 	  for (const r of o)
-	    if (!(r instanceof Card)) return E$1.error(`Each card in cards ${CardStrings._t}`), !1;
-	  return _$1.ra().Ut(o).W;
+	    if (!(r instanceof Card)) return E$1.error(`Each card in cards ${CardStrings.tr}`), !1;
+	  return K$1.ra().fs(o).lt;
 	}
 
 	function logContentCardClick(o) {
 	  return (
 	    !!r.rr() &&
-	    (o instanceof Card ? _$1.ra().logClick(o).W : (E$1.error("card " + CardStrings._t), !1))
+	    (o instanceof Card ? K$1.ra().logClick(o).lt : (E$1.error("card " + CardStrings.tr), !1))
 	  );
 	}
 
 	function newCard(e, n, r, t, i, o, l, u, d, a, f, s, w, m, p, C, c, x) {
 	  let j;
-	  if (n === Card.es.oi || n === Card.es.ai)
+	  if (n === Card.ks.oi || n === Card.ks.ai)
 	    j = new ClassicCard(e, r, t, i, o, l, u, d, a, f, s, w, m, p, c, x);
-	  else if (n === Card.es.hs)
+	  else if (n === Card.ks.zs)
 	    j = new CaptionedImage(e, r, t, i, o, l, u, d, a, f, s, w, m, p, c, x);
-	  else if (n === Card.es.Ii)
+	  else if (n === Card.ks.Ii)
 	    j = new ImageOnly(e, r, i, l, u, d, f, s, w, m, p, c, x);
 	  else {
-	    if (n !== Card.es.Ni)
+	    if (n !== Card.ks.Ni)
 	      return E$1.error("Ignoring card with unknown type " + n), null;
 	    j = new ControlCard(e, r, l, u, s, w);
 	  }
@@ -8527,15 +8579,15 @@ var mpBrazeKitV6 = (function (exports) {
 	}
 	function newCardFromContentCardsJson(e) {
 	  if (e[Card.ui.Ei]) return null;
-	  const n = e[Card.ui.rs],
-	    r = e[Card.ui.ts],
-	    t = e[Card.ui.os],
-	    i = e[Card.ui.cs],
-	    o = e[Card.ui.ns],
-	    l = e[Card.ui.ds],
-	    u = dateFromUnixTimestamp(e[Card.ui.ps]);
+	  const n = e[Card.ui.qs],
+	    r = e[Card.ui.xs],
+	    t = e[Card.ui.vs],
+	    i = e[Card.ui.ws],
+	    o = e[Card.ui.ys],
+	    l = e[Card.ui.As],
+	    u = dateFromUnixTimestamp(e[Card.ui.Bs]);
 	  let d;
-	  d = e[Card.ui.us] === Card.Ti ? null : dateFromUnixTimestamp(e[Card.ui.us]);
+	  d = e[Card.ui.Cs] === Card.Ti ? null : dateFromUnixTimestamp(e[Card.ui.Cs]);
 	  return newCard(
 	    n,
 	    r,
@@ -8546,96 +8598,96 @@ var mpBrazeKitV6 = (function (exports) {
 	    u,
 	    d,
 	    e[Card.ui.URL],
-	    e[Card.ui.ls],
-	    e[Card.ui.fs],
-	    e[Card.ui.xs],
-	    e[Card.ui.bs],
-	    e[Card.ui.gs],
-	    e[Card.ui.js],
-	    e[Card.ui.qs] || !1,
-	    e[Card.ui.zs],
-	    e[Card.ui.ks],
+	    e[Card.ui.Ds],
+	    e[Card.ui.Es],
+	    e[Card.ui.Fs],
+	    e[Card.ui.Gs],
+	    e[Card.ui.Hs],
+	    e[Card.ui.Is],
+	    e[Card.ui.Ls] || !1,
+	    e[Card.ui.Js],
+	    e[Card.ui.Ks],
 	  );
 	}
 	function newCardFromSerializedValue(e) {
 	  return (
 	    newCard(
-	      e[Card.ss.rs],
-	      e[Card.ss.ts],
-	      e[Card.ss.os],
-	      e[Card.ss.cs],
-	      e[Card.ss.ns],
-	      e[Card.ss.ds],
-	      rehydrateDateAfterJsonization(e[Card.ss.ps]),
-	      rehydrateDateAfterJsonization(e[Card.ss.us]),
-	      e[Card.ss.URL],
-	      e[Card.ss.ls],
-	      e[Card.ss.fs],
-	      e[Card.ss.xs],
-	      e[Card.ss.bs],
-	      e[Card.ss.gs],
-	      e[Card.ss.js],
-	      e[Card.ss.qs] || !1,
-	      e[Card.ss.zs],
-	      e[Card.ss.ks],
+	      e[Card.bs.qs],
+	      e[Card.bs.xs],
+	      e[Card.bs.vs],
+	      e[Card.bs.ws],
+	      e[Card.bs.ys],
+	      e[Card.bs.As],
+	      rehydrateDateAfterJsonization(e[Card.bs.Bs]),
+	      rehydrateDateAfterJsonization(e[Card.bs.Cs]),
+	      e[Card.bs.URL],
+	      e[Card.bs.Ds],
+	      e[Card.bs.Es],
+	      e[Card.bs.Fs],
+	      e[Card.bs.Gs],
+	      e[Card.bs.Hs],
+	      e[Card.bs.Is],
+	      e[Card.bs.Ls] || !1,
+	      e[Card.bs.Js],
+	      e[Card.bs.Ks],
 	    ) || void 0
 	  );
 	}
 
-	class Z extends t {
+	class rr extends t {
 	  constructor(t, s, i, e, h) {
 	    super(),
-	      (this.vs = t),
-	      (this.B = s),
+	      (this.Ss = t),
+	      (this.C = s),
 	      (this.h = i),
-	      (this.Cs = e),
-	      (this.j = h),
-	      (this.vs = t),
-	      (this.B = s),
+	      (this.Ts = e),
+	      (this.B = h),
+	      (this.Ss = t),
+	      (this.C = s),
 	      (this.h = i),
-	      (this.Cs = e),
-	      (this.j = h),
-	      (this.ws = new m()),
-	      r.q(this.ws),
-	      (this.ys = 0),
-	      (this.Ss = 0),
+	      (this.Ts = e),
+	      (this.B = h),
+	      (this.Rs = new f()),
+	      r.S(this.Rs),
+	      (this.Us = 0),
+	      (this.Ns = 0),
 	      (this.cards = []),
-	      this.Ts();
-	    const n = et.Us.Rs;
-	    new et(n, E$1).Ds(n.Fs.As, (t) => {
-	      this.Ls(t);
+	      this.Ms();
+	    const n = et.Ps.$s;
+	    new et(n, E$1).Xs(n.Os._s, (t) => {
+	      this.Qs(t);
 	    }),
-	      (this.Ns = null),
-	      (this.D = null),
-	      (this.Js = null),
-	      (this.Ms = null),
-	      (this.$s = 10);
+	      (this.Vs = null),
+	      (this.T = null),
+	      (this.Ws = null),
+	      (this.Ys = null),
+	      (this.Zs = 10);
 	  }
-	  Bs() {
-	    return this.Ns;
+	  fi() {
+	    return this.Vs;
 	  }
-	  Es(t) {
-	    this.Ns = t;
+	  vi(t) {
+	    this.Vs = t;
 	  }
-	  St() {
-	    return this.D;
+	  Lt() {
+	    return this.T;
 	  }
-	  wt(t) {
-	    this.D = t;
+	  $t(t) {
+	    this.T = t;
 	  }
-	  Ts() {
-	    if (!this.B) return;
-	    const t = this.B.dt(STORAGE_KEYS.ft.Ps) || [],
+	  Ms() {
+	    if (!this.C) return;
+	    const t = this.C.Rt(STORAGE_KEYS.Tt.Ci) || [],
 	      i = [];
 	    for (let s = 0; s < t.length; s++) {
 	      const e = newCardFromSerializedValue(t[s]);
 	      null != e && i.push(e);
 	    }
-	    (this.cards = this.Xs(this._s(i, !1))),
-	      (this.ys = this.B.dt(STORAGE_KEYS.ft.Gs) || this.ys),
-	      (this.Ss = this.B.dt(STORAGE_KEYS.ft.Hs) || this.Ss);
+	    (this.cards = this.bi(this.wi(i, !1))),
+	      (this.Us = this.C.Rt(STORAGE_KEYS.Tt.gi) || this.Us),
+	      (this.Ns = this.C.Rt(STORAGE_KEYS.Tt.ji) || this.Ns);
 	  }
-	  Is(t, i = !1, e = 0, h = 0) {
+	  yi(t, i = !1, e = 0, h = 0) {
 	    let r;
 	    if (i) {
 	      r = [];
@@ -8664,31 +8716,31 @@ var mpBrazeKitV6 = (function (exports) {
 	            }
 	      }
 	    }
-	    (this.cards = this.Xs(this._s(r, i))),
-	      this.Ks(),
-	      (this.ys = e),
-	      (this.Ss = h),
-	      this.B && (this.B.bt(STORAGE_KEYS.ft.Gs, this.ys), this.B.bt(STORAGE_KEYS.ft.Hs, this.Ss));
+	    (this.cards = this.bi(this.wi(r, i))),
+	      this.Ri(),
+	      (this.Us = e),
+	      (this.Ns = h),
+	      this.C && (this.C.It(STORAGE_KEYS.Tt.gi, this.Us), this.C.It(STORAGE_KEYS.Tt.ji, this.Ns));
 	  }
-	  N(t) {
-	    if (this.Os() && null != t && t.cards) {
-	      this.B && this.B.bt(STORAGE_KEYS.ft.Qs, r.Vs());
+	  I(t) {
+	    if (this.Ui() && null != t && t.cards) {
+	      this.C && this.C.It(STORAGE_KEYS.Tt.ki, r.zi());
 	      const i = t.full_sync;
-	      i || this.Ts(),
-	        this.Is(t.cards, i, t.last_full_sync_at, t.last_card_updated_at),
-	        this.ws.L(this.Ws(!0));
+	      i || this.Ms(),
+	        this.yi(t.cards, i, t.last_full_sync_at, t.last_card_updated_at),
+	        this.Rs.A(this.qi(!0));
 	    }
 	  }
-	  Ys(t) {
-	    this.Zs(), (this.Js = t);
+	  xi(t) {
+	    this.Fi(), (this.Ws = t);
 	  }
-	  Ls(t) {
+	  Qs(t) {
 	    var s;
-	    if (!this.Os()) return;
-	    this.Ts();
+	    if (!this.Ui()) return;
+	    this.Ms();
 	    const i = this.cards.slice();
 	    let e = null;
-	    e = null === (s = this.vs) || void 0 === s ? void 0 : s.getUserId();
+	    e = null === (s = this.Ss) || void 0 === s ? void 0 : s.getUserId();
 	    for (let s = 0; s < t.length; s++)
 	      if (e === t[s].userId || (null == e && null == t[s].userId)) {
 	        const e = t[s].card;
@@ -8710,16 +8762,16 @@ var mpBrazeKitV6 = (function (exports) {
 	              }
 	        }
 	      }
-	    (this.cards = this.Xs(this._s(i, !1))), this.Ks(), this.ws.L(this.Ws(!0));
+	    (this.cards = this.bi(this.wi(i, !1))), this.Ri(), this.Rs.A(this.qi(!0));
 	  }
-	  _s(t, i) {
+	  wi(t, i) {
 	    let e = {},
 	      h = {},
 	      r = {};
-	    this.B &&
-	      ((e = this.B.dt(STORAGE_KEYS.ft.Jt) || {}),
-	      (h = this.B.dt(STORAGE_KEYS.ft.Vt) || {}),
-	      (r = this.B.dt(STORAGE_KEYS.ft.Pt) || {}));
+	    this.C &&
+	      ((e = this.C.Rt(STORAGE_KEYS.Tt.ns) || {}),
+	      (h = this.C.Rt(STORAGE_KEYS.Tt.hs) || {}),
+	      (r = this.C.Rt(STORAGE_KEYS.Tt.us) || {}));
 	    const n = {},
 	      o = {},
 	      l = {};
@@ -8732,20 +8784,20 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	    return (
 	      i &&
-	        this.B &&
-	        (this.B.bt(STORAGE_KEYS.ft.Jt, n), this.B.bt(STORAGE_KEYS.ft.Vt, o), this.B.bt(STORAGE_KEYS.ft.Pt, l)),
+	        this.C &&
+	        (this.C.It(STORAGE_KEYS.Tt.ns, n), this.C.It(STORAGE_KEYS.Tt.hs, o), this.C.It(STORAGE_KEYS.Tt.us, l)),
 	      t
 	    );
 	  }
-	  Xs(t) {
+	  bi(t) {
 	    const i = [],
 	      e = new Date();
 	    let h = {};
-	    this.B && (h = this.B.dt(STORAGE_KEYS.ft.Pt) || {});
+	    this.C && (h = this.C.Rt(STORAGE_KEYS.Tt.us) || {});
 	    let r = !1;
 	    for (let s = 0; s < t.length; s++) {
 	      const n = t[s].url;
-	      if (!this.Cs && n && isURIJavascriptOrData(n)) {
+	      if (!this.Ts && n && isURIJavascriptOrData(n)) {
 	        E$1.error(
 	          `Card with url ${n} will not be displayed because Javascript URLs are disabled. Use the "allowUserSuppliedJavascript" option for braze.initialize to enable this card.`,
 	        );
@@ -8760,94 +8812,94 @@ var mpBrazeKitV6 = (function (exports) {
 	        i && (h[i] = !0), (r = !0);
 	      }
 	    }
-	    return r && this.B && this.B.bt(STORAGE_KEYS.ft.Pt, h), i;
+	    return r && this.C && this.C.It(STORAGE_KEYS.Tt.us, h), i;
 	  }
-	  Ks() {
+	  Ri() {
 	    var t;
 	    const i = [];
-	    for (let t = 0; t < this.cards.length; t++) i.push(this.cards[t].gt());
-	    null === (t = this.B) || void 0 === t || t.bt(STORAGE_KEYS.ft.Ps, i);
+	    for (let t = 0; t < this.cards.length; t++) i.push(this.cards[t].qt());
+	    null === (t = this.C) || void 0 === t || t.It(STORAGE_KEYS.Tt.Ci, i);
 	  }
-	  Zs() {
-	    this.Js && (clearTimeout(this.Js), (this.Js = null));
+	  Fi() {
+	    this.Ws && (clearTimeout(this.Ws), (this.Ws = null));
 	  }
-	  ar(t, i, e = !1) {
+	  lr(t, i, e = "sdk") {
 	    var n;
-	    const o = this.j,
-	      f = this.B;
-	    if (!o || !f) return void ("function" == typeof i && i());
-	    if ((e && (h.fi(f, h.H.vi), this.Zs()), !this.Os()))
+	    const o = this.B,
+	      u = this.C;
+	    if (!o || !u) return void ("function" == typeof i && i());
+	    if (("client" === e && (h.Li(u, h.it.Ji), this.Fi()), !this.Ui()))
 	      return void (
 	        null === (n = this.h) ||
 	        void 0 === n ||
-	        n.Ci(() => {
-	          this.ar(t, i, !0);
+	        n.Mi(() => {
+	          this.lr(t, i, "client");
 	        })
 	      );
-	    const m = o.$({}, !0);
-	    f.dt(STORAGE_KEYS.ft.Qs) !== r.Vs() && this.bi(),
-	      (m.last_full_sync_at = this.ys),
-	      (m.last_card_updated_at = this.Ss);
-	    const p = o.A(m, h.H.vi, e);
+	    const f = o.Z({}, !0);
+	    u.Rt(STORAGE_KEYS.Tt.ki) !== r.zi() && this.$i(),
+	      (f.last_full_sync_at = this.Us),
+	      (f.last_card_updated_at = this.Ns);
+	    const p = o.tt(f, h.it.Ji, e);
 	    let v = !1;
-	    o.J(
-	      m,
+	    o.et(
+	      f,
 	      (s = -1) => {
-	        if (this.B) {
+	        if (this.C) {
 	          const t = new Date().valueOf();
-	          h.K(this.B, h.H.vi, t);
+	          h.nt(this.C, h.it.Ji, t);
 	        }
 	        -1 !== s && p.push(["X-Braze-Req-Tokens-Remaining", s.toString()]),
-	          l.O({
-	            url: `${o.V()}/content_cards/sync`,
-	            data: m,
+	          l.ot({
+	            url: `${o.ht()}/content_cards/sync`,
+	            data: f,
 	            headers: p,
-	            W: (s) => {
-	              if (!o.Y(m, s, p))
+	            lt: (s) => {
+	              if (!o.ut(f, s, p))
 	                return (v = !0), void ("function" == typeof i && i());
-	              o.Z(), this.N(s), (v = !1), "function" == typeof t && t();
+	              o.ct(), this.I(s), (v = !1), "function" == typeof t && t();
 	            },
 	            error: (t) => {
-	              o._(t, "retrieving content cards"),
+	              o.dt(t, "retrieving content cards"),
 	                (v = !0),
 	                "function" == typeof i && i();
 	            },
-	            tt: (s, e) => {
+	            ft: (s, e) => {
 	              var r, n, l;
-	              let f;
+	              let u;
 	              if (v) {
 	                const t =
-	                    (null === (r = this.h) || void 0 === r ? void 0 : r.st()) ||
+	                    (null === (r = this.h) || void 0 === r ? void 0 : r.vt()) ||
 	                    REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
 	                  s =
-	                    (null === (n = this.h) || void 0 === n ? void 0 : n.it()) ||
+	                    (null === (n = this.h) || void 0 === n ? void 0 : n.gt()) ||
 	                    REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
 	                  i =
-	                    (null === (l = this.h) || void 0 === l ? void 0 : l.nt()) ||
+	                    (null === (l = this.h) || void 0 === l ? void 0 : l.bt()) ||
 	                    REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
-	                let e = this.Ms;
-	                (null == e || e < t) && (e = t), (f = Math.min(i, randomInclusive(t, e * s)));
+	                let e = this.Ys;
+	                (null == e || e < t) && (e = t), (u = Math.min(i, randomInclusive(t, e * s)));
 	              }
-	              o.et(
+	              o.yt(
 	                e,
 	                () => {
-	                  this.ar(t, i, !1);
+	                  this.lr(t, i);
 	                },
-	                h.H.vi,
-	                (t) => this.Ys(t),
-	                () => this.Zs(),
-	                f,
+	                h.it.Ji,
+	                (t) => this.xi(t),
+	                () => this.Fi(),
+	                u,
 	              );
 	            },
 	          });
 	      },
-	      h.H.vi,
+	      h.it.Ji,
 	      i,
 	    );
 	  }
-	  Ws(t) {
-	    t || this.Ts();
-	    const i = this.Xs(this.cards);
+	  qi(t) {
+	    t || this.Ms();
+	    const i = this.bi(this.cards);
 	    i.sort((t, s) =>
 	      t.pinned && !s.pinned
 	        ? -1
@@ -8859,81 +8911,83 @@ var mpBrazeKitV6 = (function (exports) {
 	        ? 1
 	        : 0,
 	    );
-	    let e = Math.max(this.Ss || 0, this.ys || 0);
+	    let e = Math.max(this.Ns || 0, this.Us || 0);
 	    return (
 	      0 === e && (e = void 0),
-	      this.B && this.B.dt(STORAGE_KEYS.ft.Hs) === this.Ss && void 0 === e && (e = this.Ss),
+	      this.C && this.C.Rt(STORAGE_KEYS.Tt.ji) === this.Ns && void 0 === e && (e = this.Ns),
 	      new ContentCards(i, dateFromUnixTimestamp(e))
 	    );
 	  }
-	  It(t) {
-	    return this.ws.Rt(t);
+	  zt(t) {
+	    return this.Rs.Kt(t);
 	  }
-	  bi() {
-	    (this.ys = 0),
-	      (this.Ss = 0),
-	      this.B && (this.B.zt(STORAGE_KEYS.ft.Gs), this.B.zt(STORAGE_KEYS.ft.Hs));
+	  $i() {
+	    (this.Us = 0),
+	      (this.Ns = 0),
+	      this.C && (this.C.Qt(STORAGE_KEYS.Tt.gi), this.C.Qt(STORAGE_KEYS.Tt.ji));
 	  }
 	  changeUser(t) {
 	    t ||
 	      ((this.cards = []),
-	      this.ws.L(new ContentCards(this.cards.slice(), null)),
-	      this.B &&
-	        (this.B.zt(STORAGE_KEYS.ft.Ps),
-	        this.B.zt(STORAGE_KEYS.ft.Jt),
-	        this.B.zt(STORAGE_KEYS.ft.Vt),
-	        this.B.zt(STORAGE_KEYS.ft.Pt))),
-	      this.Zs(),
-	      this.bi();
+	      this.Rs.A(new ContentCards(this.cards.slice(), null)),
+	      this.C &&
+	        (this.C.Qt(STORAGE_KEYS.Tt.Ci),
+	        this.C.Qt(STORAGE_KEYS.Tt.ns),
+	        this.C.Qt(STORAGE_KEYS.Tt.hs),
+	        this.C.Qt(STORAGE_KEYS.Tt.us))),
+	      this.Fi(),
+	      this.$i();
 	  }
 	  clearData(t) {
-	    (this.ys = 0),
-	      (this.Ss = 0),
+	    (this.Us = 0),
+	      (this.Ns = 0),
 	      (this.cards = []),
-	      this.ws.L(new ContentCards(this.cards.slice(), null)),
+	      this.Rs.A(new ContentCards(this.cards.slice(), null)),
 	      t &&
-	        this.B &&
-	        (this.B.zt(STORAGE_KEYS.ft.Ps),
-	        this.B.zt(STORAGE_KEYS.ft.Jt),
-	        this.B.zt(STORAGE_KEYS.ft.Vt),
-	        this.B.zt(STORAGE_KEYS.ft.Pt),
-	        this.B.zt(STORAGE_KEYS.ft.Gs),
-	        this.B.zt(STORAGE_KEYS.ft.Hs)),
-	      this.Zs();
+	        this.C &&
+	        (this.C.Qt(STORAGE_KEYS.Tt.Ci),
+	        this.C.Qt(STORAGE_KEYS.Tt.ns),
+	        this.C.Qt(STORAGE_KEYS.Tt.hs),
+	        this.C.Qt(STORAGE_KEYS.Tt.us),
+	        this.C.Qt(STORAGE_KEYS.Tt.gi),
+	        this.C.Qt(STORAGE_KEYS.Tt.ji)),
+	      this.Fi();
 	  }
-	  Os() {
-	    return !!this.h && (!!this.h.wi() || (0 !== this.h.xt() && this.gi(), !1));
+	  Ui() {
+	    return !!this.h && (!!this.h.Bi() || (0 !== this.h.Ot() && this.Pi(), !1));
 	  }
-	  gi() {
-	    this.ws.L(new ContentCards([], new Date())), this.B && this.B.zt(STORAGE_KEYS.ft.Ps);
+	  Pi() {
+	    this.Rs.A(new ContentCards([], new Date())), this.C && this.C.Qt(STORAGE_KEYS.Tt.Ci);
 	  }
 	}
 
-	const rr = {
+	const ir = {
 	  i: !1,
 	  provider: null,
 	  o: () => (
-	    rr.t(),
-	    rr.provider ||
-	      ((rr.provider = new Z(r.ir(), r.p(), r.l(), r.nr(), r.m())),
-	      r.v(rr.provider),
-	      r.tr("ccr", () => {
+	    ir.t(),
+	    ir.provider ||
+	      ((ir.provider = new rr(r.ir(), r.p(), r.l(), r.dr(), r.m())),
+	      r.v(ir.provider),
+	      r.ar("ccr", () => {
 	        var r;
-	        null === (r = rr.provider) || void 0 === r || r.ar();
+	        null === (r = ir.provider) ||
+	          void 0 === r ||
+	          r.lr(void 0, void 0, "dust");
 	      })),
-	    rr.provider
+	    ir.provider
 	  ),
 	  t: () => {
-	    rr.i || (r.g(rr), (rr.i = !0));
+	    ir.i || (r.g(ir), (ir.i = !0));
 	  },
 	  destroy: () => {
-	    (rr.provider = null), (rr.i = !1);
+	    (ir.provider = null), (ir.i = !1);
 	  },
 	};
-	var rr$1 = rr;
+	var ir$1 = ir;
 
 	function requestContentCardsRefresh(e, t) {
-	  if (r.rr()) return rr$1.o().ar(e, t, !0);
+	  if (r.rr()) return ir$1.o().lr(e, t, "client");
 	}
 
 	class ContentCards {
@@ -8948,23 +9002,23 @@ var mpBrazeKitV6 = (function (exports) {
 	    for (const t of this.cards) t.viewed || t instanceof ControlCard || r++;
 	    return r;
 	  }
-	  sr(r) {
+	  ur(r) {
 	    logContentCardImpressions(r);
 	  }
-	  dr(r) {
+	  cr(r) {
 	    return logContentCardClick(r);
 	  }
-	  ur() {
+	  Cr() {
 	    requestContentCardsRefresh();
 	  }
-	  cr() {
+	  hr() {
 	    return !0;
 	  }
 	}
-	(ContentCards.Cr = 6e4), (ContentCards.hr = 500), (ContentCards.lr = 1e4);
+	(ContentCards.mr = 6e4), (ContentCards.gr = 500), (ContentCards.jr = 1e4);
 
 	function getCachedContentCards() {
-	  if (r.rr()) return rr$1.o().Ws(!1);
+	  if (r.rr()) return ir$1.o().qi(!1);
 	}
 
 	function markCardAsRead(t) {
@@ -8985,7 +9039,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    i = 0;
 	  a.length > 0 && (i = a[0].offsetWidth);
 	  for (const e of t)
-	    if (((o = e.ae), o && e.imageUrl && "number" == typeof e.aspectRatio)) {
+	    if (((o = e.te), o && e.imageUrl && "number" == typeof e.aspectRatio)) {
 	      const t = i / e.aspectRatio;
 	      t && (o.style.height = `${t}px`);
 	    }
@@ -8994,7 +9048,7 @@ var mpBrazeKitV6 = (function (exports) {
 	  const i = document.createElement("div");
 	  (i.dir = o),
 	    t.language && (i.lang = t.language),
-	    (i.className = "ab-card ab-effect-card " + t.ie),
+	    (i.className = "ab-card ab-effect-card " + t.ae),
 	    t.id &&
 	      (i.setAttribute("data-ab-card-id", t.id), i.setAttribute("id", t.id)),
 	    i.setAttribute("role", "article");
@@ -9020,7 +9074,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      _setImageAltText(t, a),
 	      e.appendChild(a),
 	      (i.className += " with-image"),
-	      d && !t.ne)
+	      d && !t.oe)
 	    ) {
 	      const a = document.createElement("a");
 	      a.setAttribute("href", n),
@@ -9038,10 +9092,10 @@ var mpBrazeKitV6 = (function (exports) {
 	    t.logCardDismissal = () => logCardDismissal(t);
 	    const e = createCloseButton("Dismiss Card", void 0, t.dismissCard.bind(t), o);
 	    i.appendChild(e),
-	      detectSwipe(c, DIRECTIONS.de, (t) => {
+	      detectSwipe(c, DIRECTIONS.ie, (t) => {
 	        (i.className += " ab-swiped-left"), e.onclick(t);
 	      }),
-	      detectSwipe(c, DIRECTIONS.ce, (t) => {
+	      detectSwipe(c, DIRECTIONS.ne, (t) => {
 	        (i.className += " ab-swiped-right"), e.onclick(t);
 	      });
 	  }
@@ -9051,7 +9105,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    const t = document.createElement("h1");
 	    if (
 	      ((t.className = "ab-title"),
-	      (t.id = P$1.se()),
+	      (t.id = V$1.de()),
 	      i.setAttribute("aria-labelledby", t.id),
 	      d)
 	    ) {
@@ -9085,7 +9139,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    (l.className = "ab-unread-indicator"),
 	    t.viewed && (l.className += " read"),
 	    i.appendChild(l),
-	    (t.ae = i),
+	    (t.te = i),
 	    i
 	  );
 	}
@@ -9124,7 +9178,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    ((t.className = t.className.replace("ab-show", "ab-hide")),
 	    setTimeout(() => {
 	      t && t.parentNode && t.parentNode.removeChild(t);
-	    }, ContentCards.hr));
+	    }, ContentCards.gr));
 	  const e = t.getAttribute(BannerStrings.ea);
 	  null != e && removeSubscription(e);
 	  const n = t.getAttribute("data-listener-id");
@@ -9133,7 +9187,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    delete scrollListeners[n]);
 	}
 	function generateContentCardsUI(t, e) {
-	  const n = Me.ra(),
+	  const n = Je.ra(),
 	    o = document.createElement("div");
 	  if (
 	    ((o.className = "ab-feed-body"),
@@ -9149,11 +9203,11 @@ var mpBrazeKitV6 = (function (exports) {
 	      o.appendChild(t);
 	  } else {
 	    let s = !1;
-	    const r = (e) => t.dr(e);
+	    const r = (e) => t.cr(e);
 	    for (const a of t.cards) {
 	      const i = a instanceof ControlCard;
-	      !i || t.cr()
-	        ? (o.appendChild(cardToHtml(a, r, e, n.Ta())), (s = s || !i))
+	      !i || t.hr()
+	        ? (o.appendChild(cardToHtml(a, r, e, n.ya())), (s = s || !i))
 	        : E$1.error(
 	            "Received a control card for a legacy news feed. Control cards are only supported with content cards.",
 	          );
@@ -9172,12 +9226,12 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (null != t && null != e) {
 	    const n = [],
 	      o = e.querySelectorAll(".ab-card");
-	    t.Qa || (t.Qa = {});
+	    t.Ta || (t.Ta = {});
 	    for (let e = 0; e < o.length; e++) {
 	      const s = getCardId(o[e]),
 	        r = topIsInView(o[e]),
 	        a = bottomIsInView(o[e]);
-	      if (t.Qa[s]) {
+	      if (t.Ta[s]) {
 	        r || a || markCardAsRead(o[e]);
 	        continue;
 	      }
@@ -9191,12 +9245,12 @@ var mpBrazeKitV6 = (function (exports) {
 	        if (d && c) continue;
 	        for (const e of t.cards)
 	          if (e.id === s) {
-	            (t.Qa[e.id] = !0), n.push(e);
+	            (t.Ta[e.id] = !0), n.push(e);
 	            break;
 	          }
 	      }
 	    }
-	    n.length > 0 && t.sr(n);
+	    n.length > 0 && t.ur(n);
 	  }
 	}
 	function refreshContentCardsUI(t, e) {
@@ -9214,15 +9268,15 @@ var mpBrazeKitV6 = (function (exports) {
 	        const n = e.querySelectorAll(".ab-initial-spinner")[0];
 	        if (null != n) {
 	          const t = document.createElement("span");
-	          (t.innerHTML = Me.ra().get("FEED_TIMEOUT_MESSAGE") || ""),
+	          (t.innerHTML = Je.ra().get("FEED_TIMEOUT_MESSAGE") || ""),
 	            null != n.parentNode &&
 	              (n.parentNode.appendChild(t), n.parentNode.removeChild(n));
 	        }
 	        "true" === e.getAttribute("aria-busy") &&
 	          e.setAttribute("aria-busy", "false");
 	      }
-	    }, ContentCards.lr),
-	    t.ur();
+	    }, ContentCards.jr),
+	    t.Cr();
 	}
 	function contentCardsToHtml(t, e, n) {
 	  const o = document.createElement("div");
@@ -9243,7 +9297,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    destroyContentCardsHtml(o), t.stopPropagation();
 	  };
 	  r.addEventListener("keydown", (t) => {
-	    (t.keyCode !== KeyCodes.Ho && t.keyCode !== KeyCodes.Go) || a(t);
+	    (t.keyCode !== KeyCodes.Ao && t.keyCode !== KeyCodes.Lo) || a(t);
 	  }),
 	    (r.onclick = a);
 	  const i = document.createElement("i");
@@ -9256,7 +9310,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    refreshContentCardsUI(t, o), e.stopPropagation();
 	  };
 	  i.addEventListener("keydown", (t) => {
-	    (t.keyCode !== KeyCodes.Ho && t.keyCode !== KeyCodes.Go) || l(t);
+	    (t.keyCode !== KeyCodes.Ao && t.keyCode !== KeyCodes.Lo) || l(t);
 	  }),
 	    (i.onclick = l),
 	    s.appendChild(i),
@@ -9265,7 +9319,7 @@ var mpBrazeKitV6 = (function (exports) {
 	  const d = () => detectContentCardsImpressions(t, o);
 	  if ((o.addEventListener("scroll", d), !n)) {
 	    window.addEventListener("scroll", d);
-	    const t = P$1.se();
+	    const t = V$1.de();
 	    (scrollListeners[t] = d), o.setAttribute("data-listener-id", t);
 	  }
 	  return o;
@@ -9278,7 +9332,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      if (t.url && BRAZE_ACTION_URI_REGEX.test(t.url)) {
 	        const e = getDecodedBrazeAction(t.url);
 	        if (containsUnknownBrazeAction(e)) {
-	          E$1.error(ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Pn, "Content Card"));
+	          E$1.error(ineligibleBrazeActionURLErrorMessage(INELIGIBLE_BRAZE_ACTION_URL_ERROR_TYPES.Wn, "Content Card"));
 	          continue;
 	        }
 	      }
@@ -9312,20 +9366,20 @@ var mpBrazeKitV6 = (function (exports) {
 	  setupFeedUI();
 	  let e = !1;
 	  null == n && ((n = document.body), (e = !0));
-	  const o = r.re(D.tn) || !1,
-	    s = rr$1.o().Ws(!1);
+	  const o = r.er(U.tn) || !1,
+	    s = ir$1.o().qi(!1);
 	  "function" == typeof t && updateContentCards(s, t(s.cards.slice()), s.lastUpdated, null, o);
 	  const a = contentCardsToHtml(s, o, e),
-	    i = rr$1.o(),
-	    c = i.Bs();
+	    i = ir$1.o(),
+	    c = i.fi();
 	  (null == s.lastUpdated ||
-	    new Date().valueOf() - s.lastUpdated.valueOf() > ContentCards.Cr) &&
-	    (null == c || new Date().valueOf() - c > ContentCards.Cr) &&
+	    new Date().valueOf() - s.lastUpdated.valueOf() > ContentCards.mr) &&
+	    (null == c || new Date().valueOf() - c > ContentCards.mr) &&
 	    (E$1.info(
-	      `Cached content cards were older than max TTL of ${ContentCards.Cr} ms, requesting an update from the server.`,
+	      `Cached content cards were older than max TTL of ${ContentCards.mr} ms, requesting an update from the server.`,
 	    ),
 	    refreshContentCardsUI(s, a),
-	    i.Es(new Date().valueOf()));
+	    i.vi(new Date().valueOf()));
 	  const f = new Date().valueOf(),
 	    l = subscribeToContentCardsUpdates(function (n) {
 	      const e = a.querySelectorAll(".ab-refresh-button")[0];
@@ -9370,17 +9424,17 @@ var mpBrazeKitV6 = (function (exports) {
 	        }));
 	}
 
-	function subscribeToContentCardsUpdates(o) {
+	function subscribeToContentCardsUpdates(t) {
 	  if (!r.rr()) return;
-	  const t = rr$1.o(),
-	    n = t.It(o);
-	  if (!t.St()) {
-	    const o = r.nn();
-	    if (o) {
-	      const r = o.rn(() => {
-	        t.ar(void 0, void 0, !0);
+	  const o = ir$1.o(),
+	    n = o.zt(t);
+	  if (!o.Lt()) {
+	    const t = r.nn();
+	    if (t) {
+	      const r = t.rn(() => {
+	        o.lr(void 0, void 0, "client");
 	      });
-	      r && t.wt(r);
+	      r && o.$t(r);
 	    }
 	  }
 	  return n;
@@ -9430,13 +9484,13 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (!r.rr()) return;
 	  if (null == e || 0 === e.length || e != e)
 	    return void E$1.error("changeUser requires a non-empty userId.");
-	  if (getByteLength(e) > User.mr)
+	  if (getByteLength(e) > User.br)
 	    return void E$1.error(
-	      `Rejected user id "${e}" because it is longer than ${User.mr} bytes.`,
+	      `Rejected user id "${e}" because it is longer than ${User.br} bytes.`,
 	    );
 	  if (null != i && !validateStandardString(i, "set signature for new user", "signature")) return;
 	  const t = r.nn();
-	  t && t.changeUser(e.toString(), r.gr(), i);
+	  t && t.changeUser(e.toString(), r.vr(), i);
 	}
 
 	var changeUser$1 = /*#__PURE__*/Object.freeze({
@@ -9451,23 +9505,24 @@ var mpBrazeKitV6 = (function (exports) {
 	function disableSDK() {
 	  const e = r.nn();
 	  e && e.requestImmediateDataFlush();
-	  const n = new ee.le(null, !0),
-	    a = "This-cookie-will-expire-in-" + n.me();
-	  n.store(STORAGE_KEYS.pe, a);
-	  const i = et.Us.Rs;
-	  new et(i, E$1).setItem(i.Fs.be, i.fe, !0),
+	  const n = r.er(U.se),
+	    a = new ne.le(null, !0, n),
+	    i = "This-cookie-will-expire-in-" + a.me();
+	  a.store(STORAGE_KEYS.ce, i);
+	  const o = et.Ps.$s;
+	  new et(o, E$1).setItem(o.Os.pe, o.be, !0),
 	    E$1.info("disableSDK was called"),
 	    r.destroy(!1),
-	    r.ge(!0);
+	    r.fe(!0);
 	}
 
 	function enableSDK() {
-	  new ee.le(null, !0).remove(STORAGE_KEYS.pe);
-	  const e = et.Us.Rs;
-	  new et(e, E$1).je(e.Fs.be, e.fe),
+	  new ne.le(null, !0).remove(STORAGE_KEYS.ce);
+	  const e = et.Ps.$s;
+	  new et(e, E$1).ge(e.Os.pe, e.be),
 	    E$1.info("enableSDK was called"),
 	    r.destroy(!1),
-	    r.ge(!1);
+	    r.fe(!1);
 	}
 
 	function getDeviceId(e) {
@@ -9487,7 +9542,7 @@ var mpBrazeKitV6 = (function (exports) {
 	}
 
 	function isDisabled() {
-	  return !!new ee.le(null, !0).jr(STORAGE_KEYS.pe);
+	  return !!new ne.le(null, !0).wr(STORAGE_KEYS.ce);
 	}
 
 	function isInitialized() {
@@ -9506,27 +9561,548 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (!validateCustomString(t, "log custom event", "the event name")) return !1;
 	  const [o, n] = validateCustomProperties(
 	    e,
-	    CoreStrings.$e,
+	    CoreStrings.je,
 	    "eventProperties",
 	    `log custom event "${t}"`,
 	    "event",
 	  );
 	  if (!o) return !1;
 	  const i = r.l();
-	  if (i && i.Ce(t))
+	  if (i && i.$e(t))
 	    return E$1.info(`Custom Event "${t}" is blocklisted, ignoring.`), !1;
-	  const s = v$1.lt(f.CustomEvent, { n: t, p: n });
-	  if (s.W) {
+	  const s = v$1.wt(p.CustomEvent, { n: t, p: n });
+	  if (s.lt) {
 	    E$1.info(`Logged custom event "${t}".`);
-	    for (const o of s.Ee) TriggersProviderFactory.o().he(ot.xe, [t, e], o);
+	    for (const o of s.Ce) TriggersProviderFactory.o().Ee(ot.he, [t, e], o);
 	  }
-	  return s.W;
+	  return s.lt;
 	}
 
 	var logCustomEvent$1 = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		logCustomEvent: logCustomEvent
 	});
+
+	const DD = [
+	  "AED",
+	  "AFN",
+	  "ALL",
+	  "AMD",
+	  "ANG",
+	  "AOA",
+	  "ARS",
+	  "AUD",
+	  "AWG",
+	  "AZN",
+	  "BAM",
+	  "BBD",
+	  "BDT",
+	  "BGN",
+	  "BHD",
+	  "BIF",
+	  "BMD",
+	  "BND",
+	  "BOB",
+	  "BRL",
+	  "BSD",
+	  "BTC",
+	  "BTN",
+	  "BWP",
+	  "BYR",
+	  "BZD",
+	  "CAD",
+	  "CDF",
+	  "CHF",
+	  "CLF",
+	  "CLP",
+	  "CNY",
+	  "COP",
+	  "CRC",
+	  "CUC",
+	  "CUP",
+	  "CVE",
+	  "CZK",
+	  "DJF",
+	  "DKK",
+	  "DOP",
+	  "DZD",
+	  "EEK",
+	  "EGP",
+	  "ERN",
+	  "ETB",
+	  "EUR",
+	  "FJD",
+	  "FKP",
+	  "GBP",
+	  "GEL",
+	  "GGP",
+	  "GHS",
+	  "GIP",
+	  "GMD",
+	  "GNF",
+	  "GTQ",
+	  "GYD",
+	  "HKD",
+	  "HNL",
+	  "HRK",
+	  "HTG",
+	  "HUF",
+	  "IDR",
+	  "ILS",
+	  "IMP",
+	  "INR",
+	  "IQD",
+	  "IRR",
+	  "ISK",
+	  "JEP",
+	  "JMD",
+	  "JOD",
+	  "JPY",
+	  "KES",
+	  "KGS",
+	  "KHR",
+	  "KMF",
+	  "KPW",
+	  "KRW",
+	  "KWD",
+	  "KYD",
+	  "KZT",
+	  "LAK",
+	  "LBP",
+	  "LKR",
+	  "LRD",
+	  "LSL",
+	  "LTL",
+	  "LVL",
+	  "LYD",
+	  "MAD",
+	  "MDL",
+	  "MGA",
+	  "MKD",
+	  "MMK",
+	  "MNT",
+	  "MOP",
+	  "MRO",
+	  "MTL",
+	  "MUR",
+	  "MVR",
+	  "MWK",
+	  "MXN",
+	  "MYR",
+	  "MZN",
+	  "NAD",
+	  "NGN",
+	  "NIO",
+	  "NOK",
+	  "NPR",
+	  "NZD",
+	  "OMR",
+	  "PAB",
+	  "PEN",
+	  "PGK",
+	  "PHP",
+	  "PKR",
+	  "PLN",
+	  "PYG",
+	  "QAR",
+	  "RON",
+	  "RSD",
+	  "RUB",
+	  "RWF",
+	  "SAR",
+	  "SBD",
+	  "SCR",
+	  "SDG",
+	  "SEK",
+	  "SGD",
+	  "SHP",
+	  "SLL",
+	  "SOS",
+	  "SRD",
+	  "STD",
+	  "SVC",
+	  "SYP",
+	  "SZL",
+	  "THB",
+	  "TJS",
+	  "TMT",
+	  "TND",
+	  "TOP",
+	  "TRY",
+	  "TTD",
+	  "TWD",
+	  "TZS",
+	  "UAH",
+	  "UGX",
+	  "USD",
+	  "UYU",
+	  "UZS",
+	  "VEF",
+	  "VND",
+	  "VUV",
+	  "WST",
+	  "XAF",
+	  "XAG",
+	  "XAU",
+	  "XCD",
+	  "XDR",
+	  "XOF",
+	  "XPD",
+	  "XPF",
+	  "XPT",
+	  "YER",
+	  "ZAR",
+	  "ZMK",
+	  "ZMW",
+	  "ZWL",
+	];
+	function isValidIso4217CurrencyCode(D) {
+	  return -1 !== DD.indexOf(D);
+	}
+
+	const CartUpdatedActions = {
+	  REPLACE: "replace",
+	  Ed: "add",
+	  Ad: "remove",
+	};
+
+	const ln = "log eCommerce event";
+	function dn(n, t, e) {
+	  if (null == n) {
+	    if (!e) return;
+	    return E$1.error(`Cannot ${ln} because ${t} must be a non-empty string.`), !1;
+	  }
+	  return "string" != typeof n || (e && n.length <= 0)
+	    ? (E$1.error(
+	        `Cannot ${ln} because ${t} must be a string${
+          e ? "" : " when provided"
+        }.`,
+	      ),
+	      !1)
+	    : n.length > 255
+	    ? (E$1.error(`Cannot ${ln} because ${t} must be at most 255 characters.`), !1)
+	    : !!validateCustomString(n, ln, t) && n;
+	}
+	function mn(n, t) {
+	  return "number" != typeof n || isNaN(n) || !isFinite(n)
+	    ? (E$1.error(`Cannot ${ln} because ${t} must be a finite number.`), !1)
+	    : n;
+	}
+	function pn(n, t) {
+	  const e = mn(n, t);
+	  return (
+	    !1 !== e &&
+	    (e < 0 ? (E$1.error(`Cannot ${ln} because ${t} must be at least 0.`), !1) : e)
+	  );
+	}
+	const bn = /^[A-Za-z0-9\-_.,:;!?@#%&*()+={}[\]|\\/'`~^<>]+$/;
+	function _n(n, t) {
+	  return 0 === n.length || n.length > 255
+	    ? (E$1.error(
+	        `Cannot ${ln} because each ${t} key must be between 1 and 255 characters.`,
+	      ),
+	      !1)
+	    : "$" === n.charAt(0)
+	    ? (E$1.error(`Cannot ${ln} because ${t} keys cannot begin with "$".`), !1)
+	    : !!bn.test(n) ||
+	      (E$1.error(
+	        `Cannot ${ln} because ${t} key "${n}" contains invalid characters.`,
+	      ),
+	      !1);
+	}
+	function $n(n, t, e) {
+	  if (e > 50)
+	    return E$1.error(`Cannot ${ln} because ${t} is nested too deeply.`), !1;
+	  if (null == n || "object" != typeof n) return !0;
+	  if (isArray(n)) {
+	    const r = n;
+	    for (let n = 0; n < r.length; n++) {
+	      const u = r[n];
+	      if ("string" == typeof u) {
+	        if (u.length > 255)
+	          return (
+	            E$1.error(
+	              `Cannot ${ln} because a ${t} string value exceeds 255 characters.`,
+	            ),
+	            !1
+	          );
+	      } else if (!$n(u, t, e + 1)) return !1;
+	    }
+	    return !0;
+	  }
+	  if (!isObject$1(n)) return !0;
+	  const r = n;
+	  for (const n in r) {
+	    if (!Object.prototype.hasOwnProperty.call(r, n)) continue;
+	    if (!_n(n, t)) return !1;
+	    const u = r[n];
+	    if ("string" == typeof u) {
+	      if (u.length > 255)
+	        return (
+	          E$1.error(
+	            `Cannot ${ln} because a ${t} string value exceeds 255 characters.`,
+	          ),
+	          !1
+	        );
+	    } else if (null != u && "object" == typeof u && !$n(u, t, e + 1)) return !1;
+	  }
+	  return !0;
+	}
+	function vn(n, t) {
+	  if (!isArray(n))
+	    return (
+	      E$1.error(`Cannot ${ln} because ${t} must be an array of strings.`), !1
+	    );
+	  for (const e of n) if (!1 === dn(e, t, !0)) return !1;
+	  return !0;
+	}
+	function yn(n, t) {
+	  if (void 0 === n) return;
+	  const [e, r] = validateCustomProperties(null != n ? n : {}, CoreStrings.QE, "metadata", ln, t);
+	  return !!e && !(null != r && !$n(r, t, 0)) && r;
+	}
+	function gn(n) {
+	  if (null == n || "object" != typeof n || isArray(n))
+	    return (
+	      E$1.error(`Cannot ${ln} because each product must be an object.`), null
+	    );
+	  const t = n,
+	    e = dn(t.product_id, "product_id", !0),
+	    r = dn(t.product_name, "product_name", !0),
+	    u = dn(t.variant_id, "variant_id", !0),
+	    o = (function (n) {
+	      if (!1 === mn(n, "product quantity")) return !1;
+	      const t = parseInt(n.toString(), 10);
+	      return t !== n
+	        ? (E$1.error(`Cannot ${ln} because product quantity must be an integer.`),
+	          !1)
+	        : n < 0 || n > Number.MAX_SAFE_INTEGER
+	        ? (E$1.error(
+	            `Cannot ${ln} because product quantity must be between 0 and Number.MAX_SAFE_INTEGER.`,
+	          ),
+	          !1)
+	        : t;
+	    })(t.quantity),
+	    c = pn(t.price, "product price");
+	  if (!1 === e || !1 === r || !1 === u || !1 === o || !1 === c) return null;
+	  const i = dn(t.image_url, "image_url", !1),
+	    a = dn(t.product_url, "product_url", !1);
+	  if (!1 === i || !1 === a) return null;
+	  const s = yn(t.metadata, "eCommerce product metadata");
+	  if (!1 === s) return null;
+	  const l = {
+	    product_id: e,
+	    product_name: r,
+	    variant_id: u,
+	    quantity: o,
+	    price: c,
+	  };
+	  return (
+	    null != i && (l.image_url = i),
+	    null != a && (l.product_url = a),
+	    null != s && (l.metadata = s),
+	    l
+	  );
+	}
+	function Cn(n) {
+	  if (null == n || !isArray(n))
+	    return E$1.error(`Cannot ${ln} because products must be an array.`), null;
+	  const t = [],
+	    e = n;
+	  for (const n of e) {
+	    const e = gn(n);
+	    if (null == e) return null;
+	    t.push(e);
+	  }
+	  return t;
+	}
+	function jn(n) {
+	  const t = (function (n) {
+	      if (null == n || "string" != typeof n || n.length <= 0)
+	        return (
+	          E$1.error(`Cannot ${ln} because currency must be a non-empty string.`),
+	          !1
+	        );
+	      const t = n.toUpperCase();
+	      return isValidIso4217CurrencyCode(t)
+	        ? t
+	        : (E$1.error(
+	            `${CoreStrings.QE} requires a valid ISO 4217 currency code, got "${n}". Ignoring event.`,
+	          ),
+	          !1);
+	    })(n.currency),
+	    e = dn(n.source, "source", !0);
+	  return !1 === t || !1 === e ? null : { currency: t, source: e };
+	}
+	function hn(n, t) {
+	  const e = yn(t, "eCommerce event metadata");
+	  return !1 !== e && (null != e && (n.metadata = e), !0);
+	}
+	function wn(n, t) {
+	  const e = dn(n.cart_id, "cart_id", !0),
+	    r =
+	      void 0 === n.action
+	        ? CartUpdatedActions.REPLACE
+	        : ((u = n.action),
+	          !!validateValueIsFromEnum(
+	            CartUpdatedActions,
+	            u,
+	            `Cannot ${ln} because action is invalid.`,
+	            "CartUpdatedActions",
+	          ) && u);
+	  var u;
+	  const o = Cn(n.products);
+	  if (!1 === e || !1 === r || null == o) return null;
+	  const c = r === CartUpdatedActions.Ed || r === CartUpdatedActions.Ad,
+	    i =
+	      void 0 === n.total_value && c ? void 0 : pn(n.total_value, "total_value");
+	  if (!1 === i) return null;
+	  const a = {
+	    cart_id: e,
+	    action: r,
+	    currency: t.currency,
+	    products: o,
+	    source: t.source,
+	  };
+	  return void 0 !== i && (a.total_value = i), hn(a, n.metadata) ? a : null;
+	}
+	function sanitizeEcommerceEvent(n) {
+	  const t = n.properties;
+	  if (null == t || "object" != typeof t || isArray(t))
+	    return E$1.error(`${CoreStrings.QE} requires a properties object.`), null;
+	  const e = t,
+	    r = jn(e);
+	  if (null == r) return null;
+	  switch (n.name) {
+	    case "ecommerce.product_viewed":
+	      return (function (n, t) {
+	        const e = n.metadata;
+	        if (null != e && "object" == typeof e && !isArray(e)) {
+	          const n = e;
+	          if (void 0 !== n.type && !vn(n.type, "metadata.type")) return null;
+	        }
+	        const r = dn(n.product_id, "product_id", !0),
+	          u = dn(n.product_name, "product_name", !0),
+	          o = dn(n.variant_id, "variant_id", !0),
+	          c = pn(n.price, "price"),
+	          i = dn(n.image_url, "image_url", !1),
+	          a = dn(n.product_url, "product_url", !1);
+	        if (
+	          !1 === r ||
+	          !1 === u ||
+	          !1 === o ||
+	          !1 === c ||
+	          !1 === i ||
+	          !1 === a
+	        )
+	          return null;
+	        const s = {
+	          product_id: r,
+	          product_name: u,
+	          variant_id: o,
+	          price: c,
+	          currency: t.currency,
+	          source: t.source,
+	        };
+	        return (
+	          null != i && (s.image_url = i),
+	          null != a && (s.product_url = a),
+	          hn(s, e) ? s : null
+	        );
+	      })(e, r);
+	    case "ecommerce.cart_updated":
+	      return wn(e, r);
+	    case "ecommerce.checkout_started":
+	      return (function (n, t) {
+	        const e = dn(n.checkout_id, "checkout_id", !0),
+	          r = pn(n.total_value, "total_value"),
+	          u = Cn(n.products),
+	          o = dn(n.cart_id, "cart_id", !1);
+	        if (!1 === e || !1 === r || null == u || !1 === o) return null;
+	        const c = {
+	          checkout_id: e,
+	          total_value: r,
+	          currency: t.currency,
+	          products: u,
+	          source: t.source,
+	        };
+	        return null != o && (c.cart_id = o), hn(c, n.metadata) ? c : null;
+	      })(e, r);
+	    case "ecommerce.order_placed":
+	      return (function (n, t) {
+	        const e = n.metadata;
+	        if (null != e && "object" == typeof e && !isArray(e)) {
+	          const n = e;
+	          if (void 0 !== n.tags && !vn(n.tags, "metadata.tags")) return null;
+	          if (
+	            void 0 !== n.payment_gateway_names &&
+	            !vn(n.payment_gateway_names, "metadata.payment_gateway_names")
+	          )
+	            return null;
+	        }
+	        const r = dn(n.order_id, "order_id", !0),
+	          u = pn(n.total_value, "total_value"),
+	          o = Cn(n.products),
+	          c = dn(n.cart_id, "cart_id", !1);
+	        if (!1 === r || !1 === u || null == o || !1 === c) return null;
+	        const i = {
+	          order_id: r,
+	          total_value: u,
+	          currency: t.currency,
+	          products: o,
+	          source: t.source,
+	        };
+	        if ((null != c && (i.cart_id = c), null != n.total_discounts)) {
+	          const t = pn(n.total_discounts, "total_discounts");
+	          if (!1 === t) return null;
+	          i.total_discounts = t;
+	        }
+	        if (void 0 !== n.discounts) {
+	          const [t, e] = validateCustomProperties(
+	            { discounts: n.discounts },
+	            CoreStrings.QE,
+	            "discounts",
+	            ln,
+	            "eCommerce order discounts",
+	          );
+	          if (!t || null == e) return null;
+	          i.discounts = e.discounts;
+	        }
+	        return hn(i, n.metadata) ? i : null;
+	      })(e, r);
+	    default:
+	      return (
+	        E$1.error(
+	          "logEcommerceEvent received an unknown event name. Ignoring event.",
+	        ),
+	        null
+	      );
+	  }
+	}
+
+	function logEcommerceEvent(e) {
+	  if (!r.rr()) return !1;
+	  if (null == e || "object" != typeof e || null == e.name)
+	    return (
+	      E$1.error(
+	        'logEcommerceEvent requires an event object with a "name" field.',
+	      ),
+	      !1
+	    );
+	  const o = sanitizeEcommerceEvent(e);
+	  if (null == o) return !1;
+	  const t = r.l();
+	  if (t && t.$e(e.name))
+	    return (
+	      E$1.info(`The eCommerce event "${e.name}" is blocklisted, ignoring.`), !1
+	    );
+	  const n = v$1.wt(p.CustomEvent, { n: e.name, p: o });
+	  if (n.lt) {
+	    E$1.info(`Logged eCommerce event "${e.name}".`);
+	    for (const r of n.Ce) TriggersProviderFactory.o().Ee(ot.he, [e.name, e.properties], r);
+	  }
+	  return n.lt;
+	}
 
 	function logPurchase(e, o, i, n, t) {
 	  if (!r.rr()) return !1;
@@ -9550,212 +10126,36 @@ var mpBrazeKitV6 = (function (exports) {
 	      E$1.error(`logPurchase requires an integer quantity, got ${n}, ignoring.`),
 	      !1
 	    );
-	  const D = parseInt(n.toString());
-	  if (D < 1 || D > MAX_PURCHASE_QUANTITY)
+	  const u = parseInt(n.toString());
+	  if (u < 1 || u > MAX_PURCHASE_QUANTITY)
 	    return (
 	      E$1.error(
-	        `logPurchase requires a quantity >1 and <${MAX_PURCHASE_QUANTITY}, got ${D}, ignoring.`,
+	        `logPurchase requires a quantity >1 and <${MAX_PURCHASE_QUANTITY}, got ${u}, ignoring.`,
 	      ),
 	      !1
 	    );
-	  i = null != i ? i.toUpperCase() : i;
-	  if (
-	    -1 ===
-	    [
-	      "AED",
-	      "AFN",
-	      "ALL",
-	      "AMD",
-	      "ANG",
-	      "AOA",
-	      "ARS",
-	      "AUD",
-	      "AWG",
-	      "AZN",
-	      "BAM",
-	      "BBD",
-	      "BDT",
-	      "BGN",
-	      "BHD",
-	      "BIF",
-	      "BMD",
-	      "BND",
-	      "BOB",
-	      "BRL",
-	      "BSD",
-	      "BTC",
-	      "BTN",
-	      "BWP",
-	      "BYR",
-	      "BZD",
-	      "CAD",
-	      "CDF",
-	      "CHF",
-	      "CLF",
-	      "CLP",
-	      "CNY",
-	      "COP",
-	      "CRC",
-	      "CUC",
-	      "CUP",
-	      "CVE",
-	      "CZK",
-	      "DJF",
-	      "DKK",
-	      "DOP",
-	      "DZD",
-	      "EEK",
-	      "EGP",
-	      "ERN",
-	      "ETB",
-	      "EUR",
-	      "FJD",
-	      "FKP",
-	      "GBP",
-	      "GEL",
-	      "GGP",
-	      "GHS",
-	      "GIP",
-	      "GMD",
-	      "GNF",
-	      "GTQ",
-	      "GYD",
-	      "HKD",
-	      "HNL",
-	      "HRK",
-	      "HTG",
-	      "HUF",
-	      "IDR",
-	      "ILS",
-	      "IMP",
-	      "INR",
-	      "IQD",
-	      "IRR",
-	      "ISK",
-	      "JEP",
-	      "JMD",
-	      "JOD",
-	      "JPY",
-	      "KES",
-	      "KGS",
-	      "KHR",
-	      "KMF",
-	      "KPW",
-	      "KRW",
-	      "KWD",
-	      "KYD",
-	      "KZT",
-	      "LAK",
-	      "LBP",
-	      "LKR",
-	      "LRD",
-	      "LSL",
-	      "LTL",
-	      "LVL",
-	      "LYD",
-	      "MAD",
-	      "MDL",
-	      "MGA",
-	      "MKD",
-	      "MMK",
-	      "MNT",
-	      "MOP",
-	      "MRO",
-	      "MTL",
-	      "MUR",
-	      "MVR",
-	      "MWK",
-	      "MXN",
-	      "MYR",
-	      "MZN",
-	      "NAD",
-	      "NGN",
-	      "NIO",
-	      "NOK",
-	      "NPR",
-	      "NZD",
-	      "OMR",
-	      "PAB",
-	      "PEN",
-	      "PGK",
-	      "PHP",
-	      "PKR",
-	      "PLN",
-	      "PYG",
-	      "QAR",
-	      "RON",
-	      "RSD",
-	      "RUB",
-	      "RWF",
-	      "SAR",
-	      "SBD",
-	      "SCR",
-	      "SDG",
-	      "SEK",
-	      "SGD",
-	      "SHP",
-	      "SLL",
-	      "SOS",
-	      "SRD",
-	      "STD",
-	      "SVC",
-	      "SYP",
-	      "SZL",
-	      "THB",
-	      "TJS",
-	      "TMT",
-	      "TND",
-	      "TOP",
-	      "TRY",
-	      "TTD",
-	      "TWD",
-	      "TZS",
-	      "UAH",
-	      "UGX",
-	      "USD",
-	      "UYU",
-	      "UZS",
-	      "VEF",
-	      "VND",
-	      "VUV",
-	      "WST",
-	      "XAF",
-	      "XAG",
-	      "XAU",
-	      "XCD",
-	      "XDR",
-	      "XOF",
-	      "XPD",
-	      "XPF",
-	      "XPT",
-	      "YER",
-	      "ZAR",
-	      "ZMK",
-	      "ZMW",
-	      "ZWL",
-	    ].indexOf(i)
-	  )
+	  if (((i = null != i ? i.toUpperCase() : i), !isValidIso4217CurrencyCode(i)))
 	    return (
 	      E$1.error(`logPurchase requires a valid currencyCode, got ${i}, ignoring.`),
 	      !1
 	    );
-	  const [u, a] = validateCustomProperties(
+	  const [a, g] = validateCustomProperties(
 	    t,
 	    "logPurchase",
 	    "purchaseProperties",
 	    `log purchase "${e}"`,
 	    "purchase",
 	  );
-	  if (!u) return !1;
-	  const g = r.l();
-	  if (g && g.Dr(e))
+	  if (!a) return !1;
+	  const c = r.l();
+	  if (c && c.$r(e))
 	    return E$1.info(`Purchase "${e}" is blocklisted, ignoring.`), !1;
-	  const P = v$1.lt(f.Pr, { pid: e, c: i, p: s, q: D, pr: a });
-	  if (P.W) {
-	    E$1.info(`Logged ${D} purchase${D > 1 ? "s" : ""} of "${e}" for ${i} ${s}.`);
-	    for (const r of P.Ee) TriggersProviderFactory.o().he(ot.Rr, [e, t], r);
+	  const l = v$1.wt(p.Pr, { pid: e, c: i, p: s, q: u, pr: g });
+	  if (l.lt) {
+	    E$1.info(`Logged ${u} purchase${u > 1 ? "s" : ""} of "${e}" for ${i} ${s}.`);
+	    for (const r of l.Ce) TriggersProviderFactory.o().Ee(ot.qr, [e, t], r);
 	  }
-	  return P.W;
+	  return l.lt;
 	}
 
 	var logPurchase$1 = /*#__PURE__*/Object.freeze({
@@ -9768,20 +10168,20 @@ var mpBrazeKitV6 = (function (exports) {
 	  const i = r.nn();
 	  if (!i) return;
 	  i.openSession();
-	  const t = et.Us.Rs,
+	  const t = et.Ps.$s,
 	    o = new et(t, E$1);
-	  o.kr(t.Fs.vr, (r, n) => {
+	  o.kr(t.Os.yr, (r, n) => {
 	    const e = n.lastClick,
 	      s = n.trackingString;
 	    E$1.info(`Firing push click trigger from ${s} push click at ${e}`);
-	    const c = i.$r(e, s),
+	    const c = i.Fr(e, s),
 	      g = function () {
-	        TriggersProviderFactory.o().he(ot.wr, [s], c);
+	        TriggersProviderFactory.o().Ee(ot.Sr, [s], c);
 	      };
-	    i.yr(g, g), o.je(t.Fs.vr, r);
+	    i.Ar(g, g), o.ge(t.Os.yr, r);
 	  }),
-	    o.Ds(t.Fs.zr, function (r) {
-	      i.Fr(r);
+	    o.Xs(t.Os.Br, function (r) {
+	      i.Dr(r);
 	    });
 	}
 
@@ -9807,14 +10207,14 @@ var mpBrazeKitV6 = (function (exports) {
 	function setSdkAuthenticationSignature(t) {
 	  if (!r.rr()) return !1;
 	  if ("" === t || !validateStandardString(t, "set signature", "signature", !1)) return !1;
-	  const i = r.Sr();
+	  const i = r.Er();
 	  return !!i && (i.setSdkAuthenticationSignature(t), !0);
 	}
 
 	function subscribeToSdkAuthenticationFailures(i) {
 	  var n;
 	  if (r.rr())
-	    return null === (n = r.Sr()) || void 0 === n
+	    return null === (n = r.Er()) || void 0 === n
 	      ? void 0
 	      : n.subscribeToSdkAuthenticationFailures(i);
 	}
@@ -9827,27 +10227,27 @@ var mpBrazeKitV6 = (function (exports) {
 	  const o = r.p();
 	  if (null == o) return void E$1.warn(CoreStrings.ee);
 	  o.clearData();
-	  const t = keys(et.Us);
+	  const t = keys(et.Ps);
 	  for (let o = 0; o < t.length; o++) {
 	    const n = t[o],
-	      r = et.Us[n];
+	      r = et.Ps[n];
 	    new et(r, E$1).clearData();
 	  }
-	  if (r.rr()) for (const o of r.gr()) o.clearData(!0);
+	  if (r.rr()) for (const o of r.vr()) o.clearData(!0);
 	  const n = r.m();
 	  n && n.fo();
 	}
 
 	function isPushBlocked() {
-	  if (r.rr()) return vt$1.isPushBlocked();
+	  if (r.rr()) return It$1.isPushBlocked();
 	}
 
 	function isPushPermissionGranted() {
-	  if (r.rr()) return vt$1.isPushPermissionGranted();
+	  if (r.rr()) return It$1.isPushPermissionGranted();
 	}
 
 	function isPushSupported() {
-	  if (r.rr()) return vt$1.isPushSupported();
+	  if (r.rr()) return It$1.isPushSupported();
 	}
 
 	class na {
@@ -9861,7 +10261,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      (this.h = u),
 	      (this.ou = a),
 	      (this.uu = h),
-	      (this.B = c),
+	      (this.C = c),
 	      (this.iu = i),
 	      (this.tu = t),
 	      (this.eu = e),
@@ -9871,9 +10271,9 @@ var mpBrazeKitV6 = (function (exports) {
 	      (this.h = u),
 	      (this.ou = a || !1),
 	      (this.uu = h || !1),
-	      (this.B = c),
-	      (this.hu = vt$1.cu()),
-	      (this.fu = vt$1.lu());
+	      (this.C = c),
+	      (this.hu = It$1.cu()),
+	      (this.fu = It$1.lu());
 	  }
 	  du() {
 	    return this.uu;
@@ -10014,7 +10414,7 @@ var mpBrazeKitV6 = (function (exports) {
 	            this.yu(i, new Date(), e);
 	        })
 	        .catch((i) => {
-	          vt$1.isPushBlocked()
+	          It$1.isPushBlocked()
 	            ? (E$1.info("Permission for push notifications was denied."),
 	              "function" == typeof s && s(!1))
 	            : (E$1.error("Push subscription failed: " + i),
@@ -10042,7 +10442,7 @@ var mpBrazeKitV6 = (function (exports) {
 	      (i.unregister(), E$1.info("Service worker successfully unregistered."));
 	  }
 	  subscribe(i, t) {
-	    if (!vt$1.isPushSupported())
+	    if (!It$1.isPushSupported())
 	      return E$1.info(na.Au), void ("function" == typeof t && t(!1));
 	    if (this.hu) {
 	      if (!this.ou && null != window.location) {
@@ -10052,12 +10452,12 @@ var mpBrazeKitV6 = (function (exports) {
 	          -1 === i.indexOf(window.location.protocol) &&
 	            (i = window.location.protocol + "//" + i);
 	      }
-	      if (vt$1.isPushBlocked())
+	      if (It$1.isPushBlocked())
 	        return void this.ku(
 	          "Notifications from this site are blocked. This may be a temporary embargo or a permanent denial.",
 	          t,
 	        );
-	      if (this.h && !this.h.ju() && 0 === this.h.xt())
+	      if (this.h && !this.h.ju() && 0 === this.h.Ot())
 	        return (
 	          E$1.info(
 	            "Waiting for VAPID key from server config before subscribing to push.",
@@ -10072,13 +10472,13 @@ var mpBrazeKitV6 = (function (exports) {
 	        },
 	        r = () => {
 	          let i = "Permission for push notifications was ignored.";
-	          vt$1.isPushBlocked() &&
+	          It$1.isPushBlocked() &&
 	            (i +=
 	              " The browser has automatically blocked further permission requests for a period (probably 1 week)."),
 	            E$1.info(i),
 	            "function" == typeof t && t(!0);
 	        },
-	        n = vt$1.isPushPermissionGranted(),
+	        n = It$1.isPushPermissionGranted(),
 	        o = () => {
 	          !n &&
 	            this.iu &&
@@ -10103,16 +10503,16 @@ var mpBrazeKitV6 = (function (exports) {
 	                      (null !=
 	                        (null === (n = this.h) || void 0 === n
 	                          ? void 0
-	                          : n.ju()) && (o = ui.Nu(this.h.ju())),
+	                          : n.ju()) && (o = ai.Nu(this.h.ju())),
 	                      r)
 	                    ) {
 	                      let n,
 	                        u = null,
 	                        a = null;
-	                      if ((this.B && (n = this.B.dt(STORAGE_KEYS.ft.Uu)), n && !isArray(n))) {
+	                      if ((this.C && (n = this.C.Rt(STORAGE_KEYS.Tt.Uu)), n && !isArray(n))) {
 	                        let i;
 	                        try {
-	                          i = oi._u(n).Wu;
+	                          i = ui._u(n).Wu;
 	                        } catch (t) {
 	                          i = null;
 	                        }
@@ -10184,7 +10584,7 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	  }
 	  unsubscribe(i, t) {
-	    if (!vt$1.isPushSupported())
+	    if (!It$1.isPushSupported())
 	      return E$1.info(na.Au), void ("function" == typeof t && t());
 	    this.hu
 	      ? navigator.serviceWorker.getRegistration(this.su).then((e) => {
@@ -10237,16 +10637,16 @@ var mpBrazeKitV6 = (function (exports) {
 	    ra.t(),
 	    ra.na ||
 	      (ra.na = new na(
-	        r.br(),
-	        r._a(),
+	        r.zr(),
+	        r.za(),
 	        r.ue(),
-	        r.V(),
-	        r.re(D.Ga),
-	        r.re(D.Ha),
-	        r.re(D.Ia),
+	        r.ht(),
+	        r.er(U.xa),
+	        r.er(U.Ma),
+	        r.er(U._a),
 	        r.l(),
-	        r.re(D.Ka),
-	        r.re(D.La),
+	        r.er(U.ka),
+	        r.er(U.qa),
 	        r.p(),
 	      )),
 	    ra.na
@@ -10353,37 +10753,37 @@ var mpBrazeKitV6 = (function (exports) {
 	      (this.enabled = t),
 	      (this.trackingString = e);
 	  }
-	  gt() {
+	  qt() {
 	    const s = {};
 	    return (
-	      (s[FeatureFlag.ss.rs] = this.id),
-	      (s[FeatureFlag.ss.Jr] = this.enabled),
-	      (s[FeatureFlag.ss.Nr] = this.properties),
-	      (s[FeatureFlag.ss.Or] = this.trackingString),
+	      (s[FeatureFlag.bs.qs] = this.id),
+	      (s[FeatureFlag.bs.Nr] = this.enabled),
+	      (s[FeatureFlag.bs.Or] = this.properties),
+	      (s[FeatureFlag.bs.Qr] = this.trackingString),
 	      s
 	    );
 	  }
 	}
-	(FeatureFlag.ss = { rs: "id", Jr: "e", Nr: "pr", Or: "fts" }),
-	  (FeatureFlag.ui = { rs: "id", Jr: "enabled", Nr: "properties", Or: "fts" });
+	(FeatureFlag.bs = { qs: "id", Nr: "e", Or: "pr", Qr: "fts" }),
+	  (FeatureFlag.ui = { qs: "id", Nr: "enabled", Or: "properties", Qr: "fts" });
 
 	function newFeatureFlagFromJson(e) {
-	  if (e[FeatureFlag.ui.rs] && "boolean" == typeof e[FeatureFlag.ui.Jr])
+	  if (e[FeatureFlag.ui.qs] && "boolean" == typeof e[FeatureFlag.ui.Nr])
 	    return new FeatureFlag(
-	      e[FeatureFlag.ui.rs],
-	      e[FeatureFlag.ui.Jr],
+	      e[FeatureFlag.ui.qs],
 	      e[FeatureFlag.ui.Nr],
 	      e[FeatureFlag.ui.Or],
+	      e[FeatureFlag.ui.Qr],
 	    );
 	  E$1.info(`Unable to create feature flag from ${JSON.stringify(e, null, 2)}`);
 	}
 	function newFeatureFlagFromSerializedValue(e) {
-	  if (e[FeatureFlag.ss.rs] && "boolean" == typeof e[FeatureFlag.ss.Jr])
+	  if (e[FeatureFlag.bs.qs] && "boolean" == typeof e[FeatureFlag.bs.Nr])
 	    return new FeatureFlag(
-	      e[FeatureFlag.ss.rs],
-	      e[FeatureFlag.ss.Jr],
-	      e[FeatureFlag.ss.Nr],
-	      e[FeatureFlag.ss.Or],
+	      e[FeatureFlag.bs.qs],
+	      e[FeatureFlag.bs.Nr],
+	      e[FeatureFlag.bs.Or],
+	      e[FeatureFlag.bs.Qr],
 	    );
 	  E$1.info(
 	    `Unable to deserialize feature flag from ${JSON.stringify(e, null, 2)}`,
@@ -10394,26 +10794,26 @@ var mpBrazeKitV6 = (function (exports) {
 	  constructor(t, s, i, e) {
 	    super(),
 	      (this.h = t),
-	      (this.j = s),
-	      (this.B = i),
-	      (this.C = e),
+	      (this.B = s),
+	      (this.C = i),
+	      (this.j = e),
 	      (this.Xr = []),
-	      (this.Gr = 0),
+	      (this.Yr = 0),
 	      (this.h = t),
-	      (this.j = s),
-	      (this.B = i),
-	      (this.C = e),
-	      (this.Kr = null),
-	      (this.Qr = new m()),
-	      (this.S = 10),
-	      (this.T = null),
-	      (this.I = null),
-	      r.q(this.Qr);
+	      (this.B = s),
+	      (this.C = i),
+	      (this.j = e),
+	      (this.Zr = null),
+	      (this.ho = new f()),
+	      (this.D = 10),
+	      (this.N = null),
+	      (this.F = null),
+	      r.S(this.ho);
 	  }
-	  N(t) {
+	  I(t) {
 	    var s;
 	    if (
-	      (null === (s = this.h) || void 0 === s ? void 0 : s.Yr()) &&
+	      (null === (s = this.h) || void 0 === s ? void 0 : s.lo()) &&
 	      null != t &&
 	      t.feature_flags
 	    ) {
@@ -10422,12 +10822,12 @@ var mpBrazeKitV6 = (function (exports) {
 	        const t = newFeatureFlagFromJson(s);
 	        t && this.Xr.push(t);
 	      }
-	      (this.Gr = new Date().getTime()), this.Zr(), this.Qr.L(this.Xr);
+	      (this.Yr = new Date().getTime()), this.do(), this.ho.A(this.Xr);
 	    }
 	  }
-	  ho() {
+	  vo() {
 	    let t = {};
-	    this.B && (t = this.B.dt(STORAGE_KEYS.ft.lo));
+	    this.C && (t = this.C.Rt(STORAGE_KEYS.Tt.Fo));
 	    const i = {};
 	    for (const s in t) {
 	      const e = newFeatureFlagFromSerializedValue(t[s]);
@@ -10435,144 +10835,144 @@ var mpBrazeKitV6 = (function (exports) {
 	    }
 	    return i;
 	  }
-	  do() {
+	  po() {
 	    var t;
 	    return (
-	      (null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.vo)) || {}
+	      (null === (t = this.C) || void 0 === t ? void 0 : t.Rt(STORAGE_KEYS.Tt.jo)) || {}
 	    );
 	  }
-	  Fo(t) {
-	    this.B && this.B.bt(STORAGE_KEYS.ft.vo, t);
+	  wo(t) {
+	    this.C && this.C.It(STORAGE_KEYS.Tt.jo, t);
 	  }
-	  It(t) {
-	    return this.Qr.Rt(t);
+	  zt(t) {
+	    return this.ho.Kt(t);
 	  }
 	  refreshFeatureFlags(t, s, i = !1, e = !0) {
 	    const r = () => {
-	      "function" == typeof s && s(), this.Qr.L(this.Xr);
+	      "function" == typeof s && s(), this.ho.A(this.Xr);
 	    };
-	    if (!this.po(i))
+	    if (!this.yo(i))
 	      return (
-	        !this.Kr &&
+	        !this.Zr &&
 	          this.h &&
-	          (this.Kr = this.h.jo(() => {
+	          (this.Zr = this.h.bo(() => {
 	            this.refreshFeatureFlags(t, s);
 	          })),
 	        void r()
 	      );
-	    const o = this.j;
+	    const o = this.B;
 	    if (!o) return void r();
-	    e && this.X();
-	    const n = o.$({}, !0),
-	      f = o.A(n, h.H.wo);
-	    let m = !1;
-	    o.J(
+	    e && this.Y();
+	    const n = o.Z({}, !0),
+	      u = o.tt(n, h.it.Co);
+	    let f = !1;
+	    o.et(
 	      n,
 	      (e = -1) => {
-	        const o = this.j;
+	        const o = this.B;
 	        if (!o) return void r();
 	        const v = new Date().valueOf();
-	        h.K(this.B, h.H.wo, v),
-	          -1 !== e && f.push(["X-Braze-Req-Tokens-Remaining", e.toString()]),
-	          l.O({
-	            url: `${o.V()}/feature_flags/sync`,
-	            headers: f,
+	        h.nt(this.C, h.it.Co, v),
+	          -1 !== e && u.push(["X-Braze-Req-Tokens-Remaining", e.toString()]),
+	          l.ot({
+	            url: `${o.ht()}/feature_flags/sync`,
+	            headers: u,
 	            data: n,
-	            W: (s) => {
-	              if (!o.Y(n, s, f)) return (m = !0), void r();
-	              o.Z(), this.N(s), (m = !1), "function" == typeof t && t();
+	            lt: (s) => {
+	              if (!o.ut(n, s, u)) return (f = !0), void r();
+	              o.ct(), this.I(s), (f = !1), "function" == typeof t && t();
 	            },
 	            error: (t) => {
-	              o._(t, "retrieving feature flags"), (m = !0), r();
+	              o.dt(t, "retrieving feature flags"), (f = !0), r();
 	            },
-	            tt: (e, r) => {
-	              var n, l, f;
+	            ft: (e, r) => {
+	              var n, l, u;
 	              let v;
-	              if (m) {
+	              if (f) {
 	                const t =
-	                    (null === (n = this.h) || void 0 === n ? void 0 : n.st()) ||
+	                    (null === (n = this.h) || void 0 === n ? void 0 : n.vt()) ||
 	                    REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
 	                  s =
-	                    (null === (l = this.h) || void 0 === l ? void 0 : l.it()) ||
+	                    (null === (l = this.h) || void 0 === l ? void 0 : l.gt()) ||
 	                    REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
 	                  i =
-	                    (null === (f = this.h) || void 0 === f ? void 0 : f.nt()) ||
+	                    (null === (u = this.h) || void 0 === u ? void 0 : u.bt()) ||
 	                    REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
-	                let e = this.T;
+	                let e = this.N;
 	                (null == e || e < t) && (e = t), (v = Math.min(i, randomInclusive(t, e * s)));
 	              }
-	              o.et(
+	              o.yt(
 	                r,
 	                () => {
 	                  this.refreshFeatureFlags(t, s, i, !0);
 	                },
-	                h.H.wo,
-	                (t) => this.rt(t),
-	                () => this.X(),
+	                h.it.Co,
+	                (t) => this.Bt(t),
+	                () => this.Y(),
 	                v,
 	              );
 	            },
 	          });
 	      },
-	      h.H.wo,
+	      h.it.Co,
 	      s,
 	    );
 	  }
-	  X() {
-	    null != this.I && (clearTimeout(this.I), (this.I = null));
+	  Y() {
+	    null != this.F && (clearTimeout(this.F), (this.F = null));
 	  }
-	  rt(t) {
-	    this.X(), (this.I = t);
+	  Bt(t) {
+	    this.Y(), (this.F = t);
 	  }
-	  po(t) {
+	  yo(t) {
 	    if (!this.h) return !1;
 	    if (!t) {
-	      const t = this.h.yo();
+	      const t = this.h.Ro();
 	      if (null == t) return !1;
 	      let s = !1;
 	      if (!isNaN(t)) {
 	        if (-1 === t) return E$1.info("Feature flag refreshes not allowed"), !1;
-	        s = new Date().getTime() >= (this.Gr || 0) + 1e3 * t;
+	        s = new Date().getTime() >= (this.Yr || 0) + 1e3 * t;
 	      }
 	      if (!s)
 	        return (
 	          E$1.info(`Feature flag refreshes were rate limited to ${t} seconds`), !1
 	        );
 	    }
-	    return this.h.Yr();
-	  }
-	  bo() {
-	    var t;
-	    return (
-	      (null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.Co)) || null
-	    );
-	  }
-	  Ro() {
-	    var t, i;
-	    null === (t = this.B) ||
-	      void 0 === t ||
-	      t.bt(STORAGE_KEYS.ft.Co, null === (i = this.C) || void 0 === i ? void 0 : i.yt());
+	    return this.h.lo();
 	  }
 	  To() {
 	    var t;
-	    const s = null === (t = this.C) || void 0 === t ? void 0 : t.yt(),
-	      i = this.bo();
+	    return (
+	      (null === (t = this.C) || void 0 === t ? void 0 : t.Rt(STORAGE_KEYS.Tt.Do)) || null
+	    );
+	  }
+	  Io() {
+	    var t, i;
+	    null === (t = this.C) ||
+	      void 0 === t ||
+	      t.It(STORAGE_KEYS.Tt.Do, null === (i = this.j) || void 0 === i ? void 0 : i.kt());
+	  }
+	  So() {
+	    var t;
+	    const s = null === (t = this.j) || void 0 === t ? void 0 : t.kt(),
+	      i = this.To();
 	    return null == i || s === i;
 	  }
-	  Zr() {
-	    if (!this.B) return;
+	  do() {
+	    if (!this.C) return;
 	    const t = {};
 	    for (const s of this.Xr) {
-	      const i = s.gt();
+	      const i = s.qt();
 	      t[s.id] = i;
 	    }
-	    this.B.bt(STORAGE_KEYS.ft.lo, t), this.B.bt(STORAGE_KEYS.ft.Do, this.Gr), this.Ro();
+	    this.C.It(STORAGE_KEYS.Tt.Fo, t), this.C.It(STORAGE_KEYS.Tt.qo, this.Yr), this.Io();
 	  }
 	  changeUser() {
-	    this.X();
+	    this.Y();
 	  }
 	  clearData() {
-	    this.X();
+	    this.Y();
 	  }
 	}
 
@@ -10610,8 +11010,8 @@ var mpBrazeKitV6 = (function (exports) {
 	function getFeatureFlag(t) {
 	  if (!r.rr()) return;
 	  const e = r.l();
-	  if (e && !e.Yr()) return null;
-	  const n = lr$1.o().ho();
+	  if (e && !e.lo()) return null;
+	  const n = lr$1.o().vo();
 	  return n[t] ? n[t] : null;
 	}
 
@@ -10619,8 +11019,8 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (!r.rr()) return;
 	  const t = [],
 	    e = r.l();
-	  if (e && !e.Yr()) return t;
-	  const n = lr$1.o().ho();
+	  if (e && !e.lo()) return t;
+	  const n = lr$1.o().vo();
 	  for (const r in n) t.push(n[r]);
 	  return t;
 	}
@@ -10628,11 +11028,11 @@ var mpBrazeKitV6 = (function (exports) {
 	function subscribeToFeatureFlagsUpdates(t) {
 	  if (!r.rr()) return;
 	  const e = lr$1.o();
-	  if (e.To()) {
+	  if (e.So()) {
 	    const r = getAllFeatureFlags();
 	    r && "function" == typeof t && t(r);
 	  }
-	  return e.It(t);
+	  return e.zt(t);
 	}
 
 	function logFeatureFlagImpression(e) {
@@ -10640,11 +11040,11 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (!e) return !1;
 	  const t =
 	      "Not logging a feature flag impression. The feature flag was not part of any matching experiment.",
-	    o = lr$1.o().ho();
+	    o = lr$1.o().vo();
 	  if (!o[e]) return E$1.info(t), !1;
 	  const n = o[e].trackingString;
 	  if (!n) return E$1.info(t), !1;
-	  const i = lr$1.o().do();
+	  const i = lr$1.o().po();
 	  if (i[n])
 	    return (
 	      E$1.info(
@@ -10652,46 +11052,57 @@ var mpBrazeKitV6 = (function (exports) {
 	      ),
 	      !1
 	    );
-	  (i[n] = !0), lr$1.o().Fo(i);
+	  (i[n] = !0), lr$1.o().wo(i);
 	  const s = { fid: e, fts: n };
-	  return v$1.lt(f.xo, s).W;
+	  return v$1.wt(p.xo, s).lt;
 	}
 
 	class Banner extends PropertiesBase {
-	  constructor(t, s, i, h = !1, r = !1, e = -1, o = {}) {
+	  constructor(t, s, i, h = !1, r = !1, e = -1, o = {}, n = null) {
 	    super(o),
 	      (this.id = t),
 	      (this.placementId = s),
 	      (this.html = i),
-	      (this.At = h),
+	      (this.Vt = h),
 	      (this.isControl = r),
-	      (this.Et = e),
+	      (this.Yt = e),
+	      (this.G = n),
 	      (this.id = t),
 	      (this.placementId = s),
 	      (this.html = i),
-	      (this.At = h),
+	      (this.Vt = h),
 	      (this.isControl = r),
-	      (this.Et = e),
-	      (this.Gt = !1);
+	      (this.Yt = e),
+	      (this.Zt = !1);
 	  }
-	  Ht() {
+	  ts() {
 	    return this.isControl;
 	  }
-	  gt() {
+	  qt() {
 	    return {
 	      id: this.id,
 	      pid: this.placementId,
 	      html: this.html,
-	      its: this.At,
+	      its: this.Vt,
 	      ic: this.isControl,
-	      eat: this.Et,
+	      eat: this.Yt,
 	      pr: this.properties,
+	      sk: this.G,
 	    };
 	  }
 	}
 
 	function newBannerFromSerializedValue(n) {
-	  return new Banner(n.id, n.pid, n.html, n.its, n.ic, n.eat, n.pr);
+	  return new Banner(
+	    n.id,
+	    n.pid,
+	    n.html,
+	    n.its,
+	    n.ic,
+	    n.eat,
+	    n.pr,
+	    n.sk || null,
+	  );
 	}
 	function newBannerFromJson(n) {
 	  return new Banner(
@@ -10702,201 +11113,324 @@ var mpBrazeKitV6 = (function (exports) {
 	    n.is_control,
 	    n.expires_at,
 	    n.properties,
+	    n.stable_key || null,
 	  );
 	}
 
 	class e extends t {
-	  constructor(t, s, i, n) {
+	  constructor(t, s, i, e) {
 	    super(),
 	      (this.h = t),
-	      (this.j = s),
-	      (this.B = i),
-	      (this.C = n),
+	      (this.B = s),
+	      (this.C = i),
+	      (this.j = e),
 	      (this.banners = {}),
 	      (this.h = t),
-	      (this.j = s),
-	      (this.B = i),
-	      (this.C = n),
-	      (this.S = 10),
+	      (this.B = s),
+	      (this.C = i),
+	      (this.j = e),
+	      (this.D = 10),
+	      (this.N = null),
+	      (this.F = null),
+	      (this.R = new f()),
+	      r.S(this.R),
 	      (this.T = null),
-	      (this.I = null),
-	      (this.R = new m()),
-	      r.q(this.R),
-	      (this.D = null),
-	      (this.F = null);
+	      (this.q = null);
 	  }
-	  N(t) {
-	    if (this.k() && null != t && t.banners) {
+	  I(t) {
+	    if (this.P() && (this._(t), null != t && t.banners)) {
+	      const s = t.request_time,
+	        i = "number" != typeof s || isNaN(s) ? null : s,
+	        e = this.k(),
+	        r = this.L(),
+	        o = this.$();
 	      this.banners = {};
-	      const s = t.banners;
-	      for (const t in s) {
-	        const i = s[t];
-	        let e = null;
-	        null != i && null != i.banner && (e = newBannerFromJson(i.banner)),
-	          e && (this.banners[t] = e);
+	      const h = t.banners;
+	      for (const t in h) {
+	        const s = this.K(t, i, o),
+	          l = h[t];
+	        let a = null;
+	        if (
+	          (null != l && null != l.banner && (a = l.banner),
+	          this.U(t, a, i, s, e, r))
+	        ) {
+	          if (s) {
+	            const s = e[t];
+	            s && (this.banners[t] = s);
+	          }
+	          continue;
+	        }
+	        let u = null;
+	        null != a && (u = newBannerFromJson(a)), u && (this.banners[t] = u);
 	      }
-	      this.U(), this.R.L(this.banners);
+	      this.W(), this.R.A(this.banners);
 	    }
 	  }
-	  M(t, s, i, n = !0) {
-	    var e;
+	  U(t, s, i, e, n, r) {
+	    return !this.M(t, s, n) && null != i && (!!e || this.X(s, r, i));
+	  }
+	  K(t, s, i) {
+	    if (null == s) return !1;
+	    const e = i[t];
+	    return "number" == typeof e && !isNaN(e) && s < e;
+	  }
+	  M(t, s, i) {
+	    if (!s) return !1;
+	    const e = s.stable_key;
+	    if ("string" != typeof e || 0 === e.length) return !1;
+	    const n = i[t],
+	      r = null == n ? void 0 : n.G;
+	    return "string" == typeof r && 0 !== r.length && r !== e;
+	  }
+	  X(t, s, i) {
+	    if (!t) return !1;
+	    const e = t.stable_key;
+	    if ("string" != typeof e || 0 === e.length) return !1;
+	    for (const t of s) {
+	      if (t.stable_key !== e) continue;
+	      const s = t.dismissal_time;
+	      if ("number" == typeof s && !isNaN(s) && s >= i) return !0;
+	    }
+	    return !1;
+	  }
+	  _(t) {
+	    var s;
+	    const i =
+	      null === (s = null == t ? void 0 : t.dismissals) || void 0 === s
+	        ? void 0
+	        : s.acknowledged;
+	    if (!i || !isArray(i) || 0 === i.length) return;
+	    const e = this.L();
+	    if (0 === e.length) return;
+	    const n = {};
+	    for (const t of i)
+	      t.banner_id &&
+	        t.dismissal_time &&
+	        (n[this.H(t.banner_id, t.dismissal_time)] = !0);
+	    const r = e.filter((t) => !n[this.H(t.banner_id, t.dismissal_time)]);
+	    r.length !== e.length && this.J(r);
+	  }
+	  H(t, s) {
+	    return `${t}:${s}`;
+	  }
+	  O(t, s, i, e = !0) {
+	    var n;
 	    const r = () => {
 	      "function" == typeof i && i();
 	    };
-	    if (!this.k())
+	    if (!this.P())
 	      return void (
-	        null === (e = this.h) ||
-	        void 0 === e ||
-	        e.P(() => {
-	          this.M(t, s, i);
+	        null === (n = this.h) ||
+	        void 0 === n ||
+	        n.V(() => {
+	          this.O(t, s, i);
 	        })
 	      );
-	    const o = this.j;
+	    const o = this.B;
 	    if (!o) return void r();
-	    n && this.X();
-	    const m = o.$({}, !0),
-	      v = [];
-	    for (const s of t) v.push({ id: s });
-	    m.placements = v;
-	    const f = o.A(m, h.H.G);
-	    let p = !1;
-	    o.J(
-	      m,
-	      (n = -1) => {
-	        const e = this.j;
-	        if (!e) return void r();
+	    e && this.Y();
+	    const u = o.Z({}, !0);
+	    u.time_ms = new Date().valueOf();
+	    const f = [];
+	    for (const s of t) f.push({ id: s });
+	    u.placements = f;
+	    const v = this.L().map((t) => ({
+	      banner_id: t.banner_id,
+	      dismissal_time: t.dismissal_time,
+	    }));
+	    u.pending_dismissals = v;
+	    const p = o.tt(u, h.it.st);
+	    let g = !1;
+	    o.et(
+	      u,
+	      (e = -1) => {
+	        const n = this.B;
+	        if (!n) return void r();
 	        const o = new Date().valueOf();
-	        h.K(this.B, h.H.G, o),
-	          -1 !== n && f.push(["X-Braze-Req-Tokens-Remaining", n.toString()]),
-	          l.O({
-	            url: `${e.V()}/banners/sync`,
-	            headers: f,
-	            data: m,
-	            W: (t) => {
-	              if (!e.Y(m, t, f)) return (p = !0), void r();
-	              e.Z(), this.N(t), (p = !1), "function" == typeof s && s();
+	        h.nt(this.C, h.it.st, o),
+	          -1 !== e && p.push(["X-Braze-Req-Tokens-Remaining", e.toString()]);
+	        const f = u.time_ms;
+	        null == f || "number" != typeof f || isNaN(f) || this.rt(t, f),
+	          l.ot({
+	            url: `${n.ht()}/banners/sync`,
+	            headers: p,
+	            data: u,
+	            lt: (t) => {
+	              if (!n.ut(u, t, p)) return (g = !0), void r();
+	              n.ct(), this.I(t), (g = !1), "function" == typeof s && s();
 	            },
 	            error: (t) => {
-	              e._(t, "retrieving banners"), (p = !0), r();
+	              n.dt(t, "retrieving banners"), (g = !0), r();
 	            },
-	            tt: (n, r) => {
-	              var o, l, m;
-	              let v;
-	              if (((this.F = t), p)) {
+	            ft: (e, r) => {
+	              var o, l, u;
+	              let f;
+	              if (((this.q = t), g)) {
 	                const t =
-	                    (null === (o = this.h) || void 0 === o ? void 0 : o.st()) ||
+	                    (null === (o = this.h) || void 0 === o ? void 0 : o.vt()) ||
 	                    REQUEST_BACKOFF_MIN_SLEEP_MS_DEFAULT,
 	                  s =
-	                    (null === (l = this.h) || void 0 === l ? void 0 : l.it()) ||
+	                    (null === (l = this.h) || void 0 === l ? void 0 : l.gt()) ||
 	                    REQUEST_BACKOFF_SCALE_FACTOR_DEFAULT,
 	                  i =
-	                    (null === (m = this.h) || void 0 === m ? void 0 : m.nt()) ||
+	                    (null === (u = this.h) || void 0 === u ? void 0 : u.bt()) ||
 	                    REQUEST_BACKOFF_MAX_SLEEP_MS_DEFAULT;
-	                let n = this.T;
-	                (null == n || n < t) && (n = t), (v = Math.min(i, randomInclusive(t, n * s)));
+	                let e = this.N;
+	                (null == e || e < t) && (e = t), (f = Math.min(i, randomInclusive(t, e * s)));
 	              }
-	              e.et(
+	              n.yt(
 	                r,
 	                () => {
-	                  this.M(t, s, i, !1);
+	                  this.O(t, s, i, !1);
 	                },
-	                h.H.G,
-	                (t) => this.rt(t),
-	                () => this.X(),
-	                v,
+	                h.it.st,
+	                (t) => this.Bt(t),
+	                () => this.Y(),
+	                f,
 	              );
 	            },
 	          });
 	      },
-	      h.H.G,
+	      h.it.st,
 	      i,
 	    );
 	  }
-	  ot() {
-	    return this.F;
+	  Ct() {
+	    return this.q;
 	  }
-	  ht(t, s) {
+	  jt(t, s) {
 	    const i = { id: t.id };
 	    s && (i.bid = s);
-	    return v$1.lt(f.ut, i).W;
+	    return v$1.wt(p.Dt, i).lt;
 	  }
-	  X() {
-	    null != this.I && (clearTimeout(this.I), (this.I = null));
+	  Nt(t) {
+	    if (!t.G) return !1;
+	    const s = this.L();
+	    if (s.some((s) => s.banner_id === t.id && s.stable_key === t.G)) return !1;
+	    const i = { id: t.id },
+	      e = this.k(),
+	      n = e[t.placementId];
+	    n &&
+	      n.G === t.G &&
+	      (delete e[t.placementId],
+	      (this.banners = e),
+	      this.W(),
+	      this.R.A(this.banners)),
+	      s.push({
+	        banner_id: t.id,
+	        dismissal_time: new Date().valueOf(),
+	        stable_key: t.G,
+	      }),
+	      this.J(s);
+	    return v$1.wt(p.Ft, i).lt;
 	  }
-	  rt(t) {
-	    this.X(), (this.I = t);
+	  Y() {
+	    null != this.F && (clearTimeout(this.F), (this.F = null));
 	  }
-	  ct() {
+	  Bt(t) {
+	    this.Y(), (this.F = t);
+	  }
+	  k() {
 	    let t = {};
-	    this.B && (t = this.B.dt(STORAGE_KEYS.ft.vt));
+	    this.C && (t = this.C.Rt(STORAGE_KEYS.Tt.St));
 	    const i = {};
 	    for (const s in t) {
-	      let n = null;
-	      null != t[s] && (n = newBannerFromSerializedValue(t[s])), n && (i[n.placementId] = n);
+	      let e = null;
+	      null != t[s] && (e = newBannerFromSerializedValue(t[s])), e && (i[e.placementId] = e);
 	    }
 	    return i;
 	  }
-	  U() {
+	  W() {
 	    var t;
-	    if (!this.B) return;
+	    if (!this.C) return;
 	    const i = {};
 	    for (const s in this.banners) {
-	      const n =
-	        (null === (t = this.banners[s]) || void 0 === t ? void 0 : t.gt()) ||
+	      const e =
+	        (null === (t = this.banners[s]) || void 0 === t ? void 0 : t.qt()) ||
 	        null;
-	      i[s] = n;
+	      i[s] = e;
 	    }
-	    this.B.bt(STORAGE_KEYS.ft.vt, i), this.jt();
+	    this.C.It(STORAGE_KEYS.Tt.St, i), this.Pt();
 	  }
-	  jt() {
+	  Pt() {
 	    var t, i;
-	    null === (t = this.B) ||
+	    null === (t = this.C) ||
 	      void 0 === t ||
-	      t.bt(STORAGE_KEYS.ft.Bt, null === (i = this.C) || void 0 === i ? void 0 : i.yt());
+	      t.It(STORAGE_KEYS.Tt._t, null === (i = this.j) || void 0 === i ? void 0 : i.kt());
 	  }
-	  Ct() {
+	  Et() {
 	    var t;
 	    return (
-	      (null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.Bt)) || null
+	      (null === (t = this.C) || void 0 === t ? void 0 : t.Rt(STORAGE_KEYS.Tt._t)) || null
 	    );
 	  }
-	  St() {
-	    return this.D;
+	  Lt() {
+	    return this.T;
 	  }
-	  wt(t) {
-	    this.D = t;
+	  $t(t) {
+	    this.T = t;
 	  }
-	  Tt() {
+	  xt() {
 	    var t;
-	    const s = null === (t = this.C) || void 0 === t ? void 0 : t.yt(),
-	      i = this.Ct();
+	    const s = null === (t = this.j) || void 0 === t ? void 0 : t.kt(),
+	      i = this.Et();
 	    return null == i || s === i;
 	  }
-	  It(t) {
-	    return this.R.Rt(t);
+	  zt(t) {
+	    return this.R.Kt(t);
 	  }
-	  qt() {
+	  Ut() {
 	    var t;
 	    return (
-	      (null === (t = this.B) || void 0 === t ? void 0 : t.dt(STORAGE_KEYS.ft.Dt)) || {}
+	      (null === (t = this.C) || void 0 === t ? void 0 : t.Rt(STORAGE_KEYS.Tt.Wt)) || {}
 	    );
 	  }
-	  Ft(t) {
-	    this.B && this.B.bt(STORAGE_KEYS.ft.Dt, t);
+	  At(t) {
+	    this.C && this.C.It(STORAGE_KEYS.Tt.Wt, t);
+	  }
+	  L() {
+	    var t;
+	    return (
+	      (null === (t = this.C) || void 0 === t ? void 0 : t.Rt(STORAGE_KEYS.Tt.Mt)) || []
+	    );
+	  }
+	  J(t) {
+	    var i;
+	    if (!this.C) return;
+	    const e = null === (i = this.h) || void 0 === i ? void 0 : i.Xt(),
+	      n = null != e ? e : DISMISSALS_CACHE_SIZE_DEFAULT,
+	      r = t.length <= n ? t : t.slice(-n);
+	    this.C.It(STORAGE_KEYS.Tt.Mt, r);
+	  }
+	  $() {
+	    var t;
+	    return (
+	      (null === (t = this.C) || void 0 === t ? void 0 : t.Rt(STORAGE_KEYS.Tt.Gt)) || {}
+	    );
+	  }
+	  rt(t, i) {
+	    if (!this.C) return;
+	    const e = this.$();
+	    for (const s of t) e[s] = i;
+	    this.C.It(STORAGE_KEYS.Tt.Gt, e);
 	  }
 	  changeUser() {
-	    this.Nt(), this.X();
+	    this.Ht(), this.Y();
 	  }
 	  clearData() {
-	    this.X();
+	    this.Y();
 	  }
-	  k() {
-	    return !!this.h && (!!this.h.kt() || (0 !== this.h.xt() && this.Nt(), !1));
+	  P() {
+	    return !!this.h && (!!this.h.Jt() || (0 !== this.h.Ot() && this.Ht(), !1));
 	  }
-	  Nt() {
+	  Ht() {
 	    (this.banners = {}),
-	      this.B && (this.B.zt(STORAGE_KEYS.ft.vt), this.B.zt(STORAGE_KEYS.ft.Dt)),
-	      this.R.L({});
+	      this.C &&
+	        (this.C.Qt(STORAGE_KEYS.Tt.St),
+	        this.C.Qt(STORAGE_KEYS.Tt.Wt),
+	        this.C.Qt(STORAGE_KEYS.Tt.Mt),
+	        this.C.Qt(STORAGE_KEYS.Tt.Gt)),
+	      this.R.A({});
 	  }
 	}
 
@@ -10920,7 +11454,7 @@ var mpBrazeKitV6 = (function (exports) {
 	function getBannerIfNotExpired(n, r) {
 	  const e = n[r];
 	  if (!e) return null;
-	  const t = e.Et,
+	  const t = e.Yt,
 	    o = new Date().valueOf();
 	  return -1 !== t && 1e3 * t < o
 	    ? (E$1.info(`Banner with ID: ${e.id} and placement ID: ${r} has expired.`),
@@ -10930,11 +11464,11 @@ var mpBrazeKitV6 = (function (exports) {
 	function getBanner(n) {
 	  var e;
 	  if (!r.rr()) return;
-	  !1 === (null === (e = r.l()) || void 0 === e ? void 0 : e.kt()) &&
+	  !1 === (null === (e = r.l()) || void 0 === e ? void 0 : e.Jt()) &&
 	    E$1.error(BannerStrings.aa);
 	  const t = i.o();
-	  if (!t.k()) return null;
-	  return getBannerIfNotExpired(t.ct(), n);
+	  if (!t.P()) return null;
+	  return getBannerIfNotExpired(t.k(), n);
 	}
 
 	function logBannerClick(n, o) {
@@ -10944,15 +11478,40 @@ var mpBrazeKitV6 = (function (exports) {
 	      E$1.error("Banner argument to logBannerClick must be an Banner object."), !1
 	    );
 	  const e = i.o(),
-	    t = e.ct();
+	    t = e.k();
 	  return 0 === keys(t).length
 	    ? (E$1.info("Not logging banner click. No banners exist."), !1)
 	    : t[n.placementId]
-	    ? e.ht(n, o)
+	    ? e.jt(n, o)
 	    : (E$1.info(
 	        `Not logging banner click for ID ${n.placementId}. The placement ID did not correspond to any banner.`,
 	      ),
 	      !1);
+	}
+
+	function logBannerDismissal(n) {
+	  if (!r.rr()) return;
+	  if (!(n instanceof Banner))
+	    return (
+	      E$1.error("Banner argument to logBannerDismissal must be a Banner object."),
+	      !1
+	    );
+	  const o = i.o(),
+	    e = o.k();
+	  return 0 === keys(e).length
+	    ? (E$1.info("Not logging banner dismissal. No banners exist."), !1)
+	    : e[n.placementId]
+	    ? o.Nt(n)
+	    : (E$1.info(
+	        `Not logging banner dismissal for ID ${n.placementId}. The placement ID did not correspond to any banner.`,
+	      ),
+	      !1);
+	}
+
+	function destroyBannerHtml(o) {
+	  const r = o.getAttribute(BannerStrings.ea);
+	  null != r && removeSubscription(r),
+	    o && o.parentNode && o.parentNode.removeChild(o);
 	}
 
 	const BANNER_PLACEMENT_ID = "data-ab-banner-placement-id";
@@ -10968,69 +11527,77 @@ var mpBrazeKitV6 = (function (exports) {
 	  );
 	}
 	function bannerToHtml(n, t) {
-	  if (n.Ht()) return controlBannerToHtml(n);
-	  const e = document.createElement("iframe");
+	  if (n.ts()) return controlBannerToHtml(n);
+	  const o = document.createElement("iframe");
 	  return (
-	    (e.id = n.id),
-	    t && e.setAttribute("nonce", t),
-	    (e.className = "ab-html-banner"),
-	    e.setAttribute(BANNER_PLACEMENT_ID, n.placementId),
-	    e.setAttribute("title", "Banner"),
-	    attachHtmlToIframeWithNonce(e, n.html, t),
-	    (e.onload = () => {
-	      const t = e.contentWindow,
-	        o = t.document.getElementsByTagName("title");
-	      o && o.length > 0 && e.setAttribute("title", o[0].textContent || "");
-	      const r = Object.assign(Object.assign({}, buildBrazeBridge(e)), {
+	    (o.id = n.id),
+	    t && o.setAttribute("nonce", t),
+	    (o.className = "ab-html-banner"),
+	    o.setAttribute(BANNER_PLACEMENT_ID, n.placementId),
+	    o.setAttribute("title", "Banner"),
+	    attachHtmlToIframeWithNonce(o, n.html, t),
+	    (o.onload = () => {
+	      const t = o.contentWindow,
+	        e = t.document.getElementsByTagName("title");
+	      e && e.length > 0 && o.setAttribute("title", e[0].textContent || "");
+	      const r = Object.assign(Object.assign({}, buildBrazeBridge(o)), {
 	        logClick: function () {
 	          logBannerClick(n, ...arguments);
 	        },
-	        closeMessage: function () {},
+	        closeMessage: function () {
+	          !(function (n) {
+	            const t = document.getElementById(n.id);
+	            t && destroyBannerHtml(t), logBannerDismissal(n);
+	          })(n);
+	        },
 	        setBannerHeight: (n) => {
 	          isNaN(n) || !isFinite(n) || n < 0
 	            ? E$1.warn(`Invalid banner height: ${n}`)
-	            : (e.style.height = `${n}px`);
+	            : (o.style.height = `${n}px`);
 	        },
 	      });
 	      (t.brazeBridge = r),
 	        (t.appboyBridge = r),
 	        t.dispatchEvent(new CustomEvent("ab.BridgeReady"));
 	    }),
-	    e
+	    o
 	  );
-	}
-
-	function destroyBannerHtml(o) {
-	  const r = o.getAttribute(BannerStrings.ea);
-	  null != r && removeSubscription(r),
-	    o && o.parentNode && o.parentNode.removeChild(o);
 	}
 
 	function logBannerImpressions(o) {
 	  if (!r.rr()) return;
 	  if (!o || o.length <= 0) return !1;
 	  const n = i.o(),
-	    s = n.ct();
+	    s = n.k();
 	  if (0 === keys(s).length)
 	    return E$1.info("Not logging banners impression. No banners exist."), !1;
-	  const e = n.qt(),
-	    t = [];
-	  for (const r of o) {
-	    const o = s[r];
+	  let e = n.Ut(),
+	    t = !1;
+	  if (Object.keys(e).some((o) => void 0 !== s[o])) {
+	    const o = {};
+	    for (const n of Object.keys(e)) {
+	      const r = s[n];
+	      r && e[n] && (o[r.id] = !0);
+	    }
+	    (e = o), (t = !0);
+	  }
+	  const a = [];
+	  for (const n of o) {
+	    const o = s[n];
 	    o
-	      ? e[o.placementId]
+	      ? e[o.id]
 	        ? E$1.info(
-	            `Not logging banners impression for ID ${r}. This ID was already logged this session.`,
+	            `Not logging banners impression for ID ${n}. This ID was already logged this session.`,
 	          )
-	        : ((e[o.placementId] = !0), t.push(o.id))
+	        : ((e[o.id] = !0), a.push(o.id))
 	      : E$1.info(
-	          `Not logging banners impression for ID ${r}. The placement ID did not correspond to any banner.`,
+	          `Not logging banners impression for ID ${n}. The placement ID did not correspond to any banner.`,
 	        );
 	  }
-	  if (0 === t.length) return !1;
-	  n.Ft(e);
-	  const a = { ids: t };
-	  return v$1.lt(f.ro, a).W;
+	  if (0 === a.length) return t && n.At(e), !1;
+	  n.At(e);
+	  const f = { ids: a };
+	  return v$1.wt(p.ro, f).lt;
 	}
 
 	function detectBannerImpressions() {
@@ -11055,11 +11622,11 @@ var mpBrazeKitV6 = (function (exports) {
 	  const n = {},
 	    o = r.l();
 	  if (
-	    (!1 === (null == o ? void 0 : o.kt()) && E$1.error(BannerStrings.aa),
-	    !(null == o ? void 0 : o.kt()))
+	    (!1 === (null == o ? void 0 : o.Jt()) && E$1.error(BannerStrings.aa),
+	    !(null == o ? void 0 : o.Jt()))
 	  )
 	    return n;
-	  const t = i.o().ct();
+	  const t = i.o().k();
 	  for (const r in t) n[r] = getBannerIfNotExpired(t, r);
 	  return n;
 	}
@@ -11068,20 +11635,20 @@ var mpBrazeKitV6 = (function (exports) {
 	  var o;
 	  if (!r.rr()) return;
 	  const t = i.o();
-	  if (t.Tt()) {
+	  if (t.xt()) {
 	    const r = getAllBanners();
 	    r && "function" == typeof n && n(r);
 	  }
-	  const s = t.It(n);
-	  if (!t.St()) {
+	  const s = t.zt(n);
+	  if (!t.Lt()) {
 	    const n =
 	      null === (o = r.nn()) || void 0 === o
 	        ? void 0
 	        : o.rn(() => {
-	            const n = t.ot();
-	            n && n.length > 0 && t.M(n);
+	            const n = t.Ct();
+	            n && n.length > 0 && t.O(n);
 	          });
-	    n && t.wt(n);
+	    n && t.$t(n);
 	  }
 	  return s;
 	}
@@ -11091,15 +11658,15 @@ var mpBrazeKitV6 = (function (exports) {
 	  if (!e) return void E$1.error("Not inserting banner: banner was not provided.");
 	  if (!n)
 	    return void E$1.error("Not inserting banner: parentNode was not provided.");
-	  if (!r.re(D.te))
+	  if (!r.er(U.nr))
 	    return void E$1.error(
 	      "Banners are disabled. Use the 'allowUserSuppliedJavascript' option for braze.initialize to enable these messages.",
 	    );
 	  setupBannerUI();
-	  const o = bannerToHtml(e, r.re(D.er)),
+	  const o = bannerToHtml(e, r.er(U.sr)),
 	    s = subscribeToBannersUpdates((s) => {
 	      const i = s[e.placementId];
-	      i ? n.replaceChildren(bannerToHtml(i, r.re(D.er))) : destroyBannerHtml(o);
+	      i ? n.replaceChildren(bannerToHtml(i, r.er(U.sr))) : destroyBannerHtml(o);
 	    });
 	  s && o.setAttribute(BannerStrings.ea, s),
 	    n.replaceChildren(o),
@@ -11109,20 +11676,16 @@ var mpBrazeKitV6 = (function (exports) {
 
 	function requestBannersRefresh(e, t, o) {
 	  if (!r.rr()) return void E$1.warn(CoreStrings.ee);
-	  const s = r.l();
-	  if (!s) return;
+	  const n = r.l();
+	  if (!n) return;
 	  if (!isArray(e) || 0 === e.length)
 	    return void E$1.warn("placementIds should be a non-empty array.");
-	  if (!r.re(D.te))
-	    return void E$1.error(
-	      "Banners are disabled. Use the 'allowUserSuppliedJavascript' option for braze.initialize to enable these messages.",
-	    );
-	  const n = i.o();
-	  if ((!1 === s.kt() && E$1.error(BannerStrings.aa), !n.k()))
-	    return void s.P(() => {
+	  const s = i.o();
+	  if ((!1 === n.Jt() && E$1.error(BannerStrings.aa), !s.P()))
+	    return void n.V(() => {
 	      requestBannersRefresh(e, t, o);
 	    });
-	  const a = s.oe();
+	  const a = n.re();
 	  e.length > a &&
 	    (E$1.warn(
 	      `Number of placement IDs requested exceeds the max allowed. Trimming placementIds array from length ${e.length} to ${a} (max allowed).`,
@@ -11138,7 +11701,7 @@ var mpBrazeKitV6 = (function (exports) {
 	          !1),
 	      )).length &&
 	      (E$1.info(`Requesting banners for placement IDs: ${JSON.stringify(e)}`),
-	      n.M(e, t, o));
+	      s.O(e, t, o));
 	}
 
 	var src = /*#__PURE__*/Object.freeze({
@@ -11172,6 +11735,7 @@ var mpBrazeKitV6 = (function (exports) {
 		isDisabled: isDisabled,
 		isInitialized: isInitialized,
 		logCustomEvent: logCustomEvent,
+		logEcommerceEvent: logEcommerceEvent,
 		logPurchase: logPurchase,
 		openSession: openSession,
 		removeAllSubscriptions: removeAllSubscriptions,
@@ -11242,7 +11806,7 @@ var mpBrazeKitV6 = (function (exports) {
 	var name = 'Appboy',
 	    suffix = 'v6',
 	    moduleId = 28,
-	    version = '5.0.3',
+	    version = '6.0.0',
 	    MessageType = {
 	        PageView: 3,
 	        PageEvent: 4,
@@ -11300,6 +11864,12 @@ var mpBrazeKitV6 = (function (exports) {
 
 	    var bundleCommerceEventData = false;
 	    var forwardSkuAsProductName = false;
+	    var useEcommerceRecommendedEvents = false;
+
+	    var RECOMMENDED_ECOMMERCE_SOURCE = 'web';
+	    var RECOMMENDED_ORDER_REFUNDED_EVENT_NAME = 'ecommerce.order_refunded';
+	    var RECOMMENDED_IMAGE_URL_ATTRIBUTES = ['image_url', 'Image URL'];
+	    var RECOMMENDED_PRODUCT_URL_ATTRIBUTES = ['product_url', 'Product URL'];
 
 	    var brazeConsentKeys = [
 	        '$google_ad_user_data',
@@ -11478,6 +12048,369 @@ var mpBrazeKitV6 = (function (exports) {
 	        return [eventNamePrefix, eventName].join(' - ');
 	    }
 
+	    // The Braze Web SDK only exposes logEcommerceEvent in v6.8.0+. Guard against
+	    // older host SDKs so we can fall back to legacy forwarding when unsupported.
+	    function recommendedEcommerceEventsSupported() {
+	        return typeof braze.logEcommerceEvent === 'function';
+	    }
+
+	    function getSessionIdForBraze() {
+	        try {
+	            if (mParticle && typeof mParticle.getSession === 'function') {
+	                return mParticle.getSession();
+	            }
+	        } catch (e) {
+	            // no-op: session id is a best-effort fallback
+	        }
+	        return null;
+	    }
+
+	    function generateEcommerceId() {
+	        if (
+	            typeof window !== 'undefined' &&
+	            window.crypto &&
+	            typeof window.crypto.randomUUID === 'function'
+	        ) {
+	            return window.crypto.randomUUID();
+	        }
+	        return (
+	            'mp-' +
+	            new Date().getTime() +
+	            '-' +
+	            Math.floor(Math.random() * 1000000000)
+	        );
+	    }
+
+	    function getEcommerceCustomAttribute(event, key) {
+	        var attributes = event.EventAttributes || {};
+	        if (attributes[key] != null && attributes[key] !== '') {
+	            return String(attributes[key]);
+	        }
+	        return null;
+	    }
+
+	    function getRecommendedCartId(event) {
+	        // When cart_id is omitted, Braze assigns a shared default that links the
+	        // cart/checkout/order events, so we only set it when we have a stable value.
+	        return (
+	            getEcommerceCustomAttribute(event, 'cart_id') ||
+	            getSessionIdForBraze() ||
+	            undefined
+	        );
+	    }
+
+	    function getRecommendedCheckoutId(event) {
+	        return (
+	            getEcommerceCustomAttribute(event, 'checkout_id') ||
+	            getSessionIdForBraze() ||
+	            generateEcommerceId()
+	        );
+	    }
+
+	    function getRecommendedOrderId(event) {
+	        if (event.ProductAction && event.ProductAction.TransactionId) {
+	            return String(event.ProductAction.TransactionId);
+	        }
+	        return getSessionIdForBraze() || generateEcommerceId();
+	    }
+
+	    function getRecommendedProductList(event) {
+	        if (event.ProductAction && event.ProductAction.ProductList) {
+	            return event.ProductAction.ProductList;
+	        }
+	        return [];
+	    }
+
+	    function getRecommendedTotalValue(event) {
+	        if (
+	            event.ProductAction &&
+	            event.ProductAction.TotalAmount != null &&
+	            event.ProductAction.TotalAmount !== ''
+	        ) {
+	            return parseFloat(event.ProductAction.TotalAmount) || 0;
+	        }
+	        var total = 0;
+	        getRecommendedProductList(event).forEach(function(product) {
+	            var quantity = product.Quantity ? parseFloat(product.Quantity) : 1;
+	            if (!quantity || quantity < 1) {
+	                quantity = 1;
+	            }
+	            total += (parseFloat(product.Price) || 0) * quantity;
+	        });
+	        return total;
+	    }
+
+	    function getRecommendedTotalDiscounts(event) {
+	        var value = getEcommerceCustomAttribute(event, 'total_discounts');
+	        if (value == null) {
+	            return null;
+	        }
+	        var parsed = parseFloat(value);
+	        return isNaN(parsed) ? null : parsed;
+	    }
+
+	    function getRecommendedVariantId(product) {
+	        return String(product.Variant || product.Sku);
+	    }
+
+	    function getRecommendedProductAttribute(product, keys) {
+	        var attributes = product.Attributes || {};
+	        for (var i = 0; i < keys.length; i++) {
+	            var value = attributes[keys[i]];
+	            if (value != null && value !== '') {
+	                return String(value);
+	            }
+	        }
+	        return null;
+	    }
+
+	    function emptyObjectToUndefined(obj) {
+	        return obj && Object.keys(obj).length ? obj : undefined;
+	    }
+
+	    function buildRecommendedProductMetadata(product) {
+	        var metadata = {};
+	        if (product.Brand) {
+	            metadata.brand = product.Brand;
+	        }
+	        if (product.Category) {
+	            metadata.category = product.Category;
+	        }
+	        if (product.CouponCode) {
+	            metadata.coupon_code = product.CouponCode;
+	        }
+	        if (product.Position != null) {
+	            metadata.position = product.Position;
+	        }
+	        metadata.sku = product.Sku;
+	        var attributes = product.Attributes || {};
+	        Object.keys(attributes).forEach(function(key) {
+	            if (
+	                RECOMMENDED_IMAGE_URL_ATTRIBUTES.indexOf(key) === -1 &&
+	                RECOMMENDED_PRODUCT_URL_ATTRIBUTES.indexOf(key) === -1 &&
+	                attributes[key] != null &&
+	                attributes[key] !== ''
+	            ) {
+	                metadata[key] = attributes[key];
+	            }
+	        });
+	        return metadata;
+	    }
+
+	    function buildRecommendedEventMetadata(event) {
+	        var metadata = {};
+	        var attributes = event.EventAttributes || {};
+	        Object.keys(attributes).forEach(function(key) {
+	            if (attributes[key] != null && attributes[key] !== '') {
+	                metadata[key] = attributes[key];
+	            }
+	        });
+	        var productAction = event.ProductAction || {};
+	        if (productAction.Affiliation) {
+	            metadata.affiliation = productAction.Affiliation;
+	        }
+	        if (productAction.CouponCode) {
+	            metadata.coupon_code = productAction.CouponCode;
+	        }
+	        if (productAction.TaxAmount != null) {
+	            metadata.tax = productAction.TaxAmount;
+	        }
+	        if (productAction.ShippingAmount != null) {
+	            metadata.shipping = productAction.ShippingAmount;
+	        }
+	        return metadata;
+	    }
+
+	    function buildRecommendedLineItem(product) {
+	        var lineItem = {
+	            product_id: String(product.Sku),
+	            product_name: String(product.Name),
+	            variant_id: getRecommendedVariantId(product),
+	            quantity: product.Quantity ? parseFloat(product.Quantity) : 1,
+	            price: parseFloat(product.Price) || 0,
+	        };
+	        var imageUrl = getRecommendedProductAttribute(
+	            product,
+	            RECOMMENDED_IMAGE_URL_ATTRIBUTES
+	        );
+	        if (imageUrl) {
+	            lineItem.image_url = imageUrl;
+	        }
+	        var productUrl = getRecommendedProductAttribute(
+	            product,
+	            RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+	        );
+	        if (productUrl) {
+	            lineItem.product_url = productUrl;
+	        }
+	        var metadata = emptyObjectToUndefined(
+	            buildRecommendedProductMetadata(product)
+	        );
+	        if (metadata) {
+	            lineItem.metadata = metadata;
+	        }
+	        return lineItem;
+	    }
+
+	    function buildRecommendedLineItems(productList) {
+	        return (productList || []).map(buildRecommendedLineItem);
+	    }
+
+	    // Forwards a commerce event using Braze's recommended eCommerce schema.
+	    // Returns true/false when the event was handled, or null to signal the caller
+	    // to fall back to legacy forwarding (no products, or an unsupported action).
+	    function logRecommendedCommerceEvent(event) {
+	        var productList = getRecommendedProductList(event);
+	        if (!productList.length) {
+	            return null;
+	        }
+	        var currency = event.CurrencyCode || 'USD';
+	        var source = RECOMMENDED_ECOMMERCE_SOURCE;
+	        var eventMetadata = emptyObjectToUndefined(
+	            buildRecommendedEventMetadata(event)
+	        );
+	        var reportEvent = false;
+	        var properties;
+
+	        switch (event.EventCategory) {
+	            case CommerceEventType.ProductAddToCart:
+	            case CommerceEventType.ProductRemoveFromCart:
+	                properties = {
+	                    cart_id: getRecommendedCartId(event) || generateEcommerceId(),
+	                    currency: currency,
+	                    source: source,
+	                    total_value: getRecommendedTotalValue(event),
+	                    products: buildRecommendedLineItems(productList),
+	                    action:
+	                        event.EventCategory ===
+	                        CommerceEventType.ProductAddToCart
+	                            ? 'add'
+	                            : 'remove',
+	                };
+	                if (eventMetadata) {
+	                    properties.metadata = eventMetadata;
+	                }
+	                reportEvent = braze.logEcommerceEvent({
+	                    name: 'ecommerce.cart_updated',
+	                    properties: properties,
+	                });
+	                break;
+	            case CommerceEventType.ProductCheckout:
+	                properties = {
+	                    checkout_id: getRecommendedCheckoutId(event),
+	                    currency: currency,
+	                    source: source,
+	                    total_value: getRecommendedTotalValue(event),
+	                    products: buildRecommendedLineItems(productList),
+	                };
+	                var checkoutCartId = getRecommendedCartId(event);
+	                if (checkoutCartId) {
+	                    properties.cart_id = checkoutCartId;
+	                }
+	                if (eventMetadata) {
+	                    properties.metadata = eventMetadata;
+	                }
+	                reportEvent = braze.logEcommerceEvent({
+	                    name: 'ecommerce.checkout_started',
+	                    properties: properties,
+	                });
+	                break;
+	            case CommerceEventType.ProductViewDetail:
+	                reportEvent = false;
+	                productList.forEach(function(product) {
+	                    var viewedProperties = {
+	                        product_id: String(product.Sku),
+	                        product_name: String(product.Name),
+	                        variant_id: getRecommendedVariantId(product),
+	                        price: parseFloat(product.Price) || 0,
+	                        currency: currency,
+	                        source: source,
+	                    };
+	                    var imageUrl = getRecommendedProductAttribute(
+	                        product,
+	                        RECOMMENDED_IMAGE_URL_ATTRIBUTES
+	                    );
+	                    if (imageUrl) {
+	                        viewedProperties.image_url = imageUrl;
+	                    }
+	                    var productUrl = getRecommendedProductAttribute(
+	                        product,
+	                        RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+	                    );
+	                    if (productUrl) {
+	                        viewedProperties.product_url = productUrl;
+	                    }
+	                    var viewedMetadata = emptyObjectToUndefined(
+	                        mergeObjects(
+	                            buildRecommendedProductMetadata(product),
+	                            eventMetadata || {}
+	                        )
+	                    );
+	                    if (viewedMetadata) {
+	                        viewedProperties.metadata = viewedMetadata;
+	                    }
+	                    if (
+	                        braze.logEcommerceEvent({
+	                            name: 'ecommerce.product_viewed',
+	                            properties: viewedProperties,
+	                        }) === true
+	                    ) {
+	                        reportEvent = true;
+	                    }
+	                });
+	                break;
+	            case CommerceEventType.ProductPurchase:
+	                properties = {
+	                    order_id: getRecommendedOrderId(event),
+	                    currency: currency,
+	                    source: source,
+	                    total_value: getRecommendedTotalValue(event),
+	                    products: buildRecommendedLineItems(productList),
+	                };
+	                var purchaseCartId = getRecommendedCartId(event);
+	                if (purchaseCartId) {
+	                    properties.cart_id = purchaseCartId;
+	                }
+	                var totalDiscounts = getRecommendedTotalDiscounts(event);
+	                if (totalDiscounts != null) {
+	                    properties.total_discounts = totalDiscounts;
+	                }
+	                if (eventMetadata) {
+	                    properties.metadata = eventMetadata;
+	                }
+	                reportEvent = braze.logEcommerceEvent({
+	                    name: 'ecommerce.order_placed',
+	                    properties: properties,
+	                });
+	                break;
+	            case CommerceEventType.ProductRefund:
+	                // Braze has no typed order_refunded event; forward it as a custom
+	                // event that mirrors the recommended ecommerce.order_refunded schema.
+	                var refundProperties = {
+	                    order_id: getRecommendedOrderId(event),
+	                    total_value: getRecommendedTotalValue(event),
+	                    currency: currency,
+	                    source: source,
+	                    products: buildRecommendedLineItems(productList),
+	                };
+	                var refundDiscounts = getRecommendedTotalDiscounts(event);
+	                if (refundDiscounts != null) {
+	                    refundProperties.total_discounts = refundDiscounts;
+	                }
+	                if (eventMetadata) {
+	                    refundProperties.metadata = eventMetadata;
+	                }
+	                reportEvent = braze.logCustomEvent(
+	                    RECOMMENDED_ORDER_REFUNDED_EVENT_NAME,
+	                    refundProperties
+	                );
+	                break;
+	            default:
+	                return null;
+	        }
+	        return reportEvent === true;
+	    }
+
 	    function logBrazePageViewEvent(event) {
 	        var sanitizedEventName,
 	            sanitizedAttrs,
@@ -11628,6 +12561,18 @@ var mpBrazeKitV6 = (function (exports) {
 	    // a purchase event or a non-purchase commerce event
 	    function logCommerceEvent(event) {
 	        var reportEvent = false;
+	        // When opted in (and the host Braze SDK supports it), forward supported
+	        // commerce actions using Braze's recommended eCommerce schema. Unsupported
+	        // actions (or a host SDK without the API) fall back to legacy forwarding.
+	        if (
+	            useEcommerceRecommendedEvents &&
+	            recommendedEcommerceEventsSupported()
+	        ) {
+	            var recommendedResult = logRecommendedCommerceEvent(event);
+	            if (recommendedResult !== null) {
+	                return recommendedResult === true;
+	            }
+	        }
 	        if (event.EventCategory === CommerceEventType.ProductPurchase) {
 	            reportEvent = logPurchaseEvent(event);
 	            return reportEvent === true;
@@ -12105,6 +13050,8 @@ var mpBrazeKitV6 = (function (exports) {
 	                forwarderSettings.bundleCommerceEventData === 'True';
 	            forwardSkuAsProductName =
 	                forwarderSettings.forwardSkuAsProductName === 'True';
+	            useEcommerceRecommendedEvents =
+	                forwarderSettings.useEcommerceRecommendedEvents === 'True';
 	            reportingService = service;
 	            // 30 min is Braze default
 	            options.sessionTimeoutInSeconds =

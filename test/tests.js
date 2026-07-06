@@ -167,6 +167,8 @@ describe('Braze Forwarder', function() {
             this.subscribeToInAppMessageCalled = false;
             this.eventProperties = [];
             this.purchaseEventProperties = [];
+            this.logEcommerceEventCalled = false;
+            this.loggedEcommerceEvents = [];
 
             this.user = new MockBrazeUser();
             this.display = new MockDisplay();
@@ -230,6 +232,14 @@ describe('Braze Forwarder', function() {
                     quantity,
                     attributes,
                 ]);
+
+                // Return true to indicate event should be reported
+                return true;
+            };
+
+            this.logEcommerceEvent = function(event) {
+                self.logEcommerceEventCalled = true;
+                self.loggedEcommerceEvents.push(event);
 
                 // Return true to indicate event should be reported
                 return true;
@@ -2592,6 +2602,252 @@ user.getUserIdentities is not a function,\n`;
             };
 
             impressionEvent.should.eql(expectedImpressionEvent);
+        });
+    });
+
+    describe('Recommended eCommerce Events (useEcommerceRecommendedEvents)', function() {
+        function initRecommended(extraSettings) {
+            var settings = {
+                apiKey: '123456',
+                useEcommerceRecommendedEvents: 'True',
+            };
+            if (extraSettings) {
+                for (var key in extraSettings) {
+                    settings[key] = extraSettings[key];
+                }
+            }
+            mParticle.forwarder.init(
+                settings,
+                reportService.cb,
+                true,
+                null,
+                { gender: 'm' },
+                [{ Identity: 'testUser', Type: IdentityType.CustomerId }],
+                '1.1',
+                'My App'
+            );
+        }
+
+        function recommendedProduct() {
+            return {
+                Sku: 'sku1',
+                Name: 'Product Name',
+                Price: '10',
+                Quantity: 2,
+                Brand: 'brandX',
+                Category: 'catY',
+                Variant: 'variantZ',
+                Position: 3,
+                Attributes: {
+                    image_url: 'https://example.com/img.jpg',
+                    product_url: 'https://example.com/product',
+                    customKey: 'customVal',
+                },
+            };
+        }
+
+        beforeEach(function() {
+            initRecommended();
+        });
+
+        it('should forward add_to_cart as ecommerce.cart_updated with action add', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - add_to_cart',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductAddToCart,
+                CurrencyCode: 'USD',
+                EventAttributes: { cart_id: 'cart-123' },
+                ProductAction: {
+                    TotalAmount: 20,
+                    ProductList: [recommendedProduct()],
+                },
+            });
+            window.braze.should.have.property('logEcommerceEventCalled', true);
+            window.braze.loggedEcommerceEvents.should.have.lengthOf(1);
+            var event = window.braze.loggedEcommerceEvents[0];
+            event.name.should.equal('ecommerce.cart_updated');
+            event.properties.action.should.equal('add');
+            event.properties.cart_id.should.equal('cart-123');
+            event.properties.currency.should.equal('USD');
+            event.properties.source.should.equal('web');
+            event.properties.total_value.should.equal(20);
+            event.properties.products.should.have.lengthOf(1);
+            var lineItem = event.properties.products[0];
+            lineItem.product_id.should.equal('sku1');
+            lineItem.product_name.should.equal('Product Name');
+            lineItem.variant_id.should.equal('variantZ');
+            lineItem.quantity.should.equal(2);
+            lineItem.price.should.equal(10);
+            lineItem.image_url.should.equal('https://example.com/img.jpg');
+            lineItem.product_url.should.equal('https://example.com/product');
+            // custom/extra props live in metadata, never at the top level
+            lineItem.metadata.brand.should.equal('brandX');
+            lineItem.metadata.category.should.equal('catY');
+            lineItem.metadata.customKey.should.equal('customVal');
+        });
+
+        it('should forward remove_from_cart as ecommerce.cart_updated with action remove', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - remove_from_cart',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductRemoveFromCart,
+                CurrencyCode: 'USD',
+                EventAttributes: { cart_id: 'cart-123' },
+                ProductAction: { ProductList: [recommendedProduct()] },
+            });
+            window.braze.loggedEcommerceEvents.should.have.lengthOf(1);
+            var event = window.braze.loggedEcommerceEvents[0];
+            event.name.should.equal('ecommerce.cart_updated');
+            event.properties.action.should.equal('remove');
+        });
+
+        it('should forward checkout as ecommerce.checkout_started', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - checkout',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductCheckout,
+                CurrencyCode: 'USD',
+                EventAttributes: { checkout_id: 'checkout-9', cart_id: 'cart-123' },
+                ProductAction: {
+                    TotalAmount: 20,
+                    ProductList: [recommendedProduct()],
+                },
+            });
+            window.braze.loggedEcommerceEvents.should.have.lengthOf(1);
+            var event = window.braze.loggedEcommerceEvents[0];
+            event.name.should.equal('ecommerce.checkout_started');
+            event.properties.checkout_id.should.equal('checkout-9');
+            event.properties.cart_id.should.equal('cart-123');
+            event.properties.total_value.should.equal(20);
+        });
+
+        it('should forward view_detail as one ecommerce.product_viewed per product', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - view_detail',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductViewDetail,
+                CurrencyCode: 'USD',
+                ProductAction: {
+                    ProductList: [
+                        recommendedProduct(),
+                        {
+                            Sku: 'sku2',
+                            Name: 'Second',
+                            Price: '5',
+                            Quantity: 1,
+                        },
+                    ],
+                },
+            });
+            window.braze.loggedEcommerceEvents.should.have.lengthOf(2);
+            var first = window.braze.loggedEcommerceEvents[0];
+            first.name.should.equal('ecommerce.product_viewed');
+            first.properties.product_id.should.equal('sku1');
+            first.properties.image_url.should.equal(
+                'https://example.com/img.jpg'
+            );
+            var second = window.braze.loggedEcommerceEvents[1];
+            second.properties.product_id.should.equal('sku2');
+            // variant_id falls back to sku when the product has no variant
+            second.properties.variant_id.should.equal('sku2');
+        });
+
+        it('should forward purchase as ecommerce.order_placed', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - purchase',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductPurchase,
+                CurrencyCode: 'USD',
+                EventAttributes: { total_discounts: '3.5' },
+                ProductAction: {
+                    TransactionId: 'order-42',
+                    TotalAmount: 50,
+                    TaxAmount: 5,
+                    ShippingAmount: 7,
+                    Affiliation: 'the affiliation',
+                    ProductList: [recommendedProduct()],
+                },
+            });
+            window.braze.loggedEcommerceEvents.should.have.lengthOf(1);
+            var event = window.braze.loggedEcommerceEvents[0];
+            event.name.should.equal('ecommerce.order_placed');
+            event.properties.order_id.should.equal('order-42');
+            event.properties.total_value.should.equal(50);
+            event.properties.total_discounts.should.equal(3.5);
+            // tax/shipping/affiliation have no typed field; preserved in metadata
+            event.properties.metadata.tax.should.equal(5);
+            event.properties.metadata.shipping.should.equal(7);
+            event.properties.metadata.affiliation.should.equal(
+                'the affiliation'
+            );
+        });
+
+        it('should forward refund as an ecommerce.order_refunded custom event', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - refund',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductRefund,
+                CurrencyCode: 'USD',
+                ProductAction: {
+                    TransactionId: 'order-42',
+                    TotalAmount: 50,
+                    ProductList: [recommendedProduct()],
+                },
+            });
+            // Refund has no typed Braze event; it is forwarded as a custom event.
+            window.braze.should.have.property('logEcommerceEventCalled', false);
+            window.braze.should.have.property('logCustomEventCalled', true);
+            var loggedEvent = window.braze.loggedEvents[0];
+            loggedEvent.name.should.equal('ecommerce.order_refunded');
+            loggedEvent.eventProperties.order_id.should.equal('order-42');
+            loggedEvent.eventProperties.source.should.equal('web');
+            loggedEvent.eventProperties.products.should.have.lengthOf(1);
+        });
+
+        it('should fall back to legacy forwarding when the toggle is off', function() {
+            initRecommended({ useEcommerceRecommendedEvents: 'False' });
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - purchase',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductPurchase,
+                CurrencyCode: 'USD',
+                ProductAction: {
+                    TransactionId: 'order-42',
+                    TotalAmount: 50,
+                    ProductList: [recommendedProduct()],
+                },
+            });
+            window.braze.should.have.property('logEcommerceEventCalled', false);
+            window.braze.should.have.property('logPurchaseEventCalled', true);
+        });
+
+        it('should fall back to legacy forwarding for unsupported actions', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - add_to_wishlist',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductAddToWishlist,
+                CurrencyCode: 'USD',
+                ProductAction: { ProductList: [recommendedProduct()] },
+            });
+            // add_to_wishlist is not a recommended eCommerce event
+            window.braze.should.have.property('logEcommerceEventCalled', false);
+            window.braze.should.have.property('logCustomEventCalled', true);
+        });
+
+        it('should fall back to legacy forwarding when the host Braze SDK lacks logEcommerceEvent', function() {
+            delete window.braze.logEcommerceEvent;
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - purchase',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductPurchase,
+                CurrencyCode: 'USD',
+                ProductAction: {
+                    TransactionId: 'order-42',
+                    TotalAmount: 50,
+                    ProductList: [recommendedProduct()],
+                },
+            });
+            window.braze.should.have.property('logPurchaseEventCalled', true);
         });
     });
 });

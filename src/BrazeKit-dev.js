@@ -75,6 +75,12 @@ var constructor = function () {
 
     var bundleCommerceEventData = false;
     var forwardSkuAsProductName = false;
+    var useEcommerceRecommendedEvents = false;
+
+    var RECOMMENDED_ECOMMERCE_SOURCE = 'web';
+    var RECOMMENDED_ORDER_REFUNDED_EVENT_NAME = 'ecommerce.order_refunded';
+    var RECOMMENDED_IMAGE_URL_ATTRIBUTES = ['image_url', 'Image URL'];
+    var RECOMMENDED_PRODUCT_URL_ATTRIBUTES = ['product_url', 'Product URL'];
 
     var brazeConsentKeys = [
         '$google_ad_user_data',
@@ -253,6 +259,369 @@ var constructor = function () {
         return [eventNamePrefix, eventName].join(' - ');
     }
 
+    // The Braze Web SDK only exposes logEcommerceEvent in v6.8.0+. Guard against
+    // older host SDKs so we can fall back to legacy forwarding when unsupported.
+    function recommendedEcommerceEventsSupported() {
+        return typeof braze.logEcommerceEvent === 'function';
+    }
+
+    function getSessionIdForBraze() {
+        try {
+            if (mParticle && typeof mParticle.getSession === 'function') {
+                return mParticle.getSession();
+            }
+        } catch (e) {
+            // no-op: session id is a best-effort fallback
+        }
+        return null;
+    }
+
+    function generateEcommerceId() {
+        if (
+            typeof window !== 'undefined' &&
+            window.crypto &&
+            typeof window.crypto.randomUUID === 'function'
+        ) {
+            return window.crypto.randomUUID();
+        }
+        return (
+            'mp-' +
+            new Date().getTime() +
+            '-' +
+            Math.floor(Math.random() * 1000000000)
+        );
+    }
+
+    function getEcommerceCustomAttribute(event, key) {
+        var attributes = event.EventAttributes || {};
+        if (attributes[key] != null && attributes[key] !== '') {
+            return String(attributes[key]);
+        }
+        return null;
+    }
+
+    function getRecommendedCartId(event) {
+        // When cart_id is omitted, Braze assigns a shared default that links the
+        // cart/checkout/order events, so we only set it when we have a stable value.
+        return (
+            getEcommerceCustomAttribute(event, 'cart_id') ||
+            getSessionIdForBraze() ||
+            undefined
+        );
+    }
+
+    function getRecommendedCheckoutId(event) {
+        return (
+            getEcommerceCustomAttribute(event, 'checkout_id') ||
+            getSessionIdForBraze() ||
+            generateEcommerceId()
+        );
+    }
+
+    function getRecommendedOrderId(event) {
+        if (event.ProductAction && event.ProductAction.TransactionId) {
+            return String(event.ProductAction.TransactionId);
+        }
+        return getSessionIdForBraze() || generateEcommerceId();
+    }
+
+    function getRecommendedProductList(event) {
+        if (event.ProductAction && event.ProductAction.ProductList) {
+            return event.ProductAction.ProductList;
+        }
+        return [];
+    }
+
+    function getRecommendedTotalValue(event) {
+        if (
+            event.ProductAction &&
+            event.ProductAction.TotalAmount != null &&
+            event.ProductAction.TotalAmount !== ''
+        ) {
+            return parseFloat(event.ProductAction.TotalAmount) || 0;
+        }
+        var total = 0;
+        getRecommendedProductList(event).forEach(function(product) {
+            var quantity = product.Quantity ? parseFloat(product.Quantity) : 1;
+            if (!quantity || quantity < 1) {
+                quantity = 1;
+            }
+            total += (parseFloat(product.Price) || 0) * quantity;
+        });
+        return total;
+    }
+
+    function getRecommendedTotalDiscounts(event) {
+        var value = getEcommerceCustomAttribute(event, 'total_discounts');
+        if (value == null) {
+            return null;
+        }
+        var parsed = parseFloat(value);
+        return isNaN(parsed) ? null : parsed;
+    }
+
+    function getRecommendedVariantId(product) {
+        return String(product.Variant || product.Sku);
+    }
+
+    function getRecommendedProductAttribute(product, keys) {
+        var attributes = product.Attributes || {};
+        for (var i = 0; i < keys.length; i++) {
+            var value = attributes[keys[i]];
+            if (value != null && value !== '') {
+                return String(value);
+            }
+        }
+        return null;
+    }
+
+    function emptyObjectToUndefined(obj) {
+        return obj && Object.keys(obj).length ? obj : undefined;
+    }
+
+    function buildRecommendedProductMetadata(product) {
+        var metadata = {};
+        if (product.Brand) {
+            metadata.brand = product.Brand;
+        }
+        if (product.Category) {
+            metadata.category = product.Category;
+        }
+        if (product.CouponCode) {
+            metadata.coupon_code = product.CouponCode;
+        }
+        if (product.Position != null) {
+            metadata.position = product.Position;
+        }
+        metadata.sku = product.Sku;
+        var attributes = product.Attributes || {};
+        Object.keys(attributes).forEach(function(key) {
+            if (
+                RECOMMENDED_IMAGE_URL_ATTRIBUTES.indexOf(key) === -1 &&
+                RECOMMENDED_PRODUCT_URL_ATTRIBUTES.indexOf(key) === -1 &&
+                attributes[key] != null &&
+                attributes[key] !== ''
+            ) {
+                metadata[key] = attributes[key];
+            }
+        });
+        return metadata;
+    }
+
+    function buildRecommendedEventMetadata(event) {
+        var metadata = {};
+        var attributes = event.EventAttributes || {};
+        Object.keys(attributes).forEach(function(key) {
+            if (attributes[key] != null && attributes[key] !== '') {
+                metadata[key] = attributes[key];
+            }
+        });
+        var productAction = event.ProductAction || {};
+        if (productAction.Affiliation) {
+            metadata.affiliation = productAction.Affiliation;
+        }
+        if (productAction.CouponCode) {
+            metadata.coupon_code = productAction.CouponCode;
+        }
+        if (productAction.TaxAmount != null) {
+            metadata.tax = productAction.TaxAmount;
+        }
+        if (productAction.ShippingAmount != null) {
+            metadata.shipping = productAction.ShippingAmount;
+        }
+        return metadata;
+    }
+
+    function buildRecommendedLineItem(product) {
+        var lineItem = {
+            product_id: String(product.Sku),
+            product_name: String(product.Name),
+            variant_id: getRecommendedVariantId(product),
+            quantity: product.Quantity ? parseFloat(product.Quantity) : 1,
+            price: parseFloat(product.Price) || 0,
+        };
+        var imageUrl = getRecommendedProductAttribute(
+            product,
+            RECOMMENDED_IMAGE_URL_ATTRIBUTES
+        );
+        if (imageUrl) {
+            lineItem.image_url = imageUrl;
+        }
+        var productUrl = getRecommendedProductAttribute(
+            product,
+            RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+        );
+        if (productUrl) {
+            lineItem.product_url = productUrl;
+        }
+        var metadata = emptyObjectToUndefined(
+            buildRecommendedProductMetadata(product)
+        );
+        if (metadata) {
+            lineItem.metadata = metadata;
+        }
+        return lineItem;
+    }
+
+    function buildRecommendedLineItems(productList) {
+        return (productList || []).map(buildRecommendedLineItem);
+    }
+
+    // Forwards a commerce event using Braze's recommended eCommerce schema.
+    // Returns true/false when the event was handled, or null to signal the caller
+    // to fall back to legacy forwarding (no products, or an unsupported action).
+    function logRecommendedCommerceEvent(event) {
+        var productList = getRecommendedProductList(event);
+        if (!productList.length) {
+            return null;
+        }
+        var currency = event.CurrencyCode || 'USD';
+        var source = RECOMMENDED_ECOMMERCE_SOURCE;
+        var eventMetadata = emptyObjectToUndefined(
+            buildRecommendedEventMetadata(event)
+        );
+        var reportEvent = false;
+        var properties;
+
+        switch (event.EventCategory) {
+            case CommerceEventType.ProductAddToCart:
+            case CommerceEventType.ProductRemoveFromCart:
+                properties = {
+                    cart_id: getRecommendedCartId(event) || generateEcommerceId(),
+                    currency: currency,
+                    source: source,
+                    total_value: getRecommendedTotalValue(event),
+                    products: buildRecommendedLineItems(productList),
+                    action:
+                        event.EventCategory ===
+                        CommerceEventType.ProductAddToCart
+                            ? 'add'
+                            : 'remove',
+                };
+                if (eventMetadata) {
+                    properties.metadata = eventMetadata;
+                }
+                reportEvent = braze.logEcommerceEvent({
+                    name: 'ecommerce.cart_updated',
+                    properties: properties,
+                });
+                break;
+            case CommerceEventType.ProductCheckout:
+                properties = {
+                    checkout_id: getRecommendedCheckoutId(event),
+                    currency: currency,
+                    source: source,
+                    total_value: getRecommendedTotalValue(event),
+                    products: buildRecommendedLineItems(productList),
+                };
+                var checkoutCartId = getRecommendedCartId(event);
+                if (checkoutCartId) {
+                    properties.cart_id = checkoutCartId;
+                }
+                if (eventMetadata) {
+                    properties.metadata = eventMetadata;
+                }
+                reportEvent = braze.logEcommerceEvent({
+                    name: 'ecommerce.checkout_started',
+                    properties: properties,
+                });
+                break;
+            case CommerceEventType.ProductViewDetail:
+                reportEvent = false;
+                productList.forEach(function(product) {
+                    var viewedProperties = {
+                        product_id: String(product.Sku),
+                        product_name: String(product.Name),
+                        variant_id: getRecommendedVariantId(product),
+                        price: parseFloat(product.Price) || 0,
+                        currency: currency,
+                        source: source,
+                    };
+                    var imageUrl = getRecommendedProductAttribute(
+                        product,
+                        RECOMMENDED_IMAGE_URL_ATTRIBUTES
+                    );
+                    if (imageUrl) {
+                        viewedProperties.image_url = imageUrl;
+                    }
+                    var productUrl = getRecommendedProductAttribute(
+                        product,
+                        RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+                    );
+                    if (productUrl) {
+                        viewedProperties.product_url = productUrl;
+                    }
+                    var viewedMetadata = emptyObjectToUndefined(
+                        mergeObjects(
+                            buildRecommendedProductMetadata(product),
+                            eventMetadata || {}
+                        )
+                    );
+                    if (viewedMetadata) {
+                        viewedProperties.metadata = viewedMetadata;
+                    }
+                    if (
+                        braze.logEcommerceEvent({
+                            name: 'ecommerce.product_viewed',
+                            properties: viewedProperties,
+                        }) === true
+                    ) {
+                        reportEvent = true;
+                    }
+                });
+                break;
+            case CommerceEventType.ProductPurchase:
+                properties = {
+                    order_id: getRecommendedOrderId(event),
+                    currency: currency,
+                    source: source,
+                    total_value: getRecommendedTotalValue(event),
+                    products: buildRecommendedLineItems(productList),
+                };
+                var purchaseCartId = getRecommendedCartId(event);
+                if (purchaseCartId) {
+                    properties.cart_id = purchaseCartId;
+                }
+                var totalDiscounts = getRecommendedTotalDiscounts(event);
+                if (totalDiscounts != null) {
+                    properties.total_discounts = totalDiscounts;
+                }
+                if (eventMetadata) {
+                    properties.metadata = eventMetadata;
+                }
+                reportEvent = braze.logEcommerceEvent({
+                    name: 'ecommerce.order_placed',
+                    properties: properties,
+                });
+                break;
+            case CommerceEventType.ProductRefund:
+                // Braze has no typed order_refunded event; forward it as a custom
+                // event that mirrors the recommended ecommerce.order_refunded schema.
+                var refundProperties = {
+                    order_id: getRecommendedOrderId(event),
+                    total_value: getRecommendedTotalValue(event),
+                    currency: currency,
+                    source: source,
+                    products: buildRecommendedLineItems(productList),
+                };
+                var refundDiscounts = getRecommendedTotalDiscounts(event);
+                if (refundDiscounts != null) {
+                    refundProperties.total_discounts = refundDiscounts;
+                }
+                if (eventMetadata) {
+                    refundProperties.metadata = eventMetadata;
+                }
+                reportEvent = braze.logCustomEvent(
+                    RECOMMENDED_ORDER_REFUNDED_EVENT_NAME,
+                    refundProperties
+                );
+                break;
+            default:
+                return null;
+        }
+        return reportEvent === true;
+    }
+
     function logBrazePageViewEvent(event) {
         var sanitizedEventName,
             sanitizedAttrs,
@@ -403,6 +772,18 @@ var constructor = function () {
     // a purchase event or a non-purchase commerce event
     function logCommerceEvent(event) {
         var reportEvent = false;
+        // When opted in (and the host Braze SDK supports it), forward supported
+        // commerce actions using Braze's recommended eCommerce schema. Unsupported
+        // actions (or a host SDK without the API) fall back to legacy forwarding.
+        if (
+            useEcommerceRecommendedEvents &&
+            recommendedEcommerceEventsSupported()
+        ) {
+            var recommendedResult = logRecommendedCommerceEvent(event);
+            if (recommendedResult !== null) {
+                return recommendedResult === true;
+            }
+        }
         if (event.EventCategory === CommerceEventType.ProductPurchase) {
             reportEvent = logPurchaseEvent(event);
             return reportEvent === true;
@@ -880,6 +1261,8 @@ var constructor = function () {
                 forwarderSettings.bundleCommerceEventData === 'True';
             forwardSkuAsProductName =
                 forwarderSettings.forwardSkuAsProductName === 'True';
+            useEcommerceRecommendedEvents =
+                forwarderSettings.useEcommerceRecommendedEvents === 'True';
             reportingService = service;
             // 30 min is Braze default
             options.sessionTimeoutInSeconds =
