@@ -2685,6 +2685,10 @@ user.getUserIdentities is not a function,\n`;
             lineItem.metadata.brand.should.equal('brandX');
             lineItem.metadata.category.should.equal('catY');
             lineItem.metadata.customKey.should.equal('customVal');
+            // cart_id is promoted to the typed cart_id field, so it must not be duplicated in metadata
+            (event.properties.metadata || {}).should.not.have.property(
+                'cart_id'
+            );
         });
 
         it('should forward remove_from_cart as ecommerce.cart_updated with action remove', function() {
@@ -2780,6 +2784,10 @@ user.getUserIdentities is not a function,\n`;
             event.properties.metadata.shipping.should.equal(7);
             event.properties.metadata.affiliation.should.equal(
                 'the affiliation'
+            );
+            // total_discounts is promoted to a typed field, so it must not be duplicated in metadata
+            event.properties.metadata.should.not.have.property(
+                'total_discounts'
             );
         });
 

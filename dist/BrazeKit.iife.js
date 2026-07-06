@@ -11870,6 +11870,12 @@ var mpBrazeKitV6 = (function (exports) {
 	    var RECOMMENDED_ORDER_REFUNDED_EVENT_NAME = 'ecommerce.order_refunded';
 	    var RECOMMENDED_IMAGE_URL_ATTRIBUTES = ['image_url', 'Image URL'];
 	    var RECOMMENDED_PRODUCT_URL_ATTRIBUTES = ['product_url', 'Product URL'];
+	    // Custom attributes promoted to typed recommended-event fields; excluded from metadata.
+	    var RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES = [
+	        'cart_id',
+	        'checkout_id',
+	        'total_discounts',
+	    ];
 
 	    var brazeConsentKeys = [
 	        '$google_ad_user_data',
@@ -12201,7 +12207,13 @@ var mpBrazeKitV6 = (function (exports) {
 	        var metadata = {};
 	        var attributes = event.EventAttributes || {};
 	        Object.keys(attributes).forEach(function(key) {
-	            if (attributes[key] != null && attributes[key] !== '') {
+	            // Skip attributes already promoted to typed recommended-event fields to avoid
+	            // emitting them both at the top level and inside metadata.
+	            if (
+	                RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES.indexOf(key) === -1 &&
+	                attributes[key] != null &&
+	                attributes[key] !== ''
+	            ) {
 	                metadata[key] = attributes[key];
 	            }
 	        });
