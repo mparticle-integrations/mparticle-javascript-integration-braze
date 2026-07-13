@@ -12096,12 +12096,12 @@ var constructor = function () {
     }
 
     function getRecommendedCartId(event) {
-        // When cart_id is omitted, Braze assigns a shared default that links the
-        // cart/checkout/order events, so we only set it when we have a stable value.
+        // Fall back to the mParticle session id, then a generated id, matching the
+        // Android and iOS kits (a missing session id is unlikely but possible).
         return (
             getEcommerceCustomAttribute(event, 'cart_id') ||
             getSessionIdForBraze() ||
-            undefined
+            generateEcommerceId()
         );
     }
 
@@ -12127,6 +12127,16 @@ var constructor = function () {
         return [];
     }
 
+    // Product quantity is a count, so coerce to an integer >= 1 (mirrors the
+    // Android kit's toLong().coerceAtLeast(1)).
+    function getRecommendedQuantity(product) {
+        var quantity = parseInt(product.Quantity, 10);
+        if (isNaN(quantity) || quantity < 1) {
+            quantity = 1;
+        }
+        return quantity;
+    }
+
     function getRecommendedTotalValue(event) {
         if (
             event.ProductAction &&
@@ -12137,11 +12147,9 @@ var constructor = function () {
         }
         var total = 0;
         getRecommendedProductList(event).forEach(function(product) {
-            var quantity = product.Quantity ? parseFloat(product.Quantity) : 1;
-            if (!quantity || quantity < 1) {
-                quantity = 1;
-            }
-            total += (parseFloat(product.Price) || 0) * quantity;
+            total +=
+                (parseFloat(product.Price) || 0) *
+                getRecommendedQuantity(product);
         });
         return total;
     }
@@ -12238,7 +12246,7 @@ var constructor = function () {
             product_id: String(product.Sku),
             product_name: String(product.Name),
             variant_id: getRecommendedVariantId(product),
-            quantity: product.Quantity ? parseFloat(product.Quantity) : 1,
+            quantity: getRecommendedQuantity(product),
             price: parseFloat(product.Price) || 0,
         };
         var imageUrl = getRecommendedProductAttribute(
@@ -12288,7 +12296,7 @@ var constructor = function () {
             case CommerceEventType.ProductAddToCart:
             case CommerceEventType.ProductRemoveFromCart:
                 properties = {
-                    cart_id: getRecommendedCartId(event) || generateEcommerceId(),
+                    cart_id: getRecommendedCartId(event),
                     currency: currency,
                     source: source,
                     total_value: getRecommendedTotalValue(event),
@@ -12314,11 +12322,8 @@ var constructor = function () {
                     source: source,
                     total_value: getRecommendedTotalValue(event),
                     products: buildRecommendedLineItems(productList),
+                    cart_id: getRecommendedCartId(event),
                 };
-                var checkoutCartId = getRecommendedCartId(event);
-                if (checkoutCartId) {
-                    properties.cart_id = checkoutCartId;
-                }
                 if (eventMetadata) {
                     properties.metadata = eventMetadata;
                 }
@@ -12378,11 +12383,8 @@ var constructor = function () {
                     source: source,
                     total_value: getRecommendedTotalValue(event),
                     products: buildRecommendedLineItems(productList),
+                    cart_id: getRecommendedCartId(event),
                 };
-                var purchaseCartId = getRecommendedCartId(event);
-                if (purchaseCartId) {
-                    properties.cart_id = purchaseCartId;
-                }
                 var totalDiscounts = getRecommendedTotalDiscounts(event);
                 if (totalDiscounts != null) {
                     properties.total_discounts = totalDiscounts;
