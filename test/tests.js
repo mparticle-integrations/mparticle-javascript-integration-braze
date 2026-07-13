@@ -2858,5 +2858,36 @@ user.getUserIdentities is not a function,\n`;
             });
             window.braze.should.have.property('logPurchaseEventCalled', true);
         });
+
+        it('should fall back to a session/generated cart_id when none is provided', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - add_to_cart',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductAddToCart,
+                CurrencyCode: 'USD',
+                ProductAction: { ProductList: [recommendedProduct()] },
+            });
+            var event = window.braze.loggedEcommerceEvents[0];
+            // Matches Android/iOS: cart_id always resolves (custom attr ->
+            // session id -> generated id), never empty/undefined.
+            event.properties.cart_id.should.be.a.String();
+            event.properties.cart_id.should.not.be.empty();
+        });
+
+        it('should send an integer quantity even when the product quantity is fractional', function() {
+            var product = recommendedProduct();
+            product.Quantity = 2.9;
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - add_to_cart',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductAddToCart,
+                CurrencyCode: 'USD',
+                ProductAction: { ProductList: [product] },
+            });
+            var lineItem =
+                window.braze.loggedEcommerceEvents[0].properties.products[0];
+            lineItem.quantity.should.equal(2);
+            Number.isInteger(lineItem.quantity).should.equal(true);
+        });
     });
 });
