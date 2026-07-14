@@ -78,6 +78,10 @@ var constructor = function () {
     var useEcommerceRecommendedEvents = false;
 
     var RECOMMENDED_ECOMMERCE_SOURCE = 'web';
+    var RECOMMENDED_CART_UPDATED_EVENT_NAME = 'ecommerce.cart_updated';
+    var RECOMMENDED_CHECKOUT_STARTED_EVENT_NAME = 'ecommerce.checkout_started';
+    var RECOMMENDED_PRODUCT_VIEWED_EVENT_NAME = 'ecommerce.product_viewed';
+    var RECOMMENDED_ORDER_PLACED_EVENT_NAME = 'ecommerce.order_placed';
     var RECOMMENDED_ORDER_REFUNDED_EVENT_NAME = 'ecommerce.order_refunded';
     var RECOMMENDED_IMAGE_URL_ATTRIBUTES = ['image_url', 'Image URL'];
     var RECOMMENDED_PRODUCT_URL_ATTRIBUTES = ['product_url', 'Product URL'];
@@ -522,7 +526,7 @@ var constructor = function () {
                     properties.metadata = eventMetadata;
                 }
                 reportEvent = braze.logEcommerceEvent({
-                    name: 'ecommerce.cart_updated',
+                    name: RECOMMENDED_CART_UPDATED_EVENT_NAME,
                     properties: properties,
                 });
                 break;
@@ -539,7 +543,7 @@ var constructor = function () {
                     properties.metadata = eventMetadata;
                 }
                 reportEvent = braze.logEcommerceEvent({
-                    name: 'ecommerce.checkout_started',
+                    name: RECOMMENDED_CHECKOUT_STARTED_EVENT_NAME,
                     properties: properties,
                 });
                 break;
@@ -577,14 +581,11 @@ var constructor = function () {
                     if (viewedMetadata) {
                         viewedProperties.metadata = viewedMetadata;
                     }
-                    if (
+                    reportEvent =
                         braze.logEcommerceEvent({
-                            name: 'ecommerce.product_viewed',
+                            name: RECOMMENDED_PRODUCT_VIEWED_EVENT_NAME,
                             properties: viewedProperties,
-                        }) === true
-                    ) {
-                        reportEvent = true;
-                    }
+                        }) === true || reportEvent;
                 });
                 break;
             case CommerceEventType.ProductPurchase:
@@ -604,7 +605,7 @@ var constructor = function () {
                     properties.metadata = eventMetadata;
                 }
                 reportEvent = braze.logEcommerceEvent({
-                    name: 'ecommerce.order_placed',
+                    name: RECOMMENDED_ORDER_PLACED_EVENT_NAME,
                     properties: properties,
                 });
                 break;
