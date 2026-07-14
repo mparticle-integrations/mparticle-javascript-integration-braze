@@ -90,6 +90,7 @@ var constructor = function () {
         'cart_id',
         'checkout_id',
         'total_discounts',
+        'subtotal_value',
     ];
 
     var brazeConsentKeys = [
@@ -378,6 +379,51 @@ var constructor = function () {
         return isNaN(parsed) ? null : parsed;
     }
 
+    function parseRecommendedFloat(value) {
+        if (value == null || value === '') {
+            return null;
+        }
+        var parsed = parseFloat(value);
+        return isNaN(parsed) ? null : parsed;
+    }
+
+    function getRecommendedTax(event) {
+        return parseRecommendedFloat(
+            event.ProductAction && event.ProductAction.TaxAmount
+        );
+    }
+
+    function getRecommendedShipping(event) {
+        return parseRecommendedFloat(
+            event.ProductAction && event.ProductAction.ShippingAmount
+        );
+    }
+
+    // mParticle has no native subtotal field, so subtotal_value is sourced from a
+    // `subtotal_value` commerce custom attribute (like cart_id/total_discounts).
+    function getRecommendedSubtotalValue(event) {
+        return parseRecommendedFloat(
+            getEcommerceCustomAttribute(event, 'subtotal_value')
+        );
+    }
+
+    // tax, shipping, and subtotal_value are optional recognized top-level attributes
+    // on cart_updated/checkout_started/order_placed. Set only when present.
+    function applyRecommendedMonetaryAttributes(properties, event) {
+        var tax = getRecommendedTax(event);
+        if (tax != null) {
+            properties.tax = tax;
+        }
+        var shipping = getRecommendedShipping(event);
+        if (shipping != null) {
+            properties.shipping = shipping;
+        }
+        var subtotalValue = getRecommendedSubtotalValue(event);
+        if (subtotalValue != null) {
+            properties.subtotal_value = subtotalValue;
+        }
+    }
+
     function getRecommendedVariantId(product) {
         return String(product.Variant || product.Sku);
     }
@@ -447,12 +493,8 @@ var constructor = function () {
         if (productAction.CouponCode) {
             metadata.coupon_code = productAction.CouponCode;
         }
-        if (productAction.TaxAmount != null) {
-            metadata.tax = productAction.TaxAmount;
-        }
-        if (productAction.ShippingAmount != null) {
-            metadata.shipping = productAction.ShippingAmount;
-        }
+        // tax/shipping are recognized top-level recommended-event attributes
+        // (see applyRecommendedMonetaryAttributes), so they are not duplicated here.
         return metadata;
     }
 
@@ -522,6 +564,7 @@ var constructor = function () {
                             ? 'add'
                             : 'remove',
                 };
+                applyRecommendedMonetaryAttributes(properties, event);
                 if (eventMetadata) {
                     properties.metadata = eventMetadata;
                 }
@@ -539,6 +582,7 @@ var constructor = function () {
                     products: buildRecommendedLineItems(productList),
                     cart_id: getRecommendedCartId(event),
                 };
+                applyRecommendedMonetaryAttributes(properties, event);
                 if (eventMetadata) {
                     properties.metadata = eventMetadata;
                 }
@@ -601,6 +645,7 @@ var constructor = function () {
                 if (totalDiscounts != null) {
                     properties.total_discounts = totalDiscounts;
                 }
+                applyRecommendedMonetaryAttributes(properties, event);
                 if (eventMetadata) {
                     properties.metadata = eventMetadata;
                 }
