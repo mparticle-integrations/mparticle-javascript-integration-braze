@@ -2763,7 +2763,7 @@ user.getUserIdentities is not a function,\n`;
                 EventDataType: MessageType.Commerce,
                 EventCategory: CommerceEventType.ProductPurchase,
                 CurrencyCode: 'USD',
-                EventAttributes: { total_discounts: '3.5' },
+                EventAttributes: { total_discounts: '3.5', subtotal_value: '40' },
                 ProductAction: {
                     TransactionId: 'order-42',
                     TotalAmount: 50,
@@ -2779,16 +2779,42 @@ user.getUserIdentities is not a function,\n`;
             event.properties.order_id.should.equal('order-42');
             event.properties.total_value.should.equal(50);
             event.properties.total_discounts.should.equal(3.5);
-            // tax/shipping/affiliation have no typed field; preserved in metadata
-            event.properties.metadata.tax.should.equal(5);
-            event.properties.metadata.shipping.should.equal(7);
+            // tax/shipping/subtotal_value are recognized top-level attributes (Braze 6.9+)
+            event.properties.tax.should.equal(5);
+            event.properties.shipping.should.equal(7);
+            event.properties.subtotal_value.should.equal(40);
+            // affiliation has no typed field; preserved in metadata
             event.properties.metadata.affiliation.should.equal(
                 'the affiliation'
             );
-            // total_discounts is promoted to a typed field, so it must not be duplicated in metadata
+            // promoted top-level attrs must not be duplicated in metadata
             event.properties.metadata.should.not.have.property(
                 'total_discounts'
             );
+            event.properties.metadata.should.not.have.property(
+                'subtotal_value'
+            );
+        });
+
+        it('should send tax/shipping/subtotal_value as top-level attributes on cart_updated', function() {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - add_to_cart',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductAddToCart,
+                CurrencyCode: 'USD',
+                EventAttributes: { cart_id: 'cart-123', subtotal_value: '40' },
+                ProductAction: {
+                    TotalAmount: 50,
+                    TaxAmount: 5,
+                    ShippingAmount: 7,
+                    ProductList: [recommendedProduct()],
+                },
+            });
+            var event = window.braze.loggedEcommerceEvents[0];
+            event.name.should.equal('ecommerce.cart_updated');
+            event.properties.tax.should.equal(5);
+            event.properties.shipping.should.equal(7);
+            event.properties.subtotal_value.should.equal(40);
         });
 
         it('should forward refund as an ecommerce.order_refunded custom event', function() {

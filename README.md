@@ -24,11 +24,11 @@ self.importScripts('https://static.mparticle.com/sdk/js/braze/service-worker-6.5
 
 # Recommended eCommerce Events (opt-in)
 
-Braze Web SDK **6.8.0+** introduces [recommended eCommerce events](https://www.braze.com/docs/developer_guide/analytics/logging_ecommerce_events/#web). When the **`useEcommerceRecommendedEvents`** setting is enabled on the Braze connection, this kit forwards supported mParticle commerce events using that schema. When the setting is off (the default), commerce forwarding is unchanged and fully backward compatible.
+Braze Web SDK **6.9.0+** introduces [recommended eCommerce events](https://www.braze.com/docs/developer_guide/analytics/logging_ecommerce_events/#web) with the full attribute set (including top-level `tax`, `shipping`, and `subtotal_value`). When the **`useEcommerceRecommendedEvents`** setting is enabled on the Braze connection, this kit forwards supported mParticle commerce events using that schema. When the setting is off (the default), commerce forwarding is unchanged and fully backward compatible.
 
 Requirements:
 
-* **Minimum Braze Web SDK version: 6.8.0** (`braze.logEcommerceEvent`). The kit detects support at runtime; if the loaded Braze SDK is older than 6.8.0, commerce events automatically fall back to legacy forwarding.
+* **Minimum Braze Web SDK version: 6.9.0** (`braze.logEcommerceEvent` with the `tax`/`shipping`/`subtotal_value` attributes). The kit detects support at runtime; if the loaded Braze SDK is older than 6.9.0, commerce events automatically fall back to legacy forwarding.
 * **Minimum mParticle Braze kit version:** the first release that includes this feature (`@mparticle/web-braze-kit`).
 
 When enabled, mParticle commerce actions map to Braze recommended events:
@@ -42,7 +42,7 @@ When enabled, mParticle commerce actions map to Braze recommended events:
 | `purchase` | `ecommerce.order_placed` |
 | `refund` | `ecommerce.order_refunded` (custom event; no typed Braze API) |
 
-Attributes without a direct Braze equivalent (`cart_id`, `checkout_id`, `source`, product `brand`/`category`/`coupon_code`/`position`, `tax`, `shipping`, etc.) are placed inside the event- or product-level `metadata` object, per Braze's strict recommended-event schema. `source` is reported as `"web"`. Any commerce action not listed above continues to use legacy forwarding.
+`tax` and `shipping` map to the recognized top-level attributes from mParticle's `TransactionAttributes.tax`/`shipping`. `total_discounts` and `subtotal_value` have no native mParticle field and are sourced from the `total_discounts` / `subtotal_value` commerce custom attributes (`tax`/`shipping`/`subtotal_value` apply to cart_updated/checkout_started/order_placed; `total_discounts` to order_placed/refund). Any remaining attribute without a direct Braze equivalent (`cart_id`, `checkout_id`, `source`, product `brand`/`category`/`coupon_code`/`position`, etc.) is placed inside the event- or product-level `metadata` object, per Braze's strict recommended-event schema. `source` is reported as `"web"`. Any commerce action not listed above continues to use legacy forwarding.
 
 # License
 
