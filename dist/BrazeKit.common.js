@@ -12322,6 +12322,26 @@ var constructor = function () {
         }
     }
 
+    // product_viewed and order_refunded have no recognized top-level tax/shipping/
+    // subtotal_value fields, so when present these are preserved in metadata rather
+    // than dropped.
+    function buildRecommendedMonetaryMetadata(event) {
+        var metadata = {};
+        var tax = getRecommendedTax(event);
+        if (tax != null) {
+            metadata.tax = tax;
+        }
+        var shipping = getRecommendedShipping(event);
+        if (shipping != null) {
+            metadata.shipping = shipping;
+        }
+        var subtotalValue = getRecommendedSubtotalValue(event);
+        if (subtotalValue != null) {
+            metadata.subtotal_value = subtotalValue;
+        }
+        return metadata;
+    }
+
     function getRecommendedVariantId(product) {
         return String(product.Variant || product.Sku);
     }
@@ -12516,8 +12536,11 @@ var constructor = function () {
                     }
                     var viewedMetadata = emptyObjectToUndefined(
                         mergeObjects(
-                            buildRecommendedProductMetadata(product),
-                            eventMetadata || {}
+                            mergeObjects(
+                                buildRecommendedProductMetadata(product),
+                                eventMetadata || {}
+                            ),
+                            buildRecommendedMonetaryMetadata(event)
                         )
                     );
                     if (viewedMetadata) {
@@ -12566,8 +12589,14 @@ var constructor = function () {
                 if (refundDiscounts != null) {
                     refundProperties.total_discounts = refundDiscounts;
                 }
-                if (eventMetadata) {
-                    refundProperties.metadata = eventMetadata;
+                var refundMetadata = emptyObjectToUndefined(
+                    mergeObjects(
+                        eventMetadata || {},
+                        buildRecommendedMonetaryMetadata(event)
+                    )
+                );
+                if (refundMetadata) {
+                    refundProperties.metadata = refundMetadata;
                 }
                 reportEvent = braze.logCustomEvent(
                     RECOMMENDED_ORDER_REFUNDED_EVENT_NAME,
