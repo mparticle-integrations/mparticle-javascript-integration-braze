@@ -2823,9 +2823,12 @@ user.getUserIdentities is not a function,\n`;
                 EventDataType: MessageType.Commerce,
                 EventCategory: CommerceEventType.ProductRefund,
                 CurrencyCode: 'USD',
+                EventAttributes: { subtotal_value: '40' },
                 ProductAction: {
                     TransactionId: 'order-42',
                     TotalAmount: 50,
+                    TaxAmount: 5,
+                    ShippingAmount: 7,
                     ProductList: [recommendedProduct()],
                 },
             });
@@ -2837,6 +2840,11 @@ user.getUserIdentities is not a function,\n`;
             loggedEvent.eventProperties.order_id.should.equal('order-42');
             loggedEvent.eventProperties.source.should.equal('web');
             loggedEvent.eventProperties.products.should.have.lengthOf(1);
+            // order_refunded has no recognized top-level tax/shipping/subtotal_value,
+            // so they are preserved in metadata rather than dropped.
+            loggedEvent.eventProperties.metadata.tax.should.equal(5);
+            loggedEvent.eventProperties.metadata.shipping.should.equal(7);
+            loggedEvent.eventProperties.metadata.subtotal_value.should.equal(40);
         });
 
         it('should fall back to legacy forwarding when the toggle is off', function() {
