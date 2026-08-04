@@ -85,6 +85,16 @@ var constructor = function () {
     var RECOMMENDED_ORDER_REFUNDED_EVENT_NAME = 'ecommerce.order_refunded';
     var RECOMMENDED_IMAGE_URL_ATTRIBUTES = ['image_url', 'Image URL'];
     var RECOMMENDED_PRODUCT_URL_ATTRIBUTES = ['product_url', 'Product URL'];
+    var RECOMMENDED_CART_ID_ATTRIBUTE = 'cart_id';
+    var RECOMMENDED_CHECKOUT_ID_ATTRIBUTE = 'checkout_id';
+    var RECOMMENDED_ATTRIBUTE_MAP_TYPE = 'EventAttributeClass.Name';
+    // Attribute-name overrides from the connection settings. Each is the
+    // customer-configured attribute that holds the value, or null when
+    // unconfigured, in which case the defaults above are used.
+    var mappedCartIdAttribute = null;
+    var mappedCheckoutIdAttribute = null;
+    var mappedImageUrlAttribute = null;
+    var mappedProductUrlAttribute = null;
     // Custom attributes promoted to typed recommended-event fields; excluded from metadata.
     var RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES = [
         'cart_id',
@@ -276,10 +286,22 @@ var constructor = function () {
         return typeof braze.logEcommerceEvent === 'function';
     }
 
-    function getSessionIdForBraze() {
+    // The forwarder event carries the session id, so prefer it over reaching for
+    // a global. mParticle.getSession() is not part of the public API (it is
+    // undefined on the global object), so relying on it always yielded null and
+    // every cart/checkout fell back to a fresh random id, leaving Braze unable to
+    // correlate a cart across add/remove/checkout/order.
+    function getSessionIdForBraze(event) {
+        if (event && event.SessionId) {
+            return String(event.SessionId);
+        }
         try {
-            if (mParticle && typeof mParticle.getSession === 'function') {
-                return mParticle.getSession();
+            if (
+                mParticle &&
+                mParticle.sessionManager &&
+                typeof mParticle.sessionManager.getSession === 'function'
+            ) {
+                return mParticle.sessionManager.getSession();
             }
         } catch (e) {
             // no-op: session id is a best-effort fallback
@@ -303,6 +325,41 @@ var constructor = function () {
         );
     }
 
+    // Attribute-mapping settings are "custom JSON" (setting data type 7) shaped as
+    //   [{ "map": {...}, "value": "attr_name", "maptype": "EventAttributeClass.Name" }]
+    // Mirrors the server-side forwarder: first entry with a non-empty value whose
+    // maptype matches wins; anything else (including the unconfigured "[]") yields
+    // null so the caller keeps its default. Never throws - a malformed setting must
+    // not break event forwarding.
+    function getMappedEventAttributeName(settingValue) {
+        if (!settingValue) {
+            return null;
+        }
+        try {
+            var mappings = JSON.parse(settingValue);
+            if (!Array.isArray(mappings)) {
+                return null;
+            }
+            for (var i = 0; i < mappings.length; i++) {
+                var mapping = mappings[i];
+                if (
+                    mapping &&
+                    mapping.maptype === RECOMMENDED_ATTRIBUTE_MAP_TYPE &&
+                    typeof mapping.value === 'string' &&
+                    mapping.value !== ''
+                ) {
+                    return mapping.value;
+                }
+            }
+        } catch (e) {
+            kitLogger(
+                'Braze kit could not parse attribute mapping setting',
+                settingValue
+            );
+        }
+        return null;
+    }
+
     function getEcommerceCustomAttribute(event, key) {
         var attributes = event.EventAttributes || {};
         if (attributes[key] != null && attributes[key] !== '') {
@@ -315,16 +372,22 @@ var constructor = function () {
         // Fall back to the mParticle session id, then a generated id, matching the
         // Android and iOS kits (a missing session id is unlikely but possible).
         return (
-            getEcommerceCustomAttribute(event, 'cart_id') ||
-            getSessionIdForBraze() ||
+            getEcommerceCustomAttribute(
+                event,
+                mappedCartIdAttribute || RECOMMENDED_CART_ID_ATTRIBUTE
+            ) ||
+            getSessionIdForBraze(event) ||
             generateEcommerceId()
         );
     }
 
     function getRecommendedCheckoutId(event) {
         return (
-            getEcommerceCustomAttribute(event, 'checkout_id') ||
-            getSessionIdForBraze() ||
+            getEcommerceCustomAttribute(
+                event,
+                mappedCheckoutIdAttribute || RECOMMENDED_CHECKOUT_ID_ATTRIBUTE
+            ) ||
+            getSessionIdForBraze(event) ||
             generateEcommerceId()
         );
     }
@@ -333,7 +396,7 @@ var constructor = function () {
         if (event.ProductAction && event.ProductAction.TransactionId) {
             return String(event.ProductAction.TransactionId);
         }
-        return getSessionIdForBraze() || generateEcommerceId();
+        return getSessionIdForBraze(event) || generateEcommerceId();
     }
 
     function getRecommendedProductList(event) {
@@ -448,6 +511,33 @@ var constructor = function () {
         return String(product.Variant || product.Sku);
     }
 
+    // A configured attribute name takes precedence over the built-in defaults, and
+    // is also excluded from metadata so a promoted value is not emitted twice.
+    function getRecommendedImageUrlAttributes() {
+        return mappedImageUrlAttribute
+            ? [mappedImageUrlAttribute].concat(RECOMMENDED_IMAGE_URL_ATTRIBUTES)
+            : RECOMMENDED_IMAGE_URL_ATTRIBUTES;
+    }
+
+    function getRecommendedProductUrlAttributes() {
+        return mappedProductUrlAttribute
+            ? [mappedProductUrlAttribute].concat(
+                  RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+              )
+            : RECOMMENDED_PRODUCT_URL_ATTRIBUTES;
+    }
+
+    function getRecommendedPromotedEventAttributes() {
+        var promoted = RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES.slice();
+        if (mappedCartIdAttribute) {
+            promoted.push(mappedCartIdAttribute);
+        }
+        if (mappedCheckoutIdAttribute) {
+            promoted.push(mappedCheckoutIdAttribute);
+        }
+        return promoted;
+    }
+
     function getRecommendedProductAttribute(product, keys) {
         var attributes = product.Attributes || {};
         for (var i = 0; i < keys.length; i++) {
@@ -481,8 +571,8 @@ var constructor = function () {
         var attributes = product.Attributes || {};
         Object.keys(attributes).forEach(function(key) {
             if (
-                RECOMMENDED_IMAGE_URL_ATTRIBUTES.indexOf(key) === -1 &&
-                RECOMMENDED_PRODUCT_URL_ATTRIBUTES.indexOf(key) === -1 &&
+                getRecommendedImageUrlAttributes().indexOf(key) === -1 &&
+                getRecommendedProductUrlAttributes().indexOf(key) === -1 &&
                 attributes[key] != null &&
                 attributes[key] !== ''
             ) {
@@ -499,7 +589,7 @@ var constructor = function () {
             // Skip attributes already promoted to typed recommended-event fields to avoid
             // emitting them both at the top level and inside metadata.
             if (
-                RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES.indexOf(key) === -1 &&
+                getRecommendedPromotedEventAttributes().indexOf(key) === -1 &&
                 attributes[key] != null &&
                 attributes[key] !== ''
             ) {
@@ -528,14 +618,14 @@ var constructor = function () {
         };
         var imageUrl = getRecommendedProductAttribute(
             product,
-            RECOMMENDED_IMAGE_URL_ATTRIBUTES
+            getRecommendedImageUrlAttributes()
         );
         if (imageUrl) {
             lineItem.image_url = imageUrl;
         }
         var productUrl = getRecommendedProductAttribute(
             product,
-            RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+            getRecommendedProductUrlAttributes()
         );
         if (productUrl) {
             lineItem.product_url = productUrl;
@@ -624,14 +714,14 @@ var constructor = function () {
                     };
                     var imageUrl = getRecommendedProductAttribute(
                         product,
-                        RECOMMENDED_IMAGE_URL_ATTRIBUTES
+                        getRecommendedImageUrlAttributes()
                     );
                     if (imageUrl) {
                         viewedProperties.image_url = imageUrl;
                     }
                     var productUrl = getRecommendedProductAttribute(
                         product,
-                        RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+                        getRecommendedProductUrlAttributes()
                     );
                     if (productUrl) {
                         viewedProperties.product_url = productUrl;
@@ -1352,6 +1442,20 @@ var constructor = function () {
                 forwarderSettings.forwardSkuAsProductName === 'True';
             useEcommerceRecommendedEvents =
                 forwarderSettings.useEcommerceRecommendedEvents === 'True';
+            // Customer-configured attribute names for the recommended eCommerce
+            // fields. Unset settings leave these null and the defaults apply.
+            mappedCartIdAttribute = getMappedEventAttributeName(
+                forwarderSettings.cartIdAttribute
+            );
+            mappedCheckoutIdAttribute = getMappedEventAttributeName(
+                forwarderSettings.checkoutIdAttribute
+            );
+            mappedImageUrlAttribute = getMappedEventAttributeName(
+                forwarderSettings.imageUrlAttribute
+            );
+            mappedProductUrlAttribute = getMappedEventAttributeName(
+                forwarderSettings.productUrlAttribute
+            );
             reportingService = service;
             // 30 min is Braze default
             options.sessionTimeoutInSeconds =

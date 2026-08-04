@@ -2691,6 +2691,87 @@ user.getUserIdentities is not a function,\n`;
             );
         });
 
+        // Attribute-mapping settings are "custom JSON" shaped as
+        // [{"map":{},"value":"attr","maptype":"EventAttributeClass.Name"}]
+        function attributeMapping(attributeName) {
+            return JSON.stringify([
+                {
+                    map: {},
+                    value: attributeName,
+                    maptype: 'EventAttributeClass.Name',
+                },
+            ]);
+        }
+
+        function processAddToCart(eventAttributes, product) {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - add_to_cart',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductAddToCart,
+                CurrencyCode: 'USD',
+                SessionId: 'session-abc',
+                EventAttributes: eventAttributes || {},
+                ProductAction: {
+                    TotalAmount: 20,
+                    ProductList: [product || recommendedProduct()],
+                },
+            });
+            return window.braze.loggedEcommerceEvents[0];
+        }
+
+        it('should read cart_id from the configured cartIdAttribute', function() {
+            initRecommended({
+                cartIdAttribute: attributeMapping('my_basket_ref'),
+            });
+            var event = processAddToCart({ my_basket_ref: 'basket-999' });
+            event.properties.cart_id.should.equal('basket-999');
+            // the mapped attribute is promoted, so it must not also sit in metadata
+            (event.properties.metadata || {}).should.not.have.property(
+                'my_basket_ref'
+            );
+        });
+
+        it('should read image_url and product_url from configured attributes', function() {
+            initRecommended({
+                imageUrlAttribute: attributeMapping('hero_shot'),
+                productUrlAttribute: attributeMapping('pdp_link'),
+            });
+            var product = recommendedProduct();
+            product.Attributes = {
+                hero_shot: 'https://example.com/hero.jpg',
+                pdp_link: 'https://example.com/pdp',
+            };
+            var lineItem = processAddToCart({}, product).properties.products[0];
+            lineItem.image_url.should.equal('https://example.com/hero.jpg');
+            lineItem.product_url.should.equal('https://example.com/pdp');
+            // promoted to typed fields, so not duplicated in product metadata
+            lineItem.metadata.should.not.have.property('hero_shot');
+            lineItem.metadata.should.not.have.property('pdp_link');
+        });
+
+        it('should fall back to default attribute names when settings are unset', function() {
+            initRecommended({ cartIdAttribute: '[]', imageUrlAttribute: '[]' });
+            var event = processAddToCart({ cart_id: 'cart-123' });
+            event.properties.cart_id.should.equal('cart-123');
+            event.properties.products[0].image_url.should.equal(
+                'https://example.com/img.jpg'
+            );
+        });
+
+        it('should ignore a malformed attribute mapping setting', function() {
+            initRecommended({ cartIdAttribute: 'not-json' });
+            var event = processAddToCart({ cart_id: 'cart-123' });
+            event.properties.cart_id.should.equal('cart-123');
+        });
+
+        // Without this the kit generates a fresh id per event and Braze cannot
+        // correlate a cart across add/remove/checkout/order.
+        it('should fall back to the session id when no cart_id attribute exists', function() {
+            initRecommended();
+            var event = processAddToCart({});
+            event.properties.cart_id.should.equal('session-abc');
+        });
+
         it('should forward remove_from_cart as ecommerce.cart_updated with action remove', function() {
             mParticle.forwarder.process({
                 EventName: 'eCommerce - remove_from_cart',
