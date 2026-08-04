@@ -286,11 +286,15 @@ var constructor = function () {
         return typeof braze.logEcommerceEvent === 'function';
     }
 
-    // The forwarder event carries the session id, so prefer it over reaching for
-    // a global. mParticle.getSession() is not part of the public API (it is
-    // undefined on the global object), so relying on it always yielded null and
-    // every cart/checkout fell back to a fresh random id, leaving Braze unable to
-    // correlate a cart across add/remove/checkout/order.
+    // The forwarder event carries the session id, so prefer it over reaching for a
+    // global: it needs no feature detection and works on every core SDK version.
+    //
+    // The previous implementation relied on mParticle.getSession(), which is not
+    // exposed on the global object by any core version (verified on 2.23.0 and
+    // 2.75.0), so the lookup silently returned null and every cart/checkout fell
+    // back to a freshly generated id, leaving Braze unable to correlate a cart
+    // across add/remove/checkout/order. mParticle.sessionManager.getSession() is
+    // the supported public accessor, kept here only as a secondary fallback.
     function getSessionIdForBraze(event) {
         if (event && event.SessionId) {
             return String(event.SessionId);
