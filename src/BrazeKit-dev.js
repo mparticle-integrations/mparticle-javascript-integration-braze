@@ -87,7 +87,11 @@ var constructor = function () {
     var RECOMMENDED_PRODUCT_URL_ATTRIBUTES = ['product_url', 'Product URL'];
     var RECOMMENDED_CART_ID_ATTRIBUTE = 'cart_id';
     var RECOMMENDED_CHECKOUT_ID_ATTRIBUTE = 'checkout_id';
-    var RECOMMENDED_ATTRIBUTE_MAP_TYPE = 'EventAttributeClass.Name';
+    var RECOMMENDED_SUBTOTAL_VALUE_ATTRIBUTE = 'subtotal_value';
+    var RECOMMENDED_ATTRIBUTE_MAP_TYPES = [
+        'EventAttributeClass.Name',
+        'ProductAttributeClass.Name',
+    ];
     // Attribute-name overrides from the connection settings. Each is the
     // customer-configured attribute that holds the value, or null when
     // unconfigured, in which case the defaults above are used.
@@ -95,6 +99,7 @@ var constructor = function () {
     var mappedCheckoutIdAttribute = null;
     var mappedImageUrlAttribute = null;
     var mappedProductUrlAttribute = null;
+    var mappedSubtotalValueAttribute = null;
     // Custom attributes promoted to typed recommended-event fields; excluded from metadata.
     var RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES = [
         'cart_id',
@@ -331,11 +336,16 @@ var constructor = function () {
 
     // Attribute-mapping settings are "custom JSON" (setting data type 7) shaped as
     //   [{ "map": {...}, "value": "attr_name", "maptype": "EventAttributeClass.Name" }]
-    // Mirrors the server-side forwarder: first entry with a non-empty value whose
-    // maptype matches wins; anything else (including the unconfigured "[]") yields
-    // null so the caller keeps its default. Never throws - a malformed setting must
-    // not break event forwarding.
-    function getMappedEventAttributeName(settingValue) {
+    //
+    // The cart/checkout/subtotal settings select an event attribute; the image and
+    // product URL settings select a *product* attribute, which carries a different
+    // maptype. Rather than hard-coding every maptype string, prefer a recognized
+    // one and otherwise fall back to the first entry with a usable value, so a
+    // mapping is honored even if the maptype is one we have not seen yet. Silently
+    // ignoring a configured mapping is the worse failure.
+    //
+    // Never throws: a malformed setting must not break event forwarding.
+    function getMappedAttributeName(settingValue) {
         if (!settingValue) {
             return null;
         }
@@ -344,17 +354,27 @@ var constructor = function () {
             if (!Array.isArray(mappings)) {
                 return null;
             }
+            var fallback = null;
             for (var i = 0; i < mappings.length; i++) {
                 var mapping = mappings[i];
                 if (
-                    mapping &&
-                    mapping.maptype === RECOMMENDED_ATTRIBUTE_MAP_TYPE &&
-                    typeof mapping.value === 'string' &&
-                    mapping.value !== ''
+                    !mapping ||
+                    typeof mapping.value !== 'string' ||
+                    mapping.value === ''
+                ) {
+                    continue;
+                }
+                if (
+                    RECOMMENDED_ATTRIBUTE_MAP_TYPES.indexOf(mapping.maptype) !==
+                    -1
                 ) {
                     return mapping.value;
                 }
+                if (fallback === null) {
+                    fallback = mapping.value;
+                }
             }
+            return fallback;
         } catch (e) {
             kitLogger(
                 'Braze kit could not parse attribute mapping setting',
@@ -470,7 +490,11 @@ var constructor = function () {
     // `subtotal_value` commerce custom attribute (like cart_id/total_discounts).
     function getRecommendedSubtotalValue(event) {
         return parseRecommendedFloat(
-            getEcommerceCustomAttribute(event, 'subtotal_value')
+            getEcommerceCustomAttribute(
+                event,
+                mappedSubtotalValueAttribute ||
+                    RECOMMENDED_SUBTOTAL_VALUE_ATTRIBUTE
+            )
         );
     }
 
@@ -538,6 +562,9 @@ var constructor = function () {
         }
         if (mappedCheckoutIdAttribute) {
             promoted.push(mappedCheckoutIdAttribute);
+        }
+        if (mappedSubtotalValueAttribute) {
+            promoted.push(mappedSubtotalValueAttribute);
         }
         return promoted;
     }
@@ -1448,17 +1475,20 @@ var constructor = function () {
                 forwarderSettings.useEcommerceRecommendedEvents === 'True';
             // Customer-configured attribute names for the recommended eCommerce
             // fields. Unset settings leave these null and the defaults apply.
-            mappedCartIdAttribute = getMappedEventAttributeName(
+            mappedCartIdAttribute = getMappedAttributeName(
                 forwarderSettings.cartIdAttribute
             );
-            mappedCheckoutIdAttribute = getMappedEventAttributeName(
+            mappedCheckoutIdAttribute = getMappedAttributeName(
                 forwarderSettings.checkoutIdAttribute
             );
-            mappedImageUrlAttribute = getMappedEventAttributeName(
+            mappedImageUrlAttribute = getMappedAttributeName(
                 forwarderSettings.imageUrlAttribute
             );
-            mappedProductUrlAttribute = getMappedEventAttributeName(
+            mappedProductUrlAttribute = getMappedAttributeName(
                 forwarderSettings.productUrlAttribute
+            );
+            mappedSubtotalValueAttribute = getMappedAttributeName(
+                forwarderSettings.subtotalValueAttribute
             );
             reportingService = service;
             // 30 min is Braze default

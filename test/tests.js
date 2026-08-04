@@ -2693,12 +2693,12 @@ user.getUserIdentities is not a function,\n`;
 
         // Attribute-mapping settings are "custom JSON" shaped as
         // [{"map":{},"value":"attr","maptype":"EventAttributeClass.Name"}]
-        function attributeMapping(attributeName) {
+        function attributeMapping(attributeName, mapType) {
             return JSON.stringify([
                 {
                     map: {},
                     value: attributeName,
-                    maptype: 'EventAttributeClass.Name',
+                    maptype: mapType || 'EventAttributeClass.Name',
                 },
             ]);
         }
@@ -2747,6 +2747,55 @@ user.getUserIdentities is not a function,\n`;
             // promoted to typed fields, so not duplicated in product metadata
             lineItem.metadata.should.not.have.property('hero_shot');
             lineItem.metadata.should.not.have.property('pdp_link');
+        });
+
+        // The image/product URL settings select a product attribute, so they carry
+        // a product-scoped maptype rather than the event one.
+        it('should honor product-scoped maptype for URL attributes', function() {
+            initRecommended({
+                imageUrlAttribute: attributeMapping(
+                    'hero_shot',
+                    'ProductAttributeClass.Name'
+                ),
+                productUrlAttribute: attributeMapping(
+                    'pdp_link',
+                    'ProductAttributeClass.Name'
+                ),
+            });
+            var product = recommendedProduct();
+            product.Attributes = {
+                hero_shot: 'https://example.com/hero.jpg',
+                pdp_link: 'https://example.com/pdp',
+            };
+            var lineItem = processAddToCart({}, product).properties.products[0];
+            lineItem.image_url.should.equal('https://example.com/hero.jpg');
+            lineItem.product_url.should.equal('https://example.com/pdp');
+        });
+
+        // Silently ignoring a configured mapping is worse than accepting one whose
+        // maptype we do not recognize yet.
+        it('should still honor a mapping with an unrecognized maptype', function() {
+            initRecommended({
+                cartIdAttribute: attributeMapping(
+                    'my_basket_ref',
+                    'SomeFutureClass.Name'
+                ),
+            });
+            processAddToCart({
+                my_basket_ref: 'basket-999',
+            }).properties.cart_id.should.equal('basket-999');
+        });
+
+        it('should read subtotal_value from the configured subtotalValueAttribute', function() {
+            initRecommended({
+                subtotalValueAttribute: attributeMapping('order_subtotal'),
+            });
+            var event = processAddToCart({ order_subtotal: 42.5 });
+            event.properties.subtotal_value.should.equal(42.5);
+            // promoted to a typed field, so not duplicated in metadata
+            (event.properties.metadata || {}).should.not.have.property(
+                'order_subtotal'
+            );
         });
 
         it('should fall back to default attribute names when settings are unset', function() {
