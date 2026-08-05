@@ -2709,6 +2709,54 @@ user.getUserIdentities is not a function,\n`;
             ]).replace(/"/g, '&quot;');
         }
 
+        // Verbatim setting values from the /config endpoint of the QA1 workspace
+        // used to validate this feature. Every mapping test below is built on
+        // attributeMapping, so if that helper drifts from what the server really
+        // sends, those tests keep passing while the kit is broken in production -
+        // which is how the HTML escaping was missed the first time. Pinning the
+        // helper against real payloads is what makes the rest trustworthy.
+        var LIVE_EVENT_ATTRIBUTE_SETTING =
+            '[{&quot;jsmap&quot;:null,&quot;map&quot;:null,&quot;maptype&quot;:&quot;EventAttributeClass.Name&quot;,&quot;value&quot;:&quot;test_cart_id&quot;}]';
+        var LIVE_PRODUCT_ATTRIBUTE_SETTING =
+            '[{&quot;jsmap&quot;:null,&quot;map&quot;:null,&quot;maptype&quot;:&quot;ProductAttributeSelector.Name&quot;,&quot;value&quot;:&quot;Variant&quot;}]';
+
+        it('should build fixtures byte for byte identical to the live config', function() {
+            attributeMapping('test_cart_id').should.equal(
+                LIVE_EVENT_ATTRIBUTE_SETTING
+            );
+            attributeMapping(
+                'Variant',
+                'ProductAttributeSelector.Name'
+            ).should.equal(LIVE_PRODUCT_ATTRIBUTE_SETTING);
+        });
+
+        // Belt and braces: drive the kit with the live strings directly, so the
+        // mapping is proven even if the helper is wrong.
+        it('should honor the live config setting strings verbatim', function() {
+            initRecommended({
+                checkoutIdAttribute: LIVE_EVENT_ATTRIBUTE_SETTING,
+                imageUrlAttribute: LIVE_PRODUCT_ATTRIBUTE_SETTING,
+            });
+            var product = recommendedProduct();
+            product.Attributes = { Variant: 'https://example.com/hero.jpg' };
+
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - checkout',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductCheckout,
+                CurrencyCode: 'USD',
+                SessionId: 'session-abc',
+                EventAttributes: { test_cart_id: 'live-checkout-1' },
+                ProductAction: { TotalAmount: 20, ProductList: [product] },
+            });
+
+            var event = window.braze.loggedEcommerceEvents[0];
+            event.properties.checkout_id.should.equal('live-checkout-1');
+            event.properties.products[0].image_url.should.equal(
+                'https://example.com/hero.jpg'
+            );
+        });
+
         function processAddToCart(eventAttributes, product) {
             mParticle.forwarder.process({
                 EventName: 'eCommerce - add_to_cart',
