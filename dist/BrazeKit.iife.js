@@ -11983,6 +11983,17 @@ var mpBrazeKitV6 = (function (exports) {
 	    var RECOMMENDED_ORDER_REFUNDED_EVENT_NAME = 'ecommerce.order_refunded';
 	    var RECOMMENDED_IMAGE_URL_ATTRIBUTES = ['image_url', 'Image URL'];
 	    var RECOMMENDED_PRODUCT_URL_ATTRIBUTES = ['product_url', 'Product URL'];
+	    var RECOMMENDED_CART_ID_ATTRIBUTE = 'cart_id';
+	    var RECOMMENDED_CHECKOUT_ID_ATTRIBUTE = 'checkout_id';
+	    var RECOMMENDED_SUBTOTAL_VALUE_ATTRIBUTE = 'subtotal_value';
+	    // Attribute-name overrides from the connection settings. Each is the
+	    // customer-configured attribute that holds the value, or null when
+	    // unconfigured, in which case the defaults above are used.
+	    var mappedCartIdAttribute = null;
+	    var mappedCheckoutIdAttribute = null;
+	    var mappedImageUrlAttribute = null;
+	    var mappedProductUrlAttribute = null;
+	    var mappedSubtotalValueAttribute = null;
 	    // Custom attributes promoted to typed recommended-event fields; excluded from metadata.
 	    var RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES = [
 	        'cart_id',
@@ -12174,10 +12185,26 @@ var mpBrazeKitV6 = (function (exports) {
 	        return typeof braze.logEcommerceEvent === 'function';
 	    }
 
-	    function getSessionIdForBraze() {
+	    // The forwarder event carries the session id, so prefer it over reaching for a
+	    // global: it needs no feature detection and works on every core SDK version.
+	    //
+	    // The previous implementation relied on mParticle.getSession(), which is not
+	    // exposed on the global object by any core version (verified on 2.23.0 and
+	    // 2.75.0), so the lookup silently returned null and every cart/checkout fell
+	    // back to a freshly generated id, leaving Braze unable to correlate a cart
+	    // across add/remove/checkout/order. mParticle.sessionManager.getSession() is
+	    // the supported public accessor, kept here only as a secondary fallback.
+	    function getSessionIdForBraze(event) {
+	        if (event && event.SessionId) {
+	            return String(event.SessionId);
+	        }
 	        try {
-	            if (mParticle && typeof mParticle.getSession === 'function') {
-	                return mParticle.getSession();
+	            if (
+	                mParticle &&
+	                mParticle.sessionManager &&
+	                typeof mParticle.sessionManager.getSession === 'function'
+	            ) {
+	                return mParticle.sessionManager.getSession();
 	            }
 	        } catch (e) {
 	            // no-op: session id is a best-effort fallback
@@ -12201,6 +12228,57 @@ var mpBrazeKitV6 = (function (exports) {
 	        );
 	    }
 
+	    // Attribute-mapping settings are "custom JSON" (setting data type 7). The config
+	    // API delivers them with the quotes HTML-escaped, so they must be decoded before
+	    // parsing (same as decodeSubscriptionGroupMappings, decodeClusterSetting and the
+	    // consent mapping):
+	    //   [{&quot;jsmap&quot;:null,&quot;map&quot;:null,
+	    //     &quot;maptype&quot;:&quot;EventAttributeClass.Name&quot;,
+	    //     &quot;value&quot;:&quot;attr_name&quot;}]
+	    //
+	    // maptype varies by what the setting selects (EventAttributeClass.Name for the
+	    // cart/checkout/subtotal settings, ProductAttributeSelector.Name for the URL
+	    // ones) and is deliberately ignored: the settings are single-select, so the
+	    // first entry with a value is the mapping. This matches the iOS kit and avoids
+	    // maptype strings drifting out of sync with the platform.
+	    //
+	    // Never throws: a malformed setting must not break event forwarding.
+	    function getMappedAttributeName(settingValue) {
+	        if (!settingValue) {
+	            return null;
+	        }
+	        // No-op when the value is already unescaped, so both shapes work.
+	        var decodedSetting = settingValue.replace(/&quot;/g, '"');
+	        try {
+	            var mappings = JSON.parse(decodedSetting);
+	            if (!Array.isArray(mappings)) {
+	                return null;
+	            }
+	            for (var i = 0; i < mappings.length; i++) {
+	                var mapping = mappings[i];
+	                if (
+	                    mapping &&
+	                    typeof mapping.value === 'string' &&
+	                    mapping.value !== ''
+	                ) {
+	                    return mapping.value;
+	                }
+	            }
+	            return null;
+	        } catch (e) {
+	            // Deliberately stricter than the iOS kit, which treats an unparseable
+	            // setting as a plain attribute name. The config API always sends the
+	            // JSON array form, so a string that does not parse is malformed rather
+	            // than a bare name, and returning null keeps the documented default
+	            // attribute in play instead of looking up a garbage key.
+	            kitLogger(
+	                'Braze kit could not parse attribute mapping setting',
+	                settingValue
+	            );
+	            return null;
+	        }
+	    }
+
 	    function getEcommerceCustomAttribute(event, key) {
 	        var attributes = event.EventAttributes || {};
 	        if (attributes[key] != null && attributes[key] !== '') {
@@ -12213,16 +12291,22 @@ var mpBrazeKitV6 = (function (exports) {
 	        // Fall back to the mParticle session id, then a generated id, matching the
 	        // Android and iOS kits (a missing session id is unlikely but possible).
 	        return (
-	            getEcommerceCustomAttribute(event, 'cart_id') ||
-	            getSessionIdForBraze() ||
+	            getEcommerceCustomAttribute(
+	                event,
+	                mappedCartIdAttribute || RECOMMENDED_CART_ID_ATTRIBUTE
+	            ) ||
+	            getSessionIdForBraze(event) ||
 	            generateEcommerceId()
 	        );
 	    }
 
 	    function getRecommendedCheckoutId(event) {
 	        return (
-	            getEcommerceCustomAttribute(event, 'checkout_id') ||
-	            getSessionIdForBraze() ||
+	            getEcommerceCustomAttribute(
+	                event,
+	                mappedCheckoutIdAttribute || RECOMMENDED_CHECKOUT_ID_ATTRIBUTE
+	            ) ||
+	            getSessionIdForBraze(event) ||
 	            generateEcommerceId()
 	        );
 	    }
@@ -12231,7 +12315,7 @@ var mpBrazeKitV6 = (function (exports) {
 	        if (event.ProductAction && event.ProductAction.TransactionId) {
 	            return String(event.ProductAction.TransactionId);
 	        }
-	        return getSessionIdForBraze() || generateEcommerceId();
+	        return getSessionIdForBraze(event) || generateEcommerceId();
 	    }
 
 	    function getRecommendedProductList(event) {
@@ -12301,7 +12385,11 @@ var mpBrazeKitV6 = (function (exports) {
 	    // `subtotal_value` commerce custom attribute (like cart_id/total_discounts).
 	    function getRecommendedSubtotalValue(event) {
 	        return parseRecommendedFloat(
-	            getEcommerceCustomAttribute(event, 'subtotal_value')
+	            getEcommerceCustomAttribute(
+	                event,
+	                mappedSubtotalValueAttribute ||
+	                    RECOMMENDED_SUBTOTAL_VALUE_ATTRIBUTE
+	            )
 	        );
 	    }
 
@@ -12346,6 +12434,36 @@ var mpBrazeKitV6 = (function (exports) {
 	        return String(product.Variant || product.Sku);
 	    }
 
+	    // A configured attribute name takes precedence over the built-in defaults, and
+	    // is also excluded from metadata so a promoted value is not emitted twice.
+	    function getRecommendedImageUrlAttributes() {
+	        return mappedImageUrlAttribute
+	            ? [mappedImageUrlAttribute].concat(RECOMMENDED_IMAGE_URL_ATTRIBUTES)
+	            : RECOMMENDED_IMAGE_URL_ATTRIBUTES;
+	    }
+
+	    function getRecommendedProductUrlAttributes() {
+	        return mappedProductUrlAttribute
+	            ? [mappedProductUrlAttribute].concat(
+	                  RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+	              )
+	            : RECOMMENDED_PRODUCT_URL_ATTRIBUTES;
+	    }
+
+	    function getRecommendedPromotedEventAttributes() {
+	        var promoted = RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES.slice();
+	        if (mappedCartIdAttribute) {
+	            promoted.push(mappedCartIdAttribute);
+	        }
+	        if (mappedCheckoutIdAttribute) {
+	            promoted.push(mappedCheckoutIdAttribute);
+	        }
+	        if (mappedSubtotalValueAttribute) {
+	            promoted.push(mappedSubtotalValueAttribute);
+	        }
+	        return promoted;
+	    }
+
 	    function getRecommendedProductAttribute(product, keys) {
 	        var attributes = product.Attributes || {};
 	        for (var i = 0; i < keys.length; i++) {
@@ -12379,8 +12497,8 @@ var mpBrazeKitV6 = (function (exports) {
 	        var attributes = product.Attributes || {};
 	        Object.keys(attributes).forEach(function(key) {
 	            if (
-	                RECOMMENDED_IMAGE_URL_ATTRIBUTES.indexOf(key) === -1 &&
-	                RECOMMENDED_PRODUCT_URL_ATTRIBUTES.indexOf(key) === -1 &&
+	                getRecommendedImageUrlAttributes().indexOf(key) === -1 &&
+	                getRecommendedProductUrlAttributes().indexOf(key) === -1 &&
 	                attributes[key] != null &&
 	                attributes[key] !== ''
 	            ) {
@@ -12397,7 +12515,7 @@ var mpBrazeKitV6 = (function (exports) {
 	            // Skip attributes already promoted to typed recommended-event fields to avoid
 	            // emitting them both at the top level and inside metadata.
 	            if (
-	                RECOMMENDED_PROMOTED_METADATA_ATTRIBUTES.indexOf(key) === -1 &&
+	                getRecommendedPromotedEventAttributes().indexOf(key) === -1 &&
 	                attributes[key] != null &&
 	                attributes[key] !== ''
 	            ) {
@@ -12426,14 +12544,14 @@ var mpBrazeKitV6 = (function (exports) {
 	        };
 	        var imageUrl = getRecommendedProductAttribute(
 	            product,
-	            RECOMMENDED_IMAGE_URL_ATTRIBUTES
+	            getRecommendedImageUrlAttributes()
 	        );
 	        if (imageUrl) {
 	            lineItem.image_url = imageUrl;
 	        }
 	        var productUrl = getRecommendedProductAttribute(
 	            product,
-	            RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+	            getRecommendedProductUrlAttributes()
 	        );
 	        if (productUrl) {
 	            lineItem.product_url = productUrl;
@@ -12522,14 +12640,14 @@ var mpBrazeKitV6 = (function (exports) {
 	                    };
 	                    var imageUrl = getRecommendedProductAttribute(
 	                        product,
-	                        RECOMMENDED_IMAGE_URL_ATTRIBUTES
+	                        getRecommendedImageUrlAttributes()
 	                    );
 	                    if (imageUrl) {
 	                        viewedProperties.image_url = imageUrl;
 	                    }
 	                    var productUrl = getRecommendedProductAttribute(
 	                        product,
-	                        RECOMMENDED_PRODUCT_URL_ATTRIBUTES
+	                        getRecommendedProductUrlAttributes()
 	                    );
 	                    if (productUrl) {
 	                        viewedProperties.product_url = productUrl;
@@ -13250,6 +13368,23 @@ var mpBrazeKitV6 = (function (exports) {
 	                forwarderSettings.forwardSkuAsProductName === 'True';
 	            useEcommerceRecommendedEvents =
 	                forwarderSettings.useEcommerceRecommendedEvents === 'True';
+	            // Customer-configured attribute names for the recommended eCommerce
+	            // fields. Unset settings leave these null and the defaults apply.
+	            mappedCartIdAttribute = getMappedAttributeName(
+	                forwarderSettings.cartIdAttribute
+	            );
+	            mappedCheckoutIdAttribute = getMappedAttributeName(
+	                forwarderSettings.checkoutIdAttribute
+	            );
+	            mappedImageUrlAttribute = getMappedAttributeName(
+	                forwarderSettings.imageUrlAttribute
+	            );
+	            mappedProductUrlAttribute = getMappedAttributeName(
+	                forwarderSettings.productUrlAttribute
+	            );
+	            mappedSubtotalValueAttribute = getMappedAttributeName(
+	                forwarderSettings.subtotalValueAttribute
+	            );
 	            reportingService = service;
 	            // 30 min is Braze default
 	            options.sessionTimeoutInSeconds =
