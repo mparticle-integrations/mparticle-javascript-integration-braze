@@ -2691,6 +2691,180 @@ user.getUserIdentities is not a function,\n`;
             );
         });
 
+        // Mirrors what the config API actually delivers: "custom JSON" with the
+        // quotes HTML-escaped, e.g.
+        //   [{&quot;jsmap&quot;:null,&quot;map&quot;:null,
+        //     &quot;maptype&quot;:&quot;EventAttributeClass.Name&quot;,
+        //     &quot;value&quot;:&quot;my_attr&quot;}]
+        // maptype varies (EventAttributeClass.Name for event attributes,
+        // ProductAttributeSelector.Name for product ones) and is not used.
+        function attributeMapping(attributeName, mapType) {
+            return JSON.stringify([
+                {
+                    jsmap: null,
+                    map: null,
+                    maptype: mapType || 'EventAttributeClass.Name',
+                    value: attributeName,
+                },
+            ]).replace(/"/g, '&quot;');
+        }
+
+        function processAddToCart(eventAttributes, product) {
+            mParticle.forwarder.process({
+                EventName: 'eCommerce - add_to_cart',
+                EventDataType: MessageType.Commerce,
+                EventCategory: CommerceEventType.ProductAddToCart,
+                CurrencyCode: 'USD',
+                SessionId: 'session-abc',
+                EventAttributes: eventAttributes || {},
+                ProductAction: {
+                    TotalAmount: 20,
+                    ProductList: [product || recommendedProduct()],
+                },
+            });
+            return window.braze.loggedEcommerceEvents[0];
+        }
+
+        it('should read cart_id from the configured cartIdAttribute', function() {
+            initRecommended({
+                cartIdAttribute: attributeMapping('my_basket_ref'),
+            });
+            var event = processAddToCart({ my_basket_ref: 'basket-999' });
+            event.properties.cart_id.should.equal('basket-999');
+            // the mapped attribute is promoted, so it must not also sit in metadata
+            (event.properties.metadata || {}).should.not.have.property(
+                'my_basket_ref'
+            );
+        });
+
+        it('should read image_url and product_url from configured attributes', function() {
+            initRecommended({
+                imageUrlAttribute: attributeMapping('hero_shot'),
+                productUrlAttribute: attributeMapping('pdp_link'),
+            });
+            var product = recommendedProduct();
+            product.Attributes = {
+                hero_shot: 'https://example.com/hero.jpg',
+                pdp_link: 'https://example.com/pdp',
+            };
+            var lineItem = processAddToCart({}, product).properties.products[0];
+            lineItem.image_url.should.equal('https://example.com/hero.jpg');
+            lineItem.product_url.should.equal('https://example.com/pdp');
+            // promoted to typed fields, so not duplicated in product metadata
+            lineItem.metadata.should.not.have.property('hero_shot');
+            lineItem.metadata.should.not.have.property('pdp_link');
+        });
+
+        // The image/product URL settings select a product attribute, so the live
+        // config carries ProductAttributeSelector.Name rather than the event
+        // maptype. maptype is ignored, so both must behave identically.
+        it('should honor product-scoped maptype for URL attributes', function() {
+            initRecommended({
+                imageUrlAttribute: attributeMapping(
+                    'hero_shot',
+                    'ProductAttributeSelector.Name'
+                ),
+                productUrlAttribute: attributeMapping(
+                    'pdp_link',
+                    'ProductAttributeSelector.Name'
+                ),
+            });
+            var product = recommendedProduct();
+            product.Attributes = {
+                hero_shot: 'https://example.com/hero.jpg',
+                pdp_link: 'https://example.com/pdp',
+            };
+            var lineItem = processAddToCart({}, product).properties.products[0];
+            lineItem.image_url.should.equal('https://example.com/hero.jpg');
+            lineItem.product_url.should.equal('https://example.com/pdp');
+        });
+
+        // The configured name is prepended to the defaults rather than replacing
+        // them, so a product that uses the conventional key still resolves when the
+        // mapped attribute is absent.
+        it('should fall back to default URL keys when the mapped attribute is absent', function() {
+            initRecommended({
+                imageUrlAttribute: attributeMapping(
+                    'hero_shot',
+                    'ProductAttributeSelector.Name'
+                ),
+            });
+            var product = recommendedProduct();
+            product.Attributes = {
+                image_url: 'https://example.com/default.jpg',
+            };
+            var lineItem = processAddToCart({}, product).properties.products[0];
+            lineItem.image_url.should.equal(
+                'https://example.com/default.jpg'
+            );
+        });
+
+        // The same setting delivered without HTML escaping must still work.
+        it('should parse an attribute mapping that is not HTML escaped', function() {
+            initRecommended({
+                cartIdAttribute: JSON.stringify([
+                    {
+                        jsmap: null,
+                        map: null,
+                        maptype: 'EventAttributeClass.Name',
+                        value: 'my_basket_ref',
+                    },
+                ]),
+            });
+            processAddToCart({
+                my_basket_ref: 'basket-777',
+            }).properties.cart_id.should.equal('basket-777');
+        });
+
+        // maptype is not inspected, so a new selector type added by the platform
+        // cannot silently disable an otherwise valid mapping.
+        it('should honor a mapping regardless of maptype', function() {
+            initRecommended({
+                cartIdAttribute: attributeMapping(
+                    'my_basket_ref',
+                    'SomeFutureClass.Name'
+                ),
+            });
+            processAddToCart({
+                my_basket_ref: 'basket-999',
+            }).properties.cart_id.should.equal('basket-999');
+        });
+
+        it('should read subtotal_value from the configured subtotalValueAttribute', function() {
+            initRecommended({
+                subtotalValueAttribute: attributeMapping('order_subtotal'),
+            });
+            var event = processAddToCart({ order_subtotal: 42.5 });
+            event.properties.subtotal_value.should.equal(42.5);
+            // promoted to a typed field, so not duplicated in metadata
+            (event.properties.metadata || {}).should.not.have.property(
+                'order_subtotal'
+            );
+        });
+
+        it('should fall back to default attribute names when settings are unset', function() {
+            initRecommended({ cartIdAttribute: '[]', imageUrlAttribute: '[]' });
+            var event = processAddToCart({ cart_id: 'cart-123' });
+            event.properties.cart_id.should.equal('cart-123');
+            event.properties.products[0].image_url.should.equal(
+                'https://example.com/img.jpg'
+            );
+        });
+
+        it('should ignore a malformed attribute mapping setting', function() {
+            initRecommended({ cartIdAttribute: 'not-json' });
+            var event = processAddToCart({ cart_id: 'cart-123' });
+            event.properties.cart_id.should.equal('cart-123');
+        });
+
+        // Without this the kit generates a fresh id per event and Braze cannot
+        // correlate a cart across add/remove/checkout/order.
+        it('should fall back to the session id when no cart_id attribute exists', function() {
+            initRecommended();
+            var event = processAddToCart({});
+            event.properties.cart_id.should.equal('session-abc');
+        });
+
         it('should forward remove_from_cart as ecommerce.cart_updated with action remove', function() {
             mParticle.forwarder.process({
                 EventName: 'eCommerce - remove_from_cart',
