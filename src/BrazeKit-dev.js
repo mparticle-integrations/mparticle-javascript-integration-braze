@@ -88,10 +88,6 @@ var constructor = function () {
     var RECOMMENDED_CART_ID_ATTRIBUTE = 'cart_id';
     var RECOMMENDED_CHECKOUT_ID_ATTRIBUTE = 'checkout_id';
     var RECOMMENDED_SUBTOTAL_VALUE_ATTRIBUTE = 'subtotal_value';
-    var RECOMMENDED_ATTRIBUTE_MAP_TYPES = [
-        'EventAttributeClass.Name',
-        'ProductAttributeClass.Name',
-    ];
     // Attribute-name overrides from the connection settings. Each is the
     // customer-configured attribute that holds the value, or null when
     // unconfigured, in which case the defaults above are used.
@@ -334,54 +330,55 @@ var constructor = function () {
         );
     }
 
-    // Attribute-mapping settings are "custom JSON" (setting data type 7) shaped as
-    //   [{ "map": {...}, "value": "attr_name", "maptype": "EventAttributeClass.Name" }]
+    // Attribute-mapping settings are "custom JSON" (setting data type 7). The config
+    // API delivers them with the quotes HTML-escaped, so they must be decoded before
+    // parsing (same as decodeSubscriptionGroupMappings, decodeClusterSetting and the
+    // consent mapping):
+    //   [{&quot;jsmap&quot;:null,&quot;map&quot;:null,
+    //     &quot;maptype&quot;:&quot;EventAttributeClass.Name&quot;,
+    //     &quot;value&quot;:&quot;attr_name&quot;}]
     //
-    // The cart/checkout/subtotal settings select an event attribute; the image and
-    // product URL settings select a *product* attribute, which carries a different
-    // maptype. Rather than hard-coding every maptype string, prefer a recognized
-    // one and otherwise fall back to the first entry with a usable value, so a
-    // mapping is honored even if the maptype is one we have not seen yet. Silently
-    // ignoring a configured mapping is the worse failure.
+    // maptype varies by what the setting selects (EventAttributeClass.Name for the
+    // cart/checkout/subtotal settings, ProductAttributeSelector.Name for the URL
+    // ones) and is deliberately ignored: the settings are single-select, so the
+    // first entry with a value is the mapping. This matches the iOS kit and avoids
+    // maptype strings drifting out of sync with the platform.
     //
     // Never throws: a malformed setting must not break event forwarding.
     function getMappedAttributeName(settingValue) {
         if (!settingValue) {
             return null;
         }
+        // No-op when the value is already unescaped, so both shapes work.
+        var decodedSetting = settingValue.replace(/&quot;/g, '"');
         try {
-            var mappings = JSON.parse(settingValue);
+            var mappings = JSON.parse(decodedSetting);
             if (!Array.isArray(mappings)) {
                 return null;
             }
-            var fallback = null;
             for (var i = 0; i < mappings.length; i++) {
                 var mapping = mappings[i];
                 if (
-                    !mapping ||
-                    typeof mapping.value !== 'string' ||
-                    mapping.value === ''
-                ) {
-                    continue;
-                }
-                if (
-                    RECOMMENDED_ATTRIBUTE_MAP_TYPES.indexOf(mapping.maptype) !==
-                    -1
+                    mapping &&
+                    typeof mapping.value === 'string' &&
+                    mapping.value !== ''
                 ) {
                     return mapping.value;
                 }
-                if (fallback === null) {
-                    fallback = mapping.value;
-                }
             }
-            return fallback;
+            return null;
         } catch (e) {
+            // Deliberately stricter than the iOS kit, which treats an unparseable
+            // setting as a plain attribute name. The config API always sends the
+            // JSON array form, so a string that does not parse is malformed rather
+            // than a bare name, and returning null keeps the documented default
+            // attribute in play instead of looking up a garbage key.
             kitLogger(
                 'Braze kit could not parse attribute mapping setting',
                 settingValue
             );
+            return null;
         }
-        return null;
     }
 
     function getEcommerceCustomAttribute(event, key) {

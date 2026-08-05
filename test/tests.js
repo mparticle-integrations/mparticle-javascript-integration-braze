@@ -2691,16 +2691,22 @@ user.getUserIdentities is not a function,\n`;
             );
         });
 
-        // Attribute-mapping settings are "custom JSON" shaped as
-        // [{"map":{},"value":"attr","maptype":"EventAttributeClass.Name"}]
+        // Mirrors what the config API actually delivers: "custom JSON" with the
+        // quotes HTML-escaped, e.g.
+        //   [{&quot;jsmap&quot;:null,&quot;map&quot;:null,
+        //     &quot;maptype&quot;:&quot;EventAttributeClass.Name&quot;,
+        //     &quot;value&quot;:&quot;my_attr&quot;}]
+        // maptype varies (EventAttributeClass.Name for event attributes,
+        // ProductAttributeSelector.Name for product ones) and is not used.
         function attributeMapping(attributeName, mapType) {
             return JSON.stringify([
                 {
-                    map: {},
-                    value: attributeName,
+                    jsmap: null,
+                    map: null,
                     maptype: mapType || 'EventAttributeClass.Name',
+                    value: attributeName,
                 },
-            ]);
+            ]).replace(/"/g, '&quot;');
         }
 
         function processAddToCart(eventAttributes, product) {
@@ -2749,17 +2755,18 @@ user.getUserIdentities is not a function,\n`;
             lineItem.metadata.should.not.have.property('pdp_link');
         });
 
-        // The image/product URL settings select a product attribute, so they carry
-        // a product-scoped maptype rather than the event one.
+        // The image/product URL settings select a product attribute, so the live
+        // config carries ProductAttributeSelector.Name rather than the event
+        // maptype. maptype is ignored, so both must behave identically.
         it('should honor product-scoped maptype for URL attributes', function() {
             initRecommended({
                 imageUrlAttribute: attributeMapping(
                     'hero_shot',
-                    'ProductAttributeClass.Name'
+                    'ProductAttributeSelector.Name'
                 ),
                 productUrlAttribute: attributeMapping(
                     'pdp_link',
-                    'ProductAttributeClass.Name'
+                    'ProductAttributeSelector.Name'
                 ),
             });
             var product = recommendedProduct();
@@ -2772,9 +2779,46 @@ user.getUserIdentities is not a function,\n`;
             lineItem.product_url.should.equal('https://example.com/pdp');
         });
 
-        // Silently ignoring a configured mapping is worse than accepting one whose
-        // maptype we do not recognize yet.
-        it('should still honor a mapping with an unrecognized maptype', function() {
+        // The configured name is prepended to the defaults rather than replacing
+        // them, so a product that uses the conventional key still resolves when the
+        // mapped attribute is absent.
+        it('should fall back to default URL keys when the mapped attribute is absent', function() {
+            initRecommended({
+                imageUrlAttribute: attributeMapping(
+                    'hero_shot',
+                    'ProductAttributeSelector.Name'
+                ),
+            });
+            var product = recommendedProduct();
+            product.Attributes = {
+                image_url: 'https://example.com/default.jpg',
+            };
+            var lineItem = processAddToCart({}, product).properties.products[0];
+            lineItem.image_url.should.equal(
+                'https://example.com/default.jpg'
+            );
+        });
+
+        // The same setting delivered without HTML escaping must still work.
+        it('should parse an attribute mapping that is not HTML escaped', function() {
+            initRecommended({
+                cartIdAttribute: JSON.stringify([
+                    {
+                        jsmap: null,
+                        map: null,
+                        maptype: 'EventAttributeClass.Name',
+                        value: 'my_basket_ref',
+                    },
+                ]),
+            });
+            processAddToCart({
+                my_basket_ref: 'basket-777',
+            }).properties.cart_id.should.equal('basket-777');
+        });
+
+        // maptype is not inspected, so a new selector type added by the platform
+        // cannot silently disable an otherwise valid mapping.
+        it('should honor a mapping regardless of maptype', function() {
             initRecommended({
                 cartIdAttribute: attributeMapping(
                     'my_basket_ref',
